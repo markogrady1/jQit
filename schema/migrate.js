@@ -13,6 +13,7 @@ exports.repositoryMigrate = function(){
     db.collection('repos').insert(allRepos, function(err, data){
     
     	if(err) throw err;
+    	
     	tmpLog.update('DATA MIGRATION', 'jquery repositories loaded', true);
 		db.close();
     	});
@@ -31,14 +32,11 @@ MongoClient.connect("mongodb://127.0.0.1:27017/issues", function(err, db){
         
         var url = obj.map(function(data) {return data.url; });
 	    urlValue = url.toString();
-	    
 	    nameArr = urlValue.split('/');
-	    		
 	    dataName = nameArr[5];
-	    
 	    db.collection(dataName).remove({});
-        
         db.collection(dataName).insert(obj, function(err, data){
+
             if(err) throw err;
 
         });
