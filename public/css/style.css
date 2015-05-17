@@ -1,0 +1,27 @@
+.open-issue-repo:hover{
+	background-color: #2e4677;
+}
+
+.open-issue-repo{
+	width:300px;
+	padding: 11px 20px 15px 20px;
+	background-color: #18295a;
+	color:#fff;
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+.button-wrap a{
+	text-decoration: none;
+}
+
+.button-wrap{
+	width:300px;
+	float: left;
+}
+.issue-count {
+	background-color: #fff;
+	float: right;
+	border-radius: 6px;
+	padding:2px 5px;
+	color:red;
+}

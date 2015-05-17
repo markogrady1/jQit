@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "ejs": "^2.3.1",
+    "express": "^4.12.3",
+    "mongodb": "^2.0.26",
+    "request": "^2.55.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.4",
+    "should": "^5.2.0",
+    "supertest": "^0.15.0"
+  }
+}
