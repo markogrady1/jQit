@@ -1,4 +1,4 @@
-var hist = require('./hist');
+var hist = require('./recentIssues');
 hist.migrateHistory();
 var migrate = require('./schema/migrate');
 migrate.repositoryMigrate();
