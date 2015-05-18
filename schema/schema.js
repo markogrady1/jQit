@@ -1,6 +1,6 @@
 var mongoClient = require("mongodb").MongoClient;
 var tmpLog = require('../repoData/tmpLogger');
-
+var historyDoc = [];
 //connect to mongoDB and aquire data for all documents concerning repositories
 mongoClient.connect("mongodb://127.0.0.1:27017/repositories", function(err, db){
  	console.log('schema connecting...');
@@ -30,58 +30,31 @@ mongoClient.connect("mongodb://127.0.0.1:27017/repositories", function(err, db){
 
 //connect to mongoDB and aquire data for a given repository
 //set the view with relevant data
-exports.getRecord = function(req, res, param){
+exports.getRecord = function(param, callback){
 	var query = {"name": param};
 	console.log('schema connecting...');
+
 	mongoClient.connect("mongodb://127.0.0.1:27017/repositories", function(err, db){
-
   		if(err) throw err;
+	
 	    tmpLog.update('CONNECTION','mongoDB connection made', true);
-
-		var singleRepo = [], index = 0;
 		db.collection('repos').findOne(query, function(err, doc){
  			if(err) throw err;
 
-			var commitUrl = doc.commits_url.toString();
-    		var newCommitStr = commitUrl.replace("{\/sha}", "");
-
-    		var issUrl = doc.issues_url.toString();
-    		var issueURLStr = issUrl.replace("{\/number}", "");
-
- 			res.render('repo-data',{
- 				name: doc.name,
- 				watchers: doc.watchers_count,
-			 	creation: doc.created_at,
-			 	description: doc.description,
-			 	forksNo: doc.forks_count,
-			 	openIssues: doc.open_issues,
-			 	issuesUrl: issueURLStr,
-			 	commitsUrl: newCommitStr
- 	    		});
- 
- 			dataSet = {
- 				name: doc.name,
- 				openIssues: doc.open_issues,
- 				watchers: doc.watchers_count,
- 				created: doc.created_at,
- 				description: doc.description
- 			}
-  			singleRepo[index] = [ doc.name, doc.watchers_count, doc.created_at, doc.description ];
-
-  			console.dir( dataSet);
+  			tmpLog.update('QUERY TARGET' ,doc.name + ": outstanding issues: " + doc.open_issues, false);
   			db.close();
 
+			callback(doc);
   		});  
-	});  
+	}); 
  }
 
-exports.getIssueDates = function(req, res, param){
-	var query = {"team": param};
+exports.getIssueDates = function(req, res, param) {
+	var query = {"repo": param};
 	var issueDataSet;
-	teamName = query.team;
+	teamName = query.repo;
 	var issueDates = [], index = 0;
 	console.log('issue schema connecting...');
-	console.log(query.team);
 	mongoClient.connect("mongodb://127.0.0.1:27017/issues", function(err, db){
 		var projection = { "created_at": 1,"_id": 0}
 		if(err) throw err;
@@ -98,10 +71,28 @@ exports.getIssueDates = function(req, res, param){
 			exports.date = issueDates;
 			exports.name = teamName;
 		
-		db.close();
+			db.close();
 		});  
 
 	});  
+}
+
+exports.getHistory = function(param, callback) {
+	var query = {"repo": param};
+	collection = query.repo;
+	var projection = {"date": 1, "issues": 1, "_id": 0}
+	mongoClient.connect("mongodb://127.0.0.1:27017/repoHistory", function(err, db){
+		if(err) throw err;
+
+	    db.collection(collection).find({}, projection).toArray(function(err, doc){
+ 		    if(err) throw err;
+
+ 		    tmpLog.update('REPO HISTORY', 'data resolved', false);
+			db.close();
+
+			callback(doc);
+ 	    });
+ 	});	
 }
  
 

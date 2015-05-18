@@ -1,7 +1,9 @@
 <html>
 <head>
 	<title>Repository Details</title>
-	
+	<link rel='stylesheet' href='/css/style.css' />
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="/js/scrilla.js"></script>
 
 </head>
 <body>
@@ -13,5 +15,12 @@
 <p>Number of forks: <%= forksNo %></p>
 <p></p>
 <p>Commits URL: <a href=<%= commitsUrl %>><%= commitsUrl %></a></p>
+<div class="button-wrap-static">
+<% for (var i = 0; i < history.length; i++) { %>
+   <div class='repo-hist'><% partDate = history[i].date.split(' = '); 
+partDate = partDate[0].substring(0, 10);%>
+<%= partDate %><span class='issue-count'><%= history[i].issues %></div>  
+<% i} %> 
+</div>
 </body>
 </html>

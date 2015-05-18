@@ -14,10 +14,34 @@ router.get('/', function(req, res){
 //route for single repository data
 router.get('/repo/details/:repoName?', function(req, res) {
 	console.log('repoName router called');
+	var repoHistory;
   	var nameParam = null;
   	nameParam = req.params.repoName;
-	schema.getRecord(nameParam, res, nameParam); 
+  	
+  	schema.getHistory(nameParam, function(data){
+  		repoHistory = data;
+  	});
+ 
+	schema.getRecord(nameParam, function(doc){
 
+		var commitUrl = doc.commits_url.toString();
+    	var newCommitStr = commitUrl.replace("{\/sha}", "");
+
+    	var issUrl = doc.issues_url.toString();
+    	var issueURLStr = issUrl.replace("{\/number}", "");
+
+ 		res.render('repo-data',{
+ 			name: doc.name,
+ 			watchers: doc.watchers_count,
+			creation: doc.created_at,
+			description: doc.description,
+			forksNo: doc.forks_count,
+			openIssues: doc.open_issues,
+			issuesUrl: issueURLStr,
+			commitsUrl: newCommitStr,
+			history: repoHistory
+ 	    });
+	}); 
 });
 
 router.get('/repo/issue/details/:team?', function(req, res) {
@@ -29,4 +53,9 @@ router.get('/repo/issue/details/:team?', function(req, res) {
 
 });
 
+function resolveDate(fullDate) {
+	partDate = fullDate.split(' = ');
+
+	return partDate[0];
+}
 module.exports = router;

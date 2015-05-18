@@ -2,7 +2,7 @@
 	background-color: #2e4677;
 }
 
-.open-issue-repo{
+.open-issue-repo, .repo-hist{
 	width:300px;
 	padding: 11px 20px 15px 20px;
 	background-color: #18295a;
@@ -25,3 +25,4 @@
 	padding:2px 5px;
 	color:red;
 }
+
