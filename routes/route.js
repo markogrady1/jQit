@@ -16,8 +16,6 @@ router.get('/', function(req, res){
 //route for single repository data
 router.get('/repo/details/:repoName?', function(req, res) {
 	console.log('repoName router called');
-	var repoHistory;
-	var issueNumbers = [];
   	var nameParam = null;
   	nameParam = req.params.repoName;
   	
