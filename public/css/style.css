@@ -1,4 +1,4 @@
-.open-issue-repo:hover{
+.open-issue-repo:hover, .open-issue-repo-dates:hover{
 	background-color: #2e4677;
 }
 
@@ -25,4 +25,20 @@
 	padding:2px 5px;
 	color:red;
 }
+.open-issue-repo-dates{
+	width:1000px;
+	padding: 11px 20px 11px 20px;
+	background-color: #18295a;
+	color:#fff;
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
 
+.inner-title {
+	font-size: .7em;
+	margin-left: 50px;
+	background-color: yellow;
+	padding: 5px 10px;
+	border-radius: 8px;
+	color: #000;
+}

@@ -49,29 +49,25 @@ exports.getRecord = function(param, callback){
 	}); 
  }
 
-exports.getIssueDates = function(req, res, param) {
+exports.getIssueDates = function(req, res, param, callback) {
 	var query = {"repo": param};
-	var issueDataSet;
+	// var issueDataSet;
 	teamName = query.repo;
-	var issueDates = [], index = 0;
+	// var issueDates = [], index = 0;
 	console.log('issue schema connecting...');
 	mongoClient.connect("mongodb://127.0.0.1:27017/issues", function(err, db){
-		var projection = { "created_at": 1,"_id": 0}
+		var projection = { "created_at": 1, "title": 1,"_id": 0}
 		if(err) throw err;
 
-		 tmpLog.update('CONNECTION','mongoDB connection made', true);
+		tmpLog.update('CONNECTION','mongoDB connection made', true);
 
 		db.collection(teamName).find({}, projection).toArray(function(err, doc){
 		if(err) throw err;
 
 			tmpLog.update('QUERY','mongoDB query made', false);
-			issueDates[index] = [doc.created_at];
-			index++;
-			res.render('issue-data', {name: teamName, date: doc})
-			exports.date = issueDates;
-			exports.name = teamName;
-		
 			db.close();
+
+			callback(doc, teamName);
 		});  
 
 	});  

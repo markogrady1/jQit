@@ -17,9 +17,11 @@
 <p>Commits URL: <a href=<%= commitsUrl %>><%= commitsUrl %></a></p>
 <div class="button-wrap-static">
 <% for (var i = 0; i < history.length; i++) { %>
-   <div class='repo-hist'><% partDate = history[i].date.split(' = '); 
-partDate = partDate[0].substring(0, 10);%>
-<%= partDate %><span class='issue-count'><%= history[i].issues %></div>  
+   <%      
+   	date = history[i].split(' ');
+   	cd = date[2]+ " " + date[1] + " " + date[3]
+   %>
+<div  class='open-issue-repo'><%= cd %><span class='issue-count'><%= issuesTrend[i] %></span></div>  
 <% i} %> 
 </div>
 </body>

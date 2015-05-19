@@ -9,7 +9,7 @@
 	<h1><%= name %></h1>
 <div class="button-wrap">
 <% for (var i = 0; i < date.length; i++) { %>
-   <a href=repo/details/<%= date[i] %>><div class='open-issue-repo'><%= date[i].created_at %></div></a>   
+   <a href=repo/details/<%= date[i] %>><div class='open-issue-repo-dates'><%= date[i].created_at %><span class='inner-title'><%=date[i].title%></span></div></a>   
 
 <% i} %> 
 </div>

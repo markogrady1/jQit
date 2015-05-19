@@ -7,7 +7,11 @@
     "type": "git",
     "url": "https://github.com/markogrady1/jquery-issue-tracker-0.1.0.git"
   },
-  "author": "Mark O Grady",
+    "author": {
+    "name": "Mark O Grady",
+    "email": "markogrady18@gmail.com",
+    "url": "http://www.thereformat.com"
+  },
   "dependencies": {
     "ejs": "^2.3.1",
     "express": "^4.12.3",
