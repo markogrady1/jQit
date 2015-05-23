@@ -1,5 +1,5 @@
 var mongoClient = require("mongodb").MongoClient;
-var tmpLog = require('../repoData/tmpLogger');
+var tmpLog = require('../lib/tmpLogger');
 var historyDoc = [];
 //connect to mongoDB and aquire data for all documents concerning repositories
 mongoClient.connect("mongodb://127.0.0.1:27017/repositories", function(err, db){
@@ -76,7 +76,7 @@ exports.getIssueDates = function(req, res, param, callback) {
 exports.getHistory = function(param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
-	var projection = {"date": 1, "issues": 1, "_id": 0}
+	var projection = {"date": 1, "issues": 1, "_id": 0};
 	mongoClient.connect("mongodb://127.0.0.1:27017/repoHistory", function(err, db){
 		if(err) throw err;
 
@@ -89,6 +89,57 @@ exports.getHistory = function(param, callback) {
 			callback(doc);
  	    });
  	});	
+}
+
+exports.getOpenPullRequestData = function(param, callback) {
+	var query = {"repo": param};
+	collection = query.repo;
+	var projection = {"_id": 0};
+	mongoClient.connect("mongodb://127.0.0.1:27017/pulls", function(err, db){
+		if(err) throw err;
+
+		db.collection(collection).find({}, projection).toArray(function(err, doc){
+			if(err) throw err;
+
+			db.close();
+			callback(doc);
+
+		});
+	});
+}
+ 
+exports.getClosedPullRequestData = function(param, callback) {
+	var query = {"repo": param};
+	collection = query.repo;
+	var projection = {"_id": 0};
+	mongoClient.connect("mongodb://127.0.0.1:27017/pullsClosed", function(err, db){
+		if(err) throw err;
+
+		db.collection(collection).find({}, projection).toArray(function(err, doc){
+			if(err) throw err;
+
+			db.close();
+			callback(doc);
+
+		});
+	});
+}
+ 
+exports.getClosedIssuesData = function(param, callback) {
+	var query = {"repo": param};
+	collection = query.repo;
+	var projection = {"_id": 0};
+	mongoClient.connect("mongodb://127.0.0.1:27017/issuesClosed", function(err, db){
+		if(err) throw err;
+
+		db.collection(collection).find({}, projection).toArray(function(err, doc){
+			if(err) throw err;
+
+			db.close();
+			callback(doc);
+
+		});
+	});
 }
  
 

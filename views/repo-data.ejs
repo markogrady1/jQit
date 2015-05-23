@@ -7,14 +7,15 @@
 
 </head>
 <body>
-<p>Repository name: <%= name %></p>
-<p>Open Issues: <%= openIssues %>&nbsp;<a href=../issue/details/<%= name %>>Details</a></p>
-<p>Watchers: <%= watchers %></p>
-<p>Created at: <%= creation %></p>
-<p>Description: <%= description %></p>
-<p>Number of forks: <%= forksNo %></p>
+<p>Repository name: <%= data.name %></p>
+<p>Open Issues: <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
+<p>Watchers: <%= data.watchers_count %></p>
+<p>Created at: <%= data.created_at %></p>
+<p>Description: <%= data.description %></p>
+<p>Number of forks: <%= data.forks_count %></p>
+<p>Pull Requests: <%= pullRequestNo %></p>
 <p></p>
-<p>Commits URL: <a href=<%= commitsUrl %>><%= commitsUrl %></a></p>
+<p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
 <div class="button-wrap-static">
 <% for (var i = 0; i < history.length; i++) { %>
    <%      
@@ -24,5 +25,8 @@
 <div  class='open-issue-repo'><%= cd %><span class='issue-count'><%= issuesTrend[i] %></span></div>  
 <% i} %> 
 </div>
+<p><svg height="100" width="100">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg></p>
 </body>
 </html>

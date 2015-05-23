@@ -1,4 +1,4 @@
-var tmpLog = require('../repoData/tmpLogger')
+var tmpLog = require('../lib/tmpLogger')
     ,MongoClient = require('mongodb').MongoClient;
 
 exports.setHistory = function(date, collection, issueAmount){

@@ -2,6 +2,14 @@ var hist = require('./recentIssues');
 hist.migrateHistory();
 var migrate = require('./schema/migrate');
 migrate.repositoryMigrate();
+migrate.pullsMigrate();
+
+//this next line is not working and when it does it is slowing the program down terribly
+	// migrate.pullsClosedMigrate();
+
+
+//migrate.issuesClosedMigrate();
+
 
 var express = require('express')
     , app = express()

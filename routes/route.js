@@ -19,7 +19,9 @@ router.get('/repo/details/:repoName?', function(req, res) {
   	var nameParam = null;
   	nameParam = req.params.repoName;
   	
+
   	reslvr.resolveIssueData(nameParam, req, res);
+  	
 });
 
 router.get('/repo/issue/details/:team?', function(req, res) {

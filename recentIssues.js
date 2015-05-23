@@ -1,5 +1,5 @@
 var fs = require('fs')
-	,tmpLog = require('./repoData/tmpLogger')
+	,tmpLog = require('./lib/tmpLogger')
 	,MongoClient = require('mongodb').MongoClient;
 
 var hist = require('./schema/history');
