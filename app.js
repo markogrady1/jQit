@@ -5,10 +5,10 @@ migrate.repositoryMigrate();
 migrate.pullsMigrate();
 
 //this next line is not working and when it does it is slowing the program down terribly
-	// migrate.pullsClosedMigrate();
+	migrate.pullsClosedMigrate();
 
 
-//migrate.issuesClosedMigrate();
+migrate.issuesClosedMigrate();
 
 
 var express = require('express')
