@@ -81,7 +81,7 @@ exports.pullsClosedMigrate = function() {
 		if(err) throw err;
 
 		for(var i = 1; i < 49; i++){
-			var obj = require('../repoData/pulls/closed/' + i + "_closed_pulls");
+			obj = require('../repoData/pulls/closed/' + i + "_closed_pulls");
 			if(obj == ""){
 				continue
 			}
@@ -91,13 +91,24 @@ exports.pullsClosedMigrate = function() {
 		    var nameArr = urlValue.split('/');
 		    var dataName = nameArr[5];
 		    db.collection(dataName).remove({});
-	        db.collection(dataName).insert(obj, function(err, data){
+		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: true}); //enable bulk inserting of data because of high numbers
 
-            if(err) throw err;
-
-        	});
+		    for(var j = 0; j < obj.length; j++){	
+		    	batch.insert({  
+		    		url:obj[j].url,
+			    	id:obj[j].id, 
+			    	title:obj[j].title,
+			    	body:obj[j].body,
+			    	created_at:obj[j].created_at,
+			    	updated_at:obj[j].updated_at,
+			    	closed_at:obj[j].closed_at,
+			    	assignee:obj[j].assignee
+			    });
+		    }
+		    batch.execute(function(err, result){});
 		}
-		// db.close();
+
+		db.close();
 		tmpLog.update('DATA MIGRATION', 'jquery closed pulls loaded', true);
 	});
 }
