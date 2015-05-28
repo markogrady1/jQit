@@ -119,6 +119,7 @@ exports.getClosedPullRequestData = function(param, callback) {
 			if(err) throw err;
 
 			db.close();
+			
 			callback(doc);
 
 		});
