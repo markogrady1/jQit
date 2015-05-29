@@ -1,6 +1,6 @@
 ## jquery-issue-tracker-0.1.0
 ####Requirements:
-- [ ] Make the tracking code public
+-  Make the tracking code public
 - [ ] Monitor all repositories
 - [ ] Track pull requests and issues
 - [ ] Track opens and closes, not just total open count
