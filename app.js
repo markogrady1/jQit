@@ -1,5 +1,5 @@
-var hist = require('./recentIssues');
-hist.migrateHistory();
+var hst = require('./recentIssues');
+hst.migrateHistory();
 var migrate = require('./schema/migrate');
 migrates();
 

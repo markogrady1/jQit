@@ -18,8 +18,8 @@ mongoClient.connect("mongodb://127.0.0.1:27017/repositories", function(err, db){
 		if(doc == null){
 			db.close();
 		}else{	
-			repoNames[index] = doc.name;
-			issueNo[index] = doc.open_issues;
+			repoNames.push(doc.name);
+			issueNo.push(doc.open_issues);
 			index++;
 		}
 		exports.names = repoNames;
