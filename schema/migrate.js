@@ -95,14 +95,14 @@ exports.pullsClosedMigrate = function() {
 
 		    for(var j = 0; j < obj.length; j++){	
 		    	batch.insert({  
-		    		url:obj[j].url,
-			    	id:obj[j].id, 
-			    	title:obj[j].title,
-			    	body:obj[j].body,
-			    	created_at:obj[j].created_at,
-			    	updated_at:obj[j].updated_at,
-			    	closed_at:obj[j].closed_at,
-			    	assignee:obj[j].assignee
+		    		url: obj[j].url,
+			    	id: obj[j].id, 
+			    	title: obj[j].title,
+			    	body: obj[j].body,
+			    	created_at: obj[j].created_at,
+			    	updated_at: obj[j].updated_at,
+			    	closed_at: obj[j].closed_at,
+			    	assignee: obj[j].assignee
 			    });
 		    }
 		    batch.execute(function(err, result){});
