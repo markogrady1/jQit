@@ -29,9 +29,9 @@
 <body>
 	 <h1><%= data.name %></h1>
     <%-
-      visualHelper.getBarChart({
+      visualHelper.resolveChart({
         data: ch,
-        width: 800,
+        width: 1100,
         height: 600,
         xAxisLabel: '1 month',
         yAxisLabel: 'issues',

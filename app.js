@@ -19,7 +19,7 @@ var express = require('express'),
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + "/views/");
 app.set('view engine', 'html');
-app.locals.visualHelper = require('./lib/visualHelper');
+app.locals.visualHelper = require('./lib/dataProvider');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
