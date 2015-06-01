@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title>Open Issue Details</title>
+	<link rel='stylesheet' href='/css/style.css' />
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="/js/scrilla.js"></script>
+</head>
+<body>
+	<h1><%= name %></h1>
+<div class="button-wrap">
+<% for (var i = 0; i < date.length; i++) { %>
+   <a href=repo/details/<%= date[i] %>><div class='open-issue-repo-dates'><%= date[i].created_at %><span class='inner-title'><%=date[i].title%></span></div></a>   
+
+<% i} %> 
+</div>
+<script>
+scroller.init(); 
+</script>
+</body>
+</html>

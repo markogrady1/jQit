@@ -10,13 +10,17 @@ function migrates() {
 	migrate.pullsClosedMigrate();
 	migrate.issuesClosedMigrate();
 }
-var express = require('express')
-    , app = express()
-    , routes = require('./routes/route')
-    , path = require('path')
-    , schema = require('./schema/schema');
+var express = require('express'), 
+	app = express(), 
+	routes = require('./routes/route'), 
+	path = require('path'), 
+	schema = require('./schema/schema');
 
-app.set('view engine', 'ejs');
+app.engine('.html', require('ejs').__express);
+app.set('views', __dirname + "/views/");
+app.set('view engine', 'html');
+app.locals.visualHelper = require('./lib/visualHelper');
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next){

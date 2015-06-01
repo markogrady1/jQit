@@ -1,0 +1,67 @@
+<html>
+<head>
+	<title>Repository Details</title>
+	<link rel='stylesheet' href='/css/style.css' />
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	   <meta charset="utf-8">
+   
+	<!-- // <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
+
+    <script src="/js/scrilla.js"></script>
+<style>
+      body {
+        background-color: #f5f5f5;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 13px;
+      }
+
+      .svg-chart .background {
+        shape-rendering: crispEdges;
+        stroke: #ccc;
+        fill: #fdfdfd;
+        stroke-width: 0px;
+      }
+
+      .svg-chart .bar { fill: #4682B4; }
+    </style>
+
+</head>
+<body>
+	 <h1><%= data.name %></h1>
+    <%-
+      visualHelper.getBarChart({
+        data: ch,
+        width: 800,
+        height: 600,
+        xAxisLabel: '1 month',
+        yAxisLabel: 'issues',
+        containerId: 'bar-chart-large'
+      });  
+    %>
+    <hr>
+  
+<p>Repository name: <%= data.name %></p>
+<p>Open Issues: <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
+<p>Watchers: <%= data.watchers_count %></p>
+<p>Created at: <%= data.created_at %></p>
+<p>Description: <%= data.description %></p>
+<p>Number of forks: <%= data.forks_count %></p>
+<p>Pull Requests: <%= pullRequestNo %></p>
+<p>Closed Pull Requests: <%= closedPulls %></p><i class="cent"></i>
+<p></p>
+<p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
+<div class="button-wrap-static">
+<% for (var i = 0; i < history.length; i++) { %>
+   <%      
+   	date = history[i].split(' ');
+   	cd = date[2]+ " " + date[1] + " " + date[3]
+   %>
+<div  class='open-issue-repo'><%= cd %><span class='issue-count'><%= issuesTrend[i] %></span></div>  
+<% i} %> 
+</div>
+
+<p><!-- <svg height="100" width="100">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg> --></p>
+</body>
+</html>
