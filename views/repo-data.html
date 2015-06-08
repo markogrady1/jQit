@@ -49,12 +49,13 @@
  
 <p>Repository name: <%= data.name %></p>
 <p>Open Issues: <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
+<p>Closed issues: <%= closedissues %></p>
+<p>Pull Requests: <%= pullRequestNo %></p>
+<p>Closed Pull Requests: <%= closedPulls %></p>
 <p>Watchers: <%= data.watchers_count %></p>
 <p>Created at: <%= data.created_at %></p>
 <p>Description: <%= data.description %></p>
 <p>Number of forks: <%= data.forks_count %></p>
-<p>Pull Requests: <%= pullRequestNo %></p>
-<p>Closed Pull Requests: <%= closedPulls %></p>
 <p></p>
 <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
 <div class="button-wrap-static">
