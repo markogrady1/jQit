@@ -19,7 +19,9 @@ var express = require('express'),
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + "/views/");
 app.set('view engine', 'html');
+app.locals.chartTester = require('./lib/chartTest');
 app.locals.visualHelper = require('./lib/dataProvider');
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 

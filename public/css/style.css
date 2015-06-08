@@ -42,3 +42,13 @@
 	border-radius: 8px;
 	color: #000;
 }
+
+.bar {
+	fill: #4883B2;
+	shape-rendering: crispEdges;
+
+}
+
+.bar-label {
+	/*text-anchor:end;*/
+}

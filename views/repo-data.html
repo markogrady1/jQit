@@ -5,7 +5,7 @@
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 	   <meta charset="utf-8">
    
-	<!-- // <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
+	 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
     <script src="/js/scrilla.js"></script>
 <style>
@@ -27,6 +27,7 @@
 
 </head>
 <body>
+  <section class="item"></section>
 	 <h1><%= data.name %></h1>
     <%-
       visualHelper.resolveChart({
@@ -38,8 +39,14 @@
         containerId: 'bar-chart-large'
       });  
     %>
-    <hr>
+
+  <%- chartTester.test({containerId:'bars'})%>
   
+    // <hr><script type="text/javascript"> //d3.select('.item').append('div')
+    // .attr('id', params.containerId).html('<h1>width</h1>');
+    // </script>
+ 
+ 
 <p>Repository name: <%= data.name %></p>
 <p>Open Issues: <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
 <p>Watchers: <%= data.watchers_count %></p>
@@ -47,7 +54,7 @@
 <p>Description: <%= data.description %></p>
 <p>Number of forks: <%= data.forks_count %></p>
 <p>Pull Requests: <%= pullRequestNo %></p>
-<p>Closed Pull Requests: <%= closedPulls %></p><i class="cent"></i>
+<p>Closed Pull Requests: <%= closedPulls %></p>
 <p></p>
 <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
 <div class="button-wrap-static">
