@@ -6,8 +6,6 @@ migrates();
 function migrates() {
 	migrate.repositoryMigrate();
 	migrate.pullsMigrate();
-	// migrate.pullsClosedMigrate();
-	// migrate.issuesClosedMigrate();
 	migrate.closedDataMigration('pulls');
 	migrate.closedDataMigration('issues');
 }
