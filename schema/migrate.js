@@ -74,57 +74,54 @@ exports.pullsMigrate = function() {
 }
 
 
-exports.pullsClosedMigrate = function() {
+// exports.pullsClosedMigrate = function() {
 
-	MongoClient.connect("mongodb://127.0.0.1:27017/pullsClosed", function(err, db){
+// 	MongoClient.connect("mongodb://127.0.0.1:27017/pullsClosed", function(err, db){
 
-		if(err) throw err;
+// 		if(err) throw err;
 
-		for(var i = 1; i < 49; i++){
-			obj = require('../repoData/pulls/closed/' + i + "_closed_pulls");
-			if(obj == ""){
-				continue
-			}
+// 		for(var i = 1; i < 49; i++){
+// 			obj = require('../repoData/pulls/closed/' + i + "_closed_pulls");
+// 			if(obj == ""){
+// 				continue
+// 			}
         
-	        var url = obj.map(function(data) {return data.url; });
-		    var urlValue = url.toString();
-		    var nameArr = urlValue.split('/');
-		    var dataName = nameArr[5];
-		    db.collection(dataName).remove({});
-		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: true}); //enable bulk inserting of data because of high numbers
+// 	        var url = obj.map(function(data) {return data.url; });
+// 		    var urlValue = url.toString();
+// 		    var nameArr = urlValue.split('/');
+// 		    var dataName = nameArr[5];
+// 		    db.collection(dataName).remove({});
+// 		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: true}); //enable bulk inserting of data because of high numbers
 
-		    for(var j = 0; j < obj.length; j++){	
-		    	batch.insert({  
-		    		url: obj[j].url,
-			    	id: obj[j].id, 
-			    	title: obj[j].title,
-			    	body: obj[j].body,
-			    	created_at: obj[j].created_at,
-			    	updated_at: obj[j].updated_at,
-			    	closed_at: obj[j].closed_at,
-			    	assignee: obj[j].assignee
-			    });
-		    }
-		    batch.execute(function(err, result){});
-		}
+// 		    for(var j = 0; j < obj.length; j++){	
+// 		    	batch.insert({  
+// 		    		url: obj[j].url,
+// 			    	id: obj[j].id, 
+// 			    	title: obj[j].title,
+// 			    	body: obj[j].body,
+// 			    	created_at: obj[j].created_at,
+// 			    	updated_at: obj[j].updated_at,
+// 			    	closed_at: obj[j].closed_at,
+// 			    	assignee: obj[j].assignee
+// 			    });
+// 		    }
+// 		    batch.execute(function(err, result){});
+// 		}
 
-		db.close();
-		tmpLog.update('DATA MIGRATION', 'jquery closed pulls loaded', true);
-	});
-}
-
-
+// 		db.close();
+// 		tmpLog.update('DATA MIGRATION', 'jquery closed pulls loaded', true);
+// 	});
+// }
 
 
-exports.issuesClosedMigrate = function() {
-
-	MongoClient.connect("mongodb://127.0.0.1:27017/issuesClosed", function(err, db){
+exports.closedDataMigration = function(targetData){
+MongoClient.connect("mongodb://127.0.0.1:27017/" + targetData + "Closed", function(err, db){
 
 
 if(err) throw err;
 
 		for(var i = 1; i < 49; i++){
-			obj = require('../repoData/issues/closed/' + i + "_closed_issues");
+			obj = require('../repoData/' + targetData + '/closed/' + i + "_closed_" + targetData + "");
 			if(obj == ""){
 				continue
 			}
@@ -135,7 +132,7 @@ if(err) throw err;
 		    var dataName = nameArr[5];
 		    db.collection(dataName).remove({});
 		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: true}); //enable bulk inserting of data because of high numbers
-
+		    // console.log(dataName + ' ' + obj.length)
 		    for(var j = 0; j < obj.length; j++){	
 		    	batch.insert({  
 		    		url: obj[j].url,
@@ -152,8 +149,47 @@ if(err) throw err;
 		}
 
 		db.close();
-		tmpLog.update('DATA MIGRATION', 'jquery closed issues loaded', true);
-	});
+		tmpLog.update('DATA MIGRATION', 'jquery closed ' + targetData + ' loaded', true);
+});
+}
+// exports.issuesClosedMigrate = function() {
+
+// 	MongoClient.connect("mongodb://127.0.0.1:27017/issuesClosed", function(err, db){
+
+
+// if(err) throw err;
+
+// 		for(var i = 1; i < 49; i++){
+// 			obj = require('../repoData/issues/closed/' + i + "_closed_issues");
+// 			if(obj == ""){
+// 				continue
+// 			}
+        
+// 	        var url = obj.map(function(data) {return data.url; });
+// 		    var urlValue = url.toString();
+// 		    var nameArr = urlValue.split('/');
+// 		    var dataName = nameArr[5];
+// 		    db.collection(dataName).remove({});
+// 		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: true}); //enable bulk inserting of data because of high numbers
+
+// 		    for(var j = 0; j < obj.length; j++){	
+// 		    	batch.insert({  
+// 		    		url: obj[j].url,
+// 			    	id: obj[j].id, 
+// 			    	title: obj[j].title,
+// 			    	body: obj[j].body,
+// 			    	created_at: obj[j].created_at,
+// 			    	updated_at: obj[j].updated_at,
+// 			    	closed_at: obj[j].closed_at,
+// 			    	assignee: obj[j].assignee
+// 			    });
+// 		    }
+// 		    batch.execute(function(err, result){});
+// 		}
+
+// 		db.close();
+// 		tmpLog.update('DATA MIGRATION', 'jquery closed issues loaded', true);
+// 	});
 	// 	if(err) throw err;
 
 	// 	for(var i = 1; i < 49; i++){
@@ -176,7 +212,7 @@ if(err) throw err;
 	// 	// db.close();
 	// 	tmpLog.update('DATA MIGRATION', 'jquery closed issues loaded', true);
 	// });
-}
+// }
 
 
 

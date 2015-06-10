@@ -3,12 +3,13 @@ hst.migrateHistory();
 var migrate = require('./schema/migrate');
 migrates();
 
-
 function migrates() {
 	migrate.repositoryMigrate();
 	migrate.pullsMigrate();
-	migrate.pullsClosedMigrate();
-	migrate.issuesClosedMigrate();
+	// migrate.pullsClosedMigrate();
+	// migrate.issuesClosedMigrate();
+	migrate.closedDataMigration('pulls');
+	migrate.closedDataMigration('issues');
 }
 var express = require('express'), 
 	app = express(), 
