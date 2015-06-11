@@ -2,9 +2,9 @@ var mongoClient = require("mongodb").MongoClient;
 var tmpLog = require('../lib/tmpLogger');
 var historyDoc = [];
 //connect to mongoDB and aquire data for all documents concerning repositories
-mongoClient.connect("mongodb://127.0.0.1:27017/repositories", function(err, db){
+
+exports.initConnection = function() {
  	console.log('schema connecting...');
-    if(err) throw err;
     tmpLog.update('CONNECTION','mongoDB connection made', true );
 
 	var query = {};
@@ -12,32 +12,32 @@ mongoClient.connect("mongodb://127.0.0.1:27017/repositories", function(err, db){
 	repoNames = [];
 	issueNo = [];
 	var index = 0;
-	db.collection('repos').find(query, projection).each(function(err, doc){
- 		if(err) throw err;
+	connection("repositories", function(db){
+		db.collection('repos').find(query, projection).each(function(err, doc){
+	 		if(err) throw err;
 
-		if(doc == null){
+			if(doc == null){
+				db.close();
+			}else{	
+				repoNames.push(doc.name);
+				issueNo.push(doc.open_issues);
+				index++;
+			}
+			exports.names = repoNames;
+			exports.issues = issueNo;
 			db.close();
-		}else{	
-			repoNames.push(doc.name);
-			issueNo.push(doc.open_issues);
-			index++;
-		}
-		exports.names = repoNames;
-		exports.issues = issueNo;
-		db.close();
-	});  
-});
+		});  
+	});
+}
+
 
 //connect to mongoDB and aquire data for a given repository
 //set the view with relevant data
 exports.getRecord = function(param, callback){
 	var query = {"name": param};
 	console.log('schema connecting...');
-
-	mongoClient.connect("mongodb://127.0.0.1:27017/repositories", function(err, db){
-  		if(err) throw err;
-	
-	    tmpLog.update('CONNECTION','mongoDB connection made', true);
+	tmpLog.update('CONNECTION','mongoDB connection made', true);
+	connection("repositories", function(db){
 		db.collection('repos').findOne(query, function(err, doc){
  			if(err) throw err;
 
@@ -46,41 +46,36 @@ exports.getRecord = function(param, callback){
 
 			callback(doc);
   		});  
-	}); 
+    });
  }
 
 exports.getIssueDates = function(req, res, param, callback) {
 	var query = {"repo": param};
-	// var issueDataSet;
 	teamName = query.repo;
-	// var issueDates = [], index = 0;
 	console.log('issue schema connecting...');
-	mongoClient.connect("mongodb://127.0.0.1:27017/issues", function(err, db){
-		var projection = { "created_at": 1, "title": 1,"_id": 0}
-		if(err) throw err;
-
-		tmpLog.update('CONNECTION','mongoDB connection made', true);
-
+	var projection = { "created_at": 1, "title": 1,"_id": 0}
+	tmpLog.update('CONNECTION','mongoDB connection made', true);
+	connection("issues", function(db){
 		db.collection(teamName).find({}, projection).toArray(function(err, doc){
-		if(err) throw err;
+			if(err) throw err;
 
-			tmpLog.update('QUERY','mongoDB query made', false);
-			db.close();
+				tmpLog.update('QUERY','mongoDB query made', false);
+				db.close();
 
-			callback(doc, teamName);
-		});  
+				callback(doc, teamName);
+			});  
+	});
+		
 
-	});  
+	// });  
 }
 
 exports.getHistory = function(param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
 	var projection = {"date": 1, "issues": 1, "_id": 0};
-	mongoClient.connect("mongodb://127.0.0.1:27017/repoHistory", function(err, db){
-		if(err) throw err;
-
-	    db.collection(collection).find({}, projection).toArray(function(err, doc){
+	connection("repoHistory", function(db){
+		db.collection(collection).find({}, projection).toArray(function(err, doc){
  		    if(err) throw err;
 
  		    tmpLog.update('REPO HISTORY', 'data resolved', false);
@@ -88,22 +83,19 @@ exports.getHistory = function(param, callback) {
 
 			callback(doc);
  	    });
- 	});	
+	});
 }
 
 exports.getOpenPullRequestData = function(param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
 	var projection = {"_id": 0};
-	mongoClient.connect("mongodb://127.0.0.1:27017/pulls", function(err, db){
-		if(err) throw err;
-
+	connection("pulls", function(db){
 		db.collection(collection).find({}, projection).toArray(function(err, doc){
 			if(err) throw err;
 
 			db.close();
 			callback(doc);
-
 		});
 	});
 }
@@ -112,16 +104,12 @@ exports.getClosedPullRequestData = function(param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
 	var projection = {"_id": 0};
-	mongoClient.connect("mongodb://127.0.0.1:27017/pullsClosed", function(err, db){
-		if(err) throw err;
-
+	connection("pullsClosed", function(db){
 		db.collection(collection).find({}, projection).toArray(function(err, doc){
 			if(err) throw err;
 
 			db.close();
-			
 			callback(doc);
-
 		});
 	});
 }
@@ -130,21 +118,23 @@ exports.getClosedIssuesData = function(param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
 	var projection = {"_id": 0};
-	mongoClient.connect("mongodb://127.0.0.1:27017/issuesClosed", function(err, db){
-		if(err) throw err;
-
+	connection("issuesClosed", function(db){
 		db.collection(collection).find({}, projection).toArray(function(err, doc){
 			if(err) throw err;
 
 			db.close();
 			callback(doc);
-
 		});
 	});
 }
  
 
-
+var connection = function(dbase, callback) {
+	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
+		if(err) throw err;
+		callback(db)
+	});
+}
 
  
 

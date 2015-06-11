@@ -5,7 +5,7 @@
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 	   <meta charset="utf-8">
    
-	 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
     <script src="/js/scrilla.js"></script>
 <style>
@@ -30,6 +30,7 @@
   <section class="item"></section>
 	 <h1><%= data.name %></h1>
     <%-
+
       visualHelper.resolveChart({
         data: ch,
         width: 1100,
@@ -39,13 +40,6 @@
         containerId: 'bar-chart-large'
       });  
     %>
-
-  <%- chartTester.test({containerId:'bars'})%>
-  
-    // <hr><script type="text/javascript"> //d3.select('.item').append('div')
-    // .attr('id', params.containerId).html('<h1>width</h1>');
-    // </script>
- 
  
 <p>Repository name: <%= data.name %></p>
 <p>GitHub Url: &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
@@ -57,7 +51,8 @@
 <p>Created at: <%= data.created_at %></p>
 <p>Description: <%= data.description %></p>
 <p>Number of forks: <%= data.forks_count %></p>
-<p>Average time of closed pull request: <%= avgPulls %></p>
+<p>Average time to close pull request: <%= avgPulls %></p>
+<p>Average time to close issues: <%= avgIssues %></p>
 <p></p>
 <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
 <div class="button-wrap-static">
@@ -72,6 +67,8 @@
 
 <p><!-- <svg height="100" width="100">
   <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+
 </svg> --></p>
+
 </body>
 </html>

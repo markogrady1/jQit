@@ -1,5 +1,5 @@
-var hst = require('./recentIssues');
-hst.migrateHistory();
+var hst = require('./schema/history');
+hst.migrate;
 var migrate = require('./schema/migrate');
 migrates();
 
@@ -9,16 +9,17 @@ function migrates() {
 	migrate.closedDataMigration('pulls');
 	migrate.closedDataMigration('issues');
 }
-var express = require('express'), 
-	app = express(), 
-	routes = require('./routes/route'), 
-	path = require('path'), 
-	schema = require('./schema/schema');
-
+var express = require('express')
+	, app = express()
+	, routes = require('./routes/route')
+	, path = require('path')
+	, schema = require('./schema/schema');
+	
+schema.initConnection();
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + "/views/");
 app.set('view engine', 'html');
-app.locals.chartTester = require('./lib/chartTest');
+
 app.locals.visualHelper = require('./lib/dataProvider');
 
 
