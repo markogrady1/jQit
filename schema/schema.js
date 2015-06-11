@@ -1,19 +1,15 @@
-var mongoClient = require("mongodb").MongoClient;
-var tmpLog = require('../lib/tmpLogger');
-var historyDoc = [];
-//connect to mongoDB and aquire data for all documents concerning repositories
+var mongoClient = require("mongodb").MongoClient
+    , tmpLog = require('../lib/tmpLogger');
 
+//connect to mongoDB and aquire data for all documents concerning repositories
 exports.initConnection = function() {
  	console.log('schema connecting...');
     tmpLog.update('CONNECTION','mongoDB connection made', true );
-
-	var query = {};
 	var projection = {"name": 1, "open_issues": 1,"_id": 0}
 	repoNames = [];
 	issueNo = [];
-	var index = 0;
 	connection("repositories", function(db){
-		db.collection('repos').find(query, projection).each(function(err, doc){
+		db.collection('repos').find({}, projection).each(function(err, doc){
 	 		if(err) throw err;
 
 			if(doc == null){
@@ -21,7 +17,6 @@ exports.initConnection = function() {
 			}else{	
 				repoNames.push(doc.name);
 				issueNo.push(doc.open_issues);
-				index++;
 			}
 			exports.names = repoNames;
 			exports.issues = issueNo;
@@ -59,15 +54,12 @@ exports.getIssueDates = function(req, res, param, callback) {
 		db.collection(teamName).find({}, projection).toArray(function(err, doc){
 			if(err) throw err;
 
-				tmpLog.update('QUERY','mongoDB query made', false);
-				db.close();
+			tmpLog.update('QUERY','mongoDB query made', false);
+			db.close();
 
-				callback(doc, teamName);
-			});  
+			callback(doc, teamName);
+		});  
 	});
-		
-
-	// });  
 }
 
 exports.getHistory = function(param, callback) {
