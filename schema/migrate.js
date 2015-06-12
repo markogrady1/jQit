@@ -90,7 +90,7 @@ if(err) throw err;
 		    var nameArr = urlValue.split('/');
 		    var dataName = nameArr[5];
 		    db.collection(dataName).remove({});
-		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: true}); //enable bulk inserting of data because of high numbers
+		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: false}); //enable bulk inserting of data because of high numbers
 		    for(var j = 0; j < obj.length; j++){	
 		    	batch.insert({  
 		    		url: obj[j].url,

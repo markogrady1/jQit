@@ -1,5 +1,4 @@
 var hst = require('./schema/history');
-hst.migrate;
 var migrate = require('./schema/migrate');
 migrates();
 

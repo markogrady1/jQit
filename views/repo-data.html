@@ -35,7 +35,7 @@
         data: ch,
         width: 1100,
         height: 600,
-        xAxisLabel: '1 month',
+        xAxisLabel: 'Last 30 Days',
         yAxisLabel: 'issues',
         containerId: 'bar-chart-large'
       });  
@@ -58,8 +58,8 @@
 <div class="button-wrap-static">
 <% for (var i = 0; i < history.length; i++) { %>
    <%      
-   	date = history[i].split(' ');
-   	cd = date[2]+ " " + date[1] + " " + date[3]
+   	date = history[i].split('-');
+   	cd = date[2]+ " " + date[1] + " " + date[0]
    %>
 <div  class='open-issue-repo'><%= cd %><span class='issue-count'><%= issuesTrend[i] %></span></div>  
 <% i} %> 

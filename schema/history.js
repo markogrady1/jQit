@@ -2,61 +2,45 @@ var fs = require('fs')
 	, tmpLog = require('../lib/tmpLogger')
 	, MongoClient = require('mongodb').MongoClient;
 
-var migrate = module.exports = {};
-
-var repoChunk = {};
-var repoDt = {};
+var migrate = {}
 
 migrate.init = function (){
  	this.resetHistory();
 	fs.readFile('./repoData/repo_history.txt','UTF-8', function(err, data){
     if(err) throw err;
-
-	MongoClient.connect("mongodb://127.0.0.1:27017/repoHistory", function(err, db){
-		if(err) throw err;	
-
-      //get each day consisting of date, repo and issues
-      	repoChunk = data.split('*');
-
-      //loop through days
-	      for(var i = 1; i < repoChunk.length; i++){
-
-	    	//get each repository name and issue amount
-	    	repoDt = repoChunk[i].split(',');
-
-	    	//get date of current repos record
-			var date = repoDt[0];
-
-			for(var j = 1; j < repoDt.length-1; j++){
-				var jsonData = JSON.stringify(repoDt[j]);
-
-				var arr = repoDt[j].trim().split('  ');
-	   			var collection = arr[0].trim(); 
-	   			var issueAmount = arr[1];
-				var doc = {'date': date, 'issues': issueAmount};
-
-		   		db.collection(collection).insert(doc, function(err, inserted){
-		   		if(err) throw err;
-		   		
-		   		// db.close(); 
-		   		});
-			}
-	      }
+    	migrate.connect('repoHistory', function(db){
+	      	repoChunk = data.split('*');
+		    for(var i = 1; i < repoChunk.length; i++){
+		    	repoDt = repoChunk[i].split(',');
+				var date = repoDt[0];
+				for(var j = 1; j < repoDt.length-1; j++){
+					var arr = repoDt[j].trim().split('  ');
+		   			var collection = arr[0].trim(); 
+		   			var issueAmount = arr[1];
+		   			dates = date.split(' = ')
+					var doc = {'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': issueAmount};
+			   		db.collection(collection).insert(doc, function(err, inserted){
+			   			if(err) throw err;
+			   		});
+				}
+		    }
+    	});
 	});
-});
 	tmpLog.update('HISTORY', 'new hist added', false);
 }
 
 migrate.resetHistory = function(){
-	MongoClient.connect("mongodb://127.0.0.1:27017/repoHistory", function(err, db){
-		if(err) throw err;	
-
+	migrate.connect('repoHistory', function(db){
 		db.dropDatabase();
 		db.close();
-    });
+	});
 	tmpLog.update('HISTORY', 'prev hist removed', false);
 }
 
-
-
-// module.exports.migrateHistory = migrate;
+migrate.connect = function(dbase, callback) {
+	MongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
+		if(err) throw err;
+		callback(db);
+	});
+}
+module.exports = migrate.init();
