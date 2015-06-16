@@ -1,18 +1,12 @@
-var hst = require('./schema/history');
-var migrate = require('./schema/migrate');
-migrates();
-
-function migrates() {
-	migrate.repositoryMigrate();
-	migrate.pullsMigrate();
-	migrate.closedDataMigration('pulls');
-	migrate.closedDataMigration('issues');
-}
-var express = require('express')
+var hst = require('./schema/history')
+    , migrate = require('./schema/migrate')
+    , express = require('express')
 	, app = express()
 	, routes = require('./routes/route')
 	, path = require('path')
 	, schema = require('./schema/schema');
+
+migrates();
 	
 schema.initConnection();
 app.engine('.html', require('ejs').__express);
@@ -21,6 +15,7 @@ app.set('view engine', 'html');
 
 app.locals.visualHelper = require('./lib/dataProvider');
 
+app.locals.getEvents = require('./lib/resolve')
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -35,6 +30,13 @@ var server = app.listen('3000', function(){
   	console.log('Listening on port: %s', port);
 });
 
+function migrates() {
+	migrate.repositoryMigrate();
+	migrate.pullsMigrate();
+	migrate.closedDataMigration('pulls');
+	migrate.closedDataMigration('issues');
+	migrate.eventsMigrate();
+}
 
 app.use('/', routes);
 module.exports = app;

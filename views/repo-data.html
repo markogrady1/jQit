@@ -27,8 +27,13 @@
 
 </head>
 <body>
+
+  
   <section class="item"></section>
+
+
 	 <h1><%= data.name %></h1>
+
     <%-
 
       visualHelper.resolveChart({
@@ -53,6 +58,10 @@
 <p>Number of forks: <%= data.forks_count %></p>
 <p>Average time to close pull request: <%= avgPulls %></p>
 <p>Average time to close issues: <%= avgIssues %></p>
+<p><b>Closures: </b><br>
+<%for (var key in events){ %>
+     <%= key + ' : ' + events[key] ; %> <br>
+     <% } %></p>
 <p></p>
 <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
 <div class="button-wrap-static">

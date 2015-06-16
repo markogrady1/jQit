@@ -112,6 +112,6 @@ this.scrolls();
 	
 }
 $(function(){
- scroller.init(); 
+ scroller.scrolls(); 
 
 });

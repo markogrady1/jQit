@@ -73,6 +73,37 @@ exports.pullsMigrate = function() {
 	});
 }
 
+
+exports.eventsMigrate = function() {
+
+	MongoClient.connect("mongodb://127.0.0.1:27017/events", function(err, db){
+
+		if(err) throw err;
+
+		for(var i = 1; i < 49; i++){
+			var obj = require('../repoData/events/' + i + "events");
+			if(obj == ""){
+				continue
+			}
+        
+	        var url = obj.map(function(data) {return data.url; });
+		    var urlValue = url.toString();
+		    var nameArr = urlValue.split('/');
+		    var dataName = nameArr[5];
+		    var formatName = dataName.split(',')
+		    dataName = formatName[0];
+		    db.collection(dataName).remove({});
+	        db.collection(dataName).insert(obj, function(err, data){
+
+            if(err) throw err;
+
+        	});
+		}
+		// db.close();
+		tmpLog.update('DATA MIGRATION', 'jquery events loaded', true);
+	});
+}
+
 exports.closedDataMigration = function(targetData){
 MongoClient.connect("mongodb://127.0.0.1:27017/" + targetData + "Closed", function(err, db){
 
