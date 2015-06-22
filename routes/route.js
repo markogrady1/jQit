@@ -10,7 +10,11 @@ console.log('router called');
 router.get('/', function(req, res){
 	migrate.repositoryMigrate();
 	console.log('index router called');
-	res.render('index', {names: schema.names, issuesNo: schema.issues});
+	res.render('index', {
+		names: schema.names,
+		issuesNo: schema.issues,
+		header: 'Main page'
+		});
 
 });
 

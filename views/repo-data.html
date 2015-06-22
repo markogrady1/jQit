@@ -9,26 +9,14 @@
 
     <script src="/js/scrilla.js"></script>
 <style>
-      body {
-        background-color: #f5f5f5;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 13px;
-      }
-
-      .svg-chart .background {
-        shape-rendering: crispEdges;
-        stroke: #ccc;
-        fill: #fdfdfd;
-        stroke-width: 0px;
-      }
-
-      .svg-chart .bar { fill: #4682B4; }
+      
     </style>
 
 </head>
 <body>
 
-  
+<% include partials/header.html %>
+  <div class="body-wrap">
   <section class="item"></section>
 
 
@@ -56,8 +44,8 @@
 <p>Created at: <%= data.created_at %></p>
 <p>Description: <%= data.description %></p>
 <p>Number of forks: <%= data.forks_count %></p>
-<p>Average time to close pull request: <%= avgPulls %></p>
 <p>Average time to close issues: <%= avgIssues %></p>
+<p>Average time to close pull request: <%= avgPulls %></p>
 <p><b>Closures: </b><br>
 <%for (var key in events){ %>
      <%= key + ' : ' + events[key] ; %> <br>
@@ -78,6 +66,6 @@
   <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
 
 </svg> --></p>
-
+</div>
 </body>
 </html>

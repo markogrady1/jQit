@@ -8,9 +8,10 @@
     <script src="/js/scrilla.js"></script>
 </head>
 <body>
-
+<% include partials/header.html %>
+<div class="body-wrap">
 <script> 
-
+/*
 var data = [<%=issuesNo%>];
     var w = 800;
     var h = 1850;
@@ -62,7 +63,7 @@ var data = [<%=issuesNo%>];
             })
 	        .text(function(d, i){
 	        	return d;
-	        })
+	        })*/
 </script>
 <div class="chart-area"></div>
 
@@ -74,5 +75,6 @@ var data = [<%=issuesNo%>];
 <script>
 scroller.init(); 
 </script>
+</div>
 </body>
 </html>

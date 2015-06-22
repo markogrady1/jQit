@@ -2,13 +2,13 @@ var fs = require('fs')
 	, tmpLog = require('../lib/tmpLogger')
 	, MongoClient = require('mongodb').MongoClient;
 
-var migrate = {}
+var history = {}
 
-migrate.init = function (){
+history.init = function (){
  	this.resetHistory();
 	fs.readFile('./repoData/repo_history.txt','UTF-8', function(err, data){
     if(err) throw err;
-    	migrate.connect('repoHistory', function(db){
+    	history.connect('repoHistory', function(db){
 	      	repoChunk = data.split('*');
 		    for(var i = 1; i < repoChunk.length; i++){
 		    	repoDt = repoChunk[i].split(',');
@@ -29,18 +29,18 @@ migrate.init = function (){
 	tmpLog.update('HISTORY', 'new hist added', false);
 }
 
-migrate.resetHistory = function(){
-	migrate.connect('repoHistory', function(db){
+history.resetHistory = function(){
+	history.connect('repoHistory', function(db){
 		db.dropDatabase();
 		db.close();
 	});
 	tmpLog.update('HISTORY', 'prev hist removed', false);
 }
 
-migrate.connect = function(dbase, callback) {
+history.connect = function(dbase, callback) {
 	MongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
 		if(err) throw err;
 		callback(db);
 	});
 }
-module.exports = migrate.init();
+module.exports = history.init();
