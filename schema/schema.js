@@ -80,66 +80,80 @@ exports.getHistory = function(param, callback) {
 	});
 }
 
-exports.getOpenPullRequestData = function(param, callback) {
-	var query = {"repo": param};
-	collection = query.repo;
-	var projection = { "_id": 0 };
-	connection("pulls", function(db){
-		db.collection(collection).find({}, projection).toArray(function(err, doc){
-			if(err) throw err;
+// exports.getOpenPullRequestData = function(param, callback) {
+// 	var query = {"repo": param};
+// 	collection = query.repo;
+// 	var projection = { "_id": 0 };
+// 	connection("pulls", function(db){
+// 		db.collection(collection).find({}, projection).toArray(function(err, doc){
+// 			if(err) throw err;
 
-			db.close();
-			callback(doc);
-		});
-	});
-}
+// 			db.close();
+// 			callback(doc);
+// 		});
+// 	});
+// }
  
-exports.getClosedPullRequestData = function(param, callback) {
-	var query = {"repo": param};
-	collection = query.repo;
-	var projection = { "_id": 0 };
-	connection("pullsClosed", function(db){
-		db.collection(collection).find({}, projection).toArray(function(err, doc){
-			if(err) throw err;
+// exports.getClosedPullRequestData = function(param, callback) {
+// 	var query = {"repo": param};
+// 	collection = query.repo;
+// 	var projection = { "_id": 0 };
+// 	connection("pullsClosed", function(db){
+// 		db.collection(collection).find({}, projection).toArray(function(err, doc){
+// 			if(err) throw err;
 
-			db.close();
-			callback(doc);
-		});
-	});
-}
+// 			db.close();
+// 			callback(doc);
+// 		});
+// 	});
+// }
  
-exports.getClosedIssuesData = function(param, callback) {
-	var query = {"repo": param};
-	collection = query.repo;
-	var projection = { "_id": 0 };
-	connection("issuesClosed", function(db){
-		db.collection(collection).find({}, projection).toArray(function(err, doc){
-			if(err) throw err;
+// exports.getClosedIssuesData = function(param, callback) {
+// 	var query = {"repo": param};
+// 	collection = query.repo;
+// 	var projection = { "_id": 0 };
+// 	connection("issuesClosed", function(db){
+// 		db.collection(collection).find({}, projection).toArray(function(err, doc){
+// 			if(err) throw err;
 
-			db.close();
-			callback(doc);
-		});
-	});
-}
+// 			db.close();
+// 			callback(doc);
+// 		});
+// 	});
+// }
 
-exports.getEvents = function(param, callback){
-var query = {"repo": param};
-	collection = query.repo;
-	var projection = { "_id": 0 };
-	connection("events", function(db){
-		db.collection(collection).find({}, projection).toArray(function(err, doc){
-			if(err) throw err;
+// exports.getEvents = function(param, callback){
+// var query = {"repo": param};
+// 	collection = query.repo;
+// 	var projection = { "_id": 0 };
+// 	connection("events", function(db){
+// 		db.collection(collection).find({}, projection).toArray(function(err, doc){
+// 			if(err) throw err;
 
-			db.close();
-			callback(doc);
-		});
-	});
-}
+// 			db.close();
+// 			callback(doc);
+// 		});
+// 	});
+// }
 
 var connection = function(dbase, callback) {
 	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
 		if(err) throw err;
 		callback(db)
+	});
+}
+
+exports.executeQuery = function(database, param, callback) {
+	var query = {"repo": param};
+	collection = query.repo;
+	var projection = { "_id": 0 };
+	connection(database, function(db){
+		db.collection(collection).find({}, projection).toArray(function(err, doc){
+			if(err) throw err;
+
+			db.close();
+			callback(doc);
+		});
 	});
 }
 
