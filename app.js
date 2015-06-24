@@ -40,3 +40,4 @@ function migrates() {
 
 app.use('/', routes);
 module.exports = app;
+

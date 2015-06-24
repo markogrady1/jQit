@@ -23,7 +23,7 @@ exports.initConnection = function() {
 			db.close();
 		});  
 	});
-}
+};
 
 
 //connect to mongoDB and aquire data for a given repository
@@ -42,9 +42,9 @@ exports.getRecord = function(param, callback){
 			callback(doc);
   		});  
     });
- }
+};
 
-exports.getIssueDates = function(req, res, param, callback) {
+/*exports.getIssueDates = function(req, res, param, callback) {
 	var query = {"repo": param};
 	teamName = query.repo;
 	console.log('issue schema connecting...');
@@ -60,9 +60,9 @@ exports.getIssueDates = function(req, res, param, callback) {
 			callback(doc, teamName);
 		});  
 	});
-}
+};*/
 
-exports.getHistory = function(param, callback) {
+/*exports.getHistory = function(param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
 	var projection = { "isoDate": 1, "rawDate": 1, "issues": 1, "_id": 0 };
@@ -78,33 +78,55 @@ exports.getHistory = function(param, callback) {
 			callback(doc);
  	    });
 	});
-}
-
+};
+*/
 var connection = function(dbase, callback) {
 	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
 		if(err) throw err;
 		callback(db)
 	});
-}
+};
 
 exports.executeQuery = function(database, param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
-	var projection = { "_id": 0 };
+	queryStr = getQuery(database);
+	var projection = getProjection(database);
 	connection(database, function(db){
-		db.collection(collection).find({}, projection).toArray(function(err, doc){
+		db.collection(collection).find(queryStr, projection).toArray(function(err, doc){
 			if(err) throw err;
-
+			if(database == 'issues'){
+				callback(doc, collection);
+			}else{
+				callback(doc);
+			}
 			db.close();
-			callback(doc);
 		});
 	});
-}
+};
 
  
+var getProjection = function(db) {
+	var projection;
+	if (db == 'issues') {
+		projection = { 'created_at': 1, 'title': 1, '_id': 0 };
+	} else if (db == 'repoHistory') {
+		projection = { 'isoDate': 1, 'rawDate': 1, 'issues': 1, '_id': 0 }
+	} else {
+		projection = { '_id': 0 }
+	}
 
+	return projection;
+}
 
+var getQuery = function(db) {
+	var seconds = new Date().getTime() / 1000;
+	seconds = seconds - 2592000
+	var query;
+	query = db == 'repoHistory' ? {'secondsDate': { '$gt': seconds }} : {};
 
+	return query;
+}
 
 
 
