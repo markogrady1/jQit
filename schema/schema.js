@@ -44,42 +44,6 @@ exports.getRecord = function(param, callback){
     });
 };
 
-/*exports.getIssueDates = function(req, res, param, callback) {
-	var query = {"repo": param};
-	teamName = query.repo;
-	console.log('issue schema connecting...');
-	var projection = { "created_at": 1, "title": 1,"_id": 0}
-	tmpLog.update('CONNECTION','mongoDB connection made', true);
-	connection("issues", function(db){
-		db.collection(teamName).find({}, projection).toArray(function(err, doc){
-			if(err) throw err;
-
-			tmpLog.update('QUERY','mongoDB query made', false);
-			db.close();
-
-			callback(doc, teamName);
-		});  
-	});
-};*/
-
-/*exports.getHistory = function(param, callback) {
-	var query = {"repo": param};
-	collection = query.repo;
-	var projection = { "isoDate": 1, "rawDate": 1, "issues": 1, "_id": 0 };
-	var seconds = new Date().getTime() / 1000;
-	seconds = seconds - 2592000
-	connection("repoHistory", function(db){
-		db.collection(collection).find({ "secondsDate": { "$gt": seconds }},projection).toArray(function(err, doc){
- 		    if(err) throw err;
-
- 		    tmpLog.update('REPO HISTORY', 'data resolved', false);
-			db.close();
-
-			callback(doc);
- 	    });
-	});
-};
-*/
 var connection = function(dbase, callback) {
 	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
 		if(err) throw err;
@@ -104,14 +68,15 @@ exports.executeQuery = function(database, param, callback) {
 		});
 	});
 };
-
  
 var getProjection = function(db) {
 	var projection;
-	if (db == 'issues') {
+	if (db === 'issues') {
 		projection = { 'created_at': 1, 'title': 1, '_id': 0 };
-	} else if (db == 'repoHistory') {
+	} else if (db === 'repoHistory') {
 		projection = { 'isoDate': 1, 'rawDate': 1, 'issues': 1, '_id': 0 }
+	} else if(db === 'repositories') {
+		projection = { "name": 1, "open_issues": 1, "_id": 0 }
 	} else {
 		projection = { '_id': 0 }
 	}
@@ -121,9 +86,9 @@ var getProjection = function(db) {
 
 var getQuery = function(db) {
 	var seconds = new Date().getTime() / 1000;
-	seconds = seconds - 2592000
+	seconds = seconds - 2592000;
 	var query;
-	query = db == 'repoHistory' ? {'secondsDate': { '$gt': seconds }} : {};
+	query = (db === 'repoHistory') ? {"secondsDate": { "$gt": seconds }} : {};
 
 	return query;
 }
