@@ -87,9 +87,7 @@ var getProjection = function(db) {
 var getQuery = function(db) {
 	var seconds = new Date().getTime() / 1000;
 	seconds = seconds - 2592000;
-	var query;
-	query = (db === 'repoHistory') ? {"secondsDate": { "$gt": seconds }} : {};
-
+	var query = (db === 'repoHistory') ? {"secondsDate": { "$gt": seconds }} : {};
 	return query;
 }
 
