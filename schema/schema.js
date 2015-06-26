@@ -54,7 +54,7 @@ var connection = function(dbase, callback) {
 exports.executeQuery = function(database, param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
-	queryStr = getQuery(database);
+	var queryStr = getQuery(database);
 	var projection = getProjection(database);
 	connection(database, function(db){
 		db.collection(collection).find(queryStr, projection).toArray(function(err, doc){

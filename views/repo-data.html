@@ -34,18 +34,20 @@
       });  
     %>
  
-<p>Repository name: <%= data.name %></p>
-<p>GitHub Url: &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
-<p>Open Issues: <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
-<p>Closed issues: <%= closedissues %></p>
-<p>Pull Requests: <%= pullRequestNo %></p>
-<p>Closed Pull Requests: <%= closedPulls %></p>
-<p>Stars: <%= data.watchers_count %></p>
-<p>Created at: <%= data.created_at %></p>
-<p>Description: <%= data.description %></p>
-<p>Number of forks: <%= data.forks_count %></p>
-<p>Average time to close issues: <%= avgIssues %></p>
-<p>Average time to close pull request: <%= avgPulls %></p>
+<p><b>Repository name:</b> <%= data.name %></p>
+<p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
+<p><b> Open Issues: </b> <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
+<p><b> Closed issues: </b> <%= closedissues %></p>
+<p><b> Pull Requests: </b> <%= pullRequestNo %></p>
+<p><b> Closed Pull Requests: </b> <%= closedPulls %></p>
+<p><b> Stars: </b> <%= data.watchers_count %></p>
+<p><b> Created at: </b> <%= data.created_at %></p>
+<p><b> Description: </b> <%= data.description %></p>
+<p><b> Number of forks: </b> <%= data.forks_count %></p>
+<p><b> Average time to close issues: </b> <%= avgIssues %></p>
+<p><b> Average time to close pull request: </b> <%= avgPulls %></p>
+<p><b> Age of oldest pull request: </b> <%= pullRange %></p>
+<p><b> Age of oldest issue: </b> <%= issueRange %></p>
 <p><b>Closures: </b><br>
 <%for (var key in events){ %>
      <%= key + ' : ' + events[key] ; %> <br>
