@@ -5,7 +5,7 @@ var hst = require('./schema/history')
 	, routes = require('./routes/route')
 	, path = require('path')
 	, schema = require('./schema/schema');
-
+var bodyParser = require('body-parser');
 migrates();
 	
 schema.initConnection();
@@ -16,9 +16,8 @@ app.set('view engine', 'html');
 app.locals.visualHelper = require('./lib/dataProvider');
 
 app.locals.getEvents = require('./lib/resolve')
-
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next){
 	res.set('X-Powered-By', 'Issue-Tracker');
 	next();

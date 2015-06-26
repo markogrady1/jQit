@@ -35,7 +35,6 @@ exports.getRecord = function(param, callback){
 	connection("repositories", function(db){
 		db.collection('repos').findOne(query, function(err, doc){
  			if(err) throw err;
-
   			tmpLog.update('QUERY TARGET' ,doc.name + ": outstanding issues: " + doc.open_issues, false);
   			db.close();
 
@@ -80,7 +79,6 @@ var getProjection = function(db) {
 	} else {
 		projection = { '_id': 0 }
 	}
-
 	return projection;
 }
 
