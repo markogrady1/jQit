@@ -48,10 +48,6 @@ router.get('/login', function(req, res) {
 	reslv.initiateLogin(req, res);
 });
 
-//STATUS: 404 back-up
-router.get('*', function(req, res) {
-	res.end('<h1>you\'ve been 404\'d</h1>');
-});
 
 router.post('/login/val', function(req, res){
     	username = req.body.username;
@@ -62,6 +58,20 @@ router.post('/login/val', function(req, res){
 	} else {
 		res.send('wrong');
 	}
+});
+
+router.get('/register', function(req, res) {
+	console.log('register page selected');
+	reslv.initiateRegistration(req, res);
+});
+
+router.post('/register/val', function(req, res) {
+	reslv.validateRegistration(req);
+
+});
+//STATUS: 404 back-up
+router.get('*', function(req, res) {
+	res.end('<h1>you\'ve been 404\'d</h1>');
 });
 
 module.exports = router;
