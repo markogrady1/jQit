@@ -26,6 +26,6 @@
     "supertest": "^0.15.0"
   },
    "scripts": {
-    "test": "make test"
+    "test": "node_modules/mocha/bin/mocha"
   }
 }
