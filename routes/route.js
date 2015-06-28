@@ -52,6 +52,7 @@ router.get('/login', function(req, res) {
 router.post('/login/val', function(req, res){
     	username = req.body.username;
     	password = req.body.password;
+	
 	var result = reslv.validateUser(username, password);
 	if(result) {
     		res.redirect('/');
@@ -66,8 +67,10 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/register/val', function(req, res) {
-	reslv.validateRegistration(req);
-
+	var result = reslv.validateRegistration(req, res);
+	if (!result) {
+		res.redirect('/register');
+	}
 });
 //STATUS: 404 back-up
 router.get('*', function(req, res) {

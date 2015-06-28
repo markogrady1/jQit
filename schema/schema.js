@@ -90,5 +90,27 @@ var getQuery = function(db) {
 }
 
 
+function User(username, email, pass) {
+	var self = this;
+	this.username = username;
+	this.email = email;
+	this.pass = pass;
+}
 
+User.prototype.register = function(res) {
+	var query = { 'username': this.username, 'email': this.email, 'password': this.pass };
+	connection('user', function(db){
+		db.collection('users').insert(query, function(err, result){
+			console.log('user made');
+				if (err && err.code == 11000)
+					 console.log('duplicate email take action by alerting user'); 
+					//WE NEED TO DISPLAY THE FACT WE HAVE A DUPLICATE EMAIL ADDRESS
+		});
+});	
 
+}
+exports.regUser = function(username, email, pass, req) {
+	var user = new User(username, email, pass);
+	user.register(req);
+	console.log(user);
+}
