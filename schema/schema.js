@@ -145,10 +145,10 @@ exports.loginUser = function(email, pwd, fn) {
 			db.close();
 			if (!doc.length) {
 				statusL = 'Email or password incorrect';
-				fn(false);
+				fn(false, { username: '' });
 			} else {
 				statusL = 'Login';
-				fn(true);	
+				fn(true, doc);	
 			}
 		});
 	});

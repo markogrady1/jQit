@@ -1,21 +1,26 @@
 var hst = require('./schema/history')
     , migrate = require('./schema/migrate')
     , express = require('express')
-	, app = express()
-	, routes = require('./routes/route')
-	, path = require('path')
-	, schema = require('./schema/schema');
-var bodyParser = require('body-parser');
+    , app = express()
+    , routes = require('./routes/route')
+    , path = require('path')
+    , schema = require('./schema/schema')
+    , bodyParser = require('body-parser')
+    , cookieParser = require('cookie-parser')
+    , session = require('express-session')
 migrates();
-	
+
 schema.initConnection();
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + "/views/");
 app.set('view engine', 'html');
 
 app.locals.visualHelper = require('./lib/dataProvider');
-
+//routes.instance(app);
+//app.locals.username = '';
 app.locals.getEvents = require('./lib/resolve')
+app.use(cookieParser());
+app.use(session({ secret:'mynameisthemanofthemoon', saveUninitialized: true, resave: true })); 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next){
@@ -40,6 +45,6 @@ function migrates() {
 	migrate.eventsMigrate();
 }
 
-app.use('/', routes);
+app.use('/', routes(app, server));
 module.exports = app;
 

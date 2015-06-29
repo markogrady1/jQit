@@ -4,7 +4,7 @@ var migrate = require('../schema/migrate')
 	, reslv = require('../lib/resolve')
 	, express = require('express')
 	, router = express.Router();
-
+var app, server;
 console.log('router called');
 //route for the home page
 router.get('/', function(req, res){
@@ -52,10 +52,12 @@ router.get('/login', function(req, res) {
 router.post('/login', function(req, res){
     	username = req.body.username;
     	password = req.body.password;
-	reslv.validateLogin(req, res, function(result){
+	reslv.validateLogin(req, res, function(result, data){
 		if(!result) {
     			res.redirect('/login');
 		} else {
+			req.session.username = data[0].username;
+			app.locals.username = data[0].username;
 			res.redirect('/');
 		}
 	});
@@ -75,8 +77,20 @@ router.post('/register', function(req, res) {
 	}
 });
 //STATUS: 404 back-up
+
+router.get('/logout', function(req, res) {
+	req.session.destroy();
+	app.locals.username = '';
+	res.redirect('/');
+});
+
 router.get('*', function(req, res) {
 	res.end('<h1>you\'ve been 404\'d</h1>');
 });
 
-module.exports = router;
+module.exports = function(appl, serv) {
+	server = serv
+	app = appl;
+	app.locals.username = '';
+	return router;
+}

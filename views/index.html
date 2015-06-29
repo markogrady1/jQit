@@ -67,7 +67,7 @@ var data = [<%=issuesNo%>];
 	        })*/
 </script>
 <div class="chart-area"></div>
-
+<p><%= username %>
 <div class="button-wrap">
 <% for (var i = 0; i < names.length; i++) { %>
    <a href=repo/details/<%= names[i] %>><div class='open-issue-repo'><%= names[i] %><span class='issue-count' ><%= issuesNo[i] %></span></div></a>   
