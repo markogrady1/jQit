@@ -44,32 +44,34 @@ function resolveDate(fullDate) {
 }
 
 router.get('/login', function(req, res) {
-	console.log('login page selected');
+	console.log('login page called');
 	reslv.initiateLogin(req, res);
 });
 
 
-router.post('/login/val', function(req, res){
+router.post('/login', function(req, res){
     	username = req.body.username;
     	password = req.body.password;
-	
-	var result = reslv.validateUser(username, password);
-	if(result) {
-    		res.redirect('/');
-	} else {
-		res.send('wrong');
-	}
+	reslv.validateLogin(req, res, function(result){
+		if(!result) {
+    			res.redirect('/login');
+		} else {
+			res.redirect('/');
+		}
+	});
 });
 
 router.get('/register', function(req, res) {
-	console.log('register page selected');
+	console.log('register page called');
 	reslv.initiateRegistration(req, res);
 });
 
-router.post('/register/val', function(req, res) {
+router.post('/register', function(req, res) {
 	var result = reslv.validateRegistration(req, res);
 	if (!result) {
 		res.redirect('/register');
+	} else {
+		res.redirect('/');
 	}
 });
 //STATUS: 404 back-up

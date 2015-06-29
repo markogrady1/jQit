@@ -1,19 +1,24 @@
 var mongoClient = require("mongodb").MongoClient
     , tmpLog = require('../lib/tmpLogger');
 var io;
-var status = 'Register';
+var statusR = 'Register';
+var statusL = 'Login';
 
 exports.soc = function(server) {
 	io = require('socket.io')(server);
 	io.on('connect', function(c) {
-		io.emit('new', { greet: status })
+		io.emit('register_status', { greet: statusR });
+		io.emit('login_status', { greet: statusL });
 	});
 }
 
 exports.setStatus = function(stat){
-	status = stat;
+	statusR = stat;
 }
 
+exports.setLoginStatus = function(stat) {
+	statusL = stat;
+}
 //connect to mongoDB and aquire data for all documents concerning repositories
 exports.initConnection = function() {
  	console.log('schema connecting...');
@@ -115,18 +120,36 @@ User.prototype.register = function() {
 	connection('user', function(db){
 		db.collection('users').insert(query, function(err, result){
 			console.log('user made');
-				if (err && err.code == 11000){
-					status = 'Email has been used before.';
-					 console.log('Duplicate Email: Alert User');
-				} else {
-					status = 'good';
-				}			
+			if (err && err.code == 11000){
+				statusR = 'Email has been used before.';
+				 console.log('Duplicate Email: Alert User');
+			} else {
+				statusR = 'good';
+			}			
 		});
-});	
-
+		db.close();
+	});	
 }
+
 exports.regUser = function(username, email, pass, req) {
 	var user = new User(username, email, pass);
 	user.register();
 	console.log(user);
+}
+
+exports.loginUser = function(email, pwd, fn) {
+	var projection = { 'username': 1, 'email': 1, 'password': 1, '_id': 0 };
+	var query = { 'email': email, 'password': pwd };
+	connection('user', function(db) {
+		db.collection('users').find(query, projection).toArray(function(err, doc){
+			db.close();
+			if (!doc.length) {
+				statusL = 'Email or password incorrect';
+				fn(false);
+			} else {
+				statusL = 'Login';
+				fn(true);	
+			}
+		});
+	});
 }

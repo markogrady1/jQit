@@ -1,13 +1,29 @@
 <!doctype html>
 <html>
 <head>
+
+<script src='/socket.io/socket.io.js'></script>
+
 </head>
 <body>
+
+<script>
+var server = io.connect('http://localhost:3000');
+console.log(server);
+server.on('login_status', function(data){
+	document.getElementById('statusL').innerHTML = data.greet;
+});
+</script>
+
+<body>
 <h1>login matey: <%= login %></h1>
-<form method='post' action='/login/val'>
-<input class='input-field' name='username' id='username'><br>
+<p id='statusL'></p>
+<form method='post' action='/login'>
+<input class='input-field' name='email' id='email'><br>
 <input class='input-field' name='password' id='password'><br>
 <input type='submit' value='Login'><br>
 </form>
+<br>
+<a href='/'>Home</a>
 </body>
 <html>

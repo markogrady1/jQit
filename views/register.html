@@ -9,19 +9,21 @@
 <script>
 var server = io.connect('http://localhost:3000');
 console.log(server);
-server.on('new', function(data){
+server.on('register_status', function(data){
 	document.getElementById('status').innerHTML = data.greet;
 });
 </script>
 
 <h1>Register: <%= greet %></h1>
 <p id="status"></p>
-<form method=post action='register/val'>
+<form method=post action='register'>
 <input name=username><br>
 <input name=email><br>
 <input name=password><br>
 <input name=confirmpassword><br>
 <input type=submit value=Register><br>
 </form>
+<br>
+<a href='/'>Home</a>
 </body>
 </html>
