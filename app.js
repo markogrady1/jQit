@@ -29,6 +29,9 @@ var server = app.listen('3000', function(){
   	console.log('Listening on port: %s', port);
 });
 
+// pass server to schema
+schema.soc(server)
+    
 function migrates() {
 	migrate.repositoryMigrate();
 	migrate.pullsMigrate();

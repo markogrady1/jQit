@@ -1,5 +1,18 @@
 var mongoClient = require("mongodb").MongoClient
     , tmpLog = require('../lib/tmpLogger');
+var io;
+var status = 'Register';
+
+exports.soc = function(server) {
+	io = require('socket.io')(server);
+	io.on('connect', function(c) {
+		io.emit('new', { greet: status })
+	});
+}
+
+exports.setStatus = function(stat){
+	status = stat;
+}
 
 //connect to mongoDB and aquire data for all documents concerning repositories
 exports.initConnection = function() {
@@ -97,20 +110,23 @@ function User(username, email, pass) {
 	this.pass = pass;
 }
 
-User.prototype.register = function(res) {
+User.prototype.register = function() {
 	var query = { 'username': this.username, 'email': this.email, 'password': this.pass };
 	connection('user', function(db){
 		db.collection('users').insert(query, function(err, result){
 			console.log('user made');
-				if (err && err.code == 11000)
-					 console.log('duplicate email take action by alerting user'); 
-					//WE NEED TO DISPLAY THE FACT WE HAVE A DUPLICATE EMAIL ADDRESS
+				if (err && err.code == 11000){
+					status = 'Email has been used before.';
+					 console.log('Duplicate Email: Alert User');
+				} else {
+					status = 'good';
+				}			
 		});
 });	
 
 }
 exports.regUser = function(username, email, pass, req) {
 	var user = new User(username, email, pass);
-	user.register(req);
+	user.register();
 	console.log(user);
 }
