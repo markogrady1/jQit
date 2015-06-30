@@ -1,20 +1,8 @@
 <!doctype html>
 <html>
 <head>
-
-<script src='/socket.io/socket.io.js'></script>
-
 </head>
 <body>
-
-<script>
-var server = io.connect('http://localhost:3000');
-console.log(server);
-server.on('login_status', function(data){
-	document.getElementById('statusL').innerHTML = data.greet;
-});
-</script>
-
 <body>
 <h1>login matey: <%= login %></h1>
 <p id='statusL'></p>

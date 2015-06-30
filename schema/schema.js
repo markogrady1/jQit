@@ -1,24 +1,6 @@
 var mongoClient = require("mongodb").MongoClient
     , tmpLog = require('../lib/tmpLogger');
-var io;
-var statusR = 'Register';
-var statusL = 'Login';
 
-exports.soc = function(server) {
-	io = require('socket.io')(server);
-	io.on('connect', function(c) {
-		io.emit('register_status', { greet: statusR });
-		io.emit('login_status', { greet: statusL });
-	});
-}
-
-exports.setStatus = function(stat){
-	statusR = stat;
-}
-
-exports.setLoginStatus = function(stat) {
-	statusL = stat;
-}
 //connect to mongoDB and aquire data for all documents concerning repositories
 exports.initConnection = function() {
  	console.log('schema connecting...');
@@ -42,7 +24,6 @@ exports.initConnection = function() {
 		});  
 	});
 };
-
 
 //connect to mongoDB and aquire data for a given repository
 //set the view with relevant data
@@ -115,15 +96,17 @@ function User(username, email, pass) {
 	this.pass = pass;
 }
 
-User.prototype.register = function() {
+User.prototype.register = function(res) {
 	var query = { 'username': this.username, 'email': this.email, 'password': this.pass };
 	connection('user', function(db){
 		db.collection('users').insert(query, function(err, result){
 			console.log('user made');
 			if (err && err.code == 11000){
 				statusR = 'Email has been used before.';
+				res.render('register', { register: 'Email has been used before' });
 				 console.log('Duplicate Email: Alert User');
 			} else {
+				res.render('login', { login: 'You may now login' });
 				statusR = 'good';
 			}			
 		});
@@ -131,24 +114,22 @@ User.prototype.register = function() {
 	});	
 }
 
-exports.regUser = function(username, email, pass, req) {
+exports.regUser = function(username, email, pass, res) {
 	var user = new User(username, email, pass);
-	user.register();
+	user.register(res);
 	console.log(user);
 }
 
-exports.loginUser = function(email, pwd, fn) {
+exports.loginUser = function(email, pwd, res, fn) {
 	var projection = { 'username': 1, 'email': 1, 'password': 1, '_id': 0 };
 	var query = { 'email': email, 'password': pwd };
 	connection('user', function(db) {
 		db.collection('users').find(query, projection).toArray(function(err, doc){
 			db.close();
 			if (!doc.length) {
-				statusL = 'Email or password incorrect';
-				fn(false, { username: '' });
+				res.render('login', {login: 'incorrect'});			
 			} else {
-				statusL = 'Login';
-				fn(true, doc);	
+				fn(true, doc);
 			}
 		});
 	});

@@ -16,11 +16,13 @@ app.set('views', __dirname + "/views/");
 app.set('view engine', 'html');
 
 app.locals.visualHelper = require('./lib/dataProvider');
-//routes.instance(app);
-//app.locals.username = '';
-app.locals.getEvents = require('./lib/resolve')
+//app.locals.getEvents = require('./lib/resolve')
 app.use(cookieParser());
-app.use(session({ secret:'mynameisthemanofthemoon', saveUninitialized: true, resave: true })); 
+app.use(session({ 
+	secret:'jkgabglhantiovqatapiteioatbthtipw4uiwtwu4hthtui42htuohRUVH3932HRTEJGWTWVEHGUIHAIHJSoheojahghvghjkher9turhtreig',
+	saveUninitialized: true,
+	resave: true 
+	})); 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next){
@@ -33,9 +35,6 @@ var server = app.listen('3000', function(){
 	port = server.address().port;
   	console.log('Listening on port: %s', port);
 });
-
-// pass server to schema
-schema.soc(server)
     
 function migrates() {
 	migrate.repositoryMigrate();

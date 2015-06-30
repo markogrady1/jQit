@@ -1,20 +1,9 @@
 <!doctype html>
 <html>
 <head>
-<script src='/socket.io/socket.io.js'></script>
-
 </head>
 <body>
-
-<script>
-var server = io.connect('http://localhost:3000');
-console.log(server);
-server.on('register_status', function(data){
-	document.getElementById('status').innerHTML = data.greet;
-});
-</script>
-
-<h1>Register: <%= greet %></h1>
+<h1>Register: <%= register %></h1>
 <p id="status"></p>
 <form method=post action='register'>
 <input name=username><br>
