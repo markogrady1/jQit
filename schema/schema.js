@@ -1,6 +1,7 @@
 var mongoClient = require("mongodb").MongoClient
-    , tmpLog = require('../lib/tmpLogger');
-
+    , tmpLog = require('../lib/tmpLogger')
+    , bcrypt = require('bcryptjs');
+var hash;
 //connect to mongoDB and aquire data for all documents concerning repositories
 exports.initConnection = function() {
  	console.log('schema connecting...');
@@ -97,7 +98,8 @@ function User(username, email, pass) {
 }
 
 User.prototype.register = function(res) {
-	var query = { 'username': this.username, 'email': this.email, 'password': this.pass };
+	hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));
+	var query = { 'username': this.username, 'email': this.email, 'password': hash };
 	connection('user', function(db){
 		db.collection('users').insert(query, function(err, result){
 			console.log('user made');
@@ -122,12 +124,14 @@ exports.regUser = function(username, email, pass, res) {
 
 exports.loginUser = function(email, pwd, res, fn) {
 	var projection = { 'username': 1, 'email': 1, 'password': 1, '_id': 0 };
-	var query = { 'email': email, 'password': pwd };
+	var query = { 'email': email };
 	connection('user', function(db) {
 		db.collection('users').find(query, projection).toArray(function(err, doc){
 			db.close();
 			if (!doc.length) {
-				res.render('login', {login: 'incorrect'});			
+				res.render('login', { login: 'incorrect' });			
+			} else if (!bcrypt.compareSync(pwd, doc[0].password)) {
+				res.render('login', { login: 'incorrect' });
 			} else {
 				fn(true, doc);
 			}
