@@ -77,10 +77,26 @@ body {
 }
 
 #chartArea {
-	width: 800px;
+	width: 1200px;
 	margin: 0 auto;
 }
 
 .bar-label {
-	text-anchor: end;
+	fill:#4A84B0 ;
+	text-anchor: middle;
+}
+
+.axis path, 
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: chrispEdges;
+}
+
+.gridline path,
+.gridline line {
+	fill: none;
+	stroke: #fff;
+	shape-rendering: chrispEdges;
+
 }
