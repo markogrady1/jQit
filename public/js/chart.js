@@ -25,16 +25,6 @@ var yGridlines = d3.svg.axis()
 			.tickSize(-width, 0, 0)
 			.tickFormat('')
 			.orient('left')
-//var x = d3.scale.linear()
-//	.domain([0, d3.max(data, function(d){
-//		return d.issues;	
-//	})])
-//	.range([0, width]);
-//var y = d3.scale.ordinal()
-//	.domain(data.map(function(entry){
-//		return entry.date;
-//	}))
-//	.rangeBands([0, height])
 var linearColorScale = d3.scale.linear()
 			.domain([0, data.length])
 			.range(['#4A84B0', '#c6dbef']);
