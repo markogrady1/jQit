@@ -69,10 +69,18 @@ body {
 .bar {
 	fill: #4883B2;
 	shape-rendering: crispEdges;
-
 }
 
 .header {
 	background-color: #97DDFD;
 	padding:20px;
+}
+
+#chartArea {
+	width: 800px;
+	margin: 0 auto;
+}
+
+.bar-label {
+	text-anchor: end;
 }
