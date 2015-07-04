@@ -84,7 +84,7 @@ var getProjection = function(db) {
 
 var getQuery = function(db) {
 	var seconds = new Date().getTime() / 1000;
-	seconds = seconds - 2592000;
+	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
 	var query = (db === 'repoHistory') ? {"secondsDate": { "$gt": seconds }} : {};
 	return query;
 }

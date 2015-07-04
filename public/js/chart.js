@@ -2,8 +2,8 @@ function setChart(data) {
 
 var w = 1100, h = 550;
 var margin = {
-	top: 40,
-	bottom: 40,
+	top: 48,
+	bottom: 72,
 	left: 60,
 	right: 40
 };
@@ -43,10 +43,17 @@ var chart = svg.append('g')
 		.classed('display', true)
 		.attr('transform', 'translate(' + margin.left + ',' + margin.right + ')');
 
-plot.call(chart, {data:data});
+plot.call(chart, {
+	data:data,
+	axis: {
+	    x: xAxis,
+	    y: yAxis,
+	}, 
+	gridlines: yGridlines
+});
 function plot(params) {
 this.append('g')
-	.call(yGridlines)
+	.call(params.gridlines)
 	.classed('gridline', true)
 	.attr('transform', 'translate(0,0)')
 this.selectAll('.bar')
@@ -67,7 +74,7 @@ this.selectAll('.bar')
 		return height - y(d.issues)
 	  })
 	  .style('fill', function(d, i){
-//		return ordinalColorScale(i);//uncomment line for ordinalScale colours
+		//return ordinalColorScale(i);//uncomment line for ordinalScale colours
 		return linearColorScale(i)  //uncomment line for linearScale colours
 	  });
 
@@ -90,10 +97,30 @@ this.selectAll('.bar-label')
 	this.append('g')
 	    .classed('x axis', true)
 	    .attr('transform', 'translate(' + 0 + ',' + height + ')')
-	    .call(xAxis)
+	    .call(params.axis.x)
+		.selectAll('text')
+		    .style('text-anchor', 'end')
+		    .attr('dx', -8)
+		    .attr('dy', 8)
+		    .attr('transform', 'translate(0,0) rotate(-45)')
 	this.append('g')
 	    .classed('y axis', true)
 	    .attr('transform', 'translate(0,0)')
-	    .call(yAxis)
+	    .call(params.axis.y)
+	this.select('.y.axis')
+		.append('text')
+		.attr('x', 0)
+		.attr('y', 0)
+		.style('text-anchor', 'middle')
+		.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
+		.text('No. of Issues')
+	this.select('.x.axis')
+		.append('text')
+		.attr('x', 0)
+		.attr('y', 0)
+		.style('text-anchor', 'middle')
+		.attr('transform', 'translate(' + width / 2 + ', 50)')
+		.text('Last 30 Days')
+		
 }	
 }	
