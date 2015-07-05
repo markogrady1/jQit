@@ -16,12 +16,19 @@
 </head>
 <body>
 <div id=chartArea></div>
+<div id=chartArea2></div>
 <script>
 //this section of code displays how to pass a nodejs value to ejs and then on to code
 //within script tags it can then be used anyhow you wish 
 //not ch is an array or json value set
 
 var v = <%- JSON.stringify(ch) %>
+var p = <%- JSON.stringify(events) %>
+admin = [];
+for(var l in p) {
+ admin.push({'user': l, 'closed': p[l]})
+}
+jSonArr = JSON.stringify(admin)
 arr = [];
 dataset = [];
 for(var k in v) {
@@ -30,8 +37,8 @@ dataset.push(v[k].issues);
 }
 
 var jArr = JSON.stringify(arr);
-console.log(jArr)
-setChart(arr);
+setIssuesChart(arr);
+setClosureChart(admin);
 </script>
 <% include partials/header.html %>
   <div class="body-wrap">
