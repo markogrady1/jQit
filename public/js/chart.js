@@ -341,12 +341,7 @@ console.log(dayArr)
 	//arr[1] contains the amount of issues for that day
 	var bdy = document.getElementsByTagName('header')
 	var ele = document.createElement('div');
-	// $(ele).text(displayString + '\n\nNo. of Issues:    ' + arr[1] + '    cls' + progressStr + 'clsE');
 	$(ele).html("<span class=\'displ-wrap\''>"+displayString + '</span><br><span class=displ-wrap><br>No. of Issues:    ' + arr[1] + '</span><br> <br><span class=red>'+ progressStr + '</span>');
-	// $(ele).html($(ele).html().replace(/\n/g,'<br/>'));
-	// $(ele).html($(ele).html().replace(/    /g,'&nbsp;&nbsp;&nbsp;'));
-	// $(ele).html($(ele).html().replace(/cls/g,'<span class=red>;'));
-	// $(ele).html($(ele).html().replace(/clsE/g,'</span>;'));
 	$(ele).attr('class', 'display-data');
 	$(ele).css({
 		position: 'absolute',
