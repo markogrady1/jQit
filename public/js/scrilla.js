@@ -56,15 +56,14 @@ var scroller = {
 			var eTop = $('body').offset().top;
 
 			var arrowOffset = arrow.offset().top;
-			console.log("arrow offset " +
-				arrowOffset) //print arrow starting position 
+			//console.log("arrow offset " + arrowOffset) //print arrow starting position 
 
 			//position of the ele w.r.t window
 			$(window).scroll(function() {
 			//when window is scrolled
 			var scrollPosition = eTop - $(
 				window).scrollTop();
-			console.log(eTop - $(window).scrollTop());
+			//console.log(eTop - $(window).scrollTop());
 
 			if (scrollPosition > -200) {
 				arrow.fadeOut("slow");

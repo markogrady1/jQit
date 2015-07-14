@@ -5,7 +5,8 @@
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="/js/chart.js"></script>
 	   <meta charset="utf-8">
-   
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+ 
    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
     <script src="/js/scrilla.js"></script>
@@ -15,13 +16,14 @@
 
 </head>
 <body>
-<div id=chartArea></div>
-<div id=chartArea2></div>
+<% include partials/header.html %>
+  <div id=chartArea></div>
+  <div id=chartArea2></div>
 <script>
 //this section of code displays how to pass a nodejs value to ejs and then on to code
 //within script tags it can then be used anyhow you wish 
 //not ch is an array or json value set
-
+var dt = <%- JSON.stringify( fullDate) %>
 var v = <%- JSON.stringify(ch) %>
 var p = <%- JSON.stringify(events) %>
 admin = [];
@@ -32,15 +34,19 @@ jSonArr = JSON.stringify(admin)
 arr = [];
 dataset = [];
 for(var k in v) {
-arr.push({'date': v[k].date, 'issues': v[k].issues});
-dataset.push(v[k].issues);
+    arr.push({'date': v[k].date, 'issues': v[k].issues});
+    dataset.push(v[k].issues);
 }
-
+    
 var jArr = JSON.stringify(arr);
 setIssuesChart(arr);
+if(!issueStatus) {
+    var el = document.getElementById('chartArea');
+    el.innerHTML = 'There have been no issues in the last 30 days';
+    el.setAttribute('class', 'status');
+}
 setClosureChart(admin);
 </script>
-<% include partials/header.html %>
   <div class="body-wrap">
   <section class="item"></section>
 
@@ -88,12 +94,13 @@ setClosureChart(admin);
 <% i} %> 
 </div>
 
-<p><!-- <svg height="100" width="100">
-  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-
-</svg> --></p>
-</div><script>
-scroller.init(); 
+<script>
+console.log(v)
+    barInfo(v);
+</script>
+</div>
+<script>
+    scroller.init(); 
 </script>
 </body>
 </html>

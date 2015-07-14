@@ -21,7 +21,7 @@ body {
 	fill: #4682B4; 
 }
 
-.open-issue-repo:hover, .open-issue-repo-dates:hover{
+.open-issue-repo:hover, .open-issue-repo-dates:hover {
 	background-color: #2e4677;
 }
 
@@ -98,5 +98,29 @@ body {
 	fill: none;
 	stroke: #fff;
 	shape-rendering: chrispEdges;
+}
 
+.status {
+	font-size: 3em;
+}
+/*.red {
+	color: red;
+}*/
+
+.displ-wrap span{
+	margin: 0 0 10 0;
+	padding: 0 0 10 0;
+}
+.increase, .decrease, .same {
+	padding: 0 4px 0 0;
+}
+.increase {
+	color: #EA594E;
+}
+.decrease {
+	color: #52DD48;
+}
+
+.same {
+	color: #66D9EF;
 }
