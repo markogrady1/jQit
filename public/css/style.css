@@ -121,3 +121,9 @@ body {
 .same {
 	color: #66D9EF;
 }
+
+.btn {
+	background-color: red;
+	color: #fff;
+
+}

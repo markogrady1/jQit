@@ -1,9 +1,10 @@
+var totaller;
 function setIssuesChart(data) {
 var tot = 0;
     for (var m = 0; m < data.length; m++) {
 	tot += data[m].issues;
     }
-
+	totaller = tot;
 if (tot != 0) {
 issueStatus = true;
 var w = 1100, h = 550;
@@ -135,7 +136,7 @@ this.selectAll('.bar-label')
 		.attr('transform', 'translate(' + width / 2 + ', 50)')
 		.text('Last 30 Days')
 		
-}	
+	}	
 }
 
 
@@ -145,7 +146,20 @@ function setClosureChart(data) {
 	    for (var n = 0; n < data.length; n++) {
 	        tot += data[n].closed; 
 	    }
+	    if (tot != 0 && totaller != 0) {
 
+		var $viewEle = $('#changeView')
+		var btn = document.createElement('button');
+		$(btn).attr({
+			width: 200,
+			class: 'btn'	
+
+
+		});
+		$(btn).text('View other stats');
+		$viewEle.append(btn);
+		assignListener($viewEle);
+	    }
 	    if (tot != 0) {
 	        var w = 450, h = 450;
 	        var margin = {
@@ -270,11 +284,23 @@ function setClosureChart(data) {
 				.attr('transform', 'translate(' + width / 2 + ', 100)')
 				.text('User')
 		}	
+	$('#chartArea2').hide();
 }
 
 
+var assignListener = function(elem) {
+$(elem ).click(function() {
+  $( '#chartArea').toggle( "slow" );
+	$('#chartArea2').toggle('slow');
+});
+}
 
 
+var swapout = function() {
+
+
+
+}
 function barInfo(vData) {
 	var issArr = [], dayArr = [];
 
@@ -282,8 +308,6 @@ function barInfo(vData) {
 		issArr.push(vData[p].issues)
 		dayArr.push(vData[p].date)
 	}
-console.log(issArr)
-console.log(dayArr)
 	var mouseX, mouseY;
 	$(document).mousemove(function(e) {
 	    mouseX = e.pageX;
@@ -311,20 +335,15 @@ console.log(dayArr)
 		selectedBar = s[0];
 		selectedDay = a[1]
 		if (typeof issArr[t-1] != 'undefined') {
-			console.log(issArr[t-1])
 			progress = issArr[t] - issArr[t-1];
 			if(progress < 0) {
-				console.log('lower')
 				progress = progress.toString().replace('-','')
 				// progress = progress.replace('-', '')
 				progressStr = '<span class=decrease>▼ </span>' + progress + ' since yesterday';
-				console.log(progressStr)
 			} else if (progress === 0) {
 				progressStr = '<span class=same>▶ </span>No change';
-				console.log(progressStr)
 			} else {
 				progressStr = '<span class=increase>▲ </span>'  + progress + ' since yesterday';
-				console.log(progressStr)
 			}
 		} else {
 			progressStr = '';
@@ -341,7 +360,7 @@ console.log(dayArr)
 	//arr[1] contains the amount of issues for that day
 	var bdy = document.getElementsByTagName('header')
 	var ele = document.createElement('div');
-	$(ele).html("<span class=\'displ-wrap\''>"+displayString + '</span><br><span class=displ-wrap><br>No. of Issues:    ' + arr[1] + '</span><br> <br><span class=red>'+ progressStr + '</span>');
+	$(ele).html("<span class=\'displ-wrap\''>Date:    "+displayString + '</span><br><span class=displ-wrap><br>No. of Issues:    ' + arr[1] + '</span><br> <br><span class=red>'+ progressStr + '</span>');
 	$(ele).attr('class', 'display-data');
 	$(ele).css({
 		position: 'absolute',
