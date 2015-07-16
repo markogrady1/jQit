@@ -4,9 +4,10 @@ var fs = require('fs')
 
 var history = {}
 
+
 history.init = function (){
- 	this.resetHistory();
-	fs.readFile('./repoData/repo_history.txt','UTF-8', function(err, data){
+ 	this.resetHistory('repoHistory');
+	fs.readFile('./repoData/repo_issue_history.txt','UTF-8', function(err, data){
     if(err) throw err;
     	history.connect('repoHistory', function(db){
 	      	repoChunk = data.split('*');
@@ -26,11 +27,37 @@ history.init = function (){
 		    }
     	});
 	});
-	tmpLog.update('HISTORY', 'new hist added', false);
+	tmpLog.update('HISTORY', 'new issue hist added', false);
+	this.pullsHistory();
 }
 
-history.resetHistory = function(){
-	history.connect('repoHistory', function(db){
+history.pullsHistory = function() {
+this.resetHistory('repoPullsHistory');
+	fs.readFile('./repoData/repo_pulls_history.txt','UTF-8', function(err, data){
+    if(err) throw err;
+    	history.connect('repoPullsHistory', function(db){
+	      	repoChunk = data.split('*');
+		    for(var i = 1; i < repoChunk.length; i++){
+		    	repoDt = repoChunk[i].split(',');
+				var date = repoDt[0];
+				for(var j = 1; j < repoDt.length-1; j++){
+					var arr = repoDt[j].trim().split('  ');
+		   			var collection = arr[0].trim(); 
+		   			var issueAmount = arr[1];
+		   			dates = date.split(' = ')
+					var doc = {'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': issueAmount};
+			   		db.collection(collection).insert(doc, function(err, inserted){
+			   			if(err) throw err;
+			   		});
+				}
+		    }
+    	});
+	});
+	tmpLog.update('HISTORY', 'new PR hist added', false);
+}
+
+history.resetHistory = function(rep) {
+	history.connect(rep, function(db){
 		db.dropDatabase();
 		db.close();
 	});

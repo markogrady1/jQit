@@ -1,7 +1,51 @@
 var mongoClient = require("mongodb").MongoClient
     , tmpLog = require('../lib/tmpLogger')
-    , bcrypt = require('bcryptjs');
+    , fs = require('fs')
+    , bcrypt = require('bcryptjs')
+    , CronJob = require('cron').CronJob;
 var hash;
+writeArr = '';
+new CronJob('*/5 * * * *', function() {
+	for(var i = 1; i < 49; i++){
+		var obj = require('../repoData/pulls/open/' + i + "_pulls");
+		if(obj == ""){
+			continue
+		}
+		
+    	var url = mapping(obj, function(data) {return data.url;})
+	    var dataName = splitValue(url, 5, '/');
+	    writeArr += '' + dataName + '  '+obj.length + ',\n';
+	}
+
+		var d = new Date();
+		var seconds = d.getTime()/1000;
+		seconds = seconds.toString().split('.');
+		var n = d.toISOString();
+		n = n.substring(19,0)
+		newString = '*' + n + 'Z = ' + seconds[0] +',\n'+writeArr;
+		fs.appendFile('repoData/repo_pulls_history.txt', newString, function (err) {
+  				if (err) throw err;
+  				tmpLog.update('CRONJOB','Job written for '+ new Date(), true);
+				});
+}, null, true, "Europe/London");
+
+
+var splitValue = function(origVal, index, separator) {
+			var a = origVal.toString();
+		    var v = a.split(separator);
+		    var d = v[index];  
+		    return d;
+}
+
+var mapping = function(dat, fn) {
+	var d = dat.map(fn);
+
+	return d;
+}
+
+
+
+
 //connect to mongoDB and aquire data for all documents concerning repositories
 exports.initConnection = function() {
  	console.log('schema connecting...');
