@@ -6,36 +6,15 @@ var history = {}
 
 
 history.init = function (){
- 	this.resetHistory('repoHistory');
-	fs.readFile('./repoData/repo_issue_history.txt','UTF-8', function(err, data){
-    if(err) throw err;
-    	history.connect('repoHistory', function(db){
-	      	repoChunk = data.split('*');
-		    for(var i = 1; i < repoChunk.length; i++){
-		    	repoDt = repoChunk[i].split(',');
-				var date = repoDt[0];
-				for(var j = 1; j < repoDt.length-1; j++){
-					var arr = repoDt[j].trim().split('  ');
-		   			var collection = arr[0].trim(); 
-		   			var issueAmount = arr[1];
-		   			dates = date.split(' = ')
-					var doc = {'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': issueAmount};
-			   		db.collection(collection).insert(doc, function(err, inserted){
-			   			if(err) throw err;
-			   		});
-				}
-		    }
-    	});
-	});
-	tmpLog.update('HISTORY', 'new issue hist added', false);
-	this.pullsHistory();
+	this.getDataOverTime('repoHistory', 'issue')
+	this.getDataOverTime('repoPullsHistory', 'pulls')
 }
 
-history.pullsHistory = function() {
-this.resetHistory('repoPullsHistory');
-	fs.readFile('./repoData/repo_pulls_history.txt','UTF-8', function(err, data){
+history.getDataOverTime = function(database, target) {
+	this.resetHistory(database);
+	fs.readFile('./repoData/repo_' + target + '_history.txt','UTF-8', function(err, data){
     if(err) throw err;
-    	history.connect('repoPullsHistory', function(db){
+    	history.connect(database, function(db){
 	      	repoChunk = data.split('*');
 		    for(var i = 1; i < repoChunk.length; i++){
 		    	repoDt = repoChunk[i].split(',');
@@ -43,9 +22,12 @@ this.resetHistory('repoPullsHistory');
 				for(var j = 1; j < repoDt.length-1; j++){
 					var arr = repoDt[j].trim().split('  ');
 		   			var collection = arr[0].trim(); 
-		   			var issueAmount = arr[1];
+		   			var amount = arr[1];
 		   			dates = date.split(' = ')
-					var doc = {'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': issueAmount};
+					var doc = target == 'pulls' ?
+					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': amount } :
+					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': amount }
+
 			   		db.collection(collection).insert(doc, function(err, inserted){
 			   			if(err) throw err;
 			   		});
@@ -53,7 +35,7 @@ this.resetHistory('repoPullsHistory');
 		    }
     	});
 	});
-	tmpLog.update('HISTORY', 'new PR hist added', false);
+	tmpLog.update('HISTORY', 'new hist added', false);
 }
 
 history.resetHistory = function(rep) {

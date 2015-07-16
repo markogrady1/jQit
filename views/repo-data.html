@@ -28,11 +28,13 @@
 //not ch is an array or json value set
 var dt = <%- JSON.stringify( fullDate) %>
 var v = <%- JSON.stringify(ch) %>
+var pr = <%- JSON.stringify(chPull) %>
 var p = <%- JSON.stringify(events) %>
 admin = [];
 for(var l in p) {
  admin.push({'user': l, 'closed': p[l]})
 }
+console.log(pr)
 jSonArr = JSON.stringify(admin)
 arr = [];
 dataset = [];
