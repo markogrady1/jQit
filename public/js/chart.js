@@ -48,10 +48,18 @@ function setIssuesChart(data) {
 			.attr('id', 'chart')
 			.attr('height', h)
 			.attr('width', w)
+
 	var chart = svg.append('g')
 			.classed('display', true)
 			.attr('transform', 'translate(' + margin.left + ',' + margin.right + ')');
-
+chart.append("text")
+		.classed('title', true)
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("ISSUES");
 	plot.call(chart, {
 		data:data,
 		axis: {
@@ -157,7 +165,7 @@ function setPullsChart(data) {
 			class: 'btn'	
 		});
 
-		$(btn).text('View other stats');
+		$(btn).text('View Pull Requests');
 		$viewEle.append(btn);
 		assignListener($viewEle);
 	    }
