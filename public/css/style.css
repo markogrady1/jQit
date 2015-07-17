@@ -128,7 +128,17 @@ body {
 }
 
 .btn {
-	background-color: red;
+	width: 150px;
+	height: 40px;
+	border-radius: 8px;
+	background-color: #3999dd;
 	color: #fff;
+	border: 0;
+	font-size: 1.2em;
+	outline: none;
+}
 
+.btn:hover {
+	background-color: #4a84b0;
+	cursor: pointer;
 }
