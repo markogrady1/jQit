@@ -143,3 +143,9 @@ body {
 	background-color: #4a84b0;
 	cursor: pointer;
 }
+
+#issues-title {
+	font-weight: bold;
+	font-size: 1.5em;
+	color: #a9a9a9;
+}

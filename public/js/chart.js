@@ -52,14 +52,13 @@ function setIssuesChart(data) {
 	var chart = svg.append('g')
 			.classed('display', true)
 			.attr('transform', 'translate(' + margin.left + ',' + margin.right + ')');
-chart.append("text")
-		.classed('title', true)
-        .attr("x", (width / 2))             
-        .attr("y", 0 - (margin.top / 2))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .style("text-decoration", "underline")  
-        .text("ISSUES");
+	chart.append("text")
+			.classed('issues-title', true)
+	        .attr("x", (width / 2))             
+	        .attr("id", 'issues-title')             
+	        .attr("y", 0 - (margin.top / 2))
+	        .attr("text-anchor", "middle")  
+	        .text("ISSUES");
 	plot.call(chart, {
 		data:data,
 		axis: {
@@ -212,7 +211,13 @@ function setPullsChart(data) {
 	var chart = svg.append('g')
 			.classed('display', true)
 			.attr('transform', 'translate(' + margin.left + ',' + margin.right + ')');
-
+	chart.append("text")
+				.classed('pulls-title', true)
+		        .attr("x", (width / 2))             
+		        .attr("id", 'pulls-title')             
+		        .attr("y", 0 - (margin.top / 2))
+		        .attr("text-anchor", "middle")  
+		        .text("PULL REQUESTS");
 	plot2.call(chart, {
 		data:data,
 		axis: {
