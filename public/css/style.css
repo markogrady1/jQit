@@ -81,6 +81,11 @@ body {
 	margin: 0 auto;
 }
 
+#chartArea2 {
+	width: 1200px;
+	margin: 0 auto;
+}
+
 .bar-label {
 	fill:#4A84B0 ;
 	text-anchor: middle;

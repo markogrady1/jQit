@@ -27,6 +27,7 @@
 //within script tags it can then be used anyhow you wish 
 //not ch is an array or json value set
 var dt = <%- JSON.stringify( fullDate) %>
+var pdt = <%- JSON.stringify( fullPullDate) %>
 var v = <%- JSON.stringify(ch) %>
 var pr = <%- JSON.stringify(chPull) %>
 var p = <%- JSON.stringify(events) %>
@@ -36,21 +37,30 @@ for(var l in p) {
 }
 console.log(pr)
 jSonArr = JSON.stringify(admin)
-arr = [];
-dataset = [];
+issuesArr = [], pullsArr = [];
+
+
+dataset = [] ;
 for(var k in v) {
-    arr.push({'date': v[k].date, 'issues': v[k].issues});
+    issuesArr.push({'date': v[k].date, 'issues': v[k].issues});
     dataset.push(v[k].issues);
 }
-    
-var jArr = JSON.stringify(arr);
-setIssuesChart(arr);
+
+for(var y in pr) {
+  pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
+    //dataset.push(pr[y].pulls);
+}
+var jArr = JSON.stringify(issuesArr);
+setIssuesChart(issuesArr)
+setPullsChart(pullsArr)
+//setIssuesChart(issuesArr, 'issues');
+//setIssuesChart(pullsArr, 'pulls'); 
 if(!issueStatus) {
     var el = document.getElementById('chartArea');
     el.innerHTML = 'There have been no issues in the last 30 days';
     el.setAttribute('class', 'status');
 }
-setClosureChart(admin);
+//setClosureChart(admin);
 </script>
   <div class="body-wrap">
   <section class="item"></section>
@@ -101,7 +111,8 @@ setClosureChart(admin);
 
 <script>
 console.log(v)
-    barInfo(v);
+    issueBarInfo(v, 'issues');
+    pullBarInfo(pr, 'pulls')
 </script>
 </div>
 <script>
