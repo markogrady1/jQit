@@ -144,8 +144,12 @@ body {
 	cursor: pointer;
 }
 
-#issues-title {
-	/*font-weight: bold;*/
+.issues-title {
+	font-size: 1.2em;
+	color: #a9a9a9;
+}
+
+.pulls-title {
 	font-size: 1.2em;
 	color: #a9a9a9;
 }
