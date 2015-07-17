@@ -143,9 +143,6 @@ function plot(params) {
 }
 
 
-
-
-
 function setPullsChart(data) {
 	var tot = 0;
 	    for (var n = 0; n < data.length; n++) {
@@ -158,8 +155,6 @@ function setPullsChart(data) {
 		$(btn).attr({
 			width: 200,
 			class: 'btn'	
-
-
 		});
 
 		$(btn).text('View other stats');
@@ -297,20 +292,6 @@ function setPullsChart(data) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function setClosureChart(data) {
 	var tot = 0;
 	    for (var n = 0; n < data.length; n++) {
@@ -323,10 +304,7 @@ function setClosureChart(data) {
 		$(btn).attr({
 			width: 200,
 			class: 'btn'	
-
-
 		});
-		
 		
 		$viewEle.append(btn);
 		assignListener($viewEle);
@@ -384,6 +362,7 @@ function setClosureChart(data) {
 		gridlines: yGridlines
 	});
 	}
+
 	function plot2(params) {
 		this.append('g')
 			.call(params.gridlines)
@@ -465,26 +444,14 @@ var assignListener = function(elem) {
 $(elem ).click(function() {
   $( '#chartArea').toggle( "slow" );
  var el = document.getElementById('chartArea');
-
-	
 	$('#chartArea2').toggle('slow');
-
- setTimeout(function(){
-	if(el.style.display === 'block') {
-			$('.btn').text('View Pull Requests')
-		} else {
-			$('.btn').text('View Issues')
-		}
- }, 800	)
-	// if($('#chartArea2').css('display') === 'block') {
-		
-	// }  else {
-	// 	if($('#chartArea').css('display') === 'nos') {
-	// 	$('.btn').text('isssu')
-	// }
-	// }
-	//text = $('#chartArea').css('display') == 'block' ? 'pulll' : 'issues';
-	
+	 setTimeout(function(){
+		if(el.style.display === 'block') {
+				$('.btn').text('View Pull Requests')
+			} else {
+				$('.btn').text('View Issues')
+			}
+	 }, 800	)
 });
 
 	
@@ -527,7 +494,6 @@ function issueBarInfo(vData) {
 			progress = issArr[t] - issArr[t-1];
 			if(progress < 0) {
 				progress = progress.toString().replace('-','')
-				// progress = progress.replace('-', '')
 				progressStr = '<span class=decrease>▼ </span>' + progress + ' since yesterday';
 			} else if (progress === 0) {
 				progressStr = '<span class=same>▶ </span>No change';
@@ -614,7 +580,6 @@ function pullBarInfo(vData) {
 			prog = issArr[t] - issArr[t-1];
 			if(prog < 0) {
 				prog = prog.toString().replace('-','')
-				// progress = progress.replace('-', '')
 				progressStr = '<span class=decrease>▼ </span>' + prog + ' since yesterday';
 			} else if (prog == 0) {
 				progressStr = '<span class=same>▶ </span>No change';
