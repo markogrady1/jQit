@@ -255,7 +255,8 @@ function setPullsChart(data) {
 			  .style('fill', function(d, i){
 				//return ordinalColorScale(i);//uncomment line for ordinalScale colours
 				return linearColorScale(i)  //uncomment line for linearScale colours
-			  });
+			  })
+			  .style('cursor', 'pointer');
 
 		this.selectAll('.bar-label')
 			.data(params.data)
