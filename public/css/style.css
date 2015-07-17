@@ -145,7 +145,7 @@ body {
 }
 
 #issues-title {
-	font-weight: bold;
-	font-size: 1.5em;
+	/*font-weight: bold;*/
+	font-size: 1.2em;
 	color: #a9a9a9;
 }

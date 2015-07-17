@@ -55,10 +55,10 @@ function setIssuesChart(data) {
 	chart.append("text")
 			.classed('issues-title', true)
 	        .attr("x", (width / 2))             
-	        .attr("id", 'issues-title')             
 	        .attr("y", 0 - (margin.top / 2))
 	        .attr("text-anchor", "middle")  
 	        .text("ISSUES");
+
 	plot.call(chart, {
 		data:data,
 		axis: {
@@ -214,10 +214,10 @@ function setPullsChart(data) {
 	chart.append("text")
 				.classed('pulls-title', true)
 		        .attr("x", (width / 2))             
-		        .attr("id", 'pulls-title')             
 		        .attr("y", 0 - (margin.top / 2))
 		        .attr("text-anchor", "middle")  
 		        .text("PULL REQUESTS");
+		        
 	plot2.call(chart, {
 		data:data,
 		axis: {
