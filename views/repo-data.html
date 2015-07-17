@@ -53,8 +53,7 @@ for(var y in pr) {
 var jArr = JSON.stringify(issuesArr);
 setIssuesChart(issuesArr)
 setPullsChart(pullsArr)
-//setIssuesChart(issuesArr, 'issues');
-//setIssuesChart(pullsArr, 'pulls'); 
+
 if(!issueStatus) {
     var el = document.getElementById('chartArea');
     el.innerHTML = 'There have been no issues in the last 30 days';
