@@ -53,8 +53,10 @@ function setIssuesChart(data) {
 	var xAxis = d3.svg.axis()
 			.scale(x)
 			.orient('bottom');
+	var z = d3.format("0d")
 	var yAxis = d3.svg.axis()
 			.scale(y)
+			.tickFormat(z)
 			.orient('left')
 	var svg = d3.select('#chartArea').append('svg')
 			.attr('id', 'chart')
@@ -201,6 +203,7 @@ function setPullsChart(data) {
 			return d.pulls;	
 		})])
 		.range([height, 0]);
+		var z = d3.format("0d")
 	var yGridlines = d3.svg.axis()
 				.scale(y)
 				.tickSize(-width, 0, 0)
@@ -215,6 +218,7 @@ function setPullsChart(data) {
 			.orient('bottom');
 	var yAxis = d3.svg.axis()
 			.scale(y)
+			.tickFormat(z)
 			.orient('left')
 	var svg = d3.select('#chartArea2').append('svg')
 			.attr('id', 'chart')
