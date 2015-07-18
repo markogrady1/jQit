@@ -1,5 +1,17 @@
 var totaller;
 
+function setIssuesLineChart(data) {
+	var tot = 0;
+	for (var n = 0; n < data.length; n++) {
+
+
+	}
+
+
+
+}
+
+
 
 function setIssuesChart(data) {
 	var tot = 0;
