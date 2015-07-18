@@ -169,6 +169,7 @@ function setPullsChart(data) {
 	    for (var n = 0; n < data.length; n++) {
 	        tot += data[n].pulls; 
 	    }
+
 	    if (tot != 0 && totaller != 0) {
 
 		var $viewEle = $('#changeView')
@@ -182,6 +183,7 @@ function setPullsChart(data) {
 		$viewEle.append(btn);
 		assignListener($viewEle);
 	    }
+
 	    if (tot != 0) {
 	        var w = 450, h = 450;
 	        var margin = {
@@ -190,6 +192,7 @@ function setPullsChart(data) {
 		    left: 60,
 		    right: 40
 	        };
+
 	var width = w - margin.left - margin.right;
 	var height = h - margin.top - margin.bottom;
 
@@ -564,6 +567,7 @@ function issueBarInfo(vData) {
 	 }).fadeIn(200)
 	$(bdy[0]).append(ele);
 	});
+
 	$singleBar.on('mouseleave', function(){
 		$('.display-data').remove();
 		$(this).css('fill', e);
@@ -580,6 +584,7 @@ function pullBarInfo(vData) {
 		issArr.push(vData[p].pulls)
 		dayArr.push(vData[p].date)
 	}
+
 	var mouseX, mouseY;
 	$(document).mousemove(function(e) {
 	    mouseX = e.pageX;
@@ -650,6 +655,7 @@ function pullBarInfo(vData) {
 	 }).fadeIn(200)
 	$(bdy[0]).append(ele);
 	});
+
 	$singleBar.on('mouseleave', function(){
 		$('.display-data').remove();
 		$(this).css('fill', e);
