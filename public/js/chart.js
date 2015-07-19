@@ -116,7 +116,6 @@ function setIssuesLineChart(data) {
 					return x(d.date);
 				})
 				.attr('cy', function(d, i) {
-					console.log(d.issues)
 					return  y(d.issues);
 				})
 
@@ -159,11 +158,170 @@ function setIssuesLineChart(data) {
 }
 }
 
+var setPullsLineChart = function(data) {
+	var tot = 0;
+	for (var i = 0; i < data.length; i++) {
+		tot += data[i].pulls;
+	}
+	if (tot != 0) {
+		var w = 450, h = 450;
+		var padding = 0; //padding not needed right now
+		var margin = {
+			top: 48,
+			bottom: 72,
+			left: 60,
+			right: 40
+		};
+		var width = w - margin.left - margin.right;
+		var height = h - margin.top - margin.bottom;
+		var svg = d3.select('#chartArea2').append('svg')
+					.attr('id', 'pulls-line-chart')
+					.attr('height', h + padding)
+					.attr('width', w + padding)
+
+		var chart = svg.append('g')
+					.classed('display', true)
+					.attr('transform', 'translate('+ margin.left+','+margin.right+')')
+		chart.append("text")
+				.classed('pulls-title', true)
+		        .attr("x", (width / 2))             
+		        .attr("y", 0 - (margin.top / 2) -20)
+		        .attr("text-anchor", "middle")  
+		        .text("ISSUES");
+		var y = d3.scale.linear()
+				.domain([0,d3.max(data, function(d) {
+					return d.pulls;
+				})])
+				.range([height, 0])
+		var x = d3.scale.ordinal()
+				.domain(data.map(function(entry) {
+				return entry.date;
+				}))
+				.rangeBands([padding, width - padding])
+
+		var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient('bottom')
+		var frm = d3.format("0d")
+		var yAxis = d3.svg.axis()
+				.scale(y)
+				.tickFormat(frm)
+				.orient('left')
+		var line = d3.svg.line()
+					.x(function(d){
+						return x(d.date)
+					})
+					.y(function(d){
+						return y(d.pulls)
+					})
+					.interpolate('cardinal')
+		var yGridlines = d3.svg.axis()
+					.scale(y)
+					.tickSize(-width, 0, 0)
+					.tickFormat('')
+					.orient('left')
+		function plot(params) {
+			this.append('g')
+			.call(params.gridlines)
+			.classed('gridline', true)
+			.attr('transform', 'translate(0,0)')
+			this.append('g')
+		    .classed('x axis', true)
+		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+		    .call(params.axis.x)
+			.selectAll('text')
+			    .style('text-anchor', 'end')
+			    .attr('dx', -8)
+			    .attr('dy', 8)
+			    .attr('transform', 'translate(0,0) rotate(-45)')
+		this.append('g')
+		    .classed('y axis', true)
+		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
+		    .call(params.axis.y)
+		this.select('.y.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
+			.text('No. of Issues')
+		this.select('.x.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(' + width / 2 + ', 50)')
+			.text('Last 30 Days')
+			//enter
+			this.selectAll('.trendline')
+				.data([params.data])
+				.enter()
+				.append('path')
+				.classed('trendline', true);
+			this.selectAll('.point')
+				.data(params.data)
+				.enter()
+				.append('circle')
+				.classed('point', true)
+				.attr('r', 2);
+			//update
+			this.selectAll('.trendline')
+				.attr('d', function(d){
+					return line(d)
+				})
+			this.selectAll('.point')
+				.attr('cx', function(d, i) {
+					return x(d.date);
+				})
+				.attr('cy', function(d, i) {
+					console.log(d.pulls)
+					return  y(d.pulls);
+				})
+
+			//exit
+			this.selectAll('.trendline')
+				.data(params.data)
+				.exit()
+				.remove()
+			this.selectAll('.point')
+				.data(params.data)
+				.exit()
+				.remove();
+
+		this.selectAll('.bar-label')
+			.data(params.data)
+			.enter()
+			  .append('text')
+			  .classed('bar-label', true)
+			  .attr('x', function(d, i){
+				return x(d.date) + (x.rangeBand()/2);
+			  })
+			   .attr('y', function(d, i){
+				return y(d.pulls);
+			  })
+			  .attr('dx', -19)
+			  .attr('dy', -20)
+			  .text(function(d, i){
+				return d.pulls;
+			  })
+		}
+		plot.call(chart,{
+			data: data,
+			axis: {
+				x: xAxis,
+				y: yAxis
+			}, 
+			gridlines: yGridlines
+		});
+	$('#pulls-line-chart').hide();
+}
+}
 
 var hideLineChart = function() {
 	var $lineChart = $('#line-chart')
 	$lineChart.css('display', 'none')
 }
+
 
 
 function setIssuesChart(data) {
@@ -388,7 +546,7 @@ function setPullsChart(data) {
 			.tickFormat(frm)
 			.orient('left')
 	var svg = d3.select('#chartArea2').append('svg')
-			.attr('id', 'chart')
+			.attr('id', 'pulls-chart')
 			.attr('height', h)
 			.attr('width', w)
 	var chart = svg.append('g')
@@ -638,10 +796,19 @@ function setClosureChart(data) {
 var assignLineListener = function(elem) {
 	$(elem).click(function() {
 		$( '#chart').toggle( "slow" );
-		var el = document.getElementById('line-chart');
+		var els = document.getElementById('line-chart');
+		
 		$( '#line-chart').toggle( "slow" );
+		// $( '#pulls-line-chart').toggle( "slow" );
+
+	var el2 = document.getElementById('pulls-line-chart');//cosdngjfsbfjkbdsbfbdsbfbdskbfkhs
+	var ca = document.getElementById('chartArea');//cosdngjfsbfjkbdsbfbdsbfbdskbfkhs
+	if(ca.style.display === 'none'){
+		$( '#pulls-line-chart').toggle( "slow" );
+		$( '#pulls-chart').toggle( "slow" );
+	}
 		setTimeout(function(){
-			if(el.style.display === 'inline') {
+			if(els.style.display === 'inline') {
 					$('.line-btn').text('View Bar Chart')
 				} else {
 					$('.line-btn').text('View Line Chart')
@@ -657,9 +824,9 @@ var assignListener = function(elem) {
 		$('#chartArea2').toggle('slow');
 		 setTimeout(function(){
 			if(el.style.display === 'none') {
-					$('.btn').text('View Pull Requests')
-				} else {
 					$('.btn').text('View Issues')
+				} else {
+					$('.btn').text('View Pull Requests')
 				}
 		 }, 800	)
 	});
