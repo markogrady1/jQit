@@ -227,7 +227,7 @@ var setPullsLineChart = function(data) {
 			.attr('transform', 'translate(0,0)')
 			this.append('g')
 		    .classed('x axis', true)
-		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+		    .attr('transform', 'translate(' + (-36 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
 		    .call(params.axis.x)
 			.selectAll('text')
 			    .style('text-anchor', 'end')
@@ -299,7 +299,7 @@ var setPullsLineChart = function(data) {
 			   .attr('y', function(d, i){
 				return y(d.pulls);
 			  })
-			  .attr('dx', -19)
+			  .attr('dx', -45)
 			  .attr('dy', -20)
 			  .text(function(d, i){
 				return d.pulls;
@@ -801,8 +801,8 @@ var assignLineListener = function(elem) {
 		$( '#line-chart').toggle( "slow" );
 		// $( '#pulls-line-chart').toggle( "slow" );
 
-	var el2 = document.getElementById('pulls-line-chart');//cosdngjfsbfjkbdsbfbdsbfbdskbfkhs
-	var ca = document.getElementById('chartArea');//cosdngjfsbfjkbdsbfbdsbfbdskbfkhs
+	var el2 = document.getElementById('pulls-line-chart');
+	var ca = document.getElementById('chartArea');
 	if(ca.style.display === 'none'){
 		$( '#pulls-line-chart').toggle( "slow" );
 		$( '#pulls-chart').toggle( "slow" );
