@@ -127,7 +127,7 @@ body {
 	color: #66D9EF;
 }
 
-.btn {
+.btn , .line-btn {
 	margin: 20px 0 0 20px;
 	width: 150px;
 	height: 30px;
@@ -139,7 +139,7 @@ body {
 	outline: none;
 }
 
-.btn:hover {
+.btn:hover, .line-btn:hover {
 	background-color: #4a84b0;
 	cursor: pointer;
 }
@@ -152,4 +152,15 @@ body {
 .pulls-title {
 	font-size: 1.2em;
 	color: #a9a9a9;
+}
+
+.trendline {
+	fill: none;
+	stroke: #5087af;
+	stroke-width: 4px;
+	/*stroke-dasharray: 0.7;*/
+}
+
+SVG#line-chart {
+	padding-top: 20px;
 }

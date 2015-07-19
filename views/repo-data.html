@@ -19,6 +19,7 @@
 <% include partials/header.html %>
 
   <div id=changeView></div>
+  <div id=changeView2></div>
   <div id=chartArea></div>
   <div id=chartArea2></div>
   
@@ -52,6 +53,7 @@ for(var y in pr) {
 }
 var jArr = JSON.stringify(issuesArr);
 setIssuesChart(issuesArr)
+setIssuesLineChart(issuesArr)
 setPullsChart(pullsArr)
 
 if(!issueStatus) {
