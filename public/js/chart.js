@@ -274,7 +274,6 @@ var setPullsLineChart = function(data) {
 					return x(d.date);
 				})
 				.attr('cy', function(d, i) {
-					console.log(d.pulls)
 					return  y(d.pulls);
 				})
 
