@@ -55,7 +55,7 @@ var jArr = JSON.stringify(issuesArr);
 setIssuesChart(issuesArr)
 setIssuesLineChart(issuesArr)
 setPullsChart(pullsArr)
-setPullsLineChart(pullsArr)
+setPullsLineChart(pullsArr  )
 
 if(!issueStatus) {
     var el = document.getElementById('chartArea');
@@ -69,17 +69,7 @@ if(!issueStatus) {
 
 
 	 <h1><%= data.name %></h1>
-    <%-
-
-      visualHelper.resolveChart({
-        data: ch,
-        width: 1100,
-        height: 600,
-        xAxisLabel: 'Last 30 Days',
-        yAxisLabel: 'issues',
-        containerId: 'bar-chart-large'
-      });  
-    %>
+    
  
 <p><b>Repository name:</b> <%= data.name %></p>
 <p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>

@@ -15,7 +15,7 @@ app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + "/views/");
 app.set('view engine', 'html');
 
-app.locals.visualHelper = require('./lib/dataProvider');
+// app.locals.visualHelper = require('./lib/dataProvider');
 //app.locals.getEvents = require('./lib/resolve')
 app.use(cookieParser());
 app.use(session({ 
