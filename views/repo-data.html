@@ -8,7 +8,7 @@
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
  
    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
+   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script src="/js/scrilla.js"></script>
 <style>
       
@@ -20,6 +20,7 @@
 
   <div id=changeView></div>
   <div id=changeView2></div>
+  <div id=display-data-info></div>
   <div id=chartArea></div>
   <div id=chartArea2></div>
   
@@ -55,7 +56,7 @@ var jArr = JSON.stringify(issuesArr);
 setIssuesChart(issuesArr)
 setIssuesLineChart(issuesArr)
 setPullsChart(pullsArr)
-setPullsLineChart(pullsArr  )
+setPullsLineChart(pullsArr,pr)
 
 if(!issueStatus) {
     var el = document.getElementById('chartArea');

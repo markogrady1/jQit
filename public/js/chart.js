@@ -14,13 +14,20 @@ function setIssuesLineChart(data) {
 			left: 60,
 			right: 40
 		};
+		var tip = d3.tip()
+				  .attr('class', 'd3-tip')
+				  .offset([-10, 0])
+				  .html(function(d) {
+				  	var date = Nth(d.date)
+				    return "<span class=line-tip>Day: " + date + "</span><br><br> <span class=line-tip>Pull Requests: " + d.issues + "</span>";
+				  })
 		var width = w - margin.left - margin.right;
 		var height = h - margin.top - margin.bottom;
 		var svg = d3.select('#chartArea').append('svg')
 					.attr('id', 'line-chart')
 					.attr('height', h + padding)
 					.attr('width', w + padding)
-
+		svg.call(tip);
 		var chart = svg.append('g')
 					.classed('display', true)
 					.attr('transform', 'translate('+ margin.left+','+margin.right+')')
@@ -105,7 +112,9 @@ function setIssuesLineChart(data) {
 				.enter()
 				.append('circle')
 				.classed('point', true)
-				.attr('r', 2);
+				.attr('r', 3)
+				.on('mouseover', tip.show)
+      			.on('mouseout', tip.hide);
 			//update
 			this.selectAll('.trendline')
 				.attr('d', function(d){
@@ -174,11 +183,18 @@ var setPullsLineChart = function(data) {
 		};
 		var width = w - margin.left - margin.right;
 		var height = h - margin.top - margin.bottom;
+		var tip = d3.tip()
+				  .attr('class', 'd3-tip')
+				  .offset([-10, 0])
+				  .html(function(d) {
+				  	var date = Nth(d.date)
+				    return "<span class=line-tip>Day: " + date + "</span><br><br> <span class=line-tip>Pull Requests: " + d.pulls + "</span>";
+				  })
 		var svg = d3.select('#chartArea2').append('svg')
 					.attr('id', 'pulls-line-chart')
 					.attr('height', h + padding)
 					.attr('width', w + padding)
-
+		svg.call(tip);
 		var chart = svg.append('g')
 					.classed('display', true)
 					.attr('transform', 'translate('+ margin.left+','+margin.right+')')
@@ -207,6 +223,7 @@ var setPullsLineChart = function(data) {
 				.scale(y)
 				.tickFormat(frm)
 				.orient('left')
+		
 		var line = d3.svg.line()
 					.x(function(d){
 						return x(d.date)
@@ -263,7 +280,10 @@ var setPullsLineChart = function(data) {
 				.enter()
 				.append('circle')
 				.classed('point', true)
-				.attr('r', 2);
+				.attr('r', 4)
+				.style('cursor', 'pointer')
+				.on('mouseover', tip.show)
+      			.on('mouseout', tip.hide);
 			//update
 			this.selectAll('.trendline')
 				.attr('d', function(d){
@@ -298,7 +318,7 @@ var setPullsLineChart = function(data) {
 			   .attr('y', function(d, i){
 				return y(d.pulls);
 			  })
-			  .attr('dx', -45)
+			  .attr('dx', -35)
 			  .attr('dy', -20)
 			  .text(function(d, i){
 				return d.pulls;
@@ -887,7 +907,7 @@ function issueBarInfo(vData) {
 
 	//arr[0] contains the day of issues amount
 	//arr[1] contains the amount of issues for that day
-	var bdy = document.getElementsByTagName('header')
+	var place = document.getElementById('display-data-info')
 	var ele = document.createElement('div');
 	$(ele).html("<span class=\'displ-wrap\''>Date:    "+displayString + '</span><br><span class=displ-wrap><br>No. of Issues:    ' + arr[1] + '</span><br> <br><span class=red>'+ progressStr + '</span>');
 	$(ele).attr('class', 'display-data');
@@ -906,7 +926,7 @@ function issueBarInfo(vData) {
 		padding: '15px',
 		borderRadius: '8px'
 	 }).fadeIn(200)
-	$(bdy[0]).append(ele);
+	$(place).append(ele);
 	});
 
 	$singleBar.on('mouseleave', function(){
@@ -975,7 +995,7 @@ function pullBarInfo(vData) {
 
 	//arr[0] contains the day of pull request amount
 	//arr[1] contains the amount of pull requests for that day
-	var bdy = document.getElementsByTagName('header')
+	var place = document.getElementById('display-data-info')
 	var ele = document.createElement('div');
 	$(ele).html("<span class=\'displ-wrap\''>Date:    "+displayString + '</span><br><span class=displ-wrap><br>Pull Requests:    ' + arr[1] + '</span><br> <br><span class=red>'+ progressStr + '</span>');
 	$(ele).attr('class', 'display-data');
@@ -994,7 +1014,7 @@ function pullBarInfo(vData) {
 		padding: '15px',
 		borderRadius: '8px'
 	 }).fadeIn(200)
-	$(bdy[0]).append(ele);
+	$(place).append(ele);
 	});
 
 	$singleBar.on('mouseleave', function(){
@@ -1049,6 +1069,34 @@ return month;
 
 }
 
+var Nth = function(data) {
+	var st = [1,21,31];
+	var rd = [3,23];
+	var nd = [2, 22]
+	var th = [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,24,25,26,27,28,29,30];
+
+	for (var i = 0; i < st.length; i++) {
+		if(data == st[i]){
+			return st[i] + "st";
+		}
+	};
+	for (var i = 0; i < rd.length; i++) {
+		if(data == rd[i]){
+			return rd[i] + "rd";
+		}
+	};
+	for (var i = 0; i < nd.length; i++) {
+		if(data == nd[i]){
+			return nd[i] + "nd";
+		}
+	};
+	for (var i = 0; i < th.length; i++) {
+		if(data == th[i]){
+			return th[i] + "th";
+		}
+	};
+}
+ 
 var getDayFormat = function(dd) {
 	var d = new Date(dd);
 	var n = d.getDay();
