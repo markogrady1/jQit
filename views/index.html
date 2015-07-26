@@ -6,12 +6,15 @@
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 	 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="/js/scrilla.js"></script>
+    <script src="/js/indexCharts.js"></script>
 </head>
 <body>
 <% include partials/header.html %>
+<div class="pie"></div>
 <div class="body-wrap">
 <a href='/register'>register</a>
 <script> 
+indexChart({'mark':'hi'});
 /*
 var data = [<%=issuesNo%>];
     var w = 800;
@@ -74,6 +77,8 @@ var data = [<%=issuesNo%>];
 <% } %> 
 </div>
 <script>
+var data = <% JSON.stringify(issueNo) %>
+console.log(data);
 scroller.init(); 
 </script>
 </div>
