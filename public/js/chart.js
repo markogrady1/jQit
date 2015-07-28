@@ -318,7 +318,7 @@ var setPullsLineChart = function(data) {
 			   .attr('y', function(d, i){
 				return y(d.pulls);
 			  })
-			  .attr('dx', -35)
+			  .attr('dx', -15)
 			  .attr('dy', -20)
 			  .text(function(d, i){
 				return d.pulls;

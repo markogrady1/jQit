@@ -198,3 +198,60 @@ SVG#line-chart {
   top: 100%;
   left: 0;
 }
+
+/* Table style for index page */
+
+
+
+
+
+
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
+/* Zebra striping */
+tr:nth-of-type(odd) { 
+  background: #eee; 
+}
+th { 
+  background: #333; 
+  color: white; 
+  font-weight: bold; 
+}
+td, th { 
+  padding: 6px; 
+  border: 1px solid #ccc; 
+  text-align: left; 
+}
+
+
+.head:hover  {
+	background-color: #515151;
+	cursor: pointer;
+}
+
+.index-name-link {
+	color: #000;
+	text-decoration: none;
+}
+
+.index-name-link:hover {
+	color: #2368EA;
+}
+
+.index-github-link {
+	color: #000;
+	text-decoration: none;
+}
+
+.index-github-link:hover {
+	color: #2368EA;
+}
+/* media query to hide extra table elements when page size is decreased */
+@media (max-width: 649px) {
+	.github-head, .github-detail {
+	display:none;
+}
+	
+}

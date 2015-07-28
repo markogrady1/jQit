@@ -14,6 +14,7 @@ router.get('/', function(req, res){
 	res.render('index', {
 		names: schema.names,
 		issuesNo: schema.issues,
+		completeDoc: schema.completeDoc,
 		header: 'Main page'
 		});
 });

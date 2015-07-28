@@ -5,29 +5,29 @@ var mongoClient = require("mongodb").MongoClient
     , CronJob = require('cron').CronJob;
 var hash;
 writeArr = '';
-new CronJob('*/5 * * * *', function() {
-	for(var i = 1; i < 49; i++){
-		var obj = require('../repoData/pulls/open/' + i + "_pulls");
-		if(obj == ""){
-			continue
-		}
+// new CronJob('*/5 * * * *', function() {
+// 	for(var i = 1; i < 49; i++){
+// 		var obj = require('../repoData/pulls/open/' + i + "_pulls");
+// 		if(obj == ""){
+// 			continue
+// 		}
 		
-    	var url = mapping(obj, function(data) {return data.url;})
-	    var dataName = splitValue(url, 5, '/');
-	    writeArr += '' + dataName + '  '+obj.length + ',\n';
-	}
+//     	var url = mapping(obj, function(data) {return data.url;})
+// 	    var dataName = splitValue(url, 5, '/');
+// 	    writeArr += '' + dataName + '  '+obj.length + ',\n';
+// 	}
 
-		var d = new Date();
-		var seconds = d.getTime()/1000;
-		seconds = seconds.toString().split('.');
-		var n = d.toISOString();
-		n = n.substring(19,0)
-		newString = '*' + n + 'Z = ' + seconds[0] +',\n'+writeArr;
-		fs.appendFile('repoData/repo_pulls_history.txt', newString, function (err) {
-  				if (err) throw err;
-  				tmpLog.update('CRONJOB','Job written for '+ new Date(), true);
-				});
-}, null, true, "Europe/London");
+// 		var d = new Date();
+// 		var seconds = d.getTime()/1000;
+// 		seconds = seconds.toString().split('.');
+// 		var n = d.toISOString();
+// 		n = n.substring(19,0)
+// 		newString = '*' + n + 'Z = ' + seconds[0] +',\n'+writeArr;
+// 		fs.appendFile('repoData/repo_pulls_history.txt', newString, function (err) {
+//   				if (err) throw err;
+//   				tmpLog.update('CRONJOB','Job written for '+ new Date(), true);
+// 				});
+// }, null, true, "Europe/London");
 
 
 var splitValue = function(origVal, index, separator) {
@@ -50,11 +50,12 @@ var mapping = function(dat, fn) {
 exports.initConnection = function() {
  	console.log('schema connecting...');
     tmpLog.update('CONNECTION','mongoDB connection made', true);
-	var projection = { "name": 1, "open_issues": 1, "_id": 0 }
+	var projection = { "name": 1, "open_issues": 1,"forks_count": 1, "watchers":1, "_id": 0 }
 	repoNames = [];
 	issueNo = [];
+	completeD = [];
 	connection("repositories", function(db){
-		db.collection('repos').find({}, projection).each(function(err, doc){
+		db.collection('repos').find({}, {}).each(function(err, doc){
 	 		if(err) throw err;
 
 			if(doc == null){
@@ -62,9 +63,11 @@ exports.initConnection = function() {
 			}else{	
 				repoNames.push(doc.name);
 				issueNo.push(doc.open_issues);
+				completeD.push({"name":doc.name,"issues":doc.open_issues, "forks":doc.forks_count, "watchers": doc.watchers, "github_url": doc.html_url})
 			}
 			exports.names = repoNames;
 			exports.issues = issueNo;
+			exports.completeDoc = completeD;
 			db.close();
 		});  
 	});

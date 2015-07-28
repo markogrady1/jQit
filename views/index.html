@@ -4,71 +4,45 @@
 	<title>Issue Tracker</title>
 	<link rel='stylesheet' href='/css/style.css' />
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-	 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.2.2/tinysort.js" charset="utf-8"></script>
     <script src="/js/scrilla.js"></script>
-    <script src="/js/indexCharts.js"></script>
+    <script src="/js/scrilla.js"></script>
+    <script src="/js/sortTable.js"></script>
 </head>
 <body>
 <% include partials/header.html %>
 <div class="pie"></div>
 <div class="body-wrap">
 <a href='/register'>register</a>
+
+<table class="props xmpl" id="xtable">
+  <thead>
+  <tr >
+    <th class='head'>Name</th>
+    <th class='head'>Issues</th>
+    <th class='head'>Forks</th>
+    <th class='head'>Watchers</th>
+    <th class='head github-head'>GitHub</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% for (var i = 0; i < completeD.length; i++) { %>
+   <tr>
+   <td > <a class='index-name-link' href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a></td>
+    <td ><%- completeD[i].issues%></td>
+    <td><%- completeD[i].forks%></td>
+    <td><%- completeD[i].watchers%></td>
+    <td class='github-detail'><a class='index-github-link' href=<%- completeD[i].github_url%>> <%- completeD[i].github_url%></a></td>
+  </tr>
+<% } %> 
+  </tbody>
+</table>
 <script> 
-indexChart({'mark':'hi'});
-/*
-var data = [<%=issuesNo%>];
-    var w = 800;
-    var h = 1850;
-
-    var x = d3.scale.linear()
-    	      .domain([0, d3.max(data)])
-    	      .range([0, w]);
-
-    var y = d3.scale.linear()
-    		  .domain([0, data.length])
-    		  .range([0, h]);
-
-    var svg = d3.select('body').append('svg')
-                .attr('id', 'chart')
-                .attr('width', w)
-                .attr('height', h);
-    // add bar values for x & y 
-    svg.selectAll('bar')
-       .data(data)
-       .enter()
-           .append('rect')
-           .classed('bar', true)
-           .attr('x', 0)
-           .attr('y', function(d, i){
-           		return y(i);
-           })
-           .attr('width', function(d, i){
-           		return x(d);
-           })
-           .attr('height', function(d, i){
-           		return y(1) -1;
-           });
-    svg.selectAll('bar-label')
-	    .data(data)
-	    .enter()
-	        .append('text')
-	        .classed('bar-label', true)
-	        .attr('x', function(d, i){
-
-	        	var val = (x(d) < 30) ? x(d): x(d)- 30 ;
-	        	return val;
-
-	        })
-	        .attr('y', function(d, i){
-           		return y(i);
-            })
-            .attr('dy', function(d, i){
-            	return y(1) / 1.5;
-            })
-	        .text(function(d, i){
-	        	return d;
-	        })*/
+// indexChart({'mark':'hi'});
+sortTable();
 </script>
+
 <div class="chart-area"></div>
 <p><%= username %>
 <div class="button-wrap">
@@ -77,7 +51,7 @@ var data = [<%=issuesNo%>];
 <% } %> 
 </div>
 <script>
-var data = <% JSON.stringify(issueNo) %>
+var data = <%- JSON.stringify(completeDoc) %>
 console.log(data);
 scroller.init(); 
 </script>
