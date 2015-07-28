@@ -114,7 +114,7 @@ function setIssuesLineChart(data) {
 				.classed('point', true)
 				.attr('r', 3)
 				.on('mouseover', tip.show)
-      			.on('mouseout', tip.hide);
+      				.on('mouseout', tip.hide);
 			//update
 			this.selectAll('.trendline')
 				.attr('d', function(d){
@@ -450,6 +450,27 @@ function plot(params) {
 		  })
 		  .attr('height', function(d, i){
 			return height - y(d.issues)
+		  })
+		  .on('mouseover', function(d, i){
+		var el = d3.select(this)
+			el.transition()
+				.duration(300)
+				.attr({
+				width: x.rangeBand()+5,
+				height:height - y(d.issues)+3,
+				y: y(d.issues)-3
+			})						
+		 this.parentNode.appendChild(this); 
+		  })
+		  .on('mouseleave', function(d, i){
+			var el = d3.select(this)
+			el.transition()
+				.duration(500)
+				.attr({
+				height: height - y(d.issues),
+				y: y(d.issues),
+				width:x.rangeBand()-2
+			})						
 		  })
 		  .style('fill', function(d, i){
 			//return ordinalColorScale(i);//uncomment line for ordinalScale colours
@@ -933,6 +954,27 @@ function issueBarInfo(vData) {
 		$('.display-data').remove();
 		$(this).css('fill', e);
 	});
+
+
+var $point = $('.point');
+$point.on('mouseover', function(){
+	$(this).animate({
+		'r':6
+	})
+	.css({
+		'fill': '#2d57ca'
+	})
+})
+
+$point.on('mouseleave', function(){
+	
+	$(this).animate({
+		'r':4
+	})
+	.css({
+		'fill': '#000'
+	})
+});
 }
 
 
