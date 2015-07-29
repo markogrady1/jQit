@@ -244,7 +244,7 @@ var setPullsLineChart = function(data) {
 			.attr('transform', 'translate(0,0)')
 			this.append('g')
 		    .classed('x axis', true)
-		    .attr('transform', 'translate(' + (-36 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
 		    .call(params.axis.x)
 			.selectAll('text')
 			    .style('text-anchor', 'end')
