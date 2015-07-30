@@ -9,6 +9,11 @@
     <script src="/js/scrilla.js"></script>
     <script src="/js/scrilla.js"></script>
     <script src="/js/sortTable.js"></script>
+    <script>
+var cd = <%- JSON.stringify(pullsNo) %>
+var pd = <%- JSON.stringify(completeD) %>
+pd.pop(pd.length-1)
+    </script>
 </head>
 <body>
 <% include partials/header.html %>
@@ -21,6 +26,7 @@
   <tr >
     <th class='head'>Name</th>
     <th class='head'>Issues</th>
+    <th class='head'>PR's</th>
     <th class='head'>Forks</th>
     <th class='head'>Watchers</th>
     <th class='head github-head'>GitHub</th>
@@ -28,9 +34,11 @@
   </thead>
   <tbody>
     <% for (var i = 0; i < completeD.length; i++) { %>
+    
    <tr>
    <td > <a class='index-name-link' href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a></td>
     <td ><%- completeD[i].issues%></td>
+    <td ><%- completeD[i].pulls%></td>
     <td><%- completeD[i].forks%></td>
     <td><%- completeD[i].watchers%></td>
     <td class='github-detail'><a class='index-github-link' target='_blank' href=<%- completeD[i].github_url%>> <%- completeD[i].github_url%></a></td>

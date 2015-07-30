@@ -10,13 +10,28 @@ console.log('router called');
 //route for the home page
 router.get('/', function(req, res){
 	migrate.repositoryMigrate();
+	var prs;
 	console.log('index router called');
+	reslv.getPRs('pulls', function(d){
+		prs = d;
+		compDoc = schema.completeDoc;
+
+	for(var i = 0; i < compDoc.length; i++){
+      for(var k = prs.length-1; k >=0; k--){
+        var name = prs[k].split('  ');
+        if(compDoc[i].name == name[0])
+          compDoc[i].pulls = name[1];
+      
+      }
+     }
 	res.render('index', {
 		names: schema.names,
 		issuesNo: schema.issues,
-		completeDoc: schema.completeDoc,
+		completeDoc: compDoc,
+		pullsNo: prs,
 		header: 'Main page'
 		});
+});
 });
 
 //route for single repository data

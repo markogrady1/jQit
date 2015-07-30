@@ -17,9 +17,14 @@ function setIssuesLineChart(data) {
 		var tip = d3.tip()
 				  .attr('class', 'd3-tip')
 				  .offset([-10, 0])
-				  .html(function(d) {
+				  .html(function(d, i) {
 				  	var date = Nth(d.date)
-				    return "<span class=line-tip>Day: " + date + "</span><br><br> <span class=line-tip>Pull Requests: " + d.issues + "</span>";
+
+				  	var s = dt[i].split('T')
+				  	var dateBits = s[0].split('-');
+	    			var da = s[0].substring(s[0].length, 8).trim()
+					var monthStr = dateFormat(dateBits[1])
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>Pull Requests: " + d.issues + "</span>";
 				  })
 		var width = w - margin.left - margin.right;
 		var height = h - margin.top - margin.bottom;
@@ -113,6 +118,9 @@ function setIssuesLineChart(data) {
 				.append('circle')
 				.classed('point', true)
 				.attr('r', 3)
+				.attr('value', function(d){
+					return d.date + "  " + d.issues;
+				})
 				.on('mouseover', tip.show)
       				.on('mouseout', tip.hide);
 			//update
@@ -186,9 +194,14 @@ var setPullsLineChart = function(data) {
 		var tip = d3.tip()
 				  .attr('class', 'd3-tip')
 				  .offset([-10, 0])
-				  .html(function(d) {
+				  .html(function(d, i) {
 				  	var date = Nth(d.date)
-				    return "<span class=line-tip>Day: " + date + "</span><br><br> <span class=line-tip>Pull Requests: " + d.pulls + "</span>";
+				  	
+				  	var s = pdt[i].split('T')
+				  	var dateBits = s[0].split('-');
+	    			var da = s[0].substring(s[0].length, 8).trim()
+					var monthStr = dateFormat(dateBits[1])
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>Pull Requests: " + d.pulls + "</span>";
 				  })
 		var svg = d3.select('#chartArea2').append('svg')
 					.attr('id', 'pulls-line-chart')
@@ -281,6 +294,9 @@ var setPullsLineChart = function(data) {
 				.append('circle')
 				.classed('point', true)
 				.attr('r', 4)
+				.attr('value', function(d){
+					return d.date + "  " + d.pulls;
+				})
 				.style('cursor', 'pointer')
 				.on('mouseover', tip.show)
       			.on('mouseout', tip.hide);

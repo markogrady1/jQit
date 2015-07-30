@@ -124,6 +124,8 @@ var getProjection = function(db) {
 		projection = { 'created_at': 1, 'title': 1, '_id': 0 };
 	} else if (db === 'repoHistory') {
 		projection = { 'isoDate': 1, 'rawDate': 1, 'issues': 1, '_id': 0 }
+	} else if (db === 'repoPullsHistory') {
+		projection = { 'isoDate': 1, 'rawDate': 1, 'pulls': 1, '_id': 0 }
 	} else if(db === 'repositories') {
 		projection = { "name": 1, "open_issues": 1, "_id": 0 }
 	} else {

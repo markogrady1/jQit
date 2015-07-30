@@ -8,6 +8,8 @@ var history = {}
 history.init = function (){
 	this.getDataOverTime('repoHistory', 'issue')
 	this.getDataOverTime('repoPullsHistory', 'pulls')
+	this.getClosedDataOverTime('repoClosedPullsHistory', 'PR')
+	this.getClosedDataOverTime('repoClosedIssueHistory', 'issue')
 }
 
 history.getDataOverTime = function(database, target) {
@@ -25,6 +27,34 @@ history.getDataOverTime = function(database, target) {
 		   			var amount = arr[1];
 		   			dates = date.split(' = ')
 					var doc = target == 'pulls' ?
+					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': amount } :
+					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': amount }
+
+			   		db.collection(collection).insert(doc, function(err, inserted){
+			   			if(err) throw err;
+			   		});
+				}
+		    }
+    	});
+	});
+	tmpLog.update('HISTORY', 'new hist added', false);
+}
+
+history.getClosedDataOverTime = function(database, target) {
+	this.resetHistory(database);
+	fs.readFile('./repoData/closed_' + target + '_history.txt','UTF-8', function(err, data){
+    if(err) throw err;
+    	history.connect(database, function(db){
+	      	repoChunk = data.split('*');
+		    for(var i = 1; i < repoChunk.length; i++){
+		    	repoDt = repoChunk[i].split(',');
+				var date = repoDt[0];
+				for(var j = 1; j < repoDt.length-1; j++){
+					var arr = repoDt[j].trim().split('  ');
+		   			var collection = arr[0].trim(); 
+		   			var amount = arr[1];
+		   			dates = date.split(' = ')
+					var doc = target == 'PR' ?
 					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': amount } :
 					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': amount }
 
