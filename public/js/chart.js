@@ -6,498 +6,520 @@ var hideLineChart = function() {
 }
 
 
+function setBarChart(data, buildStyle) {
 
-// function setIssuesChart(data) {
-// 	var tot = 0;
-// 	    for (var m = 0; m < data.length; m++) {
-// 			tot += data[m].issues;
-// 	    }
-// 		totaller = tot;
-// 	if (tot != 0) {
-// 		$viewEle = $('#changeView2');
-// 		var lineBtn = document.createElement('button')
-// 		$(lineBtn).text('View Line Chart')
-// 		$viewEle.append(lineBtn);
-// 		$(lineBtn).attr({
-// 			width: 200,
-// 			class: 'line-btn'	
-// 		});
+var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
+
+	var tot = 0;
+	var chartId = buildStyle.isIssue ? "" : "pulls-"
+	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
+	    for (var m = 0; m < data.length; m++) {
+			tot += data[m][buildStyle.dataVal];
+	    }
+	    if(buildStyle.isIssue) 
+		totaller = tot;
+
+	if(!buildStyle.isIssue){
+		if (tot != 0 && totaller != 0) {
+			assignPullButtons();
+			
+		}
+	}
+
+	if (tot != 0) {
+		if(buildStyle.isIssue) {
+		var lineBtn = document.createElement('button')
+		$(lineBtn).text('View Line Chart')
+		$viewEle.append(lineBtn);
+		$(lineBtn).attr({
+			width: 200,
+			class: 'line-btn'	
+		});
+
+		$viewEle.append(lineBtn);
+		assignLineListener(lineBtn);
+	}
+	issueStatus = true;
+	var width = buildStyle.w - buildStyle.left - buildStyle.right;
+	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
+
+	var x = d3.scale.ordinal()
+		.domain(data.map(function(entry){
+			return entry[buildStyle.dataKey];
+		}))
+		.rangeBands([0, width])
+	var y = d3.scale.linear()
+		.domain([0, d3.max(data, function(d){
+			return d[buildStyle.dataVal];	
+		})])
+		.range([height, 0]);
+	var yGridlines = d3.svg.axis()
+				.scale(y)
+				.tickSize(-width, 0, 0)
+				.tickFormat('')
+				.orient('left')
+	var linearColorScale = d3.scale.linear()
+				.domain([0, data.length])
+				.range(['#4A84B0', '#c6dbef']);
+	var ordinalColorScale = d3.scale.category20();
+	var xAxis = d3.svg.axis()
+			.scale(x)
+			.orient('bottom');
+	var frm = d3.format("0d")
+	var yAxis = d3.svg.axis()
+			.scale(y)
+			.tickFormat(frm)
+			.orient('left')
+	var svg = d3.select(buildStyle.chartArea).append('svg')
+			.attr('id', chartId + 'chart')
+			.attr('height', buildStyle.h)
+			.attr('width', buildStyle.w)
+
+	var chart = svg.append('g')
+			.classed('display', true)
+			.attr('transform', 'translate(' + buildStyle.left + ',' + buildStyle.right + ')');
+	chart.append("text")
+			.classed(buildStyle.dataVal+ '-title', true)
+	        .attr("x", (width / 2))             
+	        .attr("y", 0 - (buildStyle.top / 2))
+	        .attr("text-anchor", "middle")  
+	        .text(toolTipValue.toUpperCase());
+
+	plot.call(chart, {
+		data:data,
+		axis: {
+		    x: xAxis,
+		    y: yAxis,
+		}, 
+		gridlines: yGridlines
+	});
+	} else {
+	    issueStatus = false;
+	} 
+
+function plot(params) {
+	this.append('g')
+		.call(params.gridlines)
+		.classed('gridline', true)
+		.attr('transform', 'translate(0,0)')
+	this.selectAll('.bar')
+		.data(params.data)
+		.enter()
+		  .append('rect')
+		  .classed('bar', true)
+		  .attr('x', function(d, i){
+			return x(d[buildStyle.dataKey]);
+		  })
+		  .attr('value', function(d, i) {
+			return d[buildStyle.dataKey]  + ' ' + d[buildStyle.dataVal];
+		  })
+		  .attr('y', function(d, i){
+			return y(d[buildStyle.dataVal]);
+		  })
+		  .attr('width', function(d, i){
+			return x.rangeBand()-2;
+		  })
+		  .attr('height', function(d, i){
+			return height - y(d[buildStyle.dataVal])
+		  })
+		  .on('mouseover', function(d, i){
+		var el = d3.select(this)
+			el.transition()
+				.duration(300)
+				.attr({
+				width: x.rangeBand()+5,
+				height:height - y(d[buildStyle.dataVal])+3,
+				y: y(d[buildStyle.dataVal])-3
+			})						
+		 this.parentNode.appendChild(this); 
+		  })
+		  .on('mouseleave', function(d, i){
+			var el = d3.select(this)
+			el.transition()
+				.duration(500)
+				.attr({
+				height: height - y(d[buildStyle.dataVal]),
+				y: y(d[buildStyle.dataVal]),
+				width:x.rangeBand()-2
+			})						
+		  })
+		  .style('fill', function(d, i){
+			//return ordinalColorScale(i);//uncomment line for ordinalScale colours
+			return linearColorScale(i)  //uncomment line for linearScale colours
+		  })
+		  .style('cursor', 'pointer');
+
+	this.selectAll('.bar-label')
+		.data(params.data)
+		.enter()
+		  .append('text')
+		  .classed('bar-label', true)
+		  .attr('x', function(d, i){
+			return x(d[buildStyle.dataKey]) + (x.rangeBand()/2);
+		  })
+		   .attr('y', function(d, i){
+			return y(d[buildStyle.dataVal]);
+		  })
+		  .attr('dx', 0)
+		  .attr('dy', -6)
+		  .text(function(d, i){
+			return d[buildStyle.dataVal];
+		  })
+	this.append('g')
+	    .classed('x axis', true)
+	    .attr('transform', 'translate(' + 0 + ',' + height + ')')
+	    .call(params.axis.x)
+		.selectAll('text')
+		    .style('text-anchor', 'end')
+		    .attr('dx', -8)
+		    .attr('dy', 8)
+		    .attr('transform', 'translate(0,0) rotate(-45)')
+	this.append('g')
+	    .classed('y axis', true)
+	    .attr('transform', 'translate(0,0)')
+	    .call(params.axis.y)
+	this.select('.y.axis')
+		.append('text')
+		.attr('x', 0)
+		.attr('y', 0)
+		.style('text-anchor', 'middle')
+		.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
+		.text('No. of '+ buildStyle.dataVal.charAt(0).toUpperCase() + buildStyle.dataVal.slice(1))
+	this.select('.x.axis')
+		.append('text')
+		.attr('x', 0)
+		.attr('y', 0)
+		.style('text-anchor', 'middle')
+		.attr('transform', 'translate(' + width / 2 + ', 50)')
+		.text('Last 30 Days')
 		
-// 		$viewEle.append(lineBtn);
-// 		assignLineListener(lineBtn);
-// 	issueStatus = true;
-// 	var w = 1100, h = 550;
-// 	var margin = {
-// 		top: 48,
-// 		bottom: 72,
-// 		left: 60,
-// 		right: 40
-// 	};
-// 	var width = w - margin.left - margin.right;
-// 	var height = h - margin.top - margin.bottom;
+	}	
 
-// 	var x = d3.scale.ordinal()
-// 		.domain(data.map(function(entry){
-// 			return entry.date;
-// 		}))
-// 		.rangeBands([0, width])
-// 	var y = d3.scale.linear()
-// 		.domain([0, d3.max(data, function(d){
-// 			return d.issues;	
-// 		})])
-// 		.range([height, 0]);
-// 	var yGridlines = d3.svg.axis()
-// 				.scale(y)
-// 				.tickSize(-width, 0, 0)
-// 				.tickFormat('')
-// 				.orient('left')
-// 	var linearColorScale = d3.scale.linear()
-// 				.domain([0, data.length])
-// 				.range(['#4A84B0', '#c6dbef']);
-// 	var ordinalColorScale = d3.scale.category20();
-// 	var xAxis = d3.svg.axis()
-// 			.scale(x)
-// 			.orient('bottom');
-// 	var frm = d3.format("0d")
-// 	var yAxis = d3.svg.axis()
-// 			.scale(y)
-// 			.tickFormat(frm)
-// 			.orient('left')
-// 	var svg = d3.select('#chartArea').append('svg')
-// 			.attr('id', 'chart')
-// 			.attr('height', h)
-// 			.attr('width', w)
+	if(buildStyle.isIssue)
+		$('#chartArea2').hide();
+}
 
-// 	var chart = svg.append('g')
-// 			.classed('display', true)
-// 			.attr('transform', 'translate(' + margin.left + ',' + margin.right + ')');
-// 	chart.append("text")
-// 			.classed('issues-title', true)
-// 	        .attr("x", (width / 2))             
-// 	        .attr("y", 0 - (margin.top / 2))
-// 	        .attr("text-anchor", "middle")  
-// 	        .text("ISSUES");
+function setClosureChart(data) {
+	var tot = 0;
+	    for (var n = 0; n < data.length; n++) {
+	        tot += data[n].closed; 
+	    }
+	    if (tot != 0 && totaller != 0) {
 
-// 	plot.call(chart, {
-// 		data:data,
-// 		axis: {
-// 		    x: xAxis,
-// 		    y: yAxis,
-// 		}, 
-// 		gridlines: yGridlines
-// 	});
-// 	} else {
-// 	    issueStatus = false;
-// 	} 
-
-// function plot(params) {
-// 	this.append('g')
-// 		.call(params.gridlines)
-// 		.classed('gridline', true)
-// 		.attr('transform', 'translate(0,0)')
-// 	this.selectAll('.bar')
-// 		.data(params.data)
-// 		.enter()
-// 		  .append('rect')
-// 		  .classed('bar', true)
-// 		  .attr('x', function(d, i){
-// 			return x(d.date);
-// 		  })
-// 		  .attr('value', function(d, i) {
-// 			return d.date  + ' ' + d.issues;
-// 		  })
-// 		  .attr('y', function(d, i){
-// 			return y(d.issues);
-// 		  })
-// 		  .attr('width', function(d, i){
-// 			return x.rangeBand()-2;
-// 		  })
-// 		  .attr('height', function(d, i){
-// 			return height - y(d.issues)
-// 		  })
-// 		  .on('mouseover', function(d, i){
-// 		var el = d3.select(this)
-// 			el.transition()
-// 				.duration(300)
-// 				.attr({
-// 				width: x.rangeBand()+5,
-// 				height:height - y(d.issues)+3,
-// 				y: y(d.issues)-3
-// 			})						
-// 		 this.parentNode.appendChild(this); 
-// 		  })
-// 		  .on('mouseleave', function(d, i){
-// 			var el = d3.select(this)
-// 			el.transition()
-// 				.duration(500)
-// 				.attr({
-// 				height: height - y(d.issues),
-// 				y: y(d.issues),
-// 				width:x.rangeBand()-2
-// 			})						
-// 		  })
-// 		  .style('fill', function(d, i){
-// 			//return ordinalColorScale(i);//uncomment line for ordinalScale colours
-// 			return linearColorScale(i)  //uncomment line for linearScale colours
-// 		  })
-// 		  .style('cursor', 'pointer');
-
-// 	this.selectAll('.bar-label')
-// 		.data(params.data)
-// 		.enter()
-// 		  .append('text')
-// 		  .classed('bar-label', true)
-// 		  .attr('x', function(d, i){
-// 			return x(d.date) + (x.rangeBand()/2);
-// 		  })
-// 		   .attr('y', function(d, i){
-// 			return y(d.issues);
-// 		  })
-// 		  .attr('dx', 0)
-// 		  .attr('dy', -6)
-// 		  .text(function(d, i){
-// 			return d.issues;
-// 		  })
-// 	this.append('g')
-// 	    .classed('x axis', true)
-// 	    .attr('transform', 'translate(' + 0 + ',' + height + ')')
-// 	    .call(params.axis.x)
-// 		.selectAll('text')
-// 		    .style('text-anchor', 'end')
-// 		    .attr('dx', -8)
-// 		    .attr('dy', 8)
-// 		    .attr('transform', 'translate(0,0) rotate(-45)')
-// 	this.append('g')
-// 	    .classed('y axis', true)
-// 	    .attr('transform', 'translate(0,0)')
-// 	    .call(params.axis.y)
-// 	this.select('.y.axis')
-// 		.append('text')
-// 		.attr('x', 0)
-// 		.attr('y', 0)
-// 		.style('text-anchor', 'middle')
-// 		.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
-// 		.text('No. of Issues')
-// 	this.select('.x.axis')
-// 		.append('text')
-// 		.attr('x', 0)
-// 		.attr('y', 0)
-// 		.style('text-anchor', 'middle')
-// 		.attr('transform', 'translate(' + width / 2 + ', 50)')
-// 		.text('Last 30 Days')
+		var $viewEle = $('#changeView')
+		var btn = document.createElement('button');
+		$(btn).attr({
+			width: 200,
+			class: 'btn'	
+		});
 		
-// 	}	
-// }
+		$viewEle.append(btn);
+		assignListener($viewEle, null);
+	    }
+	    if (tot != 0) {
+	        var w = 450, h = 450;
+	        var margin = {
+		    top: 48,
+		    bottom: 100,
+		    left: 60,
+		    right: 40
+	        };
 
+	var width = w - margin.left - margin.right;
+	var height = h - margin.top - margin.bottom;
 
-// function setPullsChart(data) {
-// 	var tot = 0;
-// 	    for (var n = 0; n < data.length; n++) {
-// 	        tot += data[n].pulls; 
-// 	    }
+	var x = d3.scale.ordinal()
+		.domain(data.map(function(entry){
+			return entry.user;
+		}))
+		.rangeBands([0, width])
+	var y = d3.scale.linear()
+		.domain([0, d3.max(data, function(d){
+			return d.closed;	
+		})])
+		.range([height, 0]);
+	var yGridlines = d3.svg.axis()
+				.scale(y)
+				.tickSize(-width, 0, 0)
+				.tickFormat('')
+				.orient('left')
+	var linearColorScale = d3.scale.linear()
+				.domain([0, data.length])
+				.range(['#4A84B0', '#c6dbef']);
+	var ordinalColorScale = d3.scale.category20();
+	var xAxis = d3.svg.axis()
+			.scale(x)
+			.orient('bottom');
+	var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient('left')
+	var svg = d3.select('#chartArea2').append('svg')
+			.attr('id', 'chart')
+			.attr('height', h)
+			.attr('width', w)
+	var chart = svg.append('g')
+			.classed('display', true)
+			.attr('transform', 'translate(' + margin.left + ',' + margin.right + ')');
 
-// ////////////////////
-// 	    if (tot != 0 && totaller != 0) {
+	plot2.call(chart, {
+		data:data,
+		axis: {
+		    x: xAxis,
+		    y: yAxis,
+		}, 
+		gridlines: yGridlines
+	});
+	}
 
-// 		var $viewEle = $('#changeView')
-// 		var btn = document.createElement('button');
-// 		$(btn).attr({
-// 			width: 200,
-// 			class: 'btn'	
-// 		});
+	function plot2(params) {
+		this.append('g')
+			.call(params.gridlines)
+			.classed('gridline', true)
+			.attr('transform', 'translate(0,0)')
+		this.selectAll('.bar')
+			.data(params.data)
+			.enter()
+			  .append('rect')
+			  .classed('bar', true)
+			  .attr('x', function(d, i){
+				return x(d.user);
+			  })
+			  .attr('y', function(d, i){
+				return y(d.closed);
+			  })
+			  .attr('width', function(d, i){
+				return x.rangeBand()-2;
+			  })
+			  .attr('height', function(d, i){
+				return height - y(d.closed)
+			  })
+			  .style('fill', function(d, i){
+				//return ordinalColorScale(i);//uncomment line for ordinalScale colours
+				return linearColorScale(i)  //uncomment line for linearScale colours
+			  });
 
-// 		$(btn).text('View Pull Requests');
-// 		$viewEle.append(btn);
-// 		assignListener($viewEle);
-// 	    }
-// /////////////////////
+		this.selectAll('.bar-label')
+			.data(params.data)
+			.enter()
+			  .append('text')
+			  .classed('bar-label', true)
+			  .attr('x', function(d, i){
+				return x(d.user) + (x.rangeBand()/2);
+			  })
+			   .attr('y', function(d, i){
+				return y(d.closed);
+			  })
+			  .attr('dx', 0)
+			  .attr('dy', -6)
+			  .text(function(d, i){
+				return d.closed;
+			  })
+			this.append('g')
+			    .classed('x axis', true)
+			    .attr('transform', 'translate(' + 0 + ',' + height + ')')
+			    .call(params.axis.x)
+				.selectAll('text')
+				    .style('text-anchor', 'end')
+				    .attr('dx', -8)
+				    .attr('dy', 8)
+				    .attr('transform', 'translate(0,0) rotate(-45)')
+			this.append('g')
+			    .classed('y axis', true)
+			    .attr('transform', 'translate(0,0)')
+			    .call(params.axis.y)
+			this.select('.y.axis')
+				.append('text')
+				.attr('x', 0)
+				.attr('y', 0)
+				.style('text-anchor', 'middle')
+				.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
+				.text('No. of Closures')
+			this.select('.x.axis')
+				.append('text')
+				.attr('x', 0)
+				.attr('y', 0)
+				.style('text-anchor', 'middle')
+				.attr('transform', 'translate(' + width / 2 + ', 100)')
+				.text('User')
+		}	
+	$('#chartArea2').hide();
+}
 
-// 	    if (tot != 0) {
-// 	        var w = 450, h = 450;
-// 	        var margin = {
-// 		    top: 48,
-// 		    bottom: 100,
-// 		    left: 60,
-// 		    right: 40
-// 	        };
-
-// 	var width = w - margin.left - margin.right;
-// 	var height = h - margin.top - margin.bottom;
-
-// 	var x = d3.scale.ordinal()
-// 		.domain(data.map(function(entry){
-// 			return entry.date;
-// 		}))
-// 		.rangeBands([0, width])
-// 	var y = d3.scale.linear()
-// 		.domain([0, d3.max(data, function(d){
-// 			return d.pulls;	
-// 		})])
-// 		.range([height, 0]);
-// 	var frm = d3.format("0d")
-// 	var yGridlines = d3.svg.axis()
-// 				.scale(y)
-// 				.tickSize(-width, 0, 0)
-// 				.tickFormat('')
-// 				.orient('left')
-// 	var linearColorScale = d3.scale.linear()
-// 				.domain([0, data.length])
-// 				.range(['#4A84B0', '#c6dbef']);
-// 	var ordinalColorScale = d3.scale.category20();
-// 	var xAxis = d3.svg.axis()
-// 			.scale(x)
-// 			.orient('bottom');
-// 	var yAxis = d3.svg.axis()
-// 			.scale(y)
-// 			.tickFormat(frm)
-// 			.orient('left')
-// 	var svg = d3.select('#chartArea2').append('svg')
-// 			.attr('id', 'pulls-chart')
-// 			.attr('height', h)
-// 			.attr('width', w)
-// 	var chart = svg.append('g')
-// 			.classed('display', true)
-// 			.attr('transform', 'translate(' + margin.left + ',' + margin.right + ')');
-// 	chart.append("text")
-// 				.classed('pulls-title', true)
-// 		        .attr("x", (width / 2))             
-// 		        .attr("y", 0 - (margin.top / 2))
-// 		        .attr("text-anchor", "middle")  
-// 		        .text("PULL REQUESTS");
-		        
-// 	plot2.call(chart, {
-// 		data:data,
-// 		axis: {
-// 		    x: xAxis,
-// 		    y: yAxis,
-// 		}, 
-// 		gridlines: yGridlines
-// 	});
-// 	}
+function setLineChart(data, buildStyle) {
+	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
+	var chartId = buildStyle.isIssue ? "" : "pulls-";
+	var tot = 0;
 	
-// 	function plot2(params) {
-// 		this.append('g')
-// 			.call(params.gridlines)
-// 			.classed('gridline', true)
-// 			.attr('transform', 'translate(0,0)')
-// 		this.selectAll('.bar')
-// 			.data(params.data)
-// 			.enter()
-// 			  .append('rect')
-// 			  .classed('bars', true)
-// 			  .attr('x', function(d, i){
-// 				return x(d.date);
-// 			  })
-// 			  .attr('value', function(d, i) {
-// 				return d.date  + ' ' + d.pulls;
-// 		  	  })
-// 			  .attr('y', function(d, i){
-// 				return y(d.pulls);
-// 			  })
-// 			  .attr('width', function(d, i){
-// 				return x.rangeBand()-2;
-// 			  })
-// 			  .attr('height', function(d, i){
-// 				return height - y(d.pulls)
-// 			  })
-// 			  .style('fill', function(d, i){
-// 				//return ordinalColorScale(i);//uncomment line for ordinalScale colours
-// 				return linearColorScale(i)  //uncomment line for linearScale colours
-// 			  })
-// 			  .style('cursor', 'pointer');
-
-// 		this.selectAll('.bar-label')
-// 			.data(params.data)
-// 			.enter()
-// 			  .append('text')
-// 			  .classed('bar-label', true)
-// 			  .attr('x', function(d, i){
-// 				return x(d.date) + (x.rangeBand()/2);
-// 			  })
-// 			   .attr('y', function(d, i){
-// 				return y(d.pulls);
-// 			  })
-// 			  .attr('dx', 0)
-// 			  .attr('dy', -6)
-// 			  .text(function(d, i){
-// 				return d.pulls;
-// 			  })
-// 			this.append('g')
-// 			    .classed('x axis', true)
-// 			    .attr('transform', 'translate(' + 0 + ',' + height + ')')
-// 			    .call(params.axis.x)
-// 				.selectAll('text')
-// 				    .style('text-anchor', 'end')
-// 				    .attr('dx', -8)
-// 				    .attr('dy', 8)
-// 				    .attr('transform', 'translate(0,0) rotate(-45)')
-// 			this.append('g')
-// 			    .classed('y axis', true)
-// 			    .attr('transform', 'translate(0,0)')
-// 			    .call(params.axis.y)
-// 			this.select('.y.axis')
-// 				.append('text')
-// 				.attr('x', 0)
-// 				.attr('y', 0)
-// 				.style('text-anchor', 'middle')
-// 				.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
-// 				.text('No. of Pull Requests')
-// 			this.select('.x.axis')
-// 				.append('text')
-// 				.attr('x', 0)
-// 				.attr('y', 0)
-// 				.style('text-anchor', 'middle')
-// 				.attr('transform', 'translate(' + width / 2 + ', 60)')
-// 				.text('Last 30 Days')
-// 		}	
-// 	$('#chartArea2').hide();
-// }
-
-
-// function setClosureChart(data) {
-// 	var tot = 0;
-// 	    for (var n = 0; n < data.length; n++) {
-// 	        tot += data[n].closed; 
-// 	    }
-// 	    if (tot != 0 && totaller != 0) {
-
-// 		var $viewEle = $('#changeView')
-// 		var btn = document.createElement('button');
-// 		$(btn).attr({
-// 			width: 200,
-// 			class: 'btn'	
-// 		});
+	
+	for (var i = 0; i < data.length; i++) {
+		tot += data[i][buildStyle.dataVal];
+	}
+	if (tot != 0) {
 		
-// 		$viewEle.append(btn);
-// 		assignListener($viewEle, null);
-// 	    }
-// 	    if (tot != 0) {
-// 	        var w = 450, h = 450;
-// 	        var margin = {
-// 		    top: 48,
-// 		    bottom: 100,
-// 		    left: 60,
-// 		    right: 40
-// 	        };
-// 	var width = w - margin.left - margin.right;
-// 	var height = h - margin.top - margin.bottom;
+		var tip = d3.tip()
+				  .attr('class', 'd3-tip')
+				  .offset([-10, 0])
+				  .html(function(d, i) {
+				  	var date = Nth(d[buildStyle.dataKey])
 
-// 	var x = d3.scale.ordinal()
-// 		.domain(data.map(function(entry){
-// 			return entry.user;
-// 		}))
-// 		.rangeBands([0, width])
-// 	var y = d3.scale.linear()
-// 		.domain([0, d3.max(data, function(d){
-// 			return d.closed;	
-// 		})])
-// 		.range([height, 0]);
-// 	var yGridlines = d3.svg.axis()
-// 				.scale(y)
-// 				.tickSize(-width, 0, 0)
-// 				.tickFormat('')
-// 				.orient('left')
-// 	var linearColorScale = d3.scale.linear()
-// 				.domain([0, data.length])
-// 				.range(['#4A84B0', '#c6dbef']);
-// 	var ordinalColorScale = d3.scale.category20();
-// 	var xAxis = d3.svg.axis()
-// 			.scale(x)
-// 			.orient('bottom');
-// 	var yAxis = d3.svg.axis()
-// 			.scale(y)
-// 			.orient('left')
-// 	var svg = d3.select('#chartArea2').append('svg')
-// 			.attr('id', 'chart')
-// 			.attr('height', h)
-// 			.attr('width', w)
-// 	var chart = svg.append('g')
-// 			.classed('display', true)
-// 			.attr('transform', 'translate(' + margin.left + ',' + margin.right + ')');
+				  	var s = dt[i].split('T')
+				  	var dateBits = s[0].split('-');
+	    			var da = s[0].substring(s[0].length, 8).trim()
+					var monthStr = dateFormat(dateBits[1])
+					
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d[buildStyle.dataVal] + "</span>";
+				  })
+		var width = buildStyle.w - buildStyle.left - buildStyle.right;
+		var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
+		var svg = d3.select(buildStyle.chartArea).append('svg')
+					.attr('id', chartId + 'line-chart')
+					.attr('height', buildStyle.h + buildStyle.padding)
+					.attr('width', buildStyle.w + buildStyle.padding)
+		svg.call(tip);
+		var chart = svg.append('g')
+					.classed('display', true)
+					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')')
+		chart.append("text")
+				.classed(buildStyle.dataVal + '-title', true)
+		        .attr("x", (width / 2))             
+		        .attr("y", 0 - (buildStyle.top / 2) - buildStyle.title.y /2)
+		        .attr("text-anchor", "middle")  
+		        .text(toolTipValue.toUpperCase());
+		var y = d3.scale.linear()
+				.domain([0,d3.max(data, function(d) {
+					return d[buildStyle.dataVal];
+				})])
+				.range([height, 0])
+		var x = d3.scale.ordinal()
+				.domain(data.map(function(entry) {
+				return entry[buildStyle.dataKey];
+				}))
+				.rangeBands([buildStyle.padding, width - buildStyle.padding])
 
-// 	plot2.call(chart, {
-// 		data:data,
-// 		axis: {
-// 		    x: xAxis,
-// 		    y: yAxis,
-// 		}, 
-// 		gridlines: yGridlines
-// 	});
-// 	}
+		var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient('bottom')
+		var frm = d3.format("0d")
+		var yAxis = d3.svg.axis()
+				.scale(y)
+				.tickFormat(frm)
+				.orient('left')
+		var line = d3.svg.line()
+					.x(function(d){
+						return x(d[buildStyle.dataKey])
+					})
+					.y(function(d){
+						return y(d[buildStyle.dataVal])
+					})
+					.interpolate('cardinal')
+		var yGridlines = d3.svg.axis()
+					.scale(y)
+					.tickSize(-width, 0, 0)
+					.tickFormat('')
+					.orient('left')
+		function plot(params) {
+			this.append('g')
+			.call(params.gridlines)
+			.classed('gridline', true)
+			.attr('transform', 'translate(0,0)')
+			this.append('g')
+		    .classed('x axis', true)
+		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+		    .call(params.axis.x)
+			.selectAll('text')
+			    .style('text-anchor', 'end')
+			    .attr('dx', -8)
+			    .attr('dy', 8)
+			    .attr('transform', 'translate(0,0) rotate(-45)')
+		this.append('g')
+		    .classed('y axis', true)
+		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
+		    .call(params.axis.y)
+		this.select('.y.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
+			.text('No. of '+ buildStyle.dataVal.charAt(0).toUpperCase() + buildStyle.dataVal.slice(1))
+		this.select('.x.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(' + width / 2 + ', 50)')
+			.text('Last 30 Days')
+			//enter
+			this.selectAll('.trendline')
+				.data([params.data])
+				.enter()
+				.append('path')
+				.classed('trendline', true);
+			this.selectAll('.point')
+				.data(params.data)
+				.enter()
+				.append('circle')
+				.classed('point', true)
+				.attr('r', 3)
+				.attr('value', function(d){
+					return d[buildStyle.dataKey] + "  " + d[buildStyle.dataVal];
+				})
+				.on('mouseover', tip.show)
+      				.on('mouseout', tip.hide);
+			//update
+			this.selectAll('.trendline')
+				.attr('d', function(d){
+					return line(d)
+				})
+			this.selectAll('.point')
+				.attr('cx', function(d, i) {
+					return x(d[buildStyle.dataKey]);
+				})
+				.attr('cy', function(d, i) {
+					return  y(d[buildStyle.dataVal]);
+				})
 
-// 	function plot2(params) {
-// 		this.append('g')
-// 			.call(params.gridlines)
-// 			.classed('gridline', true)
-// 			.attr('transform', 'translate(0,0)')
-// 		this.selectAll('.bar')
-// 			.data(params.data)
-// 			.enter()
-// 			  .append('rect')
-// 			  .classed('bar', true)
-// 			  .attr('x', function(d, i){
-// 				return x(d.user);
-// 			  })
-// 			  .attr('y', function(d, i){
-// 				return y(d.closed);
-// 			  })
-// 			  .attr('width', function(d, i){
-// 				return x.rangeBand()-2;
-// 			  })
-// 			  .attr('height', function(d, i){
-// 				return height - y(d.closed)
-// 			  })
-// 			  .style('fill', function(d, i){
-// 				//return ordinalColorScale(i);//uncomment line for ordinalScale colours
-// 				return linearColorScale(i)  //uncomment line for linearScale colours
-// 			  });
+			//exit
+			this.selectAll('.trendline')
+				.data(params.data)
+				.exit()
+				.remove()
+			this.selectAll('.point')
+				.data(params.data)
+				.exit()
+				.remove();
 
-// 		this.selectAll('.bar-label')
-// 			.data(params.data)
-// 			.enter()
-// 			  .append('text')
-// 			  .classed('bar-label', true)
-// 			  .attr('x', function(d, i){
-// 				return x(d.user) + (x.rangeBand()/2);
-// 			  })
-// 			   .attr('y', function(d, i){
-// 				return y(d.closed);
-// 			  })
-// 			  .attr('dx', 0)
-// 			  .attr('dy', -6)
-// 			  .text(function(d, i){
-// 				return d.closed;
-// 			  })
-// 			this.append('g')
-// 			    .classed('x axis', true)
-// 			    .attr('transform', 'translate(' + 0 + ',' + height + ')')
-// 			    .call(params.axis.x)
-// 				.selectAll('text')
-// 				    .style('text-anchor', 'end')
-// 				    .attr('dx', -8)
-// 				    .attr('dy', 8)
-// 				    .attr('transform', 'translate(0,0) rotate(-45)')
-// 			this.append('g')
-// 			    .classed('y axis', true)
-// 			    .attr('transform', 'translate(0,0)')
-// 			    .call(params.axis.y)
-// 			this.select('.y.axis')
-// 				.append('text')
-// 				.attr('x', 0)
-// 				.attr('y', 0)
-// 				.style('text-anchor', 'middle')
-// 				.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
-// 				.text('No. of Closures')
-// 			this.select('.x.axis')
-// 				.append('text')
-// 				.attr('x', 0)
-// 				.attr('y', 0)
-// 				.style('text-anchor', 'middle')
-// 				.attr('transform', 'translate(' + width / 2 + ', 100)')
-// 				.text('User')
-// 		}	
-// 	$('#chartArea2').hide();
-// }
+		this.selectAll('.bar-label')
+			.data(params.data)
+			.enter()
+			  .append('text')
+			  .classed('bar-label', true)
+			  .attr('x', function(d, i){
+				return x(d[buildStyle.dataKey]) + (x.rangeBand()/2);
+			  })
+			   .attr('y', function(d, i){
+				return y(d[buildStyle.dataVal]);
+			  })
+			  .attr('dx', -19)
+			  .attr('dy', -20)
+			  .text(function(d, i){
+				return d[buildStyle.dataVal];
+			  })
+		}
+		plot.call(chart,{
+			data: data,
+			axis: {
+				x: xAxis,
+				y: yAxis
+			}, 
+			gridlines: yGridlines
+		});
+		if(buildStyle.isIssue)
+			$('#line-chart').hide();
+		else
+			$('#pulls-line-chart').hide();
+	}
+}
 
 var assignLineListener = function(elem) {
 	$(elem).click(function() {
@@ -682,6 +704,7 @@ function pullBarInfo(vData) {
 		selectedDay = a[1]
 		if (typeof issArr[t-1] != 'undefined') {
 			prog = issArr[t] - issArr[t-1];
+
 			if(prog < 0) {
 				prog = prog.toString().replace('-','')
 				progressStr = '<span class=decrease>▼ </span>' + prog + ' since yesterday';
@@ -691,6 +714,7 @@ function pullBarInfo(vData) {
 				progressStr = '<span class=increase>▲ </span>'  + prog + ' since yesterday';
 			}
 		} else {
+			// console.log(prog)
 			progressStr = '';
 		}
 	    }
@@ -826,211 +850,6 @@ var splitDashDate = function(dte) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function setLineChart(data, buildStyle) {
-	
-	// var chartArea = "#chartArea"
-	// var isIssue = true;
-	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
-	var chartId = buildStyle.isIssue ? "" : "pulls-";
-	var tot = 0;
-	
-	
-	for (var i = 0; i < data.length; i++) {
-		tot += data[i][buildStyle.dataVal];
-	}
-	if (tot != 0) {
-		// var w = 1100, h = 350;
-		
-		
-		
-		var tip = d3.tip()
-				  .attr('class', 'd3-tip')
-				  .offset([-10, 0])
-				  .html(function(d, i) {
-				  	var date = Nth(d[buildStyle.dataKey])
-
-				  	var s = dt[i].split('T')
-				  	var dateBits = s[0].split('-');
-	    			var da = s[0].substring(s[0].length, 8).trim()
-					var monthStr = dateFormat(dateBits[1])
-					
-				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d[buildStyle.dataVal] + "</span>";
-				  })
-		var width = buildStyle.w - buildStyle.left - buildStyle.right;
-		var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
-		var svg = d3.select(buildStyle.chartArea).append('svg')
-					.attr('id', chartId + 'line-chart')
-					.attr('height', buildStyle.h + buildStyle.padding)
-					.attr('width', buildStyle.w + buildStyle.padding)
-		svg.call(tip);
-		var chart = svg.append('g')
-					.classed('display', true)
-					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')')
-		chart.append("text")
-				.classed(buildStyle.dataVal + '-title', true)
-		        .attr("x", (width / 2))             
-		        .attr("y", 0 - (buildStyle.top / 2) -buildStyle.title.y /2)
-		        .attr("text-anchor", "middle")  
-		        .text(toolTipValue.toUpperCase());
-		var y = d3.scale.linear()
-				.domain([0,d3.max(data, function(d) {
-					return d[buildStyle.dataVal];
-				})])
-				.range([height, 0])
-		var x = d3.scale.ordinal()
-				.domain(data.map(function(entry) {
-				return entry[buildStyle.dataKey];
-				}))
-				.rangeBands([buildStyle.padding, width - buildStyle.padding])
-
-		var xAxis = d3.svg.axis()
-				.scale(x)
-				.orient('bottom')
-		var frm = d3.format("0d")
-		var yAxis = d3.svg.axis()
-				.scale(y)
-				.tickFormat(frm)
-				.orient('left')
-		var line = d3.svg.line()
-					.x(function(d){
-						return x(d[buildStyle.dataKey])
-					})
-					.y(function(d){
-						return y(d[buildStyle.dataVal])
-					})
-					.interpolate('cardinal')
-		var yGridlines = d3.svg.axis()
-					.scale(y)
-					.tickSize(-width, 0, 0)
-					.tickFormat('')
-					.orient('left')
-		function plot(params) {
-			this.append('g')
-			.call(params.gridlines)
-			.classed('gridline', true)
-			.attr('transform', 'translate(0,0)')
-			this.append('g')
-		    .classed('x axis', true)
-		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
-		    .call(params.axis.x)
-			.selectAll('text')
-			    .style('text-anchor', 'end')
-			    .attr('dx', -8)
-			    .attr('dy', 8)
-			    .attr('transform', 'translate(0,0) rotate(-45)')
-		this.append('g')
-		    .classed('y axis', true)
-		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
-		    .call(params.axis.y)
-		this.select('.y.axis')
-			.append('text')
-			.attr('x', 0)
-			.attr('y', 0)
-			.style('text-anchor', 'middle')
-			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
-			.text('No. of '+ buildStyle.dataVal.charAt(0).toUpperCase() + buildStyle.dataVal.slice(1))
-		this.select('.x.axis')
-			.append('text')
-			.attr('x', 0)
-			.attr('y', 0)
-			.style('text-anchor', 'middle')
-			.attr('transform', 'translate(' + width / 2 + ', 50)')
-			.text('Last 30 Days')
-			//enter
-			this.selectAll('.trendline')
-				.data([params.data])
-				.enter()
-				.append('path')
-				.classed('trendline', true);
-			this.selectAll('.point')
-				.data(params.data)
-				.enter()
-				.append('circle')
-				.classed('point', true)
-				.attr('r', 3)
-				.attr('value', function(d){
-					return d[buildStyle.dataKey] + "  " + d[buildStyle.dataVal];
-				})
-				.on('mouseover', tip.show)
-      				.on('mouseout', tip.hide);
-			//update
-			this.selectAll('.trendline')
-				.attr('d', function(d){
-					return line(d)
-				})
-			this.selectAll('.point')
-				.attr('cx', function(d, i) {
-					return x(d[buildStyle.dataKey]);
-				})
-				.attr('cy', function(d, i) {
-					return  y(d[buildStyle.dataVal]);
-				})
-
-			//exit
-			this.selectAll('.trendline')
-				.data(params.data)
-				.exit()
-				.remove()
-			this.selectAll('.point')
-				.data(params.data)
-				.exit()
-				.remove();
-
-		this.selectAll('.bar-label')
-			.data(params.data)
-			.enter()
-			  .append('text')
-			  .classed('bar-label', true)
-			  .attr('x', function(d, i){
-				return x(d[buildStyle.dataKey]) + (x.rangeBand()/2);
-			  })
-			   .attr('y', function(d, i){
-				return y(d[buildStyle.dataVal]);
-			  })
-			  .attr('dx', -19)
-			  .attr('dy', -20)
-			  .text(function(d, i){
-				return d[buildStyle.dataVal];
-			  })
-		}
-		plot.call(chart,{
-			data: data,
-			axis: {
-				x: xAxis,
-				y: yAxis
-			}, 
-			gridlines: yGridlines
-		});
-		if(buildStyle.isIssue)
-			$('#line-chart').hide();
-		else
-			$('#pulls-line-chart').hide();
-	}
-}
-
 function assignPullButtons(){
 		var btn = document.createElement('button');
 		$(btn).attr({
@@ -1042,205 +861,4 @@ function assignPullButtons(){
 		assignListener($viewEle);
 }
 
-
-function setBarChart(data, buildStyle) {
-
-var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
-
-	var tot = 0;
-	var chartId = buildStyle.isIssue ? "" : "pulls-"
-	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
-	    for (var m = 0; m < data.length; m++) {
-			tot += data[m][buildStyle.dataVal];
-	    }
-	    if(buildStyle.isIssue) 
-		totaller = tot;
-
-	if(!buildStyle.isIssue){
-		if (tot != 0 && totaller != 0) {
-			assignPullButtons();
-			
-		}
-	}
-
-	if (tot != 0) {
-		if(buildStyle.isIssue) {
-		var lineBtn = document.createElement('button')
-		$(lineBtn).text('View Line Chart')
-		$viewEle.append(lineBtn);
-		$(lineBtn).attr({
-			width: 200,
-			class: 'line-btn'	
-		});
-
-		$viewEle.append(lineBtn);
-		assignLineListener(lineBtn);
-	}
-	issueStatus = true;
-	// var w = 1100, h = 550;
-	// var margin = {
-	// 	top: 48,
-	// 	bottom: 72,
-	// 	left: 60,
-	// 	right: 40
-	// };
-	var width = buildStyle.w - buildStyle.left - buildStyle.right;
-	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
-
-	var x = d3.scale.ordinal()
-		.domain(data.map(function(entry){
-			return entry[buildStyle.dataKey];
-		}))
-		.rangeBands([0, width])
-	var y = d3.scale.linear()
-		.domain([0, d3.max(data, function(d){
-			return d[buildStyle.dataVal];	
-		})])
-		.range([height, 0]);
-	var yGridlines = d3.svg.axis()
-				.scale(y)
-				.tickSize(-width, 0, 0)
-				.tickFormat('')
-				.orient('left')
-	var linearColorScale = d3.scale.linear()
-				.domain([0, data.length])
-				.range(['#4A84B0', '#c6dbef']);
-	var ordinalColorScale = d3.scale.category20();
-	var xAxis = d3.svg.axis()
-			.scale(x)
-			.orient('bottom');
-	var frm = d3.format("0d")
-	var yAxis = d3.svg.axis()
-			.scale(y)
-			.tickFormat(frm)
-			.orient('left')
-	var svg = d3.select(buildStyle.chartArea).append('svg')
-			.attr('id', chartId + 'chart')
-			.attr('height', buildStyle.h)
-			.attr('width', buildStyle.w)
-
-	var chart = svg.append('g')
-			.classed('display', true)
-			.attr('transform', 'translate(' + buildStyle.left + ',' + buildStyle.right + ')');
-	chart.append("text")
-			.classed(buildStyle.dataVal+ '-title', true)
-	        .attr("x", (width / 2))             
-	        .attr("y", 0 - (buildStyle.top / 2))
-	        .attr("text-anchor", "middle")  
-	        .text(toolTipValue.toUpperCase());
-
-	plot.call(chart, {
-		data:data,
-		axis: {
-		    x: xAxis,
-		    y: yAxis,
-		}, 
-		gridlines: yGridlines
-	});
-	} else {
-	    issueStatus = false;
-	} 
-
-function plot(params) {
-	this.append('g')
-		.call(params.gridlines)
-		.classed('gridline', true)
-		.attr('transform', 'translate(0,0)')
-	this.selectAll('.bar')
-		.data(params.data)
-		.enter()
-		  .append('rect')
-		  .classed('bar', true)
-		  .attr('x', function(d, i){
-			return x(d[buildStyle.dataKey]);
-		  })
-		  .attr('value', function(d, i) {
-			return d[buildStyle.dataKey]  + ' ' + d[buildStyle.dataVal];
-		  })
-		  .attr('y', function(d, i){
-			return y(d[buildStyle.dataVal]);
-		  })
-		  .attr('width', function(d, i){
-			return x.rangeBand()-2;
-		  })
-		  .attr('height', function(d, i){
-			return height - y(d[buildStyle.dataVal])
-		  })
-		  .on('mouseover', function(d, i){
-		var el = d3.select(this)
-			el.transition()
-				.duration(300)
-				.attr({
-				width: x.rangeBand()+5,
-				height:height - y(d[buildStyle.dataVal])+3,
-				y: y(d[buildStyle.dataVal])-3
-			})						
-		 this.parentNode.appendChild(this); 
-		  })
-		  .on('mouseleave', function(d, i){
-			var el = d3.select(this)
-			el.transition()
-				.duration(500)
-				.attr({
-				height: height - y(d[buildStyle.dataVal]),
-				y: y(d[buildStyle.dataVal]),
-				width:x.rangeBand()-2
-			})						
-		  })
-		  .style('fill', function(d, i){
-			//return ordinalColorScale(i);//uncomment line for ordinalScale colours
-			return linearColorScale(i)  //uncomment line for linearScale colours
-		  })
-		  .style('cursor', 'pointer');
-
-	this.selectAll('.bar-label')
-		.data(params.data)
-		.enter()
-		  .append('text')
-		  .classed('bar-label', true)
-		  .attr('x', function(d, i){
-			return x(d[buildStyle.dataKey]) + (x.rangeBand()/2);
-		  })
-		   .attr('y', function(d, i){
-			return y(d[buildStyle.dataVal]);
-		  })
-		  .attr('dx', 0)
-		  .attr('dy', -6)
-		  .text(function(d, i){
-			return d[buildStyle.dataVal];
-		  })
-	this.append('g')
-	    .classed('x axis', true)
-	    .attr('transform', 'translate(' + 0 + ',' + height + ')')
-	    .call(params.axis.x)
-		.selectAll('text')
-		    .style('text-anchor', 'end')
-		    .attr('dx', -8)
-		    .attr('dy', 8)
-		    .attr('transform', 'translate(0,0) rotate(-45)')
-	this.append('g')
-	    .classed('y axis', true)
-	    .attr('transform', 'translate(0,0)')
-	    .call(params.axis.y)
-	this.select('.y.axis')
-		.append('text')
-		.attr('x', 0)
-		.attr('y', 0)
-		.style('text-anchor', 'middle')
-		.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
-		.text('No. of '+ buildStyle.dataVal.charAt(0).toUpperCase() + buildStyle.dataVal.slice(1))
-	this.select('.x.axis')
-		.append('text')
-		.attr('x', 0)
-		.attr('y', 0)
-		.style('text-anchor', 'middle')
-		.attr('transform', 'translate(' + width / 2 + ', 50)')
-		.text('Last 30 Days')
-		
-	}	
-
-	if(buildStyle.isIssue)
-		$('#chartArea2').hide();
-
-}
 
