@@ -54,7 +54,7 @@ for(var y in pr) {
 }
 var jArr = JSON.stringify(issuesArr);
 
-var issueLineData = {
+var issuesLineData = {
     w: 1100,
     h: 350,
     top: 48,
@@ -87,11 +87,38 @@ var pullsLineData = {
       y: 9
   }
 }
+var issuesBarData = {
+    w: 1100, 
+    h: 550,
+    top: 48,
+    bottom: 72,
+    left: 60,
+    right: 40,
+    padding: 0,
+    chartArea: "#chartArea",
+    isIssue: true,
+    dataKey: "date",
+    dataVal: "issues"
+  };
 
 
-setIssuesChart(issuesArr)
-setLineChart(issuesArr, issueLineData)
-setPullsChart(pullsArr)
+var pullsBarData = {
+    w: 1100, 
+    h: 550,
+    top: 48,
+    bottom: 72,
+    left: 60,
+    right: 40,
+    padding: 0,
+    chartArea: "#chartArea2",
+    isIssue: false,
+    dataKey: "date",
+    dataVal: "pulls"
+  };
+
+setBarChart(issuesArr, issuesBarData)
+setLineChart(issuesArr, issuesLineData)
+setBarChart(pullsArr, pullsBarData)
 setLineChart(pullsArr, pullsLineData)
 
 if(!issueStatus) {
