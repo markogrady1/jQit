@@ -53,10 +53,48 @@ for(var y in pr) {
     //dataset.push(pr[y].pulls);
 }
 var jArr = JSON.stringify(issuesArr);
+
+var issueLineData = {
+    w: 1100,
+    h: 350,
+    top: 48,
+    bottom: 72,
+    left: 60,
+    right: 40,
+    padding: 20,
+    chartArea: "#chartArea",
+    isIssue: true,
+    dataKey: "date",
+    dataVal: "issues",
+    title : {
+      y: 20
+  }
+  }
+
+
+
+var pullsLineData = {
+    w: 1100,
+    h: 350,
+    top: 48,
+    bottom: 72,
+    left: 60,
+    right: 40,
+    padding: 10,
+    chartArea: "#chartArea2",
+    isIssue: false,
+    dataKey: "date",
+    dataVal: "pulls",
+    title : {
+      y: 9
+  }
+  }
+
+
 setIssuesChart(issuesArr)
-setIssuesLineChart(issuesArr)
+setLineChart(issuesArr, issueLineData)
 setPullsChart(pullsArr)
-setPullsLineChart(pullsArr,pr)
+setLineChart(pullsArr, pullsLineData)
 
 if(!issueStatus) {
     var el = document.getElementById('chartArea');

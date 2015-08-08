@@ -1,356 +1,356 @@
 var totaller;
 
-function setIssuesLineChart(data) {
-	var tot = 0;
-	for (var i = 0; i < data.length; i++) {
-		tot += data[i].issues;
-	}
-	if (tot != 0) {
-		var w = 1100, h = 350;
-		var padding = 0; //padding not needed right now
-		var margin = {
-			top: 48,
-			bottom: 72,
-			left: 60,
-			right: 40
-		};
-		var tip = d3.tip()
-				  .attr('class', 'd3-tip')
-				  .offset([-10, 0])
-				  .html(function(d, i) {
-				  	var date = Nth(d.date)
+// function setIssuesLineChart(data) {
+// 	var tot = 0;
+// 	for (var i = 0; i < data.length; i++) {
+// 		tot += data[i].issues;
+// 	}
+// 	if (tot != 0) {
+// 		var w = 1100, h = 350;
+// 		var padding = 0; //padding not needed right now
+// 		var margin = {
+// 			top: 48,
+// 			bottom: 72,
+// 			left: 60,
+// 			right: 40
+// 		};
+// 		var tip = d3.tip()
+// 				  .attr('class', 'd3-tip')
+// 				  .offset([-10, 0])
+// 				  .html(function(d, i) {
+// 				  	var date = Nth(d.date)
 
-				  	var s = dt[i].split('T')
-				  	var dateBits = s[0].split('-');
-	    			var da = s[0].substring(s[0].length, 8).trim()
-					var monthStr = dateFormat(dateBits[1])
-				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>Pull Requests: " + d.issues + "</span>";
-				  })
-		var width = w - margin.left - margin.right;
-		var height = h - margin.top - margin.bottom;
-		var svg = d3.select('#chartArea').append('svg')
-					.attr('id', 'line-chart')
-					.attr('height', h + padding)
-					.attr('width', w + padding)
-		svg.call(tip);
-		var chart = svg.append('g')
-					.classed('display', true)
-					.attr('transform', 'translate('+ margin.left+','+margin.right+')')
-		chart.append("text")
-				.classed('issues-title', true)
-		        .attr("x", (width / 2))             
-		        .attr("y", 0 - (margin.top / 2) -20)
-		        .attr("text-anchor", "middle")  
-		        .text("ISSUES");
-		var y = d3.scale.linear()
-				.domain([0,d3.max(data, function(d) {
-					return d.issues;
-				})])
-				.range([height, 0])
-		var x = d3.scale.ordinal()
-				.domain(data.map(function(entry) {
-				return entry.date;
-				}))
-				.rangeBands([padding, width - padding])
+// 				  	var s = dt[i].split('T')
+// 				  	var dateBits = s[0].split('-');
+// 	    			var da = s[0].substring(s[0].length, 8).trim()
+// 					var monthStr = dateFormat(dateBits[1])
+// 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>Pull Requests: " + d.issues + "</span>";
+// 				  })
+// 		var width = w - margin.left - margin.right;
+// 		var height = h - margin.top - margin.bottom;
+// 		var svg = d3.select('#chartArea').append('svg')
+// 					.attr('id', 'line-chart')
+// 					.attr('height', h + padding)
+// 					.attr('width', w + padding)
+// 		svg.call(tip);
+// 		var chart = svg.append('g')
+// 					.classed('display', true)
+// 					.attr('transform', 'translate('+ margin.left+','+margin.right+')')
+// 		chart.append("text")
+// 				.classed('issues-title', true)
+// 		        .attr("x", (width / 2))             
+// 		        .attr("y", 0 - (margin.top / 2) -20)
+// 		        .attr("text-anchor", "middle")  
+// 		        .text("ISSUES");
+// 		var y = d3.scale.linear()
+// 				.domain([0,d3.max(data, function(d) {
+// 					return d.issues;
+// 				})])
+// 				.range([height, 0])
+// 		var x = d3.scale.ordinal()
+// 				.domain(data.map(function(entry) {
+// 				return entry.date;
+// 				}))
+// 				.rangeBands([padding, width - padding])
 
-		var xAxis = d3.svg.axis()
-				.scale(x)
-				.orient('bottom')
-		var frm = d3.format("0d")
-		var yAxis = d3.svg.axis()
-				.scale(y)
-				.tickFormat(frm)
-				.orient('left')
-		var line = d3.svg.line()
-					.x(function(d){
-						return x(d.date)
-					})
-					.y(function(d){
-						return y(d.issues)
-					})
-					.interpolate('cardinal')
-		var yGridlines = d3.svg.axis()
-					.scale(y)
-					.tickSize(-width, 0, 0)
-					.tickFormat('')
-					.orient('left')
-		function plot(params) {
-			this.append('g')
-			.call(params.gridlines)
-			.classed('gridline', true)
-			.attr('transform', 'translate(0,0)')
-			this.append('g')
-		    .classed('x axis', true)
-		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
-		    .call(params.axis.x)
-			.selectAll('text')
-			    .style('text-anchor', 'end')
-			    .attr('dx', -8)
-			    .attr('dy', 8)
-			    .attr('transform', 'translate(0,0) rotate(-45)')
-		this.append('g')
-		    .classed('y axis', true)
-		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
-		    .call(params.axis.y)
-		this.select('.y.axis')
-			.append('text')
-			.attr('x', 0)
-			.attr('y', 0)
-			.style('text-anchor', 'middle')
-			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
-			.text('No. of Issues')
-		this.select('.x.axis')
-			.append('text')
-			.attr('x', 0)
-			.attr('y', 0)
-			.style('text-anchor', 'middle')
-			.attr('transform', 'translate(' + width / 2 + ', 50)')
-			.text('Last 30 Days')
-			//enter
-			this.selectAll('.trendline')
-				.data([params.data])
-				.enter()
-				.append('path')
-				.classed('trendline', true);
-			this.selectAll('.point')
-				.data(params.data)
-				.enter()
-				.append('circle')
-				.classed('point', true)
-				.attr('r', 3)
-				.attr('value', function(d){
-					return d.date + "  " + d.issues;
-				})
-				.on('mouseover', tip.show)
-      				.on('mouseout', tip.hide);
-			//update
-			this.selectAll('.trendline')
-				.attr('d', function(d){
-					return line(d)
-				})
-			this.selectAll('.point')
-				.attr('cx', function(d, i) {
-					return x(d.date);
-				})
-				.attr('cy', function(d, i) {
-					return  y(d.issues);
-				})
+// 		var xAxis = d3.svg.axis()
+// 				.scale(x)
+// 				.orient('bottom')
+// 		var frm = d3.format("0d")
+// 		var yAxis = d3.svg.axis()
+// 				.scale(y)
+// 				.tickFormat(frm)
+// 				.orient('left')
+// 		var line = d3.svg.line()
+// 					.x(function(d){
+// 						return x(d.date)
+// 					})
+// 					.y(function(d){
+// 						return y(d.issues)
+// 					})
+// 					.interpolate('cardinal')
+// 		var yGridlines = d3.svg.axis()
+// 					.scale(y)
+// 					.tickSize(-width, 0, 0)
+// 					.tickFormat('')
+// 					.orient('left')
+// 		function plot(params) {
+// 			this.append('g')
+// 			.call(params.gridlines)
+// 			.classed('gridline', true)
+// 			.attr('transform', 'translate(0,0)')
+// 			this.append('g')
+// 		    .classed('x axis', true)
+// 		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+// 		    .call(params.axis.x)
+// 			.selectAll('text')
+// 			    .style('text-anchor', 'end')
+// 			    .attr('dx', -8)
+// 			    .attr('dy', 8)
+// 			    .attr('transform', 'translate(0,0) rotate(-45)')
+// 		this.append('g')
+// 		    .classed('y axis', true)
+// 		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
+// 		    .call(params.axis.y)
+// 		this.select('.y.axis')
+// 			.append('text')
+// 			.attr('x', 0)
+// 			.attr('y', 0)
+// 			.style('text-anchor', 'middle')
+// 			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
+// 			.text('No. of Issues')
+// 		this.select('.x.axis')
+// 			.append('text')
+// 			.attr('x', 0)
+// 			.attr('y', 0)
+// 			.style('text-anchor', 'middle')
+// 			.attr('transform', 'translate(' + width / 2 + ', 50)')
+// 			.text('Last 30 Days')
+// 			//enter
+// 			this.selectAll('.trendline')
+// 				.data([params.data])
+// 				.enter()
+// 				.append('path')
+// 				.classed('trendline', true);
+// 			this.selectAll('.point')
+// 				.data(params.data)
+// 				.enter()
+// 				.append('circle')
+// 				.classed('point', true)
+// 				.attr('r', 3)
+// 				.attr('value', function(d){
+// 					return d.date + "  " + d.issues;
+// 				})
+// 				.on('mouseover', tip.show)
+//       				.on('mouseout', tip.hide);
+// 			//update
+// 			this.selectAll('.trendline')
+// 				.attr('d', function(d){
+// 					return line(d)
+// 				})
+// 			this.selectAll('.point')
+// 				.attr('cx', function(d, i) {
+// 					return x(d.date);
+// 				})
+// 				.attr('cy', function(d, i) {
+// 					return  y(d.issues);
+// 				})
 
-			//exit
-			this.selectAll('.trendline')
-				.data(params.data)
-				.exit()
-				.remove()
-			this.selectAll('.point')
-				.data(params.data)
-				.exit()
-				.remove();
+// 			//exit
+// 			this.selectAll('.trendline')
+// 				.data(params.data)
+// 				.exit()
+// 				.remove()
+// 			this.selectAll('.point')
+// 				.data(params.data)
+// 				.exit()
+// 				.remove();
 
-		this.selectAll('.bar-label')
-			.data(params.data)
-			.enter()
-			  .append('text')
-			  .classed('bar-label', true)
-			  .attr('x', function(d, i){
-				return x(d.date) + (x.rangeBand()/2);
-			  })
-			   .attr('y', function(d, i){
-				return y(d.issues);
-			  })
-			  .attr('dx', -19)
-			  .attr('dy', -20)
-			  .text(function(d, i){
-				return d.issues;
-			  })
-		}
-		plot.call(chart,{
-			data: data,
-			axis: {
-				x: xAxis,
-				y: yAxis
-			}, 
-			gridlines: yGridlines
-		});
-	$('#line-chart').hide();
-}
-}
+// 		this.selectAll('.bar-label')
+// 			.data(params.data)
+// 			.enter()
+// 			  .append('text')
+// 			  .classed('bar-label', true)
+// 			  .attr('x', function(d, i){
+// 				return x(d.date) + (x.rangeBand()/2);
+// 			  })
+// 			   .attr('y', function(d, i){
+// 				return y(d.issues);
+// 			  })
+// 			  .attr('dx', -19)
+// 			  .attr('dy', -20)
+// 			  .text(function(d, i){
+// 				return d.issues;
+// 			  })
+// 		}
+// 		plot.call(chart,{
+// 			data: data,
+// 			axis: {
+// 				x: xAxis,
+// 				y: yAxis
+// 			}, 
+// 			gridlines: yGridlines
+// 		});
+// 	$('#line-chart').hide();
+// }
+// }
 
-var setPullsLineChart = function(data) {
-	var tot = 0;
-	for (var i = 0; i < data.length; i++) {
-		tot += data[i].pulls;
-	}
-	if (tot != 0) {
-		var w = 450, h = 450;
-		var padding = 0; //padding not needed right now
-		var margin = {
-			top: 48,
-			bottom: 72,
-			left: 60,
-			right: 40
-		};
-		var width = w - margin.left - margin.right;
-		var height = h - margin.top - margin.bottom;
-		var tip = d3.tip()
-				  .attr('class', 'd3-tip')
-				  .offset([-10, 0])
-				  .html(function(d, i) {
-				  	var date = Nth(d.date)
+// var setPullsLineChart = function(data) {
+// 	var tot = 0;
+// 	for (var i = 0; i < data.length; i++) {
+// 		tot += data[i].pulls;
+// 	}
+// 	if (tot != 0) {
+// 		var w = 450, h = 450;
+// 		var padding = 0; //padding not needed right now
+// 		var margin = {
+// 			top: 48,
+// 			bottom: 72,
+// 			left: 60,
+// 			right: 40
+// 		};
+// 		var width = w - margin.left - margin.right;
+// 		var height = h - margin.top - margin.bottom;
+// 		var tip = d3.tip()
+// 				  .attr('class', 'd3-tip')
+// 				  .offset([-10, 0])
+// 				  .html(function(d, i) {
+// 				  	var date = Nth(d.date)
 				  	
-				  	var s = pdt[i].split('T')
-				  	var dateBits = s[0].split('-');
-	    			var da = s[0].substring(s[0].length, 8).trim()
-					var monthStr = dateFormat(dateBits[1])
-				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>Pull Requests: " + d.pulls + "</span>";
-				  })
-		var svg = d3.select('#chartArea2').append('svg')
-					.attr('id', 'pulls-line-chart')
-					.attr('height', h + padding)
-					.attr('width', w + padding)
-		svg.call(tip);
-		var chart = svg.append('g')
-					.classed('display', true)
-					.attr('transform', 'translate('+ margin.left+','+margin.right+')')
-		chart.append("text")
-				.classed('pulls-title', true)
-		        .attr("x", (width / 2))             
-		        .attr("y", 0 - (margin.top / 2) -20)
-		        .attr("text-anchor", "middle")  
-		        .text("ISSUES");
-		var y = d3.scale.linear()
-				.domain([0,d3.max(data, function(d) {
-					return d.pulls;
-				})])
-				.range([height, 0])
-		var x = d3.scale.ordinal()
-				.domain(data.map(function(entry) {
-				return entry.date;
-				}))
-				.rangeBands([padding, width - padding])
+// 				  	var s = pdt[i].split('T')
+// 				  	var dateBits = s[0].split('-');
+// 	    			var da = s[0].substring(s[0].length, 8).trim()
+// 					var monthStr = dateFormat(dateBits[1])
+// 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>Pull Requests: " + d.pulls + "</span>";
+// 				  })
+// 		var svg = d3.select('#chartArea2').append('svg')
+// 					.attr('id', 'pulls-line-chart')
+// 					.attr('height', h + padding)
+// 					.attr('width', w + padding)
+// 		svg.call(tip);
+// 		var chart = svg.append('g')
+// 					.classed('display', true)
+// 					.attr('transform', 'translate('+ margin.left+','+margin.right+')')
+// 		chart.append("text")
+// 				.classed('pulls-title', true)
+// 		        .attr("x", (width / 2))             
+// 		        .attr("y", 0 - (margin.top / 2) -20)
+// 		        .attr("text-anchor", "middle")  
+// 		        .text("ISSUES");
+// 		var y = d3.scale.linear()
+// 				.domain([0,d3.max(data, function(d) {
+// 					return d.pulls;
+// 				})])
+// 				.range([height, 0])
+// 		var x = d3.scale.ordinal()
+// 				.domain(data.map(function(entry) {
+// 				return entry.date;
+// 				}))
+// 				.rangeBands([padding, width - padding])
 
-		var xAxis = d3.svg.axis()
-				.scale(x)
-				.orient('bottom')
-		var frm = d3.format("0d")
-		var yAxis = d3.svg.axis()
-				.scale(y)
-				.tickFormat(frm)
-				.orient('left')
+// 		var xAxis = d3.svg.axis()
+// 				.scale(x)
+// 				.orient('bottom')
+// 		var frm = d3.format("0d")
+// 		var yAxis = d3.svg.axis()
+// 				.scale(y)
+// 				.tickFormat(frm)
+// 				.orient('left')
 		
-		var line = d3.svg.line()
-					.x(function(d){
-						return x(d.date)
-					})
-					.y(function(d){
-						return y(d.pulls)
-					})
-					.interpolate('cardinal')
-		var yGridlines = d3.svg.axis()
-					.scale(y)
-					.tickSize(-width, 0, 0)
-					.tickFormat('')
-					.orient('left')
-		function plot(params) {
-			this.append('g')
-			.call(params.gridlines)
-			.classed('gridline', true)
-			.attr('transform', 'translate(0,0)')
-			this.append('g')
-		    .classed('x axis', true)
-		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
-		    .call(params.axis.x)
-			.selectAll('text')
-			    .style('text-anchor', 'end')
-			    .attr('dx', -8)
-			    .attr('dy', 8)
-			    .attr('transform', 'translate(0,0) rotate(-45)')
-		this.append('g')
-		    .classed('y axis', true)
-		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
-		    .call(params.axis.y)
-		this.select('.y.axis')
-			.append('text')
-			.attr('x', 0)
-			.attr('y', 0)
-			.style('text-anchor', 'middle')
-			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
-			.text('No. of Issues')
-		this.select('.x.axis')
-			.append('text')
-			.attr('x', 0)
-			.attr('y', 0)
-			.style('text-anchor', 'middle')
-			.attr('transform', 'translate(' + width / 2 + ', 50)')
-			.text('Last 30 Days')
-			//enter
-			this.selectAll('.trendline')
-				.data([params.data])
-				.enter()
-				.append('path')
-				.classed('trendline', true);
-			this.selectAll('.point')
-				.data(params.data)
-				.enter()
-				.append('circle')
-				.classed('point', true)
-				.attr('r', 4)
-				.attr('value', function(d){
-					return d.date + "  " + d.pulls;
-				})
-				.style('cursor', 'pointer')
-				.on('mouseover', tip.show)
-      			.on('mouseout', tip.hide);
-			//update
-			this.selectAll('.trendline')
-				.attr('d', function(d){
-					return line(d)
-				})
-			this.selectAll('.point')
-				.attr('cx', function(d, i) {
-					return x(d.date);
-				})
-				.attr('cy', function(d, i) {
-					return  y(d.pulls);
-				})
+// 		var line = d3.svg.line()
+// 					.x(function(d){
+// 						return x(d.date)
+// 					})
+// 					.y(function(d){
+// 						return y(d.pulls)
+// 					})
+// 					.interpolate('cardinal')
+// 		var yGridlines = d3.svg.axis()
+// 					.scale(y)
+// 					.tickSize(-width, 0, 0)
+// 					.tickFormat('')
+// 					.orient('left')
+// 		function plot(params) {
+// 			this.append('g')
+// 			.call(params.gridlines)
+// 			.classed('gridline', true)
+// 			.attr('transform', 'translate(0,0)')
+// 			this.append('g')
+// 		    .classed('x axis', true)
+// 		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+// 		    .call(params.axis.x)
+// 			.selectAll('text')
+// 			    .style('text-anchor', 'end')
+// 			    .attr('dx', -8)
+// 			    .attr('dy', 8)
+// 			    .attr('transform', 'translate(0,0) rotate(-45)')
+// 		this.append('g')
+// 		    .classed('y axis', true)
+// 		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
+// 		    .call(params.axis.y)
+// 		this.select('.y.axis')
+// 			.append('text')
+// 			.attr('x', 0)
+// 			.attr('y', 0)
+// 			.style('text-anchor', 'middle')
+// 			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
+// 			.text('No. of Issues')
+// 		this.select('.x.axis')
+// 			.append('text')
+// 			.attr('x', 0)
+// 			.attr('y', 0)
+// 			.style('text-anchor', 'middle')
+// 			.attr('transform', 'translate(' + width / 2 + ', 50)')
+// 			.text('Last 30 Days')
+// 			//enter
+// 			this.selectAll('.trendline')
+// 				.data([params.data])
+// 				.enter()
+// 				.append('path')
+// 				.classed('trendline', true);
+// 			this.selectAll('.point')
+// 				.data(params.data)
+// 				.enter()
+// 				.append('circle')
+// 				.classed('point', true)
+// 				.attr('r', 4)
+// 				.attr('value', function(d){
+// 					return d.date + "  " + d.pulls;
+// 				})
+// 				.style('cursor', 'pointer')
+// 				.on('mouseover', tip.show)
+//       			.on('mouseout', tip.hide);
+// 			//update
+// 			this.selectAll('.trendline')
+// 				.attr('d', function(d){
+// 					return line(d)
+// 				})
+// 			this.selectAll('.point')
+// 				.attr('cx', function(d, i) {
+// 					return x(d.date);
+// 				})
+// 				.attr('cy', function(d, i) {
+// 					return  y(d.pulls);
+// 				})
 
-			//exit
-			this.selectAll('.trendline')
-				.data(params.data)
-				.exit()
-				.remove()
-			this.selectAll('.point')
-				.data(params.data)
-				.exit()
-				.remove();
+// 			//exit
+// 			this.selectAll('.trendline')
+// 				.data(params.data)
+// 				.exit()
+// 				.remove()
+// 			this.selectAll('.point')
+// 				.data(params.data)
+// 				.exit()
+// 				.remove();
 
-		this.selectAll('.bar-label')
-			.data(params.data)
-			.enter()
-			  .append('text')
-			  .classed('bar-label', true)
-			  .attr('x', function(d, i){
-				return x(d.date) + (x.rangeBand()/2);
-			  })
-			   .attr('y', function(d, i){
-				return y(d.pulls);
-			  })
-			  .attr('dx', -15)
-			  .attr('dy', -20)
-			  .text(function(d, i){
-				return d.pulls;
-			  })
-		}
-		plot.call(chart,{
-			data: data,
-			axis: {
-				x: xAxis,
-				y: yAxis
-			}, 
-			gridlines: yGridlines
-		});
-	$('#pulls-line-chart').hide();
-}
-}
+// 		this.selectAll('.bar-label')
+// 			.data(params.data)
+// 			.enter()
+// 			  .append('text')
+// 			  .classed('bar-label', true)
+// 			  .attr('x', function(d, i){
+// 				return x(d.date) + (x.rangeBand()/2);
+// 			  })
+// 			   .attr('y', function(d, i){
+// 				return y(d.pulls);
+// 			  })
+// 			  .attr('dx', -15)
+// 			  .attr('dy', -20)
+// 			  .text(function(d, i){
+// 				return d.pulls;
+// 			  })
+// 		}
+// 		plot.call(chart,{
+// 			data: data,
+// 			axis: {
+// 				x: xAxis,
+// 				y: yAxis
+// 			}, 
+// 			gridlines: yGridlines
+// 		});
+// 	$('#pulls-line-chart').hide();
+// }
+// }
 
 var hideLineChart = function() {
 	var $lineChart = $('#line-chart')
@@ -953,7 +953,7 @@ function issueBarInfo(vData) {
 		center: mouseY +100,
 		fontSize: '1em',
 		left: mouseX,
-		width: '150px',
+		width: '170px',
 		height: '75px',
 		backgroundColor: '#3a3a3a',
 		color: '#cacaca',
@@ -1062,7 +1062,7 @@ function pullBarInfo(vData) {
 		center: mouseY +100,
 		fontSize: '1em',
 		left: mouseX,
-		width: '150px',
+		width: '170px',
 		height: '75px',
 		backgroundColor: '#3a3a3a',
 		color: '#cacaca',
@@ -1173,4 +1173,210 @@ var getDayFormat = function(dd) {
 var splitDashDate = function(dte) {
     var dateSections = dte.split('-');
     return dateSections;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function setLineChart(data, buildStyle) {
+	
+	// var chartArea = "#chartArea"
+	// var isIssue = true;
+	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
+	var chartId = buildStyle.isIssue ? "" : "pulls-";
+	var tot = 0;
+	
+	
+	for (var i = 0; i < data.length; i++) {
+		tot += data[i][buildStyle.dataVal];
+	}
+	if (tot != 0) {
+		// var w = 1100, h = 350;
+		
+		
+		
+		var tip = d3.tip()
+				  .attr('class', 'd3-tip')
+				  .offset([-10, 0])
+				  .html(function(d, i) {
+				  	var date = Nth(d[buildStyle.dataKey])
+
+				  	var s = dt[i].split('T')
+				  	var dateBits = s[0].split('-');
+	    			var da = s[0].substring(s[0].length, 8).trim()
+					var monthStr = dateFormat(dateBits[1])
+					
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d[buildStyle.dataVal] + "</span>";
+				  })
+		var width = buildStyle.w - buildStyle.left - buildStyle.right;
+		var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
+		var svg = d3.select(buildStyle.chartArea).append('svg')
+					.attr('id', chartId + 'line-chart')
+					.attr('height', buildStyle.h + buildStyle.padding)
+					.attr('width', buildStyle.w + buildStyle.padding)
+		svg.call(tip);
+		var chart = svg.append('g')
+					.classed('display', true)
+					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')')
+		chart.append("text")
+				.classed(buildStyle.dataVal + '-title', true)
+		        .attr("x", (width / 2))             
+		        .attr("y", 0 - (buildStyle.top / 2) -buildStyle.title.y /2)
+		        .attr("text-anchor", "middle")  
+		        .text(toolTipValue.toUpperCase());
+		var y = d3.scale.linear()
+				.domain([0,d3.max(data, function(d) {
+					return d[buildStyle.dataVal];
+				})])
+				.range([height, 0])
+		var x = d3.scale.ordinal()
+				.domain(data.map(function(entry) {
+				return entry[buildStyle.dataKey];
+				}))
+				.rangeBands([buildStyle.padding, width - buildStyle.padding])
+
+		var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient('bottom')
+		var frm = d3.format("0d")
+		var yAxis = d3.svg.axis()
+				.scale(y)
+				.tickFormat(frm)
+				.orient('left')
+		var line = d3.svg.line()
+					.x(function(d){
+						return x(d[buildStyle.dataKey])
+					})
+					.y(function(d){
+						return y(d[buildStyle.dataVal])
+					})
+					.interpolate('cardinal')
+		var yGridlines = d3.svg.axis()
+					.scale(y)
+					.tickSize(-width, 0, 0)
+					.tickFormat('')
+					.orient('left')
+		function plot(params) {
+			this.append('g')
+			.call(params.gridlines)
+			.classed('gridline', true)
+			.attr('transform', 'translate(0,0)')
+			this.append('g')
+		    .classed('x axis', true)
+		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+		    .call(params.axis.x)
+			.selectAll('text')
+			    .style('text-anchor', 'end')
+			    .attr('dx', -8)
+			    .attr('dy', 8)
+			    .attr('transform', 'translate(0,0) rotate(-45)')
+		this.append('g')
+		    .classed('y axis', true)
+		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
+		    .call(params.axis.y)
+		this.select('.y.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
+			.text('No. of '+ buildStyle.dataVal.charAt(0).toUpperCase() + buildStyle.dataVal.slice(1))
+		this.select('.x.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(' + width / 2 + ', 50)')
+			.text('Last 30 Days')
+			//enter
+			this.selectAll('.trendline')
+				.data([params.data])
+				.enter()
+				.append('path')
+				.classed('trendline', true);
+			this.selectAll('.point')
+				.data(params.data)
+				.enter()
+				.append('circle')
+				.classed('point', true)
+				.attr('r', 3)
+				.attr('value', function(d){
+					return d[buildStyle.dataKey] + "  " + d[buildStyle.dataVal];
+				})
+				.on('mouseover', tip.show)
+      				.on('mouseout', tip.hide);
+			//update
+			this.selectAll('.trendline')
+				.attr('d', function(d){
+					return line(d)
+				})
+			this.selectAll('.point')
+				.attr('cx', function(d, i) {
+					return x(d[buildStyle.dataKey]);
+				})
+				.attr('cy', function(d, i) {
+					return  y(d[buildStyle.dataVal]);
+				})
+
+			//exit
+			this.selectAll('.trendline')
+				.data(params.data)
+				.exit()
+				.remove()
+			this.selectAll('.point')
+				.data(params.data)
+				.exit()
+				.remove();
+
+		this.selectAll('.bar-label')
+			.data(params.data)
+			.enter()
+			  .append('text')
+			  .classed('bar-label', true)
+			  .attr('x', function(d, i){
+				return x(d[buildStyle.dataKey]) + (x.rangeBand()/2);
+			  })
+			   .attr('y', function(d, i){
+				return y(d[buildStyle.dataVal]);
+			  })
+			  .attr('dx', -19)
+			  .attr('dy', -20)
+			  .text(function(d, i){
+				return d[buildStyle.dataVal];
+			  })
+		}
+		plot.call(chart,{
+			data: data,
+			axis: {
+				x: xAxis,
+				y: yAxis
+			}, 
+			gridlines: yGridlines
+		});
+		if(buildStyle.isIssue)
+			$('#line-chart').hide();
+		else
+			$('#pulls-line-chart').hide();
+}
 }
