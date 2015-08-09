@@ -375,6 +375,7 @@ function setLineChart(data, buildStyle) {
 					.attr('id', chartId + 'line-chart')
 					.attr('height', buildStyle.h + buildStyle.padding)
 					.attr('width', buildStyle.w + buildStyle.padding)
+					.style('padding-top', 30)
 		svg.call(tip);
 		var chart = svg.append('g')
 					.classed('display', true)
@@ -382,7 +383,7 @@ function setLineChart(data, buildStyle) {
 		chart.append("text")
 				.classed(buildStyle.dataVal + '-title', true)
 		        .attr("x", (width / 2))             
-		        .attr("y", 0 - (buildStyle.top / 2) - buildStyle.title.y /2)
+		        .attr("y", 0 - (buildStyle.top / 2) - 20)
 		        .attr("text-anchor", "middle")  
 		        .text(toolTipValue.toUpperCase());
 		var y = d3.scale.linear()
@@ -596,11 +597,11 @@ function issueBarInfo(vData) {
 			progress = issArr[t] - issArr[t-1];
 			if(progress < 0) {
 				progress = progress.toString().replace('-','')
-				progressStr = '<span class=decrease>▼ </span>' + progress + ' since yesterday';
+				progressStr = '<span class=decrease>▼ </span>' + progress + ' since the previous day';
 			} else if (progress === 0) {
 				progressStr = '<span class=same>▶ </span>No change';
 			} else {
-				progressStr = '<span class=increase>▲ </span>'  + progress + ' since yesterday';
+				progressStr = '<span class=increase>▲ </span>'  + progress + ' since the previous day';
 			}
 		} else {
 			progressStr = '';
@@ -705,11 +706,11 @@ function pullBarInfo(vData) {
 			prog = issArr[t] - issArr[t-1];
 			if(prog < 0) {
 				prog = prog.toString().replace('-','')
-				progressStr = '<span class=decrease>▼ </span>' + prog + ' since yesterday';
+				progressStr = '<span class=decrease>▼ </span>' + prog + ' since the previous day';
 			} else if (prog == 0) {
 				progressStr = '<span class=same>▶ </span>No change';
 			} else {
-				progressStr = '<span class=increase>▲ </span>'  + prog + ' since yesterday';
+				progressStr = '<span class=increase>▲ </span>'  + prog + ' since the previous day';
 			}
 		} else {
 			progressStr = '';
