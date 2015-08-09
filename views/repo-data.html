@@ -33,6 +33,7 @@ var pdt = <%- JSON.stringify( fullPullDate) %>
 var v = <%- JSON.stringify(ch) %>
 var pr = <%- JSON.stringify(chPull) %>
 var p = <%- JSON.stringify(events) %>
+console.log(v)
 admin = [];
 for(var l in p) {
  admin.push({'user': l, 'closed': p[l]})
@@ -120,11 +121,13 @@ setLineChart(issuesArr, issuesLineData)
 setBarChart(pullsArr, pullsBarData)
 setLineChart(pullsArr, pullsLineData)
 
-if(!issueStatus) {
-    var el = document.getElementById('chartArea');
+
+if(issuesArr.length == 0){
+  var el = document.getElementById('chartArea');
     el.innerHTML = 'There have been no issues in the last 30 days';
     el.setAttribute('class', 'status');
 }
+
 //setClosureChart(admin);
 </script>
   <div class="body-wrap">

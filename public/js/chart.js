@@ -39,7 +39,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		$viewEle.append(lineBtn);
 		assignLineListener(lineBtn);
 	}
-	issueStatus = true;
+
 	var width = buildStyle.w - buildStyle.left - buildStyle.right;
 	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
 
@@ -94,8 +94,6 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		gridlines: yGridlines,
 		isIssue: buildStyle.isIssue
 	});
-	} else {
-	    issueStatus = false;
 	} 
 
 function plot(params) {
@@ -574,7 +572,6 @@ function issueBarInfo(vData) {
 	    mouseX = e.pageX;
 	    mouseY = e.pageY;
 	}).mouseover(); 
-
 	var $singleBar = $('.bar');
 	var e;
 	$singleBar.on('mouseover', function() {
