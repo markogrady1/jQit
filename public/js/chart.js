@@ -91,22 +91,24 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		    x: xAxis,
 		    y: yAxis,
 		}, 
-		gridlines: yGridlines
+		gridlines: yGridlines,
+		isIssue: buildStyle.isIssue
 	});
 	} else {
 	    issueStatus = false;
 	} 
 
 function plot(params) {
+	var classAppend = params.isIssue ? '' : 's';
 	this.append('g')
 		.call(params.gridlines)
 		.classed('gridline', true)
 		.attr('transform', 'translate(0,0)')
-	this.selectAll('.bar')
+	this.selectAll('.bar' + classAppend)
 		.data(params.data)
 		.enter()
 		  .append('rect')
-		  .classed('bar', true)
+		  .classed('bar'+ classAppend, true)
 		  .attr('x', function(d, i){
 			return x(d[buildStyle.dataKey]);
 		  })
@@ -704,7 +706,6 @@ function pullBarInfo(vData) {
 		selectedDay = a[1]
 		if (typeof issArr[t-1] != 'undefined') {
 			prog = issArr[t] - issArr[t-1];
-
 			if(prog < 0) {
 				prog = prog.toString().replace('-','')
 				progressStr = '<span class=decrease>▼ </span>' + prog + ' since yesterday';
@@ -714,7 +715,6 @@ function pullBarInfo(vData) {
 				progressStr = '<span class=increase>▲ </span>'  + prog + ' since yesterday';
 			}
 		} else {
-			// console.log(prog)
 			progressStr = '';
 		}
 	    }
