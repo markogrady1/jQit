@@ -33,7 +33,7 @@ var pdt = <%- JSON.stringify( fullPullDate) %>
 var v = <%- JSON.stringify(ch) %>
 var pr = <%- JSON.stringify(chPull) %>
 var p = <%- JSON.stringify(events) %>
-console.log(v)
+
 admin = [];
 for(var l in p) {
  admin.push({'user': l, 'closed': p[l]})
