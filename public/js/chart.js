@@ -365,7 +365,7 @@ function setLineChart(data, buildStyle) {
 				  	var s = dt[i].split('T')
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim()
-					var monthStr = dateFormat(dateBits[1])
+					var monthStr = getMonthString(dateBits[1])
 					
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d[buildStyle.dataVal] + "</span>";
 				  })
@@ -610,7 +610,7 @@ function issueBarInfo(vData) {
 	}
 
 	var dayString = getDayFormat(selectedBar);
-	var monthString = dateFormat(selectedDay);
+	var monthString = getMonthString(selectedDay);
 	var dateArray = splitDashDate(selectedBar);
 	var displayString = dayString + ' ' + dateArray[2] + ' ' +  monthString + ' ' + a[0];
 
@@ -719,7 +719,7 @@ function pullBarInfo(vData) {
 	}
 
 	var dayString = getDayFormat(selectedBar);
-	var monthString = dateFormat(selectedDay);
+	var monthString = getMonthString(selectedDay);
 	var dateArray = splitDashDate(selectedBar);
 	var displayString = dayString + ' ' + dateArray[2] + ' ' +  monthString + ' ' + a[0];
 
@@ -753,7 +753,7 @@ function pullBarInfo(vData) {
 	});
 }
 
-var dateFormat = function(date) {
+var getMonthString = function(date) {
 	switch(date){
 		case '01':
 		month = 'January';

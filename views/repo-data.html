@@ -6,6 +6,17 @@
 	<script src="/js/chart.js"></script>
 	   <meta charset="utf-8">
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script>
+//this section of code displays how to pass a nodejs value to ejs and then on to code
+//within script tags it can then be used anyhow you wish 
+//not ch is an array or json value set
+var dt = <%- JSON.stringify( fullDate) %>
+var pdt = <%- JSON.stringify( fullPullDate) %>
+var v = <%- JSON.stringify(ch) %>
+var pr = <%- JSON.stringify(chPull) %>
+var p = <%- JSON.stringify(events) %>
+</script>
+  <script src="/js/detectResize.js"></script>
  
    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
@@ -23,17 +34,9 @@
   <div id=display-data-info></div>
   <div id=chartArea></div>
   <div id=chartArea2></div>
-  
-<script>
-//this section of code displays how to pass a nodejs value to ejs and then on to code
-//within script tags it can then be used anyhow you wish 
-//not ch is an array or json value set
-var dt = <%- JSON.stringify( fullDate) %>
-var pdt = <%- JSON.stringify( fullPullDate) %>
-var v = <%- JSON.stringify(ch) %>
-var pr = <%- JSON.stringify(chPull) %>
-var p = <%- JSON.stringify(events) %>
+  <script>
 
+detectWindowSize()
 admin = [];
 for(var l in p) {
  admin.push({'user': l, 'closed': p[l]})
@@ -55,8 +58,8 @@ for(var y in pr) {
 var jArr = JSON.stringify(issuesArr);
 
 var issuesLineData = {
-    w: 1100,
-    h: 350,
+    w: chartWidth,
+    h: lineChartHeight,
     top: 48,
     bottom: 72,
     left: 60,
@@ -72,8 +75,8 @@ var issuesLineData = {
 }
 
 var pullsLineData = {
-    w: 1100,
-    h: 350,
+    w: chartWidth,
+    h: lineChartHeight,
     top: 48,
     bottom: 72,
     left: 60,
@@ -88,8 +91,8 @@ var pullsLineData = {
   }
 }
 var issuesBarData = {
-    w: 1100, 
-    h: 550,
+    w: chartWidth, 
+    h: barChartHeight,
     top: 48,
     bottom: 72,
     left: 60,
@@ -103,8 +106,8 @@ var issuesBarData = {
 
 
 var pullsBarData = {
-    w: 1100, 
-    h: 550,
+    w: chartWidth, 
+    h: barChartHeight,
     top: 48,
     bottom: 72,
     left: 60,
