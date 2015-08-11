@@ -13,6 +13,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var tot = 0;
 	var chartId = buildStyle.isIssue ? "" : "pulls-"
 	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
+	$viewEle.find('btn').remove()
 	    for (var m = 0; m < data.length; m++) {
 			tot += data[m][buildStyle.dataVal];
 	    }
@@ -28,6 +29,8 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 
 	if (tot != 0) {
 		if(buildStyle.isIssue) {
+			$bt2 = $('.line-btn');
+			$bt2.remove();
 		var lineBtn = document.createElement('button')
 		$(lineBtn).text('View Line Chart')
 		$viewEle.append(lineBtn);
@@ -70,6 +73,9 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 			.scale(y)
 			.tickFormat(frm)
 			.orient('left')
+
+	$e = $(buildStyle.chartArea).find('svg')
+	$e.remove();
 	var svg = d3.select(buildStyle.chartArea).append('svg')
 			.attr('id', chartId + 'chart')
 			.attr('height', buildStyle.h)
@@ -189,9 +195,10 @@ function plot(params) {
 		.append('text')
 		.attr('x', 0)
 		.attr('y', 0)
+		.classed('x-axis-title', true)
 		.style('text-anchor', 'middle')
 		.attr('transform', 'translate(' + width / 2 + ', 50)')
-		.text('Last 30 Days')
+		.text(buildStyle.scope)
 		
 	}	
 
@@ -371,6 +378,8 @@ function setLineChart(data, buildStyle) {
 				  })
 		var width = buildStyle.w - buildStyle.left - buildStyle.right;
 		var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
+		// $e = $(buildStyle.chartArea).find('svg')
+		// $e.remove();
 		var svg = d3.select(buildStyle.chartArea).append('svg')
 					.attr('id', chartId + 'line-chart')
 					.attr('height', buildStyle.h + buildStyle.padding)
@@ -447,9 +456,10 @@ function setLineChart(data, buildStyle) {
 			.append('text')
 			.attr('x', 0)
 			.attr('y', 0)
+			.classed('line-x-axis-title', true)
 			.style('text-anchor', 'middle')
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
-			.text('Last 30 Days')
+			.text(buildStyle.scope)
 			//enter
 			this.selectAll('.trendline')
 				.data([params.data])
@@ -849,6 +859,8 @@ var splitDashDate = function(dte) {
 
 
 function assignPullButtons(){
+	var bt = document.getElementsByClassName('btn')
+	if(bt[0] !== null){
 		var btn = document.createElement('button');
 		$(btn).attr({
 			width: 200,
@@ -857,6 +869,7 @@ function assignPullButtons(){
 		$(btn).text('View Pull Requests');
 		$viewEle.append(btn);
 		assignListener($viewEle);
+	}
 }
 
 
