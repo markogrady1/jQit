@@ -6,6 +6,7 @@ var detectWindowSize = function() {
 	if(clientWidth <= 400 && v.length > 5) {
 		console.log('mobile')
 		v = v.slice(-8)
+		pr = pr.slice(-8)
 		chartWidth = 400;
 		barChartHeight = 300;
 		lineChartHeight = 300;
@@ -13,6 +14,7 @@ var detectWindowSize = function() {
 	} else if (clientWidth > 400 && clientWidth < 1000) {
 		console.log('tablet')
 		v = v.slice(-15)
+		pr = pr.slice(-15)
 		chartWidth = 700;
 		barChartHeight = 450;
 		lineChartHeight = 320;
@@ -34,12 +36,14 @@ var repaint = function() {
 	if(clientWidth <= 400 && v.length > 5) {
 		console.log('mobile')
 		v = v.slice(-8)
+		pr = pr.slice(-8)
 		chartWidth = 400;
 		barChartHeight = 300;
 		lineChartHeight = 300;
 	} else if (clientWidth > 400 && clientWidth < 1000) {
 		console.log('tablet')
 		v = v.slice(-15)
+		pr = pr.slice(-15)
 		$text = $('text > .line-x-axis-title');
 		$text.text('last 15 days');
 		$text.css('color', 'red');
@@ -124,14 +128,20 @@ issuesBarData = {
   };
 	dataset = [] ;
 	var n = [];
+	var m = [];
 for(var k in v) {
    n.push({'date': v[k].date, 'issues': v[k].issues});
     // dataset.push(v[k].issues);
 }
+
+for(var y in pr) {
+  m.push({'date': pr[y].date, 'pulls': pr[y].pulls});
+    //dataset.push(pr[y].pulls);
+}
 	setBarChart(n, issuesBarData)
 setLineChart(n, issuesLineData)
-// setBarChart(pullsArr, pullsBarData)
-// setLineChart(pullsArr, pullsLineData)
+setBarChart(m, pullsBarData)
+setLineChart(m, pullsLineData)
 }
 
 window.addEventListener("resize", repaint);

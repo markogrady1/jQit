@@ -859,6 +859,8 @@ var splitDashDate = function(dte) {
 
 
 function assignPullButtons(){
+	$bt2 = $('.btn');
+			$bt2.remove();
 	var bt = document.getElementsByClassName('btn')
 	if(bt[0] !== null){
 		var btn = document.createElement('button');
