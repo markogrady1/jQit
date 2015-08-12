@@ -6,7 +6,7 @@ var hideLineChart = function() {
 }
 
 
-function setBarChart(data, buildStyle) {
+function setBarChart(data, buildStyle, repoData) {
 
 var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 
@@ -29,6 +29,8 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 
 	if (tot != 0) {
 		if(buildStyle.isIssue) {
+			console.log(repoData)
+			setCompareSelection(repoData);
 			$bt2 = $('.line-btn');
 			$bt2.remove();
 		var lineBtn = document.createElement('button')
@@ -872,6 +874,33 @@ function assignPullButtons(){
 		$viewEle.append(btn);
 		assignListener($viewEle);
 	}
+}
+
+function setCompareSelection(repoData) {
+	
+    // $compareTag = $('.compare-info');
+	$('.compare-info').append('<select class=compare-repo-sel></select>')
+	$selection = $('.compare-repo-sel');
+	$selection.append('<option>Compare Issues</option>')
+	for( var repo in repoData) {
+		$selection.append('<option>' + repoData[repo].name + '</option>')
+	}
+
+	$selection.on('change', function(){
+		var chosenVal = $(this).val();
+		compareRepositories(chosenVal);
+	})
+	//this construct is for a jqueryui style selectmenu
+	//$(function() {
+ 	//	$selection.selectmenu();
+ 	//});
+}
+
+var compareRepositories = function(repoName) {
+	// callCompare(repoName)
+	// '<%'+executeQuery('repoHistory',repoName, function(){
+
+	// });+'%>';
 }
 
 

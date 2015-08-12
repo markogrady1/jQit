@@ -27,8 +27,8 @@ history.getDataOverTime = function(database, target) {
 		   			var amount = arr[1];
 		   			dates = date.split(' = ')
 					var doc = target == 'pulls' ?
-					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': amount } :
-					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': amount }
+					{ 'team': collection, 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': amount } :
+					{ 'team': collection, 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': amount }
 
 			   		db.collection(collection).insert(doc, function(err, inserted){
 			   			if(err) throw err;
@@ -37,7 +37,7 @@ history.getDataOverTime = function(database, target) {
 		    }
     	});
 	});
-	tmpLog.update('HISTORY', 'new hist added', false);
+	tmpLog.update('HISTORY', 'new ' + target +' history added', false);
 }
 
 history.getClosedDataOverTime = function(database, target) {
@@ -55,8 +55,8 @@ history.getClosedDataOverTime = function(database, target) {
 		   			var amount = arr[1];
 		   			dates = date.split(' = ')
 					var doc = target == 'PR' ?
-					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': amount } :
-					{ 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': amount }
+					{ 'team': collection, 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'pulls': amount } :
+					{ 'team': collection, 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': amount }
 
 			   		db.collection(collection).insert(doc, function(err, inserted){
 			   			if(err) throw err;
@@ -65,7 +65,7 @@ history.getClosedDataOverTime = function(database, target) {
 		    }
     	});
 	});
-	tmpLog.update('HISTORY', 'new hist added', false);
+	tmpLog.update('HISTORY', 'new ' + target +' history added', false);
 }
 
 history.resetHistory = function(rep) {
@@ -73,7 +73,7 @@ history.resetHistory = function(rep) {
 		db.dropDatabase();
 		db.close();
 	});
-	tmpLog.update('HISTORY', 'prev hist removed', false);
+	tmpLog.update('HISTORY', 'prev ' + rep +' DB history removed', false);
 }
 
 history.connect = function(dbase, callback) {

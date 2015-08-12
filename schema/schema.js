@@ -118,6 +118,30 @@ exports.executeQuery = function(database, param, callback) {
 	});
 };
  
+ exports.getAllHistory = function(database, dataSet, callback) {
+ 	var collection = [];
+ 	var dbase;
+ 	var completeData = [];
+ 	var seconds = new Date().getTime() / 1000;
+	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
+	var queryStr = {"secondsDate": { "$gt": seconds }};
+	var projection = { 'isoDate': 1, 'name': 1, 'rawDate': 1, 'issues': 1, '_id': 0 };
+ 	for(var z in dataSet) {
+ 		collection.push(dataSet[z].name);
+ 	}
+ 	
+ 		connection(database, function(db){
+	for(var c in collection) {
+	db.collection(collection[c]).find(queryStr,{}).toArray(function(err, docMain){
+			if(err) throw err;
+			completeData.push(docMain);
+			
+		});
+	}
+	
+ 		});callback(completeData)
+ }
+
 var getProjection = function(db) {
 	var projection;
 	if (db === 'issues') {
