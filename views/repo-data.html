@@ -12,14 +12,18 @@
 //within script tags it can then be used anyhow you wish 
 //not ch is an array or json value set
 
+var allHistory = <%- JSON.stringify(allRepoHistory) %>
+// console.log(allHistory)
 var repoData = <%- JSON.stringify(repoData) %>
 var dt = <%- JSON.stringify( fullDate) %>
 var pdt = <%- JSON.stringify( fullPullDate) %>
 var v = <%- JSON.stringify(ch) %>
+console.log(v)
 var pr = <%- JSON.stringify(chPull) %>
 var p = <%- JSON.stringify(events) %>
 var temp = v;
 var temp2 = pr;
+
 </script>
   <script src="/js/detectResize.js"></script>
  
@@ -39,6 +43,7 @@ var temp2 = pr;
   <div id=display-data-info></div>
   <div class=details></div>
   <div class=compare-info></div>
+  <div class=compareChart></div>
   <div id=chartArea></div>
   <div id=chartArea2></div>
   <script>
@@ -129,8 +134,11 @@ var pullsBarData = {
     dataKey: "date",
     dataVal: "pulls"
   };
-
-setBarChart(issuesArr, issuesBarData, repoData)
+historyObj = {
+  allRepoHistory: allHistory,
+  allRepoName: repoData
+}
+setBarChart(issuesArr, issuesBarData, historyObj)
 setLineChart(issuesArr, issuesLineData)
 setBarChart(pullsArr, pullsBarData)
 setLineChart(pullsArr, pullsLineData)
@@ -148,7 +156,7 @@ if(issuesArr.length == 0){
   <section class="item"></section>
 
 
-	 <h1><%= data.name %></h1>
+	 <h1 class=current-repo><%= data.name %></h1>
     
  
 <p><b>Repository name:</b> <%= data.name %></p>

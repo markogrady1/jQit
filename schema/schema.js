@@ -129,17 +129,20 @@ exports.executeQuery = function(database, param, callback) {
  	for(var z in dataSet) {
  		collection.push(dataSet[z].name);
  	}
- 	
- 		connection(database, function(db){
+ 	connection(database, function(db){
 	for(var c in collection) {
-	db.collection(collection[c]).find(queryStr,{}).toArray(function(err, docMain){
+	db.collection(collection[c]).find(queryStr,{}).toArray(function(err, allHistory){
 			if(err) throw err;
-			completeData.push(docMain);
+			
+			completeData.push(allHistory);
 			
 		});
+
 	}
-	
- 		});callback(completeData)
+	// db.close();	
+	callback(completeData)
+ 		});
+ 		//return completeData;
  }
 
 var getProjection = function(db) {

@@ -6,7 +6,7 @@ var hideLineChart = function() {
 }
 
 
-function setBarChart(data, buildStyle, repoData) {
+function setBarChart(data, buildStyle, histObj) {
 
 var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 
@@ -29,8 +29,8 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 
 	if (tot != 0) {
 		if(buildStyle.isIssue) {
-			console.log(repoData)
-			setCompareSelection(repoData);
+			console.log(histObj.allRepoName)
+			setCompareSelection(histObj);
 			$bt2 = $('.line-btn');
 			$bt2.remove();
 		var lineBtn = document.createElement('button')
@@ -876,19 +876,20 @@ function assignPullButtons(){
 	}
 }
 
-function setCompareSelection(repoData) {
+function setCompareSelection(histObj) {
 	
     // $compareTag = $('.compare-info');
 	$('.compare-info').append('<select class=compare-repo-sel></select>')
 	$selection = $('.compare-repo-sel');
 	$selection.append('<option>Compare Issues</option>')
-	for( var repo in repoData) {
-		$selection.append('<option>' + repoData[repo].name + '</option>')
+	for( var repo in histObj.allRepoName) {
+		$selection.append('<option>' + histObj.allRepoName[repo].name + '</option>')
 	}
 
 	$selection.on('change', function(){
 		var chosenVal = $(this).val();
-		compareRepositories(chosenVal);
+		// console.log(chosenVal)
+		compareRepositories(chosenVal, histObj.allRepoHistory);
 	})
 	//this construct is for a jqueryui style selectmenu
 	//$(function() {
@@ -896,11 +897,232 @@ function setCompareSelection(repoData) {
  	//});
 }
 
-var compareRepositories = function(repoName) {
-	// callCompare(repoName)
-	// '<%'+executeQuery('repoHistory',repoName, function(){
-
-	// });+'%>';
+var compareRepositories = function(repoName, allHistory) {
+	// console.log(allHistory)
+	var comparedArray = [];
+	var team;
+	for(var i = 0; i < allHistory.length; i++) {
+		if(repoName === allHistory[i][0].team){
+			console.log(repoName+' found at No.'+i)
+			for(var j = 0; j < allHistory[i].length; j++){
+				var dayOfMonth = stripDate(allHistory[i][j].rawDate)
+				team = allHistory[i][j].team;
+				comparedArray.push({'date': dayOfMonth, 'issues': allHistory[i][j].issues})
+			}
+		}
+	}
+	// console.log(comparedArray)
+	setComparisonChart(issuesArr, comparedArray, team);
 }
 
+
+var setComparisonChart = function(oppData,data , team) {
+	// console.log(data)
+	// console.log(oppData)
+	// console.log(team)
+	var buildStyle = {
+			w: chartWidth,
+			h: lineChartHeight,
+			top: 48,
+    		bottom: 72,
+		    left: 60,
+		    right: 40,
+		    padding: 20,
+	}
+	var tip = d3.tip()
+				  .attr('class', 'd3-tip')
+				  .offset([-10, 0])
+				  .html(function(d, i) {
+				  	var date = Nth(d.date)
+
+				  	var s = dt[i].split('T')
+				  	var dateBits = s[0].split('-');
+	    			var da = s[0].substring(s[0].length, 8).trim()
+					var monthStr = getMonthString(dateBits[1])
+					
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d.issues + "</span>";
+				  })
+	$repo = $('.current-repo').text();
+	// var w = chartWidth;
+ //    var h = lineChartHeight;
+    var width = buildStyle.w - buildStyle.left - buildStyle.right;
+	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
+	var svg = d3.select('.compareChart').append('svg')
+				.attr('id', 'compare-line-chart')
+				.attr('height', buildStyle.h + buildStyle.padding)
+				.attr('width', buildStyle.w + buildStyle.padding)
+				.style('padding-top', 30)
+	svg.call(tip);
+	var chart = svg.append('g')
+					.classed('display', true)
+					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')')
+		chart.append("text")
+				.classed('issues-title', true)
+		        .attr("x", (width / 2))             
+		        .attr("y", 0 - (buildStyle.top / 2) - 20)
+		        .attr("text-anchor", "middle")
+		        .text($repo + "  - vs -  " + team);
+
+		var y = d3.scale.linear()
+				.domain([0,d3.max(data, function(d) {
+					return d.issues;
+				})])
+				.range([height, 0])
+		var x = d3.scale.ordinal()
+				.domain(data.map(function(entry) {
+				return entry.date;
+				}))
+				.rangeBands([buildStyle.padding, width - buildStyle.padding])
+
+
+var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient('bottom')
+		var frm = d3.format("0d")
+		var yAxis = d3.svg.axis()
+				.scale(y)
+				.tickFormat(frm)
+				.orient('left')
+		var line = d3.svg.line()
+					.x(function(d){
+						return x(d.date)
+					})
+					.y(function(d){
+						return y(d.issues)
+					})
+					.interpolate('cardinal')
+		var yGridlines = d3.svg.axis()
+					.scale(y)
+					.tickSize(-width, 0, 0)
+					.tickFormat('')
+					.orient('left')
+function plot(params) {
+			this.append('g')
+			.call(params.gridlines)
+			.classed('gridline', true)
+			.attr('transform', 'translate(0,0)')
+			this.append('g')
+		    .classed('x axis', true)
+		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+		    .call(params.axis.x)
+			.selectAll('text')
+			    .style('text-anchor', 'end')
+			    .attr('dx', -8)
+			    .attr('dy', 8)
+			    .attr('transform', 'translate(0,0) rotate(-45)')
+		this.append('g')
+		    .classed('y axis', true)
+		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
+		    .call(params.axis.y)
+		this.select('.y.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
+			.text('No. of issues ')
+		this.select('.x.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.classed('line-x-axis-title', true)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(' + width / 2 + ', 50)')
+			.text('Last 30 days')
+			//enter
+			this.selectAll('.trendline')
+				.data([params.data])
+				.enter()
+				.append('path')
+				.classed('trendline', true);
+			this.selectAll('.point')
+				.data(params.data)
+				.enter()
+				.append('circle')
+				.classed('point', true)
+				.attr('r', 3)
+				.attr('value', function(d){
+					return d.date + "  " + d.issues;
+				})
+				.on('mouseover', tip.show)
+      				.on('mouseout', tip.hide);
+			//update
+			this.selectAll('.trendline')
+				.attr('d', function(d){
+					return line(d)
+				})
+			this.selectAll('.point')
+				.attr('cx', function(d, i) {
+					return x(d.date);
+				})
+				.attr('cy', function(d, i) {
+					return  y(d.issues);
+				})
+
+			//exit
+			this.selectAll('.trendline')
+				.data(params.data)
+				.exit()
+				.remove()
+			this.selectAll('.point')
+				.data(params.data)
+				.exit()
+				.remove();
+
+		this.selectAll('.bar-label')
+			.data(params.data)
+			.enter()
+			  .append('text')
+			  .classed('bar-label', true)
+			  .attr('x', function(d, i){
+				return x(d.date) + (x.rangeBand()/2);
+			  })
+			   .attr('y', function(d, i){
+				return y(d.issues);
+			  })
+			  .attr('dx', -19)
+			  .attr('dy', -20)
+			  .text(function(d, i){
+				return d.issues;
+			  })
+		}
+		plot.call(chart,{
+			data: data,
+			data2: oppData,
+			axis: {
+				x: xAxis,
+				y: yAxis
+			}, 
+			gridlines: yGridlines
+		});
+
+
+
+
+			// var line = d3.svg.line()
+   //                      .x(function(d) {
+   //                          return xScale(d.year);
+   //                      })
+   //                      .y(function(d) {
+   //                          return yScale(d.sale);
+   //                      })
+   //                      .interpolate("basis");
+   //                  svg.append('svg:path')
+   //                      .attr('d', line(data))
+   //                      .attr('stroke', 'green')
+   //                      .attr('stroke-width', 2)
+   //                      .attr('fill', 'none');
+   //                  svg.append('svg:path')
+   //                      .attr('d', line(issuesArr))
+   //                      .attr('stroke', 'blue')
+   //                      .attr('stroke-width', 2)
+   //                      .attr('fill', 'none');
+}
+var stripDate = function(dateString) {
+	var s = dateString.split('T')
+	    var da = s[0].substring(s[0].length, 8).trim()
+	    var a = s[0].split('-')
+	    return a[2];
+	    // console.log(a[2])
+}
 
