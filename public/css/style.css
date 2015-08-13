@@ -156,24 +156,24 @@ body {
 
 .trendline {
 	fill: none;
-	stroke: #5087af;
+	stroke: #C81A4E;
 	stroke-width: 4px;
 	/*stroke-dasharray: 0.7;*/
 }
 
 .trendline2 {
 	fill: none;
-	stroke: #C81A4E;
+	stroke: #5087af;
 	stroke-width: 4px;
 	/*stroke-dasharray: 0.7;*/
 }
 
 .team1 {
-	color:#90B5D2;
-}
-
-.team2 {
 	color:#EA594E;
+}
+.team2 {
+	color:#90B5D2;
+
 }
 SVG#line-chart {
 	padding-top: 20px;
