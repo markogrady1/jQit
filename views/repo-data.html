@@ -13,7 +13,6 @@
 //not ch is an array or json value set
 
 var allHistory = <%- JSON.stringify(allRepoHistory) %>
-// console.log(allHistory)
 var repoData = <%- JSON.stringify(repoData) %>
 var dt = <%- JSON.stringify( fullDate) %>
 var pdt = <%- JSON.stringify( fullPullDate) %>
@@ -66,10 +65,9 @@ for(var k in v) {
 
 for(var y in pr) {
   pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
-    //dataset.push(pr[y].pulls);
 }
-var jArr = JSON.stringify(issuesArr);
 
+var jArr = JSON.stringify(issuesArr);
 var issuesLineData = {
     w: chartWidth,
     h: lineChartHeight,
@@ -155,10 +153,7 @@ if(issuesArr.length == 0){
 </script>
   <div class="body-wrap">
   <section class="item"></section>
-
-
 	 <h1 class=current-repo><%= data.name %></h1>
-    
  
 <p><b>Repository name:</b> <%= data.name %></p>
 <p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
