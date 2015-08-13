@@ -126,9 +126,7 @@ exports.executeQuery = function(database, param, callback) {
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
 	var queryStr = {"secondsDate": { "$gt": seconds }};
 	var projection = { 'isoDate': 1, 'name': 1, 'rawDate': 1, 'issues': 1, '_id': 0 };
- 	for(var z in dataSet) {
- 		collection.push(dataSet[z].name);
- 	}
+ 	collection = dataSet.map(function(collect){	return collect.name	});
  	connection(database, function(db){
 		for(var c in collection) {
 			db.collection(collection[c]).find(queryStr,{}).toArray(function(err, allHistory){

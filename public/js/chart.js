@@ -421,11 +421,13 @@ var assignListener = function(elem) {
 
 function issueBarInfo(vData) {
 	var issArr = [], dayArr = [];
+	issArr = vData.map(function(data){ return data.issues });
 
-	for (var p = 0; p<vData.length; p++) {
-		issArr.push(vData[p].issues)
-		dayArr.push(vData[p].date)
-	}
+	dayArr = vData.map(function(data){ return data.date	});
+	// for (var p = 0; p<vData.length; p++) {
+	// 	issArr.push(vData[p].issues)
+	// 	dayArr.push(vData[p].date)
+	// }
 	var mouseX, mouseY;
 	$(document).mousemove(function(e) {
 	    mouseX = e.pageX;
@@ -507,10 +509,13 @@ function pullBarInfo(vData) {
 	var selectedDay = '';
 	var issArr = [], dayArr = [];
 
-	for (var p = 0; p<vData.length; p++) {
-		issArr.push(vData[p].pulls)
-		dayArr.push(vData[p].date)
-	}
+	issArr = vData.map(function(data){ return data.pulls })
+
+	dayArr = vData.map(function(data){ return data.date })
+	// for (var p = 0; p<vData.length; p++) {
+	// 	issArr.push(vData[p].pulls)
+	// 	dayArr.push(vData[p].date)
+	// }
 
 	var mouseX, mouseY;
 	$(document).mousemove(function(e) {
