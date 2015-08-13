@@ -5,11 +5,8 @@ var hideLineChart = function() {
 	$lineChart.css('display', 'none')
 }
 
-
 function setBarChart(data, buildStyle, histObj) {
-
 var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
-
 	var tot = 0;
 	var chartId = buildStyle.isIssue ? "" : "pulls-"
 	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
@@ -734,7 +731,6 @@ var compareRepositories = function(repoName, allHistory) {
 	var team;
 	for(var i = 0; i < allHistory.length; i++) {
 		if(repoName === allHistory[i][0].team){
-			console.log(repoName+' found at No.'+i)
 			for(var j = 0; j < allHistory[i].length; j++){
 				var dayOfMonth = stripDate(allHistory[i][j].rawDate)
 				team = allHistory[i][j].team;
@@ -893,7 +889,6 @@ var setComparisonChart = function(oppData,data , team) {
 				.attr('cy', function(d, i) {
 					return  y(d.issues);
 				})
-
 			//exit
 			this.selectAll('.trendline')
 				.data(params.data)
