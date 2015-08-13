@@ -421,7 +421,6 @@ var assignListener = function(elem) {
 function issueBarInfo(vData) {
 	var issArr = [], dayArr = [];
 	issArr = vData.map(function(data){ return data.issues });
-
 	dayArr = vData.map(function(data){ return data.date	});
 	
 	var mouseX, mouseY;
