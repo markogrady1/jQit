@@ -11,13 +11,10 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var chartId = buildStyle.isIssue ? "" : "pulls-"
 	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
 	$viewEle.find('btn').remove()
-	tot = data.reduce(function(sum, data){
-		console.log('sum', sum, data)
-		return sum + data[buildStyle.dataVal]
-	})
-	  //   for (var m = 0; m < data.length; m++) {
-			// tot += data[m][buildStyle.dataVal];
-	  //   }
+	for (var m in data) {
+			tot += data[m][buildStyle.dataVal];
+	}
+	
 	    if(buildStyle.isIssue) 
 		totaller = tot;
 
