@@ -990,7 +990,7 @@ $point2.on('mouseover', function(){
 $point.on('mouseleave', function(){
 	
 	$(this).animate({
-		'r':4
+		'r':3
 	})
 	.css({
 		'fill': '#000'
@@ -999,7 +999,7 @@ $point.on('mouseleave', function(){
 $point2.on('mouseleave', function(){
 	
 	$(this).animate({
-		'r':4
+		'r':3
 	})
 	.css({
 		'fill': '#000'
