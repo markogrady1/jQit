@@ -23,7 +23,6 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	if(!buildStyle.isIssue){
 		if (tot != 0 && totaller != 0) {
 			assignPullButtons();
-			
 		}
 	}
 
@@ -654,27 +653,7 @@ function issueBarInfo(vData) {
 		$('.display-data').remove();
 		$(this).css('fill', e);
 	});
-
-
-var $point = $('.point');
-$point.on('mouseover', function(){
-	$(this).animate({
-		'r':6
-	})
-	.css({
-		'fill': '#2d57ca'
-	})
-})
-
-$point.on('mouseleave', function(){
-	
-	$(this).animate({
-		'r':4
-	})
-	.css({
-		'fill': '#000'
-	})
-});
+pointListener();
 }
 
 
@@ -877,8 +856,6 @@ function assignPullButtons(){
 }
 
 function setCompareSelection(histObj) {
-	
-    // $compareTag = $('.compare-info');
 	$('.compare-info').append('<select class=compare-repo-sel></select>')
 	$selection = $('.compare-repo-sel');
 	$selection.append('<option>Compare Issues</option>')
@@ -888,7 +865,6 @@ function setCompareSelection(histObj) {
 
 	$selection.on('change', function(){
 		var chosenVal = $(this).val();
-		// console.log(chosenVal)
 		compareRepositories(chosenVal, histObj.allRepoHistory);
 	})
 	//this construct is for a jqueryui style selectmenu
@@ -898,7 +874,6 @@ function setCompareSelection(histObj) {
 }
 
 var compareRepositories = function(repoName, allHistory) {
-	// console.log(allHistory)
 	var comparedArray = [];
 	var team;
 	for(var i = 0; i < allHistory.length; i++) {
@@ -907,19 +882,18 @@ var compareRepositories = function(repoName, allHistory) {
 			for(var j = 0; j < allHistory[i].length; j++){
 				var dayOfMonth = stripDate(allHistory[i][j].rawDate)
 				team = allHistory[i][j].team;
-				comparedArray.push({'date': dayOfMonth, 'issues': allHistory[i][j].issues})
+				comparedArray.push({'date': dayOfMonth, 'issues': allHistory[i][j].issues, 'issues2': issuesArr[j].issues})
 			}
 		}
 	}
-	// console.log(comparedArray)
 	setComparisonChart(issuesArr, comparedArray, team);
 }
 
-
 var setComparisonChart = function(oppData,data , team) {
-	// console.log(data)
-	// console.log(oppData)
-	// console.log(team)
+	$repo = $('.current-repo').text();
+	var toolTipValue = "Open Issues";
+	$comparison = $('#compare-line-chart');
+	$comparison.remove();
 	var buildStyle = {
 			w: chartWidth,
 			h: lineChartHeight,
@@ -929,22 +903,20 @@ var setComparisonChart = function(oppData,data , team) {
 		    right: 40,
 		    padding: 20,
 	}
+	//tool tip config
 	var tip = d3.tip()
 				  .attr('class', 'd3-tip')
 				  .offset([-10, 0])
 				  .html(function(d, i) {
 				  	var date = Nth(d.date)
-
 				  	var s = dt[i].split('T')
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim()
 					var monthStr = getMonthString(dateBits[1])
-					
-				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d.issues + "</span>";
+					var str = (d.issues2 <= d.issues) ? "<span class=team1>▶</span> " + team + ": " + d.issues + "</span><br><br> <span class=line-tip><span class=team2>▶</span> " +  $repo + ": " + d.issues2 + "</span>":"<span class=team2>▶</span> " +  $repo + ": " + d.issues2 + "</span><br><br> <span class=line-tip><span class=team1>▶</span> " + team + ": " + d.issues + "</span>";
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>Open Issues</span><span class=line-tip><br><br>" + str;
 				  })
-	$repo = $('.current-repo').text();
-	// var w = chartWidth;
- //    var h = lineChartHeight;
+	
     var width = buildStyle.w - buildStyle.left - buildStyle.right;
 	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
 	var svg = d3.select('.compareChart').append('svg')
@@ -962,10 +934,9 @@ var setComparisonChart = function(oppData,data , team) {
 		        .attr("y", 0 - (buildStyle.top / 2) - 20)
 		        .attr("text-anchor", "middle")
 		        .text($repo + "  - vs -  " + team);
-
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data, function(d) {
-					return d.issues;
+					return Math.max(d.issues, d.issues2);
 				})])
 				.range([height, 0])
 		var x = d3.scale.ordinal()
@@ -975,9 +946,9 @@ var setComparisonChart = function(oppData,data , team) {
 				.rangeBands([buildStyle.padding, width - buildStyle.padding])
 
 
-var xAxis = d3.svg.axis()
-				.scale(x)
-				.orient('bottom')
+		var xAxis = d3.svg.axis()
+						.scale(x)
+						.orient('bottom')
 		var frm = d3.format("0d")
 		var yAxis = d3.svg.axis()
 				.scale(y)
@@ -991,25 +962,33 @@ var xAxis = d3.svg.axis()
 						return y(d.issues)
 					})
 					.interpolate('cardinal')
+		var line2 = d3.svg.line()
+					.x(function(d){
+						return x(d.date)
+					})
+					.y(function(d){
+						return y(d.issues2)
+					})
+					.interpolate('cardinal')
 		var yGridlines = d3.svg.axis()
 					.scale(y)
 					.tickSize(-width, 0, 0)
 					.tickFormat('')
 					.orient('left')
-function plot(params) {
-			this.append('g')
-			.call(params.gridlines)
-			.classed('gridline', true)
-			.attr('transform', 'translate(0,0)')
-			this.append('g')
-		    .classed('x axis', true)
-		    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
-		    .call(params.axis.x)
-			.selectAll('text')
-			    .style('text-anchor', 'end')
-			    .attr('dx', -8)
-			    .attr('dy', 8)
-			    .attr('transform', 'translate(0,0) rotate(-45)')
+	function plot(params) {
+				this.append('g')
+				.call(params.gridlines)
+				.classed('gridline', true)
+				.attr('transform', 'translate(0,0)')
+				this.append('g')
+			    .classed('x axis', true)
+			    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+			    .call(params.axis.x)
+				.selectAll('text')
+				    .style('text-anchor', 'end')
+				    .attr('dx', -8)
+				    .attr('dy', 8)
+				    .attr('transform', 'translate(0,0) rotate(-45)')
 		this.append('g')
 		    .classed('y axis', true)
 		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
@@ -1042,7 +1021,7 @@ function plot(params) {
 				.classed('point', true)
 				.attr('r', 3)
 				.attr('value', function(d){
-					return d.date + "  " + d.issues;
+					return d.date + " " + d.issues;
 				})
 				.on('mouseover', tip.show)
       				.on('mouseout', tip.hide);
@@ -1069,22 +1048,45 @@ function plot(params) {
 				.exit()
 				.remove();
 
-		this.selectAll('.bar-label')
-			.data(params.data)
-			.enter()
-			  .append('text')
-			  .classed('bar-label', true)
-			  .attr('x', function(d, i){
-				return x(d.date) + (x.rangeBand()/2);
-			  })
-			   .attr('y', function(d, i){
-				return y(d.issues);
-			  })
-			  .attr('dx', -19)
-			  .attr('dy', -20)
-			  .text(function(d, i){
-				return d.issues;
-			  })
+			this.selectAll('.trendline2')
+				.data([params.data])
+				.enter()
+				.append('path')
+				.classed('trendline2', true);
+			this.selectAll('.point2')
+				.data(params.data)
+				.enter()
+				.append('circle')
+				.classed('point2', true)
+				.attr('r', 3)
+				.attr('value', function(d){
+					return d.date + " " + d.issues2;
+				})
+				.on('mouseover', tip.show)
+      				.on('mouseout', tip.hide);
+			//update
+			this.selectAll('.trendline2')
+				.attr('d', function(d){
+					return line2(d)
+				})
+			this.selectAll('.point2')
+				.attr('cx', function(d, i) {
+					return x(d.date);
+				})
+				.attr('cy', function(d, i) {
+					return  y(d.issues2);
+				})
+
+			//exit
+			this.selectAll('.trendline2')
+				.data(params.data)
+				.exit()
+				.remove()
+			this.selectAll('.point2')
+				.data(params.data)
+				.exit()
+				.remove();
+
 		}
 		plot.call(chart,{
 			data: data,
@@ -1096,28 +1098,10 @@ function plot(params) {
 			gridlines: yGridlines
 		});
 
-
-
-
-			// var line = d3.svg.line()
-   //                      .x(function(d) {
-   //                          return xScale(d.year);
-   //                      })
-   //                      .y(function(d) {
-   //                          return yScale(d.sale);
-   //                      })
-   //                      .interpolate("basis");
-   //                  svg.append('svg:path')
-   //                      .attr('d', line(data))
-   //                      .attr('stroke', 'green')
-   //                      .attr('stroke-width', 2)
-   //                      .attr('fill', 'none');
-   //                  svg.append('svg:path')
-   //                      .attr('d', line(issuesArr))
-   //                      .attr('stroke', 'blue')
-   //                      .attr('stroke-width', 2)
-   //                      .attr('fill', 'none');
+  pointListener();
 }
+
+
 var stripDate = function(dateString) {
 	var s = dateString.split('T')
 	    var da = s[0].substring(s[0].length, 8).trim()
@@ -1126,3 +1110,44 @@ var stripDate = function(dateString) {
 	    // console.log(a[2])
 }
 
+var pointListener = function() {
+
+var $point = $('.point');
+$point.on('mouseover', function(){
+	$(this).animate({
+		'r':6
+	})
+	.css({
+		'fill': '#2d57ca'
+	})
+})
+var $point2 = $('.point2');
+$point2.on('mouseover', function(){
+	$(this).animate({
+		'r':6
+	})
+	.css({
+		'fill': '#2d57ca'
+	})
+})
+
+$point.on('mouseleave', function(){
+	
+	$(this).animate({
+		'r':4
+	})
+	.css({
+		'fill': '#000'
+	})
+});
+$point2.on('mouseleave', function(){
+	
+	$(this).animate({
+		'r':4
+	})
+	.css({
+		'fill': '#000'
+	})
+});
+
+}

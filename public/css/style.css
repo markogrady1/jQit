@@ -161,6 +161,20 @@ body {
 	/*stroke-dasharray: 0.7;*/
 }
 
+.trendline2 {
+	fill: none;
+	stroke: #C81A4E;
+	stroke-width: 4px;
+	/*stroke-dasharray: 0.7;*/
+}
+
+.team1 {
+	color:#5087af;
+}
+
+.team2 {
+	color:#C81A4E;
+}
 SVG#line-chart {
 	padding-top: 20px;
 }
