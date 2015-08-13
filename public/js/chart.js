@@ -204,17 +204,14 @@ function plot(params) {
 		$('#chartArea2').hide();
 }
 
-
-
 function setLineChart(data, buildStyle) {
 	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var chartId = buildStyle.isIssue ? "" : "pulls-";
 	var tot = 0;
-	
-	
 	for (var i = 0; i < data.length; i++) {
 		tot += data[i][buildStyle.dataVal];
 	}
+
 	if (tot != 0) {
 		
 		var tip = d3.tip()
@@ -343,7 +340,6 @@ function setLineChart(data, buildStyle) {
 				.attr('cy', function(d, i) {
 					return  y(d[buildStyle.dataVal]);
 				})
-
 			//exit
 			this.selectAll('.trendline')
 				.data(params.data)
@@ -392,8 +388,6 @@ var assignLineListener = function(elem) {
 		var els = document.getElementById('line-chart');
 		
 		$( '#line-chart').toggle( "slow" );
-		// $( '#pulls-line-chart').toggle( "slow" );
-
 	var el2 = document.getElementById('pulls-line-chart');
 	var ca = document.getElementById('chartArea');
 	if(ca.style.display === 'none'){
@@ -442,7 +436,6 @@ function issueBarInfo(vData) {
 	$singleBar.on('mouseover', function() {
 		e = $(this).css('fill');
 		$(this).css('fill', '#3C7BD5');
-
 	});
 
 	$singleBar.on('click', function() {
@@ -508,7 +501,6 @@ function issueBarInfo(vData) {
 	});
 pointListener();
 }
-
 
 function pullBarInfo(vData) {
 	var selectedBar = '';
@@ -691,7 +683,6 @@ var splitDashDate = function(dte) {
     return dateSections;
 }
 
-
 function assignPullButtons(){
 	$bt2 = $('.btn');
 			$bt2.remove();
@@ -753,7 +744,7 @@ var setComparisonChart = function(oppData,data , team) {
     		bottom: 72,
 		    left: 60,
 		    right: 40,
-		    padding: 20,
+		    padding: 20
 	}
 	//tool tip config
 	var tip = d3.tip()
