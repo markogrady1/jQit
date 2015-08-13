@@ -25,7 +25,6 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 
 	if (tot != 0) {
 		if(buildStyle.isIssue) {
-			console.log(histObj.allRepoName)
 			setCompareSelection(histObj);
 			$bt2 = $('.line-btn');
 			$bt2.remove();
@@ -954,7 +953,6 @@ var stripDate = function(dateString) {
 	    var da = s[0].substring(s[0].length, 8).trim()
 	    var a = s[0].split('-')
 	    return a[2];
-	    // console.log(a[2])
 }
 
 var pointListener = function() {
