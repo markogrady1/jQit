@@ -11,14 +11,11 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var chartId = buildStyle.isIssue ? "" : "pulls-"
 	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
 	$viewEle.find('btn').remove()
-	for (var m in data) {
-			tot += data[m][buildStyle.dataVal];
-	}
+	tot = data.reduce(function(sum, d){ return sum + d[buildStyle.dataVal]}, 0 )
 	
-	    if(buildStyle.isIssue) 
-		totaller = tot;
+	if (buildStyle.isIssue) totaller = tot;
 
-	if(!buildStyle.isIssue){
+	if (!buildStyle.isIssue){
 		if (tot != 0 && totaller != 0) {
 			assignPullButtons();
 		}
@@ -200,7 +197,7 @@ function plot(params) {
 		
 	}	
 
-	if(buildStyle.isIssue)
+	if (buildStyle.isIssue)
 		$('#chartArea2').hide();
 }
 
@@ -375,7 +372,7 @@ function setLineChart(data, buildStyle) {
 			}, 
 			gridlines: yGridlines
 		});
-		if(buildStyle.isIssue)
+		if (buildStyle.isIssue)
 			$('#line-chart').hide();
 		else
 			$('#pulls-line-chart').hide();
@@ -390,12 +387,12 @@ var assignLineListener = function(elem) {
 		$( '#line-chart').toggle( "slow" );
 	var el2 = document.getElementById('pulls-line-chart');
 	var ca = document.getElementById('chartArea');
-	if(ca.style.display === 'none'){
+	if (ca.style.display === 'none') {
 		$( '#pulls-line-chart').toggle( "slow" );
 		$( '#pulls-chart').toggle( "slow" );
 	}
 		setTimeout(function(){
-			if(els.style.display === 'inline') {
+			if (els.style.display === 'inline') {
 					$('.line-btn').text('View Bar Chart')
 				} else {
 					$('.line-btn').text('View Line Chart')
@@ -585,7 +582,7 @@ function pullBarInfo(vData) {
 }
 
 var getMonthString = function(date) {
-	switch(date){
+	switch(date) {
 		case '01':
 		month = 'January';
 		break;
@@ -682,7 +679,7 @@ function assignPullButtons(){
 	$bt2 = $('.btn');
 			$bt2.remove();
 	var bt = document.getElementsByClassName('btn')
-	if(bt[0] !== null){
+	if (bt[0] !== null) {
 		var btn = document.createElement('button');
 		$(btn).attr({
 			width: 200,
@@ -698,13 +695,14 @@ function setCompareSelection(histObj) {
 	$('.compare-info').append('<select class=compare-repo-sel></select>')
 	$selection = $('.compare-repo-sel');
 	$selection.append('<option>Compare Issues</option>')
-	for( var repo in histObj.allRepoName) {
-		$selection.append('<option>' + histObj.allRepoName[repo].name + '</option>')
-	}
-
+	$selection.append(histObj.allRepoName.map(function(data){
+		return '<option>' + data.name + '</option>';
+	}))
+	
 	$selection.on('change', function(){
 		var chosenVal = $(this).val();
-		compareRepositories(chosenVal, histObj.allRepoHistory);
+		if(chosenVal !== 'Compare Issues')
+			compareRepositories(chosenVal, histObj.allRepoHistory);
 	})
 	//this construct is for a jqueryui style selectmenu
 	//$(function() {
