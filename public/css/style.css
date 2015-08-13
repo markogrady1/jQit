@@ -156,6 +156,13 @@ body {
 
 .trendline {
 	fill: none;
+	stroke: #5087af;
+	stroke-width: 4px;
+	/*stroke-dasharray: 0.7;*/
+}
+
+.trendline1 {
+	fill: none;
 	stroke: #C81A4E;
 	stroke-width: 4px;
 	/*stroke-dasharray: 0.7;*/

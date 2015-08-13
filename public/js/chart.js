@@ -11,9 +11,13 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var chartId = buildStyle.isIssue ? "" : "pulls-"
 	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
 	$viewEle.find('btn').remove()
-	    for (var m = 0; m < data.length; m++) {
-			tot += data[m][buildStyle.dataVal];
-	    }
+	tot = data.reduce(function(sum, data){
+		console.log('sum', sum, data)
+		return sum + data[buildStyle.dataVal]
+	})
+	  //   for (var m = 0; m < data.length; m++) {
+			// tot += data[m][buildStyle.dataVal];
+	  //   }
 	    if(buildStyle.isIssue) 
 		totaller = tot;
 
@@ -846,11 +850,11 @@ var setComparisonChart = function(oppData,data , team) {
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
 			.text('Last 30 days')
 			//enter
-			this.selectAll('.trendline')
+			this.selectAll('.trendline1')
 				.data([params.data])
 				.enter()
 				.append('path')
-				.classed('trendline', true);
+				.classed('trendline1', true);
 			this.selectAll('.point')
 				.data(params.data)
 				.enter()
@@ -863,7 +867,7 @@ var setComparisonChart = function(oppData,data , team) {
 				.on('mouseover', tip.show)
       				.on('mouseout', tip.hide);
 			//update
-			this.selectAll('.trendline')
+			this.selectAll('.trendline1')
 				.attr('d', function(d){
 					return line(d)
 				})
@@ -875,7 +879,7 @@ var setComparisonChart = function(oppData,data , team) {
 					return  y(d.issues);
 				})
 			//exit
-			this.selectAll('.trendline')
+			this.selectAll('.trendline1')
 				.data(params.data)
 				.exit()
 				.remove()
