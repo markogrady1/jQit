@@ -1,6 +1,5 @@
 
 var detectWindowSize = function() {
-	console.log(document.body.clientWidth);
 
 	var clientWidth = document.body.clientWidth;
 	if(clientWidth <= 461 && v.length > 5) {
