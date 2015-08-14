@@ -693,8 +693,7 @@ function assignPullButtons(){
 
 function setCompareSelection(histObj) {
 	$('.compare-info').append('<select class=compare-repo-sel></select>')
-	$selection = $('.compare-repo-sel');
-	$selection.append('<option>Compare Issues</option>')
+	$selection = $('.compare-repo-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}))
