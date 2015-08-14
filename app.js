@@ -41,6 +41,7 @@ var server = app.listen('3000', function(){
     
 function migrates() {
 	migrate.repositoryMigrate();
+	migrate.openIssuesMigrate();
 	migrate.pullsMigrate();
 	migrate.closedDataMigration('pulls');
 	migrate.closedDataMigration('issues');

@@ -1,5 +1,5 @@
 var mongoClient = require("mongodb").MongoClient
-    , tmpLog = require('../lib/tmpLogger')
+    , helper = require('../lib/helper')
     , fs = require('fs')
     , bcrypt = require('bcryptjs')
     , CronJob = require('cron').CronJob;
@@ -16,7 +16,7 @@ new CronJob('* 5 * * *', function() {
 		}
 		
     	var url = mapping(obj, function(data) {return data.url;})
-	    var dataName = splitValue(url, 5, '/');
+	    var dataName = helper.getSplitValue(url, 5, '/');
 	    writeArr += '' + dataName + '  '+obj.length + ',\n';
 	}
 
@@ -28,21 +28,15 @@ new CronJob('* 5 * * *', function() {
 		newString = '*' + n + 'Z = ' + seconds[0] +',\n'+writeArr;
 		fs.appendFile('repoData/repo_pulls_history.txt', newString, function (err) {
   				if (err) throw err;
-  				tmpLog.update('CRONJOB','Job written for '+ new Date(), true);
+  				helper.log('CRONJOB','Job written for '+ new Date(), true);
 				});
 }, null, true, "Europe/London");
 */
 
-var splitValue = function(origVal, index, separator) {
-			var a = origVal.toString();
-		    var v = a.split(separator);
-		    var d = v[index];  
-		    return d;
-}
+
 
 var mapping = function(dat, fn) {
 	var d = dat.map(fn);
-
 	return d;
 }
 
@@ -52,7 +46,7 @@ var mapping = function(dat, fn) {
 //connect to mongoDB and aquire data for all documents concerning repositories
 exports.initConnection = function() {
  	console.log('schema connecting...');
-    tmpLog.update('CONNECTION','mongoDB connection made', true);
+    helper.log('CONNECTION','mongoDB connection made', true);
 	var projection = { "name": 1, "open_issues": 1,"forks_count": 1, "watchers":1, "_id": 0 }
 	repoNames = [];
 	issueNo = [];
@@ -81,11 +75,11 @@ exports.initConnection = function() {
 exports.getRecord = function(param, callback){
 	var query = { "name": param };
 	console.log('schema connecting...');
-	tmpLog.update('CONNECTION','mongoDB connection made', true);
+	helper.log('CONNECTION','mongoDB connection made', true);
 	connection("repositories", function(db){
 		db.collection('repos').findOne(query, function(err, doc){
  			if(err) throw err;
-  			tmpLog.update('QUERY TARGET' ,doc.name + ": outstanding issues: " + doc.open_issues, false);
+  			helper.log('QUERY TARGET' ,doc.name + ": outstanding issues: " + doc.open_issues, false);
   			db.close();
 
 			callback(doc);
@@ -120,24 +114,20 @@ exports.executeQuery = function(database, param, callback) {
  
  exports.getAllHistory = function(database, dataSet, callback) {
  	var collection = [];
- 	var dbase;
  	var completeData = [];
  	var seconds = new Date().getTime() / 1000;
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
-	var queryStr = {"secondsDate": { "$gt": seconds }};
+	var queryStr = { "secondsDate": { "$gt": seconds }};
 	var projection = { 'isoDate': 1, 'name': 1, 'rawDate': 1, 'issues': 1, '_id': 0 };
  	collection = dataSet.map(function(collect){	return collect.name	});
  	connection(database, function(db){
-		for(var c in collection) {
-			db.collection(collection[c]).find(queryStr,{}).toArray(function(err, allHistory){
+ 		collection.map(function(coll) {
+			db.collection(coll).find(queryStr,{}).toArray(function(err, allHistory){
 				if(err) throw err;
-					
 				completeData.push(allHistory);
-					
 			});
-
-		}
-		// db.close();	
+		});
+		// db.close();
 		callback(completeData)
 	});
  }
@@ -176,10 +166,10 @@ function User(username, email, pass) {
 User.prototype.register = function(res) {
 	hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));
 	var query = { 'username': this.username, 'email': this.email, 'password': hash };
-	connection('user', function(db){
+	connection('user', function(db) {
 		db.collection('users').insert(query, function(err, result){
 			console.log('user made');
-			if (err && err.code == 11000){
+			if (err && err.code == 11000) {
 				statusR = 'Email has been used before.';
 				res.render('register', { register: 'Email has been used before' });
 				 console.log('Duplicate Email: Alert User');

@@ -1,8 +1,10 @@
-var tmpLog = require('../lib/tmpLogger');
+var helper = require('../lib/helper');
 var MongoClient = require('mongodb').MongoClient;
 
 var request = require('request');
-
+var allRepos = require('../repoData/rep');	
+var repoArray = allRepos.map(function(reps){ return reps.length; });
+console.log(repoArray.length)   	
 
 var connect = function(target, fn) {
 	MongoClient.connect("mongodb://127.0.0.1:27017/" + target, function(err, db){
@@ -12,44 +14,45 @@ var connect = function(target, fn) {
 	});
 }
 
-exports.repositoryMigrate = function(){
-	tmpLog.update('DATA MIGRATION', 'repositories loading...', false);
+exports.repositoryMigrate = function() {
+	helper.log('DATA MIGRATION', 'repositories loading...', false);
 	connect('repositories', function(db){
 		db.collection('repos').remove({});
-		var allRepos = require('../repoData/rep');	    	
+		
 	    db.collection('repos').insert(allRepos, function(err, data){
 	    	if(err) throw err;
-	    	tmpLog.update('DATA MIGRATION', 'jquery repositories loaded', true);
+	    	helper.log('DATA MIGRATION', 'jquery repositories loaded', true);
 			db.close();
 	    });
 	});
 }
-
-connect('issues', function(db){
-	for(var i = 1; i < 49; i++){
-		var obj = require('../repoData/issues/open/' + i + "_issues");
-		if(obj == ""){
-			continue
+exports.openIssuesMigrate = function() {
+	connect('issues', function(db){
+		for(var i = 1; i < repoArray.length; i++){
+			var obj = require('../repoData/issues/open/' + i + "_issues");
+			if(obj == ""){
+				continue
+			}
+	        var url = obj.map(function(data) { return data.url; })
+		    var dataName = helper.getSplitValue(url, 5, '/');
+		    db.collection(dataName).remove({});
+	        db.collection(dataName).insert(obj, function(err, data){
+	            if(err) throw err;
+	        });
 		}
-        var url = mapping(obj, function(data) {return data.url;})
-	    var dataName = splitValue(url, 5, '/');
-	    db.collection(dataName).remove({});
-        db.collection(dataName).insert(obj, function(err, data){
-            if(err) throw err;
-        });
-	}
-	tmpLog.update('DATA MIGRATION', 'jquery open issues loaded', true);
+		helper.log('DATA MIGRATION', 'jquery open issues loaded', true);
 });
+}
 
 exports.pullsMigrate = function() {
 	connect('pulls', function(db){
-		for(var i = 1; i < 49; i++){
+		for(var i = 1; i < repoArray.length; i++){
 			var obj = require('../repoData/pulls/open/' + i + "_pulls");
 			if(obj == ""){
 				continue
 			}
-        	var url = mapping(obj, function(data) {return data.url;})
-		    var dataName = splitValue(url, 5, '/');
+        	var url = obj.map( function(data) { return data.url; })
+		    var dataName = helper.getSplitValue(url, 5, '/');
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
             if(err) throw err;
@@ -57,7 +60,7 @@ exports.pullsMigrate = function() {
         	});
 		}
 		// db.close();
-		tmpLog.update('DATA MIGRATION', 'jquery open pulls loaded', true);
+		helper.log('DATA MIGRATION', 'jquery open pulls loaded', true);
 	// });
 });
 }
@@ -65,14 +68,14 @@ exports.pullsMigrate = function() {
 
 exports.eventsMigrate = function() {
     connect('events', function(db){
-		for(var i = 1; i < 49; i++){
+		for(var i = 1; i < repoArray.length; i++){
 			var obj = require('../repoData/events/' + i + "events");
 			if(obj == ""){
 				continue
 			}
-        	var url = mapping(obj, function(data) {return data.url;})
-		    var dataName = splitValue(url, 5, '/');
-		    dataName = splitValue(dataName, 0, ',');
+        	var url = obj.map(function(data) { return data.url; })
+		    var dataName = helper.getSplitValue(url, 5, '/');
+		    dataName = helper.getSplitValue(dataName, 0, ',');
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
             if(err) throw err;
@@ -80,19 +83,19 @@ exports.eventsMigrate = function() {
         	});
 		}
 		// db.close();
-		tmpLog.update('DATA MIGRATION', 'jquery events loaded', true);
+		helper.log('DATA MIGRATION', 'jquery events loaded', true);
 	});
 }
 
 exports.closedDataMigration = function(targetData){
 	connect(targetData + 'Closed', function(db){
-		for(var i = 1; i < 49; i++){
+		for(var i = 1; i < repoArray.length; i++){
 			obj = require('../repoData/' + targetData + '/closed/' + i + "_closed_" + targetData + "");
 			if(obj == ""){
 				continue
 			}
-        	var url = mapping(obj, function(data) {return data.url;})
-		     var dataName = splitValue(url, 5, '/');
+        	var url = obj.map(function(data) { return data.url; })
+		     var dataName = helper.getSplitValue(url, 5, '/');
 		    db.collection(dataName).remove({});
 		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: false}); //enable bulk inserting of data 
 		    for(var j = 0; j < obj.length; j++){	
@@ -110,24 +113,8 @@ exports.closedDataMigration = function(targetData){
 		    batch.execute(function(err, result){});
 		}
 		db.close();
-		tmpLog.update('DATA MIGRATION', 'jquery closed ' + targetData + ' loaded', true);
+		helper.log('DATA MIGRATION', 'jquery closed ' + targetData + ' loaded', true);
 	});
 }
-
-var splitValue = function(origVal, index, separator) {
-			var a = origVal.toString();
-		    var v = a.split(separator);
-		    var d = v[index];  
-		    return d;
-}
-
-var mapping = function(dat, fn) {
-	var d = dat.map(fn);
-
-	return d;
-}
-
-
-
 
 	

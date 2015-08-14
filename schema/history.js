@@ -1,5 +1,5 @@
 var fs = require('fs')
-	, tmpLog = require('../lib/tmpLogger')
+	, helper = require('../lib/helper')
 	, MongoClient = require('mongodb').MongoClient;
 
 var history = {}
@@ -37,7 +37,7 @@ history.getDataOverTime = function(database, target) {
 		    }
     	});
 	});
-	tmpLog.update('HISTORY', 'new ' + target +' history added', false);
+	helper.log('HISTORY', 'new ' + target +' history added', false);
 }
 
 history.getClosedDataOverTime = function(database, target) {
@@ -65,7 +65,7 @@ history.getClosedDataOverTime = function(database, target) {
 		    }
     	});
 	});
-	tmpLog.update('HISTORY', 'new ' + target +' history added', false);
+	helper.log('HISTORY', 'new ' + target +' history added', false);
 }
 
 history.resetHistory = function(rep) {
@@ -73,7 +73,7 @@ history.resetHistory = function(rep) {
 		db.dropDatabase();
 		db.close();
 	});
-	tmpLog.update('HISTORY', 'prev ' + rep +' DB history removed', false);
+	helper.log('HISTORY', 'prev ' + rep +' DB history removed', false);
 }
 
 history.connect = function(dbase, callback) {
