@@ -26,6 +26,7 @@ exports.repositoryMigrate = function() {
 	    });
 	});
 }
+
 exports.openIssuesMigrate = function() {
 	connect('issues', function(db){
 		for(var i = 1; i < repoArray.length; i++){

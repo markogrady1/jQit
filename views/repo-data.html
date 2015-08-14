@@ -165,9 +165,9 @@ if(issuesArr.length == 0){
 <p><b> Description: </b> <%= data.description %></p>
 <p><b> Number of forks: </b> <%= data.forks_count %></p>
 <p><b> Average time to close issues: </b> <%= avgIssues %></p>
+<p><b> Age of oldest issue: </b> <%= issueRange %></p>
 <p><b> Average time to close pull request: </b> <%= avgPulls %></p>
 <p><b> Age of oldest pull request: </b> <%= pullRange %></p>
-<p><b> Age of oldest issue: </b> <%= issueRange %></p>
 <p><b>Closures: </b><br>
 <%for (var key in events){ %>
      <%= key + ' : ' + events[key] ; %> <br>
