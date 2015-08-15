@@ -2,6 +2,7 @@ var mongoClient = require("mongodb").MongoClient
     , helper = require('../lib/helper')
     , fs = require('fs')
     , bcrypt = require('bcryptjs')
+    , _ = require('underscore')
     , CronJob = require('cron').CronJob;
 var hash;
 writeArr = '';
@@ -15,7 +16,7 @@ new CronJob('* 5 * * *', function() {
 			continue
 		}
 		
-    	var url = mapping(obj, function(data) {return data.url;})
+    	var url = _.map(obj, function(data) {return data.url;})
 	    var dataName = helper.getSplitValue(url, 5, '/');
 	    writeArr += '' + dataName + '  '+obj.length + ',\n';
 	}
@@ -32,16 +33,6 @@ new CronJob('* 5 * * *', function() {
 				});
 }, null, true, "Europe/London");
 */
-
-
-
-var mapping = function(dat, fn) {
-	var d = dat.map(fn);
-	return d;
-}
-
-
-
 
 //connect to mongoDB and aquire data for all documents concerning repositories
 exports.initConnection = function() {
@@ -119,9 +110,9 @@ exports.executeQuery = function(database, param, callback) {
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
 	var queryStr = { "secondsDate": { "$gt": seconds }};
 	var projection = { 'isoDate': 1, 'name': 1, 'rawDate': 1, 'issues': 1, '_id': 0 };
- 	collection = dataSet.map(function(collect){	return collect.name	});
+ 	collection = _.map(dataSet, function(collect){	return collect.name	});
  	connection(database, function(db){
- 		collection.map(function(coll) {
+ 		_.map(collection, function(coll) {
 			db.collection(coll).find(queryStr,{}).toArray(function(err, allHistory){
 				if(err) throw err;
 				completeData.push(allHistory);

@@ -1,9 +1,10 @@
 var helper = require('../lib/helper')
 	, MongoClient = require('mongodb').MongoClient
 	, request = require('request')
+	, _ = require('underscore')
 	, allRepos = require('../repoData/rep');
 		
-var repoArray = allRepos.map(function(reps){ return reps.length; });
+var repoArray = _.map(allRepos, function(reps){ return reps.length; });
 
 var migrate = module.exports = {};
 
@@ -26,7 +27,7 @@ migrate.openIssuesMigrate = function() {
 			if(obj == ""){
 				continue
 			}
-	        var url = obj.map(function(data) { return data.url; })
+	        var url = _.map(obj, function(data) { return data.url; })
 		    var dataName = helper.getSplitValue(url, 5, '/');
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
@@ -44,7 +45,7 @@ migrate.pullsMigrate = function() {
 			if(obj == ""){
 				continue
 			}
-        	var url = obj.map( function(data) { return data.url; })
+        	var url = _.map(obj, function(data) { return data.url; })
 		    var dataName = helper.getSplitValue(url, 5, '/');
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
@@ -65,7 +66,7 @@ migrate.eventsMigrate = function() {
 			if(obj == ""){
 				continue
 			}
-        	var url = obj.map(function(data) { return data.url; })
+        	var url = _.map(obj,function(data) { return data.url; })
 		    var dataName = helper.getSplitValue(url, 5, '/');
 		    dataName = helper.getSplitValue(dataName, 0, ',');
 		    db.collection(dataName).remove({});
@@ -85,7 +86,7 @@ migrate.closedDataMigration = function(targetData){
 			if(obj == ""){
 				continue
 			}
-        	var url = obj.map(function(data) { return data.url; })
+        	var url = _.map(obj, function(data) { return data.url; })
 		     var dataName = helper.getSplitValue(url, 5, '/');
 		    db.collection(dataName).remove({});
 		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: false}); //enable bulk inserting of data 
