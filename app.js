@@ -8,7 +8,6 @@ var hst = require('./schema/history')
     , bodyParser = require('body-parser')
     , cookieParser = require('cookie-parser')
     , session = require('express-session')
-migrates();
 
 schema.initConnection();
 app.engine('.html', require('ejs').__express);
@@ -39,15 +38,6 @@ var server = app.listen('3000', function(){
   	console.log('Listening on port: %s', port);
 });
     
-function migrates() {
-	migrate.repositoryMigrate();
-	migrate.openIssuesMigrate();
-	migrate.pullsMigrate();
-	migrate.closedDataMigration('pulls');
-	migrate.closedDataMigration('issues');
-	migrate.eventsMigrate();
-}
-
 app.use('/', routes(app, server));
 module.exports = app;
 

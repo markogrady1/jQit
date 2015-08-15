@@ -1,24 +1,16 @@
-var helper = require('../lib/helper');
-var MongoClient = require('mongodb').MongoClient;
-
-var request = require('request');
-var allRepos = require('../repoData/rep');	
+var helper = require('../lib/helper')
+	, MongoClient = require('mongodb').MongoClient
+	, request = require('request')
+	, allRepos = require('../repoData/rep');
+		
 var repoArray = allRepos.map(function(reps){ return reps.length; });
-console.log(repoArray.length)   	
 
-var connect = function(target, fn) {
-	MongoClient.connect("mongodb://127.0.0.1:27017/" + target, function(err, db){
-		if(err) throw err;
+var migrate = module.exports = {};
 
-		fn(db);
-	});
-}
-
-exports.repositoryMigrate = function() {
+migrate.repositoryMigrate = function() {
 	helper.log('DATA MIGRATION', 'repositories loading...', false);
 	connect('repositories', function(db){
 		db.collection('repos').remove({});
-		
 	    db.collection('repos').insert(allRepos, function(err, data){
 	    	if(err) throw err;
 	    	helper.log('DATA MIGRATION', 'jquery repositories loaded', true);
@@ -27,7 +19,7 @@ exports.repositoryMigrate = function() {
 	});
 }
 
-exports.openIssuesMigrate = function() {
+migrate.openIssuesMigrate = function() {
 	connect('issues', function(db){
 		for(var i = 1; i < repoArray.length; i++){
 			var obj = require('../repoData/issues/open/' + i + "_issues");
@@ -42,10 +34,10 @@ exports.openIssuesMigrate = function() {
 	        });
 		}
 		helper.log('DATA MIGRATION', 'jquery open issues loaded', true);
-});
+	});
 }
 
-exports.pullsMigrate = function() {
+migrate.pullsMigrate = function() {
 	connect('pulls', function(db){
 		for(var i = 1; i < repoArray.length; i++){
 			var obj = require('../repoData/pulls/open/' + i + "_pulls");
@@ -56,18 +48,17 @@ exports.pullsMigrate = function() {
 		    var dataName = helper.getSplitValue(url, 5, '/');
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
-            if(err) throw err;
-
+            	if(err) throw err;
         	});
 		}
 		// db.close();
 		helper.log('DATA MIGRATION', 'jquery open pulls loaded', true);
 	// });
-});
+	});
 }
 
 
-exports.eventsMigrate = function() {
+migrate.eventsMigrate = function() {
     connect('events', function(db){
 		for(var i = 1; i < repoArray.length; i++){
 			var obj = require('../repoData/events/' + i + "events");
@@ -79,8 +70,7 @@ exports.eventsMigrate = function() {
 		    dataName = helper.getSplitValue(dataName, 0, ',');
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
-            if(err) throw err;
-
+            	if(err) throw err;
         	});
 		}
 		// db.close();
@@ -88,7 +78,7 @@ exports.eventsMigrate = function() {
 	});
 }
 
-exports.closedDataMigration = function(targetData){
+migrate.closedDataMigration = function(targetData){
 	connect(targetData + 'Closed', function(db){
 		for(var i = 1; i < repoArray.length; i++){
 			obj = require('../repoData/' + targetData + '/closed/' + i + "_closed_" + targetData + "");
@@ -118,4 +108,16 @@ exports.closedDataMigration = function(targetData){
 	});
 }
 
-	
+var connect = function(target, fn) {
+	MongoClient.connect("mongodb://127.0.0.1:27017/" + target, function(err, db){
+		if(err) throw err;
+		fn(db);
+	});
+}	
+
+migrate.repositoryMigrate();
+migrate.openIssuesMigrate();
+migrate.pullsMigrate();
+migrate.closedDataMigration('pulls');
+migrate.closedDataMigration('issues');
+migrate.eventsMigrate();
