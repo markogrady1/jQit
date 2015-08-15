@@ -1,204 +1,198 @@
 <html>
-<head>
-	<title>Repository Details</title>
-	<link rel='stylesheet' href='/css/style.css' />
-	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	<script src="/js/chart.js"></script>
-	   <meta charset="utf-8">
-  <script>
-//this section of code displays how to pass a nodejs value to ejs and then on to code
-//within script tags it can then be used anyhow you wish 
-//not ch is an array or json value set
-
-var allHistory = <%- JSON.stringify(allRepoHistory) %>
-var repoData = <%- JSON.stringify(repoData) %>
-var dt = <%- JSON.stringify( fullDate) %>
-var pdt = <%- JSON.stringify( fullPullDate) %>
-var v = <%- JSON.stringify(ch) %>
-var pr = <%- JSON.stringify(chPull) %>
-var p = <%- JSON.stringify(events) %>
-var old = <%- JSON.stringify(oldIssueUrl) %>
-var temp = v;
-var temp2 = pr;
-
-</script>
-  <script src="/js/detectResize.js"></script>
- 
-   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-    <script src="/js/scrilla.js"></script>
-<style>
-      
-    </style>
-
-</head>
-<body>
-<% include partials/header.html %>
-
-  <div id=changeView></div>
-  <div id=changeView2></div>
-  <div id=display-data-info></div>
-  <div class=details></div>
-  <div class=compare-info></div>
-  <div class=compareChart></div>
-  <div id=chartArea></div>
-  <div id=chartArea2></div>
-  <div class='point point2'></div>
-  <script>
-
-detectWindowSize()
-admin = [];
-for(var l in p) {
- admin.push({'user': l, 'closed': p[l]})
-}
-jSonArr = JSON.stringify(admin)
-issuesArr = [], pullsArr = [];
-
-
-dataset = [] ;
-for(var k in v) {
-    issuesArr.push({'date': v[k].date, 'issues': v[k].issues});
-    dataset.push(v[k].issues);
-}
-
-for(var y in pr) {
-  pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
-}
-
-var jArr = JSON.stringify(issuesArr);
-var issuesLineData = {
-    w: chartWidth,
-    h: lineChartHeight,
-    top: 48,
-    bottom: 72,
-    left: 60,
-    right: 40,
-    padding: 20,
-    chartArea: "#chartArea",
-    scope: scope,
-    isIssue: true,
-    dataKey: "date",
-    dataVal: "issues",
-    title : {
-      y: 20
-  }
-}
-
-var pullsLineData = {
-    w: chartWidth,
-    h: lineChartHeight,
-    top: 48,
-    bottom: 72,
-    left: 60,
-    right: 40,
-    padding: 10,
-    chartArea: "#chartArea2",
-    scope: scope,
-    isIssue: false,
-    dataKey: "date",
-    dataVal: "pulls",
-    title : {
-      y: 9
-  }
-}
-var issuesBarData = {
-    w: chartWidth, 
-    h: barChartHeight,
-    top: 48,
-    bottom: 72,
-    left: 60,
-    right: 40,
-    padding: 0,
-    chartArea: "#chartArea",
-    scope: scope,
-    isIssue: true,
-    dataKey: "date",
-    dataVal: "issues"
-  };
-
-
-var pullsBarData = {
-    w: chartWidth, 
-    h: barChartHeight,
-    top: 48,
-    bottom: 72,
-    left: 60,
-    right: 40,
-    padding: 0,
-    chartArea: "#chartArea2",
-    scope: scope,
-    isIssue: false,
-    dataKey: "date",
-    dataVal: "pulls"
-  };
-historyObj = {
-  allRepoHistory: allHistory,
-  allRepoName: repoData
-}
-setBarChart(issuesArr, issuesBarData, historyObj)
-setLineChart(issuesArr, issuesLineData)
-setBarChart(pullsArr, pullsBarData)
-setLineChart(pullsArr, pullsLineData)
-
-
-if(issuesArr.length == 0){
-  var el = document.getElementById('chartArea');
-    el.innerHTML = 'There have been no issues in the last 30 days';
-    el.setAttribute('class', 'status');
-}
-
-//setClosureChart(admin);
-</script>
-  <div class="body-wrap">
-  <section class="item"></section>
-	 <h1 class=current-repo><%= data.name %></h1>
- 
-<p><b>Repository name:</b> <%= data.name %></p>
-<p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
-<p><b> Open Issues: </b> <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
-<p><b> Closed issues: </b> <%= closedissues %></p>
-<p><b> Pull Requests: </b> <%= pullRequestNo %></p>
-<p><b> Closed Pull Requests: </b> <%= closedPulls %></p>
-<p><b> Stars: </b> <%= data.watchers_count %></p>
-<p><b> Created at: </b> <%= data.created_at %></p>
-<p><b> Description: </b> <%= data.description %></p>
-<p><b> Number of forks: </b> <%= data.forks_count %></p>
-<p><b> Average time to close issues: </b> <%= avgIssues %></p>
-<p class='old'><b> Age of oldest issue: </b> <%= issueRange %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<script>
-if(old !== null){
-    $('.old').append('<a href='+ old +' target=_blank>Go To Issue</a>');
-}
-</script>
-  </p>  
-<p><b> Average time to close pull request: </b> <%= avgPulls %></p>
-<p><b> Age of oldest pull request: </b> <%= pullRange %></p>
-<p><b>Closures: </b><br>
-<%for (var key in events){ %>
-     <%= key + ' : ' + events[key] ; %> <br>
-     <% } %></p>
-<p></p>
-<p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
-<div class="button-wrap-static">
-<% for (var i = 0; i < history.length; i++) { %>
-   <%      
-   	date = history[i].split('-');
-   	cd = date[2]+ " " + date[1] + " " + date[0]
-   %>
-<div  class='open-issue-repo'><%= cd %><span class='issue-count'><%= issuesTrend[i] %></span></div>  
-<% i} %> 
-</div>
-
-<script>
-    issueBarInfo(v);
-    pullBarInfo(pr)
-</script>
-</div>
-<script>
-    scroller.init(); 
-</script> 
-
-</body>
-</html>
+   <head>
+      <title>Repository Details</title>
+      <link rel='stylesheet' href='/css/style.css' />
+      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+      <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+      <script src="/js/chart.js"></script>
+      <meta charset="utf-8">
+      <script>
+         //this section of code displays how to pass a nodejs value to ejs and then on to code
+         //within script tags it can then be used anyhow you wish 
+         //not ch is an array or json value set
+         
+         var allHistory = <%- JSON.stringify(allRepoHistory) %>
+         var repoData = <%- JSON.stringify(repoData) %>
+         var dt = <%- JSON.stringify( fullDate) %>
+         var pdt = <%- JSON.stringify( fullPullDate) %>
+         var v = <%- JSON.stringify(ch) %>
+         var pr = <%- JSON.stringify(chPull) %>
+         var p = <%- JSON.stringify(events) %>
+         var old = <%- JSON.stringify(oldIssueUrl) %>
+         var temp = v;
+         var temp2 = pr;
+         
+      </script>
+      <script src="/js/detectResize.js"></script>
+      <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+      <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+      <script src="/js/scrilla.js"></script>
+      <style>
+      </style>
+   </head>
+   <body>
+      <% include partials/header.html %>
+      <div id=changeView></div>
+      <div id=changeView2></div>
+      <div id=display-data-info></div>
+      <div class=details></div>
+      <div class=compare-info></div>
+      <div class=compareChart></div>
+      <div id=chartArea></div>
+      <div id=chartArea2></div>
+      <div class='point point2'></div>
+      <script>
+         detectWindowSize()
+         admin = [];
+         for(var l in p) {
+          admin.push({'user': l, 'closed': p[l]})
+         }
+         jSonArr = JSON.stringify(admin)
+         issuesArr = [], pullsArr = [];
+         
+         
+         dataset = [] ;
+         for(var k in v) {
+             issuesArr.push({'date': v[k].date, 'issues': v[k].issues});
+             dataset.push(v[k].issues);
+         }
+         
+         for(var y in pr) {
+           pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
+         }
+         
+         var jArr = JSON.stringify(issuesArr);
+         var issuesLineData = {
+             w: chartWidth,
+             h: lineChartHeight,
+             top: 48,
+             bottom: 72,
+             left: 60,
+             right: 40,
+             padding: 20,
+             chartArea: "#chartArea",
+             scope: scope,
+             isIssue: true,
+             dataKey: "date",
+             dataVal: "issues",
+             title : {
+               y: 20
+           }
+         }
+         
+         var pullsLineData = {
+             w: chartWidth,
+             h: lineChartHeight,
+             top: 48,
+             bottom: 72,
+             left: 60,
+             right: 40,
+             padding: 10,
+             chartArea: "#chartArea2",
+             scope: scope,
+             isIssue: false,
+             dataKey: "date",
+             dataVal: "pulls",
+             title : {
+               y: 9
+           }
+         }
+         var issuesBarData = {
+             w: chartWidth, 
+             h: barChartHeight,
+             top: 48,
+             bottom: 72,
+             left: 60,
+             right: 40,
+             padding: 0,
+             chartArea: "#chartArea",
+             scope: scope,
+             isIssue: true,
+             dataKey: "date",
+             dataVal: "issues"
+           };
+         
+         
+         var pullsBarData = {
+             w: chartWidth, 
+             h: barChartHeight,
+             top: 48,
+             bottom: 72,
+             left: 60,
+             right: 40,
+             padding: 0,
+             chartArea: "#chartArea2",
+             scope: scope,
+             isIssue: false,
+             dataKey: "date",
+             dataVal: "pulls"
+           };
+         historyObj = {
+           allRepoHistory: allHistory,
+           allRepoName: repoData
+         }
+         setBarChart(issuesArr, issuesBarData, historyObj)
+         setLineChart(issuesArr, issuesLineData)
+         setBarChart(pullsArr, pullsBarData)
+         setLineChart(pullsArr, pullsLineData)
+         
+         
+         if(issuesArr.length == 0){
+           var el = document.getElementById('chartArea');
+             el.innerHTML = 'There have been no issues in the last 30 days';
+             el.setAttribute('class', 'status');
+         }
+         
+         //setClosureChart(admin);
+      </script>
+      <div class="body-wrap">
+         <section class="item"></section>
+         <h1 class=current-repo><%= data.name %></h1>
+         <p><b>Repository name:</b> <%= data.name %></p>
+         <p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
+         <p><b> Open Issues: </b> <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
+         <p><b> Closed issues: </b> <%= closedissues %></p>
+         <p><b> Pull Requests: </b> <%= pullRequestNo %></p>
+         <p><b> Closed Pull Requests: </b> <%= closedPulls %></p>
+         <p><b> Stars: </b> <%= data.watchers_count %></p>
+         <p><b> Created at: </b> <%= data.created_at %></p>
+         <p><b> Description: </b> <%= data.description %></p>
+         <p><b> Number of forks: </b> <%= data.forks_count %></p>
+         <p><b> Average time to close issues: </b> <%= avgIssues %></p>
+         <p class='old'>
+            <b> Age of oldest issue: </b> <%= issueRange %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <script>
+               if(old !== null){
+                   $('.old').append('<a href='+ old +' target=_blank>Go To Issue</a>');
+               }
+            </script>
+         </p>
+         <p><b> Average time to close pull request: </b> <%= avgPulls %></p>
+         <p><b> Age of oldest pull request: </b> <%= pullRange %></p>
+         <p><b>Closures: </b><br>
+            <%for (var key in events){ %>
+            <%= key + ' : ' + events[key] ; %> <br>
+            <% } %>
+         </p>
+         <p></p>
+         <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
+         <div class="button-wrap-static">
+            <% for (var i = 0; i < history.length; i++) { %>
+            <%      
+               date = history[i].split('-');
+               cd = date[2]+ " " + date[1] + " " + date[0]
+               %>
+            <div  class='open-issue-repo'><%= cd %><span class='issue-count'><%= issuesTrend[i] %></span></div>
+            <% i} %> 
+         </div>
+         <script>
+            issueBarInfo(v);
+            pullBarInfo(pr)
+         </script>
+      </div>
+      <script>
+         scroller.init(); 
+      </script> 
+   </body>
+</html> 
