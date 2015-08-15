@@ -135,7 +135,7 @@ exports.executeQuery = function(database, param, callback) {
 var getProjection = function(db) {
 	var projection;
 	if (db === 'issues') {
-		projection = { 'created_at': 1, 'title': 1, '_id': 0 };
+		projection = { 'created_at': 1, 'title': 1, 'html_url': 1, '_id': 0 };
 	} else if (db === 'repoHistory') {
 		projection = { 'isoDate': 1, 'rawDate': 1, 'issues': 1, '_id': 0 }
 	} else if (db === 'repoPullsHistory') {

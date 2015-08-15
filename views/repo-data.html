@@ -19,6 +19,7 @@ var pdt = <%- JSON.stringify( fullPullDate) %>
 var v = <%- JSON.stringify(ch) %>
 var pr = <%- JSON.stringify(chPull) %>
 var p = <%- JSON.stringify(events) %>
+var old = <%- JSON.stringify(oldIssueUrl) %>
 var temp = v;
 var temp2 = pr;
 
@@ -165,7 +166,13 @@ if(issuesArr.length == 0){
 <p><b> Description: </b> <%= data.description %></p>
 <p><b> Number of forks: </b> <%= data.forks_count %></p>
 <p><b> Average time to close issues: </b> <%= avgIssues %></p>
-<p><b> Age of oldest issue: </b> <%= issueRange %></p>
+<p class='old'><b> Age of oldest issue: </b> <%= issueRange %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<script>
+if(old !== null){
+    $('.old').append('<a href='+ old +' target=_blank>Go To Issue</a>');
+}
+</script>
+  </p>  
 <p><b> Average time to close pull request: </b> <%= avgPulls %></p>
 <p><b> Age of oldest pull request: </b> <%= pullRange %></p>
 <p><b>Closures: </b><br>
