@@ -692,17 +692,18 @@ function assignPullButtons(){
 }
 
 function setCompareSelection(histObj) {
+	if($('.compare-repo-sel').length !== 1){
 	$('.compare-info').append('<select class=compare-repo-sel></select>')
 	$selection = $('.compare-repo-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}))
-	
 	$selection.on('change', function(){
 		var chosenVal = $(this).val();
 		if(chosenVal !== 'Compare Issues')
 			compareRepositories(chosenVal, histObj.allRepoHistory);
 	})
+}
 	//this construct is for a jqueryui style selectmenu
 	//$(function() {
  	//	$selection.selectmenu();
