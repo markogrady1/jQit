@@ -8,10 +8,7 @@ var hst = require('./schema/history')
     , bodyParser = require('body-parser')
     , cookieParser = require('cookie-parser')
     , session = require('express-session')
-    , auth = require('./config/auth');
 
-console.log(auth.github_client_id)
-console.log(auth.github_client_secret)
 schema.initConnection();
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + "/views/");
@@ -20,7 +17,7 @@ app.set('view engine', 'html');
 app.locals.repoComparison = require('./schema/schema');
 
 // app.locals.visualHelper = require('./lib/dataProvider');
-app.locals.state = '';
+//app.locals.getEvents = require('./lib/resolve')
 app.use(cookieParser());
 app.use(session({ 
 	secret:'jkgabglhantiovqatapiteioatbthtipw4uiwtwu4hthtui42htuohRUVH3932HRTEJGWTWVEHGUIHAIHJSoheojahghvghjkher9turhtreig',

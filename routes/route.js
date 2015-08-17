@@ -74,8 +74,9 @@ router.get('/login', function(req, res) {
 	var state = query.state;
 	var code = query.code;
 	var localState = localStorage.getItem('state');
-	if(state === localState) 
+	if(state === localState) {
 		console.log('all good so far')
+	}
 	console.log('login page called');
 	reslv.initiateLogin(req, res);
 });
