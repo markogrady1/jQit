@@ -716,9 +716,10 @@ var compareRepositories = function(repoName, allHistory) {
 	for(var i = 0; i < allHistory.length; i++) {
 		if(repoName === allHistory[i][0].team){
 			for(var j = 0; j < allHistory[i].length; j++){
-				var dayOfMonth = stripDate(allHistory[i][j].rawDate)
+				var dayOfMonth = stripDate('day');
+				var dom = dayOfMonth(allHistory[i][j].rawDate)
 				team = allHistory[i][j].team;
-				comparedArray.push({'date': dayOfMonth, 'issues': allHistory[i][j].issues, 'issues2': issuesArr[j].issues})
+				comparedArray.push({'date': dom, 'issues': allHistory[i][j].issues, 'issues2': issuesArr[j].issues})
 			}
 		}
 	}
@@ -937,11 +938,16 @@ var setComparisonChart = function(oppData,data , team) {
 }
 
 
-var stripDate = function(dateString) {
-	var s = dateString.split('T')
-	    var da = s[0].substring(s[0].length, 8).trim()
-	    var a = s[0].split('-')
-	    return a[2];
+var stripDate = function(section) {
+	return function(dateString) {
+		var strArr = dateString.split('T')
+	    var da = strArr[0].substring(strArr[0].length, 8).trim()
+	    var arr = strArr[0].split('-')
+	    if(section == 'day')
+	    	return arr[2];
+	    else if(section == 'month')
+	    	return arr[1];
+	}
 }
 
 var pointListener = function() {
