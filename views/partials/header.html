@@ -3,10 +3,5 @@
 <div class='login-seq'></div>
 <script>
 	$('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlParam %>>Login with Github</a>'.toString())
-
-	$('.git-log').on('click', function(){
-		var c = <%- JSON.stringify( state) %>;
-		localStorage.setItem('state', c.toString())
-	})
 </script>
 </header>

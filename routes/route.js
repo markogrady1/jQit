@@ -5,6 +5,11 @@ var migrate = require('../schema/migrate')
 	, express = require('express')
 	, auth = require('../config/auth')
 	, router = express.Router();
+
+if (typeof localStorage === "undefined" || localStorage === null) {
+	  var LocalStorage = require('node-localstorage').LocalStorage;
+	  localStorage = new LocalStorage('./scratch');
+}
 var app;
 console.log('router called');
 
@@ -14,14 +19,14 @@ router.get('/', function(req, res){
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log('index router called');
-	reslv.getPRs('pulls', function(d){
+	reslv.getPRs('pulls', function(pullsdata){
 		var rnd2 = Math.floor(Math.random()*1000000000+1);
 		var rnd = (Math.random() + 1).toString(16).substring(2);
 		for(var c = ''; c.length < 32;) c += Math.random().toString(36).substr(2, 1)
 		var urlParam = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
-		// var urlGit = "https://github.com/login/oauth/authorize?client_id=" + auth.github_client_id + "&state=" + c
-		prs = d;
+		prs = pullsdata;
 		compDoc = schema.completeDoc;
+		localStorage.setItem('state', c);
 
 	for(var i = 0; i < compDoc.length; i++){
       for(var k = prs.length-1; k >=0; k--){
@@ -65,6 +70,12 @@ function resolveDate(fullDate) {
 }
 
 router.get('/login', function(req, res) {
+	query = require('url').parse(req.url,true).query;
+	var state = query.state;
+	var code = query.code;
+	var localState = localStorage.getItem('state');
+	if(state === localState) 
+		console.log('all good so far')
 	console.log('login page called');
 	reslv.initiateLogin(req, res);
 });
