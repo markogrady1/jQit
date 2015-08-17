@@ -20,7 +20,7 @@ app.set('view engine', 'html');
 app.locals.repoComparison = require('./schema/schema');
 
 // app.locals.visualHelper = require('./lib/dataProvider');
-//app.locals.getEvents = require('./lib/resolve')
+app.locals.state = '';
 app.use(cookieParser());
 app.use(session({ 
 	secret:'jkgabglhantiovqatapiteioatbthtipw4uiwtwu4hthtui42htuohRUVH3932HRTEJGWTWVEHGUIHAIHJSoheojahghvghjkher9turhtreig',

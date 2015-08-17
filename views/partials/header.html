@@ -1,5 +1,12 @@
 <header class='header'>
 <h1><%= header %></h1>
-<!-- <div class='login-seq'><a href='/login'>Login</a></div> -->
-<div class='login-seq'><a href='https://github.com/login/oauth/authorize?client_id=da7c8cfcf34916abc253'>Login with GitHub</a></div>
+<div class='login-seq'></div>
+<script>
+	$('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlParam %>>Login with Github</a>'.toString())
+
+	$('.git-log').on('click', function(){
+		var c = <%- JSON.stringify( state) %>;
+		localStorage.setItem('state', c.toString())
+	})
+</script>
 </header>

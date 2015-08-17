@@ -3,16 +3,23 @@ var migrate = require('../schema/migrate')
 	, df = require('../lib/date')
 	, reslv = require('../lib/resolve')
 	, express = require('express')
+	, auth = require('../config/auth')
 	, router = express.Router();
 var app;
 console.log('router called');
 
 //route for the home page
 router.get('/', function(req, res){
+
 	migrate.repositoryMigrate();
-	var prs;
+	var prs, c;
 	console.log('index router called');
 	reslv.getPRs('pulls', function(d){
+		var rnd2 = Math.floor(Math.random()*1000000000+1);
+		var rnd = (Math.random() + 1).toString(16).substring(2);
+		for(var c = ''; c.length < 32;) c += Math.random().toString(36).substr(2, 1)
+		var urlParam = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
+		// var urlGit = "https://github.com/login/oauth/authorize?client_id=" + auth.github_client_id + "&state=" + c
 		prs = d;
 		compDoc = schema.completeDoc;
 
@@ -20,18 +27,20 @@ router.get('/', function(req, res){
       for(var k = prs.length-1; k >=0; k--){
         var name = prs[k].split('  ');
         if(compDoc[i].name == name[0])
-          compDoc[i].pulls = name[1];
-      
+          	compDoc[i].pulls = name[1];
       }
      }
+
 	res.render('index', {
 		names: schema.names,
 		issuesNo: schema.issues,
 		completeDoc: compDoc,
 		pullsNo: prs,
+		urlParam: urlParam,
+		state: c,
 		header: 'Main page'
 		});
-});
+	});
 });
 
 //route for single repository data
