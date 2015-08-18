@@ -1,6 +1,7 @@
 var migrate = require('../schema/migrate')
 	, schema = require('../schema/schema')
 	, df = require('../lib/date')
+	, helper = require('../lib/helper')
 	, reslv = require('../lib/resolve')
 	, express = require('express')
 	, auth = require('../config/auth')
@@ -22,8 +23,9 @@ router.get('/', function(req, res){
 	reslv.getPRs('pulls', function(pullsdata){
 		var rnd2 = Math.floor(Math.random()*1000000000+1);
 		var rnd = (Math.random() + 1).toString(16).substring(2);
+		// var c = helper.randomizeString();
 		for(var c = ''; c.length < 32;) c += Math.random().toString(36).substr(2, 1)
-		var urlParam = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
+		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
 		prs = pullsdata;
 		compDoc = schema.completeDoc;
 		localStorage.setItem('state', c);
@@ -41,7 +43,7 @@ router.get('/', function(req, res){
 		issuesNo: schema.issues,
 		completeDoc: compDoc,
 		pullsNo: prs,
-		urlParam: urlParam,
+		urlstate: urlstate,
 		state: c,
 		header: 'Main page'
 		});
@@ -75,7 +77,7 @@ router.get('/login', function(req, res) {
 	var code = query.code;
 	var localState = localStorage.getItem('state');
 	if(state === localState) {
-		console.log('all good so far')
+		console.log(localState + ' is matched.')
 	}
 	console.log('login page called');
 	reslv.initiateLogin(req, res);

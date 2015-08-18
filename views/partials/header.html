@@ -2,6 +2,9 @@
 <h1><%= header %></h1>
 <div class='login-seq'></div>
 <script>
-	$('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlParam %>>Login with Github</a>'.toString())
+	$('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a>'.toString())
+	var pathname = window.location.pathname;
+	if(pathname !== '/')
+		$('.git-log').remove()
 </script>
 </header>
