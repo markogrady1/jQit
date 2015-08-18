@@ -21,10 +21,7 @@ router.get('/', function(req, res){
 	var prs, c;
 	console.log('index router called');
 	reslv.getPRs('pulls', function(pullsdata){
-		var rnd2 = Math.floor(Math.random()*1000000000+1);
-		var rnd = (Math.random() + 1).toString(16).substring(2);
-		// var c = helper.randomizeString();
-		for(var c = ''; c.length < 32;) c += Math.random().toString(36).substr(2, 1)
+		c = helper.getRandomString();
 		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
 		prs = pullsdata;
 		compDoc = schema.completeDoc;
