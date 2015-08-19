@@ -95,6 +95,7 @@ router.get('/login', function(req, res) {
 			           	var section = body.split('&');
 			           	access_t = helper.getSplitValue(section[0], 1, '=');
 			            console.log(access_t)
+			            /** this request construct needs to be fixed. It is returning a 403 currently **/
 			        	request('https://api.github.com/user?' + access_t, function (error, response, body) {
 							console.log(response.statusCode)
 						    if (!error && response.statusCode == 200) {
