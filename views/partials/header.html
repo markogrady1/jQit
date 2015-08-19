@@ -2,9 +2,25 @@
 <h1><%= header %></h1>
 <div class='login-seq'></div>
 <script>
+
+var un = localStorage.getItem('user');
+if(!un) {
+
 	$('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a>'.toString())
 	var pathname = window.location.pathname;
 	if(pathname !== '/')
 		$('.git-log').remove()
+
+} else {
+	$('.login-seq').append('<a class=git-log href=logout>Logout</a>'.toString())
+	var pathname = window.location.pathname;
+	if(pathname !== '/')
+		$('.git-log').remove()
+
+	$('.git-log').attr('class', 'login-seq logout');
+	$('.logout').on('click', function(){
+		localStorage.setItem('user', '')
+	})
+}
 </script>
 </header>

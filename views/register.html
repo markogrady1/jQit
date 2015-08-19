@@ -3,10 +3,14 @@
 <head>
 </head>
 <body>
+<script>
+	localStorage.setItem('user',true)
+
+</script>
 <h1>Register: <%= register %></h1>
 <p id="status"></p>
 <form method=post action='register'>
-<input name=username><br>
+<input name=username value=<%=username%>><br>
 <input name=email><br>
 <input name=password><br>
 <input name=confirmpassword><br>

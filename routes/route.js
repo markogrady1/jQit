@@ -12,6 +12,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 	  localStorage = new LocalStorage('./scratch');
 }
 var app;
+var acc = [];
 var hasToken = false;
 console.log('router called');
 
@@ -64,49 +65,56 @@ router.get('/repo/issue/details/:team?', function(req, res) {
   	reslv.resolveIssueDates(nameParam, req, res);
 });
 
+function resolveDate(fullDate) {
+	partDate = fullDate.split(' = ');
+
+	return partDate[0];
+}
+
+
 //route for login page ==> GET
-router.get('/login', function(req, res) {
-	query = require('url').parse(req.url,true).query;
-	var state = query.state;
-	var code = query.code;
-	console.log('code',code)
-	var localState = localStorage.getItem('state');
-	var request = require('request');
+router.get('/logins', function(req, res) {
+    
+    query = require('url').parse(req.url, true).query;
+    var state = query.state;
+    var code = query.code;
+    console.log('code', code)
+    var localState = localStorage.getItem('state');
+    var request = require('request');
 
-	if(state === localState) {
-		console.log(localState + ' is matched.')
-		if(!hasToken) {
-			request.post(
-		    'https://github.com/login/oauth/access_token?client_id=' + auth.github_client_id + '&client_secret=' + auth.github_client_secret + '&code=' + code,
-		    { form: { key: 'value' } },
-			    function (error, response, body) {
-			    	console.log(response.statusCode)
-			        if (!error && response.statusCode == 200) {
-			            console.log(body)
-			            // access_t = body;
-			            hasToken = true
-			           	var section = body.split('&');
-			           	access_t = helper.getSplitValue(section[0], 1, '=');
-			            console.log(access_t)
-			            /** this request construct needs to be fixed. It is returning a 403 currently **/
-			        	request('https://api.github.com/user?access_token=' + access_t, function (error, response, body) {
-							console.log(response.statusCode)
-						    if (!error && response.statusCode == 200) {
-						        console.log(body) // Print the google web page. //however we seem to be getting a 403 right now :(
-						     }
-						})
+    if (state === localState) {
+        console.log(localState + ' is matched.')
+        if (!hasToken) {
+            request.post(
+                'https://github.com/login/oauth/access_token?client_id=' + auth.github_client_id + '&client_secret=' + auth.github_client_secret + '&code=' + code, {
+                    form: {
+                        key: 'value'
+                    }
+                },
+                function(error, response, body) {
+                    console.log('outh status code',response.statusCode)
+                    if (!error && response.statusCode == 200) {
+                       
+                        hasToken = true
+                        var section = body.split('&');
+                        access_t = helper.getSplitValue(section[0], 1, '=');
+                        
+                        var requestify = require('requestify');
 
-
-			        }
-			    }
-			);
-		}
-	}
-	console.log('login page called');
-	reslv.initiateLogin(req, res);
+                        requestify.get('https://api.github.com/user?access_token=' + access_t)
+                            .then(function(response) {
+	                            acc = response.getBody();
+	                            acc = setBodyValue(acc, res)
+                        });
+                    }
+                }
+            );
+        }
+    }
+    reslv.initiateRegistration(req, res, acc);
 });
 
-//route for login page ==> POST
+//route for login page ==> GET
 router.post('/login', function(req, res){
     	username = req.body.username;
     	password = req.body.password;
@@ -121,19 +129,18 @@ router.post('/login', function(req, res){
 	});
 });
 
-//route for register page ==> GET
 router.get('/register', function(req, res) {
 	console.log('register page called');
 	reslv.initiateRegistration(req, res);
 });
 
-//route for register page ==> POST
 router.post('/register', function(req, res) {
 	 reslv.validateRegistration(req, res);
 });
 
 router.get('/logout', function(req, res) {
 	req.session.destroy();
+	var localState = localStorage.setItem('state', '');
 	app.locals.username = '';
 	res.redirect('/');
 });
@@ -142,6 +149,13 @@ router.get('/logout', function(req, res) {
 router.get('*', function(req, res) {
 	res.end('<h1>you\'ve been 404\'d</h1>');
 });
+
+
+var setBodyValue = function(body, res) {
+	var bd = body;
+ 	var name = bd.login;
+ 	return name;
+}
 
 module.exports = function(appl, serv) {
 	app = appl;
