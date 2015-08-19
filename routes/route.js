@@ -56,6 +56,7 @@ router.get('/repo/details/:repoName?', function(req, res) {
   	reslv.resolveIssueData(nameParam, req, res);	
 });
 
+//route for single repository details
 router.get('/repo/issue/details/:team?', function(req, res) {
 	console.log('team issues router called');
   	var nameParam = null;
@@ -63,12 +64,7 @@ router.get('/repo/issue/details/:team?', function(req, res) {
   	reslv.resolveIssueDates(nameParam, req, res);
 });
 
-function resolveDate(fullDate) {
-	partDate = fullDate.split(' = ');
-
-	return partDate[0];
-}
-
+//route for login page ==> GET
 router.get('/login', function(req, res) {
 	query = require('url').parse(req.url,true).query;
 	var state = query.state;
@@ -110,6 +106,7 @@ router.get('/login', function(req, res) {
 	reslv.initiateLogin(req, res);
 });
 
+//route for login page ==> POST
 router.post('/login', function(req, res){
     	username = req.body.username;
     	password = req.body.password;
@@ -124,11 +121,13 @@ router.post('/login', function(req, res){
 	});
 });
 
+//route for register page ==> GET
 router.get('/register', function(req, res) {
 	console.log('register page called');
 	reslv.initiateRegistration(req, res);
 });
 
+//route for register page ==> POST
 router.post('/register', function(req, res) {
 	 reslv.validateRegistration(req, res);
 });
