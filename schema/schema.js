@@ -7,6 +7,8 @@ var mongoClient = require("mongodb").MongoClient
 var hash;
 writeArr = '';
 
+
+var schema = {};
 /*  //////////keep this code for switching cronjobs from PHP to nodeJS///////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 new CronJob('* 5 * * *', function() {
@@ -35,7 +37,8 @@ new CronJob('* 5 * * *', function() {
 */
 
 //connect to mongoDB and aquire data for all documents concerning repositories
-exports.initConnection = function() {
+schema.initConnection = function() {
+	self = this;
  	console.log('schema connecting...');
     helper.log('CONNECTION','mongoDB connection made', true);
 	var projection = { "name": 1, "open_issues": 1,"forks_count": 1, "watchers":1, "_id": 0 }
@@ -53,9 +56,9 @@ exports.initConnection = function() {
 				issueNo.push(doc.open_issues);
 				completeD.push({"name":doc.name,"issues":doc.open_issues, "forks":doc.forks_count, "watchers": doc.watchers, "github_url": doc.html_url})
 			}
-			exports.names = repoNames;
-			exports.issues = issueNo;
-			exports.completeDoc = completeD;
+			self.names = repoNames;
+			self.issues = issueNo;
+			self.completeDoc = completeD;
 			db.close();
 		});  
 	});
@@ -63,7 +66,7 @@ exports.initConnection = function() {
 
 //connect to mongoDB and aquire data for a given repository
 //set the view with relevant data
-exports.getRecord = function(param, callback){
+schema.getRecord = function(param, callback){
 	var query = { "name": param };
 	console.log('schema connecting...');
 	helper.log('CONNECTION','mongoDB connection made', true);
@@ -85,7 +88,7 @@ var connection = function(dbase, callback) {
 	});
 };
 
-exports.executeQuery = function(database, param, callback) {
+schema.executeQuery = function(database, param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
 	var queryStr = getQuery(database);
@@ -103,7 +106,7 @@ exports.executeQuery = function(database, param, callback) {
 	});
 };
  
- exports.getAllHistory = function(database, dataSet, callback) {
+ schema.getAllHistory = function(database, dataSet, callback) {
  	var collection = [];
  	var completeData = [];
  	var seconds = new Date().getTime() / 1000;
@@ -146,6 +149,28 @@ var getQuery = function(db) {
 	return query;
 }
 
+schema.regUser = function(username, email, pass, res) {
+	var user = new User(username, email, pass);
+	user.register(res);
+	console.log(user);
+}
+
+schema.loginUser = function(email, pwd, res, fn) {
+	var projection = { 'username': 1, 'email': 1, 'password': 1, '_id': 0 };
+	var query = { 'email': email };
+	connection('user', function(db) {
+		db.collection('users').find(query, projection).toArray(function(err, doc){
+			db.close();
+			if (!doc.length) {
+				res.render('login', { login: 'incorrect' });			
+			} else if (!bcrypt.compareSync(pwd, doc[0].password)) {
+				res.render('login', { login: 'incorrect' });
+			} else {
+				fn(true, doc);
+			}
+		});
+	});
+}
 
 function User(username, email, pass) {
 	var self = this;
@@ -173,25 +198,5 @@ User.prototype.register = function(res) {
 	});	
 }
 
-exports.regUser = function(username, email, pass, res) {
-	var user = new User(username, email, pass);
-	user.register(res);
-	console.log(user);
-}
 
-exports.loginUser = function(email, pwd, res, fn) {
-	var projection = { 'username': 1, 'email': 1, 'password': 1, '_id': 0 };
-	var query = { 'email': email };
-	connection('user', function(db) {
-		db.collection('users').find(query, projection).toArray(function(err, doc){
-			db.close();
-			if (!doc.length) {
-				res.render('login', { login: 'incorrect' });			
-			} else if (!bcrypt.compareSync(pwd, doc[0].password)) {
-				res.render('login', { login: 'incorrect' });
-			} else {
-				fn(true, doc);
-			}
-		});
-	});
-}
+module.exports = schema;
