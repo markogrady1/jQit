@@ -12,6 +12,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 	  localStorage = new LocalStorage('./scratch');
 }
 var app;
+var hasToken = false;
 console.log('router called');
 
 //route for the home page
@@ -72,9 +73,40 @@ router.get('/login', function(req, res) {
 	query = require('url').parse(req.url,true).query;
 	var state = query.state;
 	var code = query.code;
+	console.log('code',code)
 	var localState = localStorage.getItem('state');
+	var request = require('request');
+
+	
+
+
 	if(state === localState) {
 		console.log(localState + ' is matched.')
+		if(!hasToken) {
+			request.post(
+		    'https://github.com/login/oauth/access_token?client_id=' + auth.github_client_id + '&client_secret=' + auth.github_client_secret + '&code=' + code,
+		    { form: { key: 'value' } },
+			    function (error, response, body) {
+			    	console.log(response.statusCode)
+			        if (!error && response.statusCode == 200) {
+			            console.log(body)
+			            // access_t = body;
+			            hasToken = true
+			           	var section = body.split('&');
+			           	access_t = helper.getSplitValue(section[0], 1, '=');
+			            console.log(access_t)
+			        	request('https://api.github.com/user?' + access_t, function (error, response, body) {
+							console.log(response.statusCode)
+						    if (!error && response.statusCode == 200) {
+						        console.log(body) // Print the google web page. //however we seem to be getting a 403 right now :(
+						     }
+						})
+
+
+			        }
+			    }
+			);
+		}
 	}
 	console.log('login page called');
 	reslv.initiateLogin(req, res);
