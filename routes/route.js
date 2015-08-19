@@ -77,9 +77,6 @@ router.get('/login', function(req, res) {
 	var localState = localStorage.getItem('state');
 	var request = require('request');
 
-	
-
-
 	if(state === localState) {
 		console.log(localState + ' is matched.')
 		if(!hasToken) {
