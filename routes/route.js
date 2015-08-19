@@ -96,7 +96,7 @@ router.get('/login', function(req, res) {
 			           	access_t = helper.getSplitValue(section[0], 1, '=');
 			            console.log(access_t)
 			            /** this request construct needs to be fixed. It is returning a 403 currently **/
-			        	request('https://api.github.com/user?' + access_t, function (error, response, body) {
+			        	request('https://api.github.com/user?access_token=' + access_t, function (error, response, body) {
 							console.log(response.statusCode)
 						    if (!error && response.statusCode == 200) {
 						        console.log(body) // Print the google web page. //however we seem to be getting a 403 right now :(
