@@ -445,8 +445,8 @@ function issueBarInfo(vData) {
 	    var da = s[0].substring(s[0].length, 8).trim()
 	    var a = s[0].split('-')
 	    if (da == arr[0]) {
-		selectedBar = s[0];
-		selectedDay = a[1]
+		var selectedBar = s[0];
+		var selectedDay = a[1]
 		if (typeof issArr[t-1] != 'undefined') {
 			progress = issArr[t] - issArr[t-1];
 			if(progress < 0) {
