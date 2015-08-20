@@ -1,4 +1,4 @@
-
+'use strict'
 
 var sortTable = function() {
 	var table = document.getElementById('xtable')
