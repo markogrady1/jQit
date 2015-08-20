@@ -1,5 +1,7 @@
-var totaller;
+'use strict'
 
+var totaller;
+var $viewEle;
 var hideLineChart = function() {
 	var $lineChart = $('#line-chart')
 	$lineChart.css('display', 'none')
@@ -24,7 +26,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	if (tot != 0) {
 		if(buildStyle.isIssue) {
 			setCompareSelection(histObj);
-			$bt2 = $('.line-btn');
+			var $bt2 = $('.line-btn');
 			$bt2.remove();
 		var lineBtn = document.createElement('button')
 		$(lineBtn).text('View Line Chart')
@@ -69,7 +71,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 			.tickFormat(frm)
 			.orient('left')
 
-	$e = $(buildStyle.chartArea).find('svg')
+	var $e = $(buildStyle.chartArea).find('svg')
 	$e.remove();
 	var svg = d3.select(buildStyle.chartArea).append('svg')
 			.attr('id', chartId + 'chart')
@@ -582,6 +584,7 @@ function pullBarInfo(vData) {
 }
 
 var getMonthString = function(date) {
+	var month;
 	switch(date) {
 		case '01':
 		month = 'January';
@@ -676,7 +679,7 @@ var splitDashDate = function(dte) {
 }
 
 function assignPullButtons(){
-	$bt2 = $('.btn');
+	var $bt2 = $('.btn');
 			$bt2.remove();
 	var bt = document.getElementsByClassName('btn')
 	if (bt[0] !== null) {
@@ -694,7 +697,7 @@ function assignPullButtons(){
 function setCompareSelection(histObj) {
 	if($('.compare-repo-sel').length !== 1){
 	$('.compare-info').append('<select class=compare-repo-sel></select>')
-	$selection = $('.compare-repo-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
+	var $selection = $('.compare-repo-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}))
@@ -727,9 +730,9 @@ var compareRepositories = function(repoName, allHistory) {
 }
 
 var setComparisonChart = function(oppData,data , team) {
-	$repo = $('.current-repo').text();
+	var $repo = $('.current-repo').text();
 	var toolTipValue = "Open Issues";
-	$comparison = $('#compare-line-chart');
+	var $comparison = $('#compare-line-chart');
 	$comparison.remove();
 	var buildStyle = {
 			w: chartWidth,
