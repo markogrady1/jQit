@@ -21,11 +21,11 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var pulltmp = [];
 	for(var i = 0; i < data.length; i++) {
 		if(buildStyle.dataVal == 'issues')
-				issuetmp.push(data[i][buildStyle.dataVal])
+			issuetmp.push(data[i][buildStyle.dataVal])
 		else 
-				pulltmp.push(data[i][buildStyle.dataVal])
+			pulltmp.push(data[i][buildStyle.dataVal])
 	}
-	console.log('temp',pulltmp)
+	
 	if (buildStyle.isIssue) totaller = tot;
 
 	if (!buildStyle.isIssue){
@@ -53,36 +53,36 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 
 	var width = buildStyle.w - buildStyle.left - buildStyle.right;
 	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
-			var tip = d3.tip()
-				  .attr('class', 'd3-tip')
-				  .offset([-10, 0])
-				  .html(function(d, i) {
-				  	var date = Nth(d[buildStyle.dataKey])
-				  	var s = dt[i].split('T')
-				  	var dateBits = s[0].split('-');
-	    			var da = s[0].substring(s[0].length, 8).trim()
-					var monthStr = getMonthString(dateBits[1])
-				 	var progressStr;
-					if(isIss) var check = issuetmp[i-1];
-					else check = pulltmp[i-1];
-					if (typeof check != 'undefined') {
-						if(isIss)
-							var prog = d[buildStyle.dataVal] - issuetmp[i-1];
-						else
-							prog = d[buildStyle.dataVal] - pulltmp[i-1];
-						if(prog < 0) {
-							prog = prog.toString().replace('-','')
-							progressStr = '<span class=decrease>▼ </span>' + prog + ' since the previous day';
-						} else if (prog == 0) {
-							progressStr = '<span class=same>▶ </span>No change';
-						} else {
-							progressStr = '<span class=increase>▲ </span>'  + prog + ' since the previous day';
-						}
-					} else {
-						progressStr = '';
-					}
-						    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d[buildStyle.dataVal] + "</span><br><br>" + progressStr;
-				 })
+	var tip = d3.tip()
+		  .attr('class', 'd3-tip')
+		  .offset([-10, 0])
+		  .html(function(d, i) {
+		  	var date = Nth(d[buildStyle.dataKey])
+		  	var s = dt[i].split('T')
+		  	var dateBits = s[0].split('-');
+			var da = s[0].substring(s[0].length, 8).trim()
+			var monthStr = getMonthString(dateBits[1])
+		 	var progressStr;
+			if(isIss) var check = issuetmp[i-1];
+			else check = pulltmp[i-1];
+			if (typeof check != 'undefined') {
+				if(isIss)
+					var prog = d[buildStyle.dataVal] - issuetmp[i-1];
+				else
+					prog = d[buildStyle.dataVal] - pulltmp[i-1];
+				if(prog < 0) {
+					prog = prog.toString().replace('-','')
+					progressStr = '<span class=decrease>▼ </span>' + prog + ' since the previous day';
+				} else if (prog == 0) {
+					progressStr = '<span class=same>▶ </span>No change';
+				} else {
+					progressStr = '<span class=increase>▲ </span>'  + prog + ' since the previous day';
+				}
+			} else {
+				progressStr = '';
+			}
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d[buildStyle.dataVal] + "</span><br><br>" + progressStr;
+		 })
 	var x = d3.scale.ordinal()
 		.domain(data.map(function(entry){
 			return entry[buildStyle.dataKey];
@@ -170,8 +170,8 @@ function plot(params) {
       	  .on('mouseout', tip.hide)
 		  .on('mouseover', function(d, i){
 		  	e = $(this).css('fill');
-		$(this).css('fill', '#3C7BD5');
-		var el = d3.select(this)
+			$(this).css('fill', '#3C7BD5');
+			var el = d3.select(this)
 			el.transition()
 				.duration(300)
 				.attr({
