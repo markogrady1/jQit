@@ -25,7 +25,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		else 
 			pulltmp.push(data[i][buildStyle.dataVal])
 	}
-	
+
 	if (buildStyle.isIssue) totaller = tot;
 
 	if (!buildStyle.isIssue){
@@ -426,6 +426,7 @@ function setLineChart(data, buildStyle) {
 		else
 			$('#pulls-line-chart').hide();
 	}
+	pointListener();
 }
 
 var assignLineListener = function(elem) {
@@ -1002,42 +1003,43 @@ var stripDate = function(section) {
 
 var pointListener = function() {
 
-var $point = $('.point');
-$point.on('mouseover', function(){
-	$(this).animate({
-		'r':6
-	})
-	.css({
-		'fill': '#2d57ca'
-	})
-})
-var $point2 = $('.point2');
-$point2.on('mouseover', function(){
-	$(this).animate({
-		'r':6
-	})
-	.css({
-		'fill': '#2d57ca'
-	})
-})
+	var $point = $('.point');
+	$point.on('mouseover', function(){
+		$(this).animate({
+			'r':6
+		})
+		.css({
+			'fill': '#2d57ca'
+		})
+	});
 
-$point.on('mouseleave', function(){
-	
-	$(this).animate({
-		'r':3
-	})
-	.css({
-		'fill': '#000'
-	})
-});
-$point2.on('mouseleave', function(){
-	
-	$(this).animate({
-		'r':3
-	})
-	.css({
-		'fill': '#000'
-	})
-});
+	var $point2 = $('.point2');
+	$point2.on('mouseover', function(){
+		$(this).animate({
+			'r':6
+		})
+		.css({
+			'fill': '#2d57ca'
+		})
+	});
 
+	$point.on('mouseleave', function(){
+		
+		$(this).animate({
+			'r':3
+		})
+		.css({
+			'fill': '#000'
+		})
+	});
+
+	$point2.on('mouseleave', function(){
+		
+		$(this).animate({
+			'r':3
+		})
+		.css({
+			'fill': '#000'
+		})
+	});
 }
