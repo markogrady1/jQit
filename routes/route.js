@@ -36,7 +36,7 @@ router.get('/', function(req, res){
           	compDoc[i].pulls = name[1];
       }
      }
-
+    var avatar = localStorage.getItem('avatar');
 	res.render('index', {
 		names: schema.names,
 		issuesNo: schema.issues,
@@ -44,6 +44,7 @@ router.get('/', function(req, res){
 		pullsNo: prs,
 		urlstate: urlstate,
 		state: c,
+		avatar: avatar,
 		header: 'Main page'
 		});
 	});
@@ -84,7 +85,7 @@ router.get('/logins', function(req, res) {
 
     if (state === localState) {
         console.log(localState + ' is matched.')
-        if (!hasToken) {
+        // if (!hasToken) {
             request.post(
                 'https://github.com/login/oauth/access_token?client_id=' + auth.github_client_id + '&client_secret=' + auth.github_client_secret + '&code=' + code, {
                     form: {
@@ -104,12 +105,13 @@ router.get('/logins', function(req, res) {
                         requestify.get('https://api.github.com/user?access_token=' + access_t)
                             .then(function(response) {
 	                            acc = response.getBody();
+	                            resetStorage();
 	                            acc = setBodyValue(acc, res)
                         });
                     }
                 }
             );
-        }
+        // }
     }
     reslv.initiateRegistration(req, res, acc);
 });
@@ -153,12 +155,28 @@ router.get('*', function(req, res) {
 
 var setBodyValue = function(body, res) {
 	var bd = body;
- 	var name = bd.login;
- 	return name;
+
+	 localStorage.setItem('data','')
+	 localStorage.setItem('data', bd.login + "=>" + bd.avatar_url + "=>" + bd.email + "")
+	
+						
+	var userDetails = {
+		'login': bd.login,
+		'email': bd.email,
+		'avatar_url': bd.avatar_url
+	}
+ 	
+ 	return userDetails;
 }
 
 module.exports = function(appl, serv) {
 	app = appl;
 	app.locals.username = '';
 	return router;
+}
+
+function resetStorage() {
+	localStorage.setItem('data','');
+
+ 	   // localStorage.setItem('avatar','');
 }
