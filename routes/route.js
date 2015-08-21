@@ -36,7 +36,7 @@ router.get('/', function(req, res){
           	compDoc[i].pulls = name[1];
       }
      }
-    var avatar = localStorage.getItem('avatar');
+    // var avatar = localStorage.getItem('avatar');
 	res.render('index', {
 		names: schema.names,
 		issuesNo: schema.issues,
@@ -44,7 +44,7 @@ router.get('/', function(req, res){
 		pullsNo: prs,
 		urlstate: urlstate,
 		state: c,
-		avatar: avatar,
+		avatar: '',
 		header: 'Main page'
 		});
 	});
