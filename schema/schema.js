@@ -149,8 +149,8 @@ var getQuery = function(db) {
 	return query;
 }
 
-schema.regUser = function(username, email, pass, res) {
-	var user = new User(username, email, pass);
+schema.regUser = function(username, email, res) {
+	var user = new User(username, email);
 	user.register(res);
 	console.log(user);
 }
@@ -180,8 +180,8 @@ function User(username, email, pass) {
 }
 
 User.prototype.register = function(res) {
-	hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));
-	var query = { 'username': this.username, 'email': this.email, 'password': hash };
+	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));
+	var query = { 'username': this.username, 'email': this.email};
 	connection('user', function(db) {
 		db.collection('users').insert(query, function(err, result){
 			console.log('user made');
@@ -190,7 +190,7 @@ User.prototype.register = function(res) {
 				res.render('register', { register: 'Email has been used before' });
 				 console.log('Duplicate Email: Alert User');
 			} else {
-				res.render('login', { login: 'You may now login' });
+				res.render('login', { login: 'You will now recieve an  email anytime an issue or PR is assigned to you' });
 				statusR = 'good';
 			}			
 		});
