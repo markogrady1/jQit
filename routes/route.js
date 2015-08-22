@@ -106,12 +106,13 @@ router.get('/logins', function(req, res) {
 	                            acc = response.getBody();
 	                            resetStorage();
 	                            acc = setBodyValue(acc, res)
+	                            reslv.initiateRegistration(req, res, state, acc);
                         });
                     }
                 }
             );
     }
-    reslv.initiateRegistration(req, res, state);
+    
 });
 
 //route for login page ==> GET
