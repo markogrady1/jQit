@@ -152,7 +152,6 @@ var getQuery = function(db) {
 schema.regUser = function(username, email, res) {
 	var user = new User(username, email);
 	user.register(res);
-	console.log(user);
 }
 
 schema.loginUser = function(email, pwd, res, fn) {
@@ -160,6 +159,7 @@ schema.loginUser = function(email, pwd, res, fn) {
 	var query = { 'email': email };
 	connection('user', function(db) {
 		db.collection('users').find(query, projection).toArray(function(err, doc){
+			if(err) throw err;
 			db.close();
 			if (!doc.length) {
 				res.render('login', { login: 'incorrect' });			
@@ -170,6 +170,25 @@ schema.loginUser = function(email, pwd, res, fn) {
 			}
 		});
 	});
+}
+
+
+schema.checkForEmail = function(username, fn) {
+	var projection = { 'username': 1, 'email': 1 };
+	var query = { 'username': username };
+	connection('user', function(db){
+		db.collection('users').find(query, projection).toArray(function(err, doc){
+			if(err) throw err;
+			db.close();
+			if(!doc.length) {
+				fn(false)
+			} else {
+				for(var s in doc) {
+					fn(doc[0].email)
+				}
+			}
+		})
+	})
 }
 
 function User(username, email, pass) {

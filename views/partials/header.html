@@ -2,25 +2,29 @@
 <h1><%= header %></h1>
 <div class='login-seq'></div>
 <script>
-// var avatar = JSON.stringify(<%= avatar%>).trim()
-// var un = localStorage.getItem('user');
-// if(!un) {
+var user = localStorage.getItem('user')
+var state = window.location.search;
+console.log(state)
 
-	$('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a><br><br>'.toString())
+if(state === '?state=true') {
+
+	$('.login-seq').append('<a class=git-log href=logout>Logout</a>'.toString())
 	var pathname = window.location.pathname;
 	if(pathname !== '/')
 		$('.git-log').remove()
-
-// } else {
-	$('.login-seq').append('<a class=git-log href=logout>Logout<img src=<%=avatar%></a>'.toString())
-	var pathname = window.location.pathname;
-	if(pathname !== '/')
-		$('.git-log').remove()
-
-	$('.git-log').attr('class', 'login-seq logout');
-	$('.logout').on('click', function(){
-		localStorage.setItem('user', '')
+		localStorage.setItem('user', true)
+		$('.git-log').attr('class', 'login-seq logout');
+		$('.logout').on('click', function(){
+			localStorage.setItem('user', false)
 		})
-// }
+
+} else {
+	$('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a><br><br>'.toString())
+	localStorage.setItem('user', false)
+	var pathname = window.location.pathname;
+	if(pathname !== '/')
+		$('.git-log').remove()
+
+}
 </script>
 </header>

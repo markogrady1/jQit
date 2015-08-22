@@ -6,7 +6,7 @@
 <body>
 <h1>login: <%= login %></h1>
 <script>var un = <%- JSON.stringify(username) %> 
-localStorage.setItem('user',un)
+localStorage.setItem('user',true)
 console.log(un)
 </script>
 <p id='statusL'></p>
@@ -16,6 +16,6 @@ console.log(un)
 <input type='submit' value='Login'><br>
 </form> -->
 <br>
-<a href='/'>Home</a>
+<a href='/?state=true'>Home</a>
 </body>
 <html>

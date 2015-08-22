@@ -4,16 +4,20 @@ var migrate = require('../schema/migrate')
 	, helper = require('../lib/helper')
 	, reslv = require('../lib/resolve')
 	, express = require('express')
+	, entry = require('../lib/loginState')
 	, auth = require('../config/auth')
 	, router = express.Router();
+
+
+var state = entry.state
 
 if (typeof localStorage === "undefined" || localStorage === null) {
 	  var LocalStorage = require('node-localstorage').LocalStorage;
 	  localStorage = new LocalStorage('./scratch');
 }
+
 var app;
 var acc = [];
-var hasToken = false;
 console.log('router called');
 
 //route for the home page
@@ -36,7 +40,6 @@ router.get('/', function(req, res){
           	compDoc[i].pulls = name[1];
       }
      }
-    // var avatar = localStorage.getItem('avatar');
 	res.render('index', {
 		names: schema.names,
 		issuesNo: schema.issues,
@@ -44,7 +47,6 @@ router.get('/', function(req, res){
 		pullsNo: prs,
 		urlstate: urlstate,
 		state: c,
-		avatar: '',
 		header: 'Main page'
 		});
 	});
@@ -79,13 +81,11 @@ router.get('/logins', function(req, res) {
     query = require('url').parse(req.url, true).query;
     var state = query.state;
     var code = query.code;
-    console.log('code', code)
     var localState = localStorage.getItem('state');
     var request = require('request');
 
     if (state === localState) {
         console.log(localState + ' is matched.')
-        // if (!hasToken) {
             request.post(
                 'https://github.com/login/oauth/access_token?client_id=' + auth.github_client_id + '&client_secret=' + auth.github_client_secret + '&code=' + code, {
                     form: {
@@ -96,7 +96,6 @@ router.get('/logins', function(req, res) {
                     console.log('outh status code',response.statusCode)
                     if (!error && response.statusCode == 200) {
                        
-                        hasToken = true
                         var section = body.split('&');
                         access_t = helper.getSplitValue(section[0], 1, '=');
                         
@@ -111,9 +110,8 @@ router.get('/logins', function(req, res) {
                     }
                 }
             );
-        // }
     }
-    reslv.initiateRegistration(req, res, acc);
+    reslv.initiateRegistration(req, res, state);
 });
 
 //route for login page ==> GET
@@ -144,6 +142,7 @@ router.get('/logout', function(req, res) {
 	req.session.destroy();
 	var localState = localStorage.setItem('state', '');
 	app.locals.username = '';
+	avatar = false;
 	res.redirect('/');
 });
 
