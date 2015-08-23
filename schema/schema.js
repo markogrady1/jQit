@@ -171,7 +171,7 @@ schema.checkForEmail = function(username, fn) {
 
 
 schema.regUser = function(username, email, res) {
-	var user = new User(username, email);
+	var user = RegisteredUser(username, email);
 	user.register(res);
 }
 
@@ -227,13 +227,13 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 	});
 }
 
-function User(username, email, pass) {
+function User(username, email) {
 	var self = this;
 	this.username = username;
 	this.email = email;
-	this.pass = pass;
 }
 
+var RegisteredUser = function(x, y) { return new User(x, y); }
 
 User.prototype.register = function(res) {
 	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));  //not used currently
