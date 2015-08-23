@@ -3,6 +3,7 @@ var hst = require('./schema/history')
     , express = require('express')
     , app = express()
     , routes = require('./routes/route')
+    , resolve = require('./lib/resolve')
     , path = require('path')
     , schema = require('./schema/schema')
     , bodyParser = require('body-parser')
@@ -37,5 +38,6 @@ var server = app.listen('3000', function(){
   	console.log('Listening on port: %s', port);
 });
     
+resolve.checkForAssigneeAddition();
 app.use('/', routes(app, server));
 module.exports = app;

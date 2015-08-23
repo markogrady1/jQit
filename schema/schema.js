@@ -62,7 +62,7 @@ schema.initConnection = function() {
 			db.close();
 		});  
 	});
-};
+}
 
 //connect to mongoDB and aquire data for a given repository
 //set the view with relevant data
@@ -149,6 +149,27 @@ var getQuery = function(db) {
 	return query;
 }
 
+
+schema.checkForEmail = function(username, fn) {
+	var projection = { 'username': 1, 'email': 1 };
+	var query = { 'username': username };
+	connection('user', function(db){
+		db.collection('users').find(query, projection).toArray(function(err, doc){
+			if(err) throw err;
+			db.close();
+			if(!doc.length) {
+				fn(false)
+			} else {
+				for(var s in doc) {
+					fn(doc[0].email)
+				}
+			}
+		})
+	})
+}
+
+
+
 schema.regUser = function(username, email, res) {
 	var user = new User(username, email);
 	user.register(res);
@@ -172,23 +193,44 @@ schema.loginUser = function(email, pwd, res, fn) {
 	});
 }
 
+schema.checkForAssignee = function(callback) {
+	var projection = { 'username': 1, 'email': 1, '_id': 0 };
 
-schema.checkForEmail = function(username, fn) {
-	var projection = { 'username': 1, 'email': 1 };
-	var query = { 'username': username };
 	connection('user', function(db){
-		db.collection('users').find(query, projection).toArray(function(err, doc){
+		db.collection('users').find({}, projection).toArray(function(err, doc){
 			if(err) throw err;
 			db.close();
-			if(!doc.length) {
-				fn(false)
-			} else {
-				for(var s in doc) {
-					fn(doc[0].email)
-				}
-			}
-		})
-	})
+			console.log(doc)
+			callback(doc)
+		});
+	});
+}
+
+schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
+	console.log('in matcher')
+	var assign = [];
+	var value;
+	console.log(username)
+	// var query = { "id": 58738098};
+	var query = { "assignee": username };
+	var projection = { 'title': 1, 'assignee': 1, 'html_url': 1,  '_id': 0 };
+	collection = _.map(dataSet, function(collect){	return collect});
+ 	connection(database, function(db){
+
+ 		_.map(collection, function(coll) {
+			db.collection(coll).find(query,projection).toArray(function(err, assigned){
+	
+				if(err) throw err;
+				if(assigned.length !== 0){
+					value = assigned;
+					console.log('val',value)
+				}	
+			});
+		
+		});
+		// db.close();
+		callback(value)
+	});
 }
 
 function User(username, email, pass) {
@@ -197,6 +239,7 @@ function User(username, email, pass) {
 	this.email = email;
 	this.pass = pass;
 }
+
 
 User.prototype.register = function(res) {
 	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));

@@ -4,12 +4,8 @@ var migrate = require('../schema/migrate')
 	, helper = require('../lib/helper')
 	, reslv = require('../lib/resolve')
 	, express = require('express')
-	, entry = require('../lib/loginState')
 	, auth = require('../config/auth')
 	, router = express.Router();
-
-
-var state = entry.state
 
 if (typeof localStorage === "undefined" || localStorage === null) {
 	  var LocalStorage = require('node-localstorage').LocalStorage;
@@ -177,6 +173,4 @@ module.exports = function(appl, serv) {
 
 function resetStorage() {
 	localStorage.setItem('data','');
-
- 	   // localStorage.setItem('avatar','');
 }
