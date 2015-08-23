@@ -45,16 +45,16 @@ schema.initConnection = function() {
 	repoNames = [];
 	issueNo = [];
 	completeD = [];
-	connection("repositories", function(db){
-		db.collection('repos').find({}, {}).each(function(err, doc){
-	 		if(err) throw err;
+	connection("repositories", function(db) {
+		db.collection('repos').find({}, {}).each(function(err, doc) {
+	 		if (err) throw err;
 
-			if(doc == null){
+			if (doc == null) {
 				db.close();
-			}else{	
+			} else {	
 				repoNames.push(doc.name);
 				issueNo.push(doc.open_issues);
-				completeD.push({"name":doc.name,"issues":doc.open_issues, "forks":doc.forks_count, "watchers": doc.watchers, "github_url": doc.html_url})
+				completeD.push({ "name": doc.name, "issues": doc.open_issues, "forks": doc.forks_count, "watchers": doc.watchers, "github_url": doc.html_url })
 			}
 			self.names = repoNames;
 			self.issues = issueNo;
@@ -66,13 +66,13 @@ schema.initConnection = function() {
 
 //connect to mongoDB and aquire data for a given repository
 //set the view with relevant data
-schema.getRecord = function(param, callback){
+schema.getRecord = function(param, callback) {
 	var query = { "name": param };
 	console.log('schema connecting...');
 	helper.log('CONNECTION','mongoDB connection made', true);
-	connection("repositories", function(db){
-		db.collection('repos').findOne(query, function(err, doc){
- 			if(err) throw err;
+	connection("repositories", function(db) {
+		db.collection('repos').findOne(query, function(err, doc) {
+ 			if (err) throw err;
   			helper.log('QUERY TARGET' ,doc.name + ": outstanding issues: " + doc.open_issues, false);
   			db.close();
 
@@ -82,8 +82,8 @@ schema.getRecord = function(param, callback){
 };
 
 var connection = function(dbase, callback) {
-	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
-		if(err) throw err;
+	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db) {
+		if (err) throw err;
 		callback(db)
 	});
 };
@@ -94,11 +94,11 @@ schema.executeQuery = function(database, param, callback) {
 	var queryStr = getQuery(database);
 	var projection = getProjection(database);
 	connection(database, function(db){
-		db.collection(collection).find(queryStr, projection).toArray(function(err, doc){
-			if(err) throw err;
-			if(database == 'issues'){
+		db.collection(collection).find(queryStr, projection).toArray(function(err, doc) {
+			if (err) throw err;
+			if (database == 'issues') {
 				callback(doc, collection);
-			}else{
+			} else {
 				callback(doc);
 			}
 			db.close();
@@ -155,9 +155,9 @@ schema.checkForEmail = function(username, fn) {
 	var query = { 'username': username };
 	connection('user', function(db){
 		db.collection('users').find(query, projection).toArray(function(err, doc){
-			if(err) throw err;
+			if (err) throw err;
 			db.close();
-			if(!doc.length) {
+			if (!doc.length) {
 				fn(false)
 			} else {
 				for(var s in doc) {
@@ -200,36 +200,30 @@ schema.checkForAssignee = function(callback) {
 		db.collection('users').find({}, projection).toArray(function(err, doc){
 			if(err) throw err;
 			db.close();
-			console.log(doc)
 			callback(doc)
 		});
 	});
 }
 
 schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
-	console.log('in matcher')
 	var assign = [];
 	var value;
 	console.log(username)
-	// var query = { "id": 58738098};
-	var query = { "assignee": username };
-	var projection = { 'title': 1, 'assignee': 1, 'html_url': 1,  '_id': 0 };
-	collection = _.map(dataSet, function(collect){	return collect});
- 	connection(database, function(db){
-
+	var query = { 'assignee': username };
+	var projection = { 'title': 1, 'assignee': 1, 'created_at': 1, 'html_url': 1,  '_id': 0 };
+	collection = _.map(dataSet, function(collect) { return collect });
+ 	connection(database, function(db) {
  		_.map(collection, function(coll) {
-			db.collection(coll).find(query,projection).toArray(function(err, assigned){
-	
-				if(err) throw err;
-				if(assigned.length !== 0){
-					value = assigned;
-					console.log('val',value)
-				}	
+			db.collection(coll).find(query, projection).each(function(err, assigned) {
+				if (err) throw err;
+
+				if (assigned !== null) {
+					assign.push(assigned)
+					callback(assign)
+					username = '';
+				} 
 			});
-		
 		});
-		// db.close();
-		callback(value)
 	});
 }
 
@@ -242,7 +236,7 @@ function User(username, email, pass) {
 
 
 User.prototype.register = function(res) {
-	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));
+	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));  //not used currently
 	var query = { 'username': this.username, 'email': this.email};
 	connection('user', function(db) {
 		db.collection('users').insert(query, function(err, result){
