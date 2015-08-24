@@ -209,7 +209,7 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 	var assign = [];
 	var value;
 	console.log(username)
-	var query = { 'assignee': username };
+	var query = { 'assignee': username};
 	var projection = { 'title': 1, 'assignee': 1, 'created_at': 1, 'html_url': 1,  '_id': 0 };
 	collection = _.map(dataSet, function(collect) { return collect });
  	connection(database, function(db) {
@@ -218,9 +218,15 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 				if (err) throw err;
 
 				if (assigned !== null) {
-					assign.push(assigned)
-					callback(assign)
-					username = '';
+					var dateOffset = (24*60*60*1000); //value of one day
+					var yest = new Date();
+					var yesterday = new Date(yest.setTime(yest.getTime() - dateOffset))//get yesterday's date in mls
+					var issueDate = new Date(assigned.created_at).getTime(); //date of issue in mls
+					if(issueDate > yesterday) {
+						assign.push(assigned)
+						callback(assign)
+						username = '';
+					}
 				} 
 			});
 		});
