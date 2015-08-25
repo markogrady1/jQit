@@ -23,6 +23,7 @@
     "github-request": "^1.2.3",
     "mongodb": "^2.0.26",
     "node-localstorage": "^0.5.2",
+    "nodemailer": "^1.4.0",
     "request": "^2.55.0",
     "requestify": "^0.1.17",
     "socket.io": "^1.3.6",
