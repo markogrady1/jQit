@@ -57,7 +57,10 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		  .attr('class', 'd3-tip')
 		  .offset([-10, 0])
 		  .html(function(d, i) {
-		  	var date = Nth(d[buildStyle.dataKey])
+		  	var date;
+		  	Nth(d[buildStyle.dataKey], function(val){
+		  		date = val;
+		  	})
 		  	var s = dt[i].split('T')
 		  	var dateBits = s[0].split('-');
 			var da = s[0].substring(s[0].length, 8).trim()
@@ -264,7 +267,10 @@ function setLineChart(data, buildStyle) {
 				  .attr('class', 'd3-tip')
 				  .offset([-10, 0])
 				  .html(function(d, i) {
-				  	var date = Nth(d[buildStyle.dataKey])
+				  	var date;
+				  	Nth(d[buildStyle.dataKey], function(val) {
+				  		date = val;
+				  	})
 
 				  	var s = dt[i].split('T')
 				  	var dateBits = s[0].split('-');
@@ -678,32 +684,40 @@ return month;
 
 }
 
-var Nth = function(data) {
+var Nth = function(data ,cb) {
 	var st = [1,21,31];
 	var rd = [3,23];
 	var nd = [2, 22]
 	var th = [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,24,25,26,27,28,29,30];
+	var val;
 
-	for (var i = 0; i < st.length; i++) {
-		if(data == st[i]){
-			return st[i] + "st";
+	st.reduce(function(prev, st){
+		if(data == st){
+			val = st + "st";
+			cb(val);
 		}
-	};
-	for (var i = 0; i < rd.length; i++) {
-		if(data == rd[i]){
-			return rd[i] + "rd";
+	}, 0);
+
+	rd.reduce(function(prev, rd){
+		if(data == rd){
+			val = rd + "rd";
+			cb(val)
 		}
-	};
-	for (var i = 0; i < nd.length; i++) {
-		if(data == nd[i]){
-			return nd[i] + "nd";
+	}, 0);
+
+	nd.reduce(function(prev, nd){
+		if(data == nd){
+			val = nd + "nd";
+			cb(val)
 		}
-	};
-	for (var i = 0; i < th.length; i++) {
-		if(data == th[i]){
-			return th[i] + "th";
+	}, 0);
+
+	th.reduce(function(prev, th){
+		if(data == th){
+			val = th + "th";
+			cb(val)
 		}
-	};
+	}, 0);
 }
  
 var getDayFormat = function(dd) {

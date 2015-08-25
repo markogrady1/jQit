@@ -1,10 +1,10 @@
+require('should')
 var assert = require('assert');
 var User = require('../schema/schema');
 var history = require('../schema/history');
 
 var testUser;
-describe('creating new user', function(){
-	
+describe('creating new user', function(){	
 
 	before(function(){
 
@@ -12,14 +12,18 @@ describe('creating new user', function(){
 	});
 });
 
-describe('Creating new Applicant', function(){
+describe('Creating new user', function(){
+	it('is valid', function(){
+		assert.should.not.equal(undefined);
+	});
+})
+
+describe('Creating new message receiver', function(){
 	it('is valid', function(){
 		assert( 'not valid');
 	});
 })
 
-describe('Remove data', function(){
-	it('is valid', function(){
-		assert( history.resetHistory('repoHistory'), 'not valid');
-	});
-})
+
+
+
