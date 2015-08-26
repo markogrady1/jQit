@@ -810,7 +810,10 @@ var setComparisonChart = function(oppData,data , team) {
 				  .attr('class', 'd3-tip')
 				  .offset([-10, 0])
 				  .html(function(d, i) {
-				  	var date = Nth(d.date)
+				  	var date;
+				  	Nth(d.date, function(val) {
+				  		date = val;
+				  	})
 				  	var s = dt[i].split('T')
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim()
@@ -836,6 +839,7 @@ var setComparisonChart = function(oppData,data , team) {
 		        .attr("y", 0 - (buildStyle.top / 2) - 20)
 		        .attr("text-anchor", "middle")
 		        .text($repo + "  - vs -  " + team);
+		        appendLegend($repo, team)
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data, function(d) {
 					return Math.max(d.issues, d.issues2);
@@ -1056,4 +1060,21 @@ var pointListener = function() {
 			'fill': '#000'
 		})
 	});
+}
+
+var appendLegend = function(thisRepo, otherRepo) {
+	refreshLegend();	
+	var $elt = $('.comparison-legend');
+	$elt.prepend($('<svg class=home width=10 height=10><rect class=home width=10 height=10 /></rect></svg><span class=text-title >'+thisRepo+'</span><br class=break><svg class=away width=10 height=10><rect class=away width=10 height=10 /><rect></svg><span class=text-title >'+otherRepo+'</span>'))
+}
+
+var refreshLegend = function() {
+	var $home = $('.home');
+	var $away = $('.away');
+	var $br = $('.break');
+	var $title = $('.text-title ');
+	$home.remove()
+	$away.remove()
+	$title.remove()
+	$br.remove()
 }

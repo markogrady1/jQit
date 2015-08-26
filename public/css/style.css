@@ -278,3 +278,19 @@ td, th {
 	height: 50px;
 	border-radius: 50%;
 }
+
+.home{
+	margin-right:5px;
+	border-radius: 8px;
+	fill: #5087af;
+	shape-rendering: crispEdges;
+}
+
+.away {
+	margin-right:5px;	
+	border-radius: 8px;
+	fill: #C81A4E;
+	shape-rendering: crispEdges;
+}
+
+
