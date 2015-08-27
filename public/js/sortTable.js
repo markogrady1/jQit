@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var sortTable = function() {
 	var table = document.getElementById('xtable')
@@ -28,4 +28,4 @@ var sortTable = function() {
 	        );
 	    }
 	});
-}
+};
