@@ -19,12 +19,13 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	tot = _.reduce(data, function(sum, d){ return sum + d[buildStyle.dataVal]; }, 0 );
 	var issuetmp = [];
 	var pulltmp = [];
-	for(var i = 0; i < data.length; i++) {
+
+	_.map(data, function(d){
 		if(buildStyle.dataVal == 'issues')
-			issuetmp.push(data[i][buildStyle.dataVal]);
+			issuetmp.push(d[buildStyle.dataVal]);
 		else 
-			pulltmp.push(data[i][buildStyle.dataVal]);
-	}
+			pulltmp.push(d[buildStyle.dataVal]);
+	})
 
 	if (buildStyle.isIssue) totaller = tot;
 
