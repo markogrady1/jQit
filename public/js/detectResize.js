@@ -3,10 +3,10 @@ var detectWindowSize = function() {
 
 	var clientWidth = document.body.clientWidth;
 	if(clientWidth <= 461 && v.length > 5) {
-		console.log('mobile')
+		console.log('mobile');
 		v = temp;
-		v = v.slice(-8)
-		pr = pr.slice(-8)
+		v = v.slice(-8);
+		pr = pr.slice(-8);
 		chartWidth = 400;
 		barChartHeight = 300;
 		lineChartHeight = 300;
@@ -15,18 +15,18 @@ var detectWindowSize = function() {
 
 	} else if (clientWidth > 461 && clientWidth <= 657) {
 		v = temp;
-		v = v.slice(-10)
-		pr = pr.slice(-10)
+		v = v.slice(-10);
+		pr = pr.slice(-10);
 		chartWidth = 500;
 		barChartHeight = 400;
 		lineChartHeight = 300;
 		standard = false;
 		scope = 'Last 10 Days';
 	} else if (clientWidth > 657 && clientWidth <= 860) {
-		console.log('tablet')
+		console.log('tablet');
 		v = temp;
-		v = v.slice(-12)
-		pr = pr.slice(-12)
+		v = v.slice(-12);
+		pr = pr.slice(-12);
 		$text = $('text > .line-x-axis-title');
 		$text.text('last 15 days');
 		$text.css('color', 'red');
@@ -36,10 +36,10 @@ var detectWindowSize = function() {
 		standard = false;
 		scope = 'Last 12 Days';
 	} else if (clientWidth > 860 && clientWidth < 1064) {
-		console.log('tablet')
+		console.log('tablet');
 		v = temp;
-		v = v.slice(-15)
-		pr = pr.slice(-15)
+		v = v.slice(-15);
+		pr = pr.slice(-15);
 		$text = $('text > .line-x-axis-title');
 		$text.text('last 15 days');
 		$text.css('color', 'red');
@@ -56,7 +56,7 @@ var detectWindowSize = function() {
 		scope = 'Last 30 Days';
 	}
 
-}
+};
 
 
 var repaint = function() {
@@ -66,10 +66,10 @@ var repaint = function() {
 	var standard = true;
 	var clientWidth = document.body.clientWidth;
 	if(clientWidth <= 461 && v.length > 5) {
-		console.log('mobile')
+		console.log('mobile');
 		v = temp;
-		v = v.slice(-8)
-		pr = pr.slice(-8)
+		v = v.slice(-8);
+		pr = pr.slice(-8);
 		chartWidth = 400;
 		barChartHeight = 300;
 		lineChartHeight = 300;
@@ -78,17 +78,17 @@ var repaint = function() {
 
 	} else if (clientWidth > 461 && clientWidth <= 657) {
 		v = temp;
-		v = v.slice(-10)
-		pr = pr.slice(-10)
+		v = v.slice(-10);
+		pr = pr.slice(-10);
 		chartWidth = 500;
 		barChartHeight = 400;
 		lineChartHeight = 300;
 		standard = false;
 	} else if (clientWidth > 657 && clientWidth <= 860) {
-		console.log('tablet')
+		console.log('tablet');
 		v = temp;
-		v = v.slice(-12)
-		pr = pr.slice(-12)
+		v = v.slice(-12);
+		pr = pr.slice(-12);
 		$text = $('text > .line-x-axis-title');
 		$text.text('last 15 days');
 		$text.css('color', 'red');
@@ -97,10 +97,10 @@ var repaint = function() {
 		lineChartHeight = 300;
 		standard = false;
 	} else if (clientWidth > 860 && clientWidth < 1064) {
-		console.log('tablet')
+		console.log('tablet');
 		v = temp;
-		v = v.slice(-15)
-		pr = pr.slice(-15)
+		v = v.slice(-15);
+		pr = pr.slice(-15);
 		$text = $('text > .line-x-axis-title');
 		$text.text('last 15 days');
 		$text.css('color', 'red');
@@ -136,7 +136,7 @@ issuesLineData = {
     title : {
       y: 20
   }
-}
+};
 
 pullsLineData = {
     w: chartWidth,
@@ -154,7 +154,8 @@ pullsLineData = {
     title : {
       y: 9
   }
-}
+};
+
 issuesBarData = {
     w: chartWidth, 
     h: barChartHeight,
@@ -189,12 +190,12 @@ issuesBarData = {
 	var n = [];
 	var m = [];
 	if(standard) {
-		for(var k in temp) {
-		   n.push({'date': temp[k].date, 'issues': temp[k].issues});
+		for(var i in temp) {
+		   n.push({'date': temp[i].date, 'issues': temp[i].issues});
 		    // dataset.push(v[k].issues);
 		}
-		for(var y in temp2) {
-		  m.push({'date': temp2[y].date, 'pulls': temp2[y].pulls});
+		for(var j in temp2) {
+		  m.push({'date': temp2[j].date, 'pulls': temp2[j].pulls});
 		    //dataset.push(pr[y].pulls);
 		}
 	} else {
@@ -210,11 +211,11 @@ issuesBarData = {
 		    //dataset.push(pr[y].pulls);
 		}
 }
-setBarChart(n, issuesBarData)
-setLineChart(n, issuesLineData)
-setBarChart(m, pullsBarData)
-setLineChart(m, pullsLineData)
-}
+setBarChart(n, issuesBarData);
+setLineChart(n, issuesLineData);
+setBarChart(m, pullsBarData);
+setLineChart(m, pullsLineData);
+};
 
 window.addEventListener("resize", repaint);
 
