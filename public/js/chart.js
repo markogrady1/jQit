@@ -16,7 +16,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var chartId = buildStyle.isIssue ? "" : "pulls-";
 	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
 	$viewEle.find('btn').remove();
-	tot = data.reduce(function(sum, d){ return sum + d[buildStyle.dataVal]; }, 0 );
+	tot = _.reduce(data, function(sum, d){ return sum + d[buildStyle.dataVal]; }, 0 );
 	var issuetmp = [];
 	var pulltmp = [];
 	for(var i = 0; i < data.length; i++) {
@@ -473,170 +473,7 @@ var assignListener = function(elem) {
 	});
 };
 
-function issueBarInfo(vData) {
-	var issArr = [], dayArr = [];
-	issArr = vData.map(function(data){ return data.issues; });
-	dayArr = vData.map(function(data){ return data.date; });
-	
-	var mouseX, mouseY;
-	$(document).mousemove(function(e) {
-	    mouseX = e.pageX;
-	    mouseY = e.pageY;
-	}).mouseover(); 
-	var $singleBar = $('.bar');
-	var e;
-	$singleBar.on('mouseover', function() {
-		e = $(this).css('fill');
-		$(this).css('fill', '#3C7BD5');
-	});
 
-	$singleBar.on('click', function() {
-	var title = $(this).attr('value');
-	var arr = title.split(' ');
-	var progress, progressStr;
-	//seperate the date from the ISO format 
-	for (var t in dt) {
-	    var s = dt[t].split('T');
-	    var da = s[0].substring(s[0].length, 8).trim();
-	    var a = s[0].split('-');
-	    if (da == arr[0]) {
-		var selectedBar = s[0];
-		var selectedDay = a[1];
-		if (typeof issArr[t-1] != 'undefined') {
-			progress = issArr[t] - issArr[t-1];
-			if(progress < 0) {
-				progress = progress.toString().replace('-','');
-				progressStr = '<span class=decrease>▼ </span>' + progress + ' since the previous day';
-			} else if (progress === 0) {
-				progressStr = '<span class=same>▶ </span>No change';
-			} else {
-				progressStr = '<span class=increase>▲ </span>'  + progress + ' since the previous day';
-			}
-		} else {
-			progressStr = '';
-		}
-	    }
-	}
-
-	var dayString = getDayFormat(selectedBar);
-	var monthString = getMonthString(selectedDay);
-	var dateArray = splitDashDate(selectedBar);
-	var displayString = dayString + ' ' + dateArray[2] + ' ' +  monthString + ' ' + a[0];
-
-	//arr[0] contains the day of issues amount
-	//arr[1] contains the amount of issues for that day
-	var place = document.getElementById('display-data-info');
-	var ele = document.createElement('div');
-	$(ele).html("<span class=\'displ-wrap\''>Date:    "+displayString + '</span><br><span class=displ-wrap><br>No. of Issues:    ' + arr[1] + '</span><br> <br><span class=red>'+ progressStr + '</span>');
-	$(ele).attr('class', 'display-data');
-	$(ele).css({
-		position: 'absolute',
-		center: mouseY +100,
-		fontSize: '1em',
-		left: mouseX,
-		width: '170px',
-		height: '75px',
-		backgroundColor: '#3a3a3a',
-		color: '#cacaca',
-		border: '2px solid #a3a3a3',
-		innerHTML: arr[0],
-		margin: '10px',
-		padding: '15px',
-		borderRadius: '8px'
-	 }).fadeIn(200);
-	$(place).append(ele);
-	});
-
-	$singleBar.on('mouseleave', function(){
-		$('.display-data').remove();
-		$(this).css('fill', e);
-	});
-pointListener();
-}
-
-function pullBarInfo(vData) {
-	var selectedBar = '';
-	var selectedDay = '';
-	var issArr = [], dayArr = [];
-	issArr = vData.map(function(data){ return data.pulls; });
-	dayArr = vData.map(function(data){ return data.date; });
-
-	var mouseX, mouseY;
-	$(document).mousemove(function(e) {
-	    mouseX = e.pageX;
-	    mouseY = e.pageY;
-	}).mouseover(); 
-
-	var $singleBar = $('.bars');
-	var e;
-	$singleBar.on('mouseover', function() {
-		e = $(this).css('fill');
-		$(this).css('fill', '#3C7BD5');
-
-	});
-
-	$singleBar.on('click', function() {
-	var title = $(this).attr('value');
-	var arr = title.split(' ');
-	var prog, progressStr;
-	//seperate the date from the ISO format 
-	for (var t in pdt) {
-	    var s = pdt[t].split('T');
-	    var da = s[0].substring(s[0].length, 8).trim();
-	    var a = s[0].split('-');
-	    if (da == arr[0]) {
-		selectedBar = s[0];
-		selectedDay = a[1];
-		if (typeof issArr[t-1] != 'undefined') {
-			prog = issArr[t] - issArr[t-1];
-			if(prog < 0) {
-				prog = prog.toString().replace('-','');
-				progressStr = '<span class=decrease>▼ </span>' + prog + ' since the previous day';
-			} else if (prog === 0) {
-				progressStr = '<span class=same>▶ </span>No change';
-			} else {
-				progressStr = '<span class=increase>▲ </span>'  + prog + ' since the previous day';
-			}
-		} else {
-			progressStr = '';
-		}
-	    }
-	}
-
-	var dayString = getDayFormat(selectedBar);
-	var monthString = getMonthString(selectedDay);
-	var dateArray = splitDashDate(selectedBar);
-	var displayString = dayString + ' ' + dateArray[2] + ' ' +  monthString + ' ' + a[0];
-
-	//arr[0] contains the day of pull request amount
-	//arr[1] contains the amount of pull requests for that day
-	var place = document.getElementById('display-data-info');
-	var ele = document.createElement('div');
-	$(ele).html("<span class=\'displ-wrap\''>Date:    "+displayString + '</span><br><span class=displ-wrap><br>Pull Requests:    ' + arr[1] + '</span><br> <br><span class=red>'+ progressStr + '</span>');
-	$(ele).attr('class', 'display-data');
-	$(ele).css({
-		position: 'absolute',
-		center: mouseY +100,
-		fontSize: '1em',
-		left: mouseX,
-		width: '170px',
-		height: '75px',
-		backgroundColor: '#3a3a3a',
-		color: '#cacaca',
-		border: '2px solid #a3a3a3',
-		innerHTML: arr[0],
-		margin: '10px',
-		padding: '15px',
-		borderRadius: '8px'
-	 }).fadeIn(200);
-	$(place).append(ele);
-	});
-
-	$singleBar.on('mouseleave', function(){
-		$('.display-data').remove();
-		$(this).css('fill', e);
-	});
-}
 
 var getMonthString = function(date) {
 	var month;
@@ -692,28 +529,28 @@ var nth = function(data ,cb) {
 	var th = [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,24,25,26,27,28,29,30];
 	var val;
 
-	st.reduce(function(prev, st){
+	_.reduce(st, function(prev, st){
 		if(data == st){
 			val = st + "st";
 			cb(val);
 		}
 	}, 0);
 
-	rd.reduce(function(prev, rd){
+	_.reduce(rd, function(prev, rd){
 		if(data == rd){
 			val = rd + "rd";
 			cb(val);
 		}
 	}, 0);
 
-	nd.reduce(function(prev, nd){
+	_.reduce(nd, function(prev, nd){
 		if(data == nd){
 			val = nd + "nd";
 			cb(val);
 		}
 	}, 0);
 
-	th.reduce(function(prev, th){
+	_.reduce(th, function(prev, th){
 		if(data == th){
 			val = th + "th";
 			cb(val);
