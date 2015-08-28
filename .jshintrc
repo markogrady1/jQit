@@ -1,0 +1,13 @@
+{
+	"boss": true,
+	
+	"eqeqeq": true,
+	"eqnull": true,
+	"expr": true,
+	"immed": true,
+	"noarg": true,
+	"unused": true,
+	"validthis": true,
+	"jquery": true,
+	"node": true
+}

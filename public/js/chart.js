@@ -11,7 +11,7 @@ function setBarChart(data, buildStyle, histObj) {
 var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var tot = 0;
 	var isIss =false;
-	if(buildStyle.dataVal == 'issues')
+	if(buildStyle.dataVal === 'issues')
 		isIss = true;
 	var chartId = buildStyle.isIssue ? "" : "pulls-";
 	$viewEle = buildStyle.isIssue ? $('#changeView2') : $('#changeView');
@@ -21,11 +21,11 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var pulltmp = [];
 
 	_.map(data, function(d){
-		if(buildStyle.dataVal == 'issues')
+		if(buildStyle.dataVal === 'issues')
 			issuetmp.push(d[buildStyle.dataVal]);
 		else 
 			pulltmp.push(d[buildStyle.dataVal]);
-	})
+	});
 
 	if (buildStyle.isIssue) totaller = tot;
 
@@ -70,7 +70,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		 	var prog, check;
 			if(isIss) check = issuetmp[i-1];
 			else check = pulltmp[i-1];
-			if (typeof check != 'undefined') {
+			if (typeof check !== 'undefined') {
 				if(isIss)
 					prog = d[buildStyle.dataVal] - issuetmp[i-1];
 				else
@@ -531,28 +531,28 @@ var nth = function(data ,cb) {
 	var val;
 
 	_.reduce(st, function(prev, st){
-		if(data == st){
+		if(data === st){
 			val = st + "st";
 			cb(val);
 		}
 	}, 0);
 
 	_.reduce(rd, function(prev, rd){
-		if(data == rd){
+		if(data === rd){
 			val = rd + "rd";
 			cb(val);
 		}
 	}, 0);
 
 	_.reduce(nd, function(prev, nd){
-		if(data == nd){
+		if(data === nd){
 			val = nd + "nd";
 			cb(val);
 		}
 	}, 0);
 
 	_.reduce(th, function(prev, th){
-		if(data == th){
+		if(data === th){
 			val = th + "th";
 			cb(val);
 		}
@@ -724,7 +724,7 @@ var setComparisonChart = function(oppData,data , team) {
 				this.append('g')
 				.call(params.gridlines)
 				.classed('gridline', true)
-				.attr('transform', 'translate(0,0)')
+				.attr('transform', 'translate(0,0)');
 				this.append('g')
 			    .classed('x axis', true)
 			    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
@@ -916,4 +916,4 @@ var refreshLegend = function() {
 	$away.remove();
 	$title.remove();
 	$br.remove();
-}
+};

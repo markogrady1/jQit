@@ -37,7 +37,7 @@ var scroller = {
 			$(this).css({
 		 		backgroundColor: "#ff3b30"
 			});
-		})
+		});
 		$(".scroll-top-button").on("mouseout", function(){
 			$(this).css({
 				color: "#fff",
@@ -110,7 +110,7 @@ this.scrolls();
 
 	}
 	
-}
+};	
 $(function(){
  scroller.scrolls(); 
 
