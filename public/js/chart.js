@@ -59,6 +59,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		  .offset([-10, 0])
 		  .html(function(d, i) {
 		  	var date;
+		  	if(buildStyle.dataVal !== 'issues') { dt = pdt; }
 		  	nth(d[buildStyle.dataKey], function(val){
 		  		date = val;
 		  	});
@@ -270,10 +271,10 @@ function setLineChart(data, buildStyle) {
 				  .offset([-10, 0])
 				  .html(function(d, i) {
 				  	var date;
+				  	if(buildStyle.dataVal !== 'issues') { dt = pdt; }
 				  	nth(d[buildStyle.dataKey], function(val) {
 				  		date = val;
 				  	});
-
 				  	var s = dt[i].split('T');
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim();
@@ -531,28 +532,28 @@ var nth = function(data ,cb) {
 	var val;
 
 	_.reduce(st, function(prev, st){
-		if(data === st){
+		if(data == st){
 			val = st + "st";
 			cb(val);
 		}
 	}, 0);
 
 	_.reduce(rd, function(prev, rd){
-		if(data === rd){
+		if(data == rd){
 			val = rd + "rd";
 			cb(val);
 		}
 	}, 0);
 
 	_.reduce(nd, function(prev, nd){
-		if(data === nd){
+		if(data == nd){
 			val = nd + "nd";
 			cb(val);
 		}
 	}, 0);
 
 	_.reduce(th, function(prev, th){
-		if(data === th){
+		if(data == th){
 			val = th + "th";
 			cb(val);
 		}
