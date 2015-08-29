@@ -39,6 +39,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		if(buildStyle.isIssue) {
 			setIssueCompareSelection(histObj);
 			setPullsCompareSelection(histObj);
+			setUpMultipleCompareBtn(histObj);
 			var $bt2 = $('.line-btn');
 			$bt2.remove();
 		var lineBtn = document.createElement('button');
@@ -619,7 +620,7 @@ function setIssueCompareSelection(histObj) {
 function setPullsCompareSelection(histObj) {
 	if($('.compare-pulls-sel').length !== 1){
 	$('.compare-pulls-info').append('<select class=compare-pulls-sel></select>');
-	var $selection = $('.compare-pulls-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
+	var $selection = $('.compare-pulls-sel').css({cursor: 'pointer'}).append('<option>Compare Pulls</option>');
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}));
@@ -666,6 +667,279 @@ var comparePullsRepositories = function(repoName, allHistory) {
 	}
 	setComparisonChart(pullsArr, comparedArray, team, false);
 };
+
+var setComparisonChart = function(oppData,data , team, isIssue) {
+	var dataVal1 = isIssue ? 'issues' : 'pulls';
+	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
+	var y_ax = isIssue ? 'No. of Issues' : 'No. of Pulls';
+	var $repo = $('.current-repo').text();
+	var toolTipValue = isIssue ? 'Open Issues' : 'Pull Requests';
+	var $comparison = $('#compare-line-chart');
+	$comparison.remove();
+	var buildStyle = {
+			w: chartWidth,
+			h: lineChartHeight,
+			top: 48,
+    		bottom: 72,
+		    left: 60,
+		    right: 40,
+		    padding: 20
+	};
+	//tool tip config
+	var tip = d3.tip()
+				  .attr('class', 'd3-tip')
+				  .offset([-10, 0])
+				  .html(function(d, i) {
+				  	var date;
+				  	nth(d.date, function(val) {
+				  		date = val;
+				  	});
+				  	var s = dt[i].split('T');
+				  	var dateBits = s[0].split('-');
+	    			var da = s[0].substring(s[0].length, 8).trim();
+					var monthStr = getMonthString(dateBits[1]);
+					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1>▶</span> " + team + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1>▶</span> " + team + ": " + d[dataVal1] + "</span>";
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>"+ toolTipValue+"</span><span class=line-tip><br><br>" + str;
+				  });
+	
+    var width = buildStyle.w - buildStyle.left - buildStyle.right;
+	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
+	var svg = d3.select('.compareChart').append('svg')
+				.attr('id', 'compare-line-chart')
+				.attr('height', buildStyle.h + buildStyle.padding)
+				.attr('width', buildStyle.w + buildStyle.padding)
+				.style('padding-top', 30);
+	svg.call(tip);
+	var chart = svg.append('g')
+					.classed('display', true)
+					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')');
+		chart.append("text")
+				.classed('issues-title', true)
+		        .attr("x", (width / 2))             
+		        .attr("y", 0 - (buildStyle.top / 2) - 20)
+		        .attr("text-anchor", "middle")
+		        .text($repo + "  - vs -  " + team);
+		        appendLegend($repo, team);
+		var y = d3.scale.linear()
+				.domain([0,d3.max(data, function(d) {
+					return Math.max(d[dataVal1], d[dataVal2]);
+				})])
+				.range([height, 0]);
+		var x = d3.scale.ordinal()
+				.domain(data.map(function(entry) {
+				return entry.date;
+				}))
+				.rangeBands([buildStyle.padding, width - buildStyle.padding]);
+
+
+		var xAxis = d3.svg.axis()
+						.scale(x)
+						.orient('bottom');
+		var frm = d3.format("0d");
+		var yAxis = d3.svg.axis()
+				.scale(y)
+				.tickFormat(frm)
+				.orient('left');
+		var line = d3.svg.line()
+					.x(function(d){
+						return x(d.date);
+					})
+					.y(function(d){
+						return y(d[dataVal1]);
+					})
+					.interpolate('cardinal');
+		var line2 = d3.svg.line()
+					.x(function(d){
+						return x(d.date);
+					})
+					.y(function(d){
+						return y(d[dataVal2]);
+					})
+					.interpolate('cardinal');
+		var yGridlines = d3.svg.axis()
+					.scale(y)
+					.tickSize(-width, 0, 0)
+					.tickFormat('')
+					.orient('left');
+	function plot(params) {
+				this.append('g')
+				.call(params.gridlines)
+				.classed('gridline', true)
+				.attr('transform', 'translate(0,0)');
+				this.append('g')
+			    .classed('x axis', true)
+			    .attr('transform', 'translate(' + (-16 )+ ',' + (height +10)+ ')') //added -16 here to move x-axis left slightly
+			    .call(params.axis.x)
+				.selectAll('text')
+				    .style('text-anchor', 'end')
+				    .attr('dx', -8)
+				    .attr('dy', 8)
+				    .attr('transform', 'translate(0,0) rotate(-45)');
+		this.append('g')
+		    .classed('y axis', true)
+		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
+		    .call(params.axis.y);
+		this.select('.y.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
+			.text(y_ax);
+		this.select('.x.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.classed('line-x-axis-title', true)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(' + width / 2 + ', 50)')
+			.text('Last 30 days');
+			//enter
+			this.selectAll('.trendline1')
+				.data([params.data])
+				.enter()
+				.append('path')
+				.classed('trendline1', true);
+			this.selectAll('.point')
+				.data(params.data)
+				.enter()
+				.append('circle')
+				.classed('point', true)
+				.attr('r', 3)
+				.attr('value', function(d){
+					return d.date + " " + d[dataVal1];
+				})
+				.on('mouseover', tip.show)
+      				.on('mouseout', tip.hide);
+			//update
+			this.selectAll('.trendline1')
+				.attr('d', function(d){
+					return line(d);
+				});
+			this.selectAll('.point')
+				.attr('cx', function(d, i) {
+					return x(d.date);
+				})
+				.attr('cy', function(d, i) {
+					return  y(d[dataVal1]);
+				});
+			//exit
+			this.selectAll('.trendline1')
+				.data(params.data)
+				.exit()
+				.remove();
+			this.selectAll('.point')
+				.data(params.data)
+				.exit()
+				.remove();
+
+			this.selectAll('.trendline2')
+				.data([params.data])
+				.enter()
+				.append('path')
+				.classed('trendline2', true);
+			this.selectAll('.point2')
+				.data(params.data)
+				.enter()
+				.append('circle')
+				.classed('point2', true)
+				.attr('r', 3)
+				.attr('value', function(d){
+					return d.date + " " + d[dataVal2];
+				})
+				.on('mouseover', tip.show)
+      				.on('mouseout', tip.hide);
+			//update
+			this.selectAll('.trendline2')
+				.attr('d', function(d){
+					return line2(d);
+				});
+			this.selectAll('.point2')
+				.attr('cx', function(d, i) {
+					return x(d.date);
+				})
+				.attr('cy', function(d, i) {
+					return  y(d[dataVal2]);
+				});
+
+			//exit
+			this.selectAll('.trendline2')
+				.data(params.data)
+				.exit()
+				.remove();
+			this.selectAll('.point2')
+				.data(params.data)
+				.exit()
+				.remove();
+
+		}
+		plot.call(chart,{
+			data: data,
+			data2: oppData,
+			axis: {
+				x: xAxis,
+				y: yAxis
+			}, 
+			gridlines: yGridlines
+		});
+
+  pointListener();
+};
+
+var setUpMultipleCompareBtn = function(histObj) {
+	$('.multi-comparison').append('<button class=trigger-multi-compare>Compare Multiple Repos</button><div class=check-append></div>');
+	var $btn = $('.trigger-multi-compare');
+	$btn.on('click', function() {
+		$btn.remove();
+		$('.multi-comparison').prepend('<button class=go-compare>GO</button>');
+		setMultiComparisonCheck(histObj);
+		var $go = $('.go-compare');
+		$go.on('click', function() {
+			getCheckValues(histObj);
+		})
+
+	})
+}
+var setMultiComparisonCheck = function(histObj) {
+	var data = histObj.allRepoIssueHistory;
+	var i = 1;
+	if($('.multi-compare').length === 0){
+		_.map(data, function(val){
+			$('.check-append').append('<input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label for=compare'+(i++)+ '>'+ val[0].team+'</label><br>');
+		})
+	// $('.multi-comparison').append('<input type="checkbox" name="issue-multi-compare" value="Bike">I have a bike<br>');
+	// $('.multi-comparison').append('<input type="checkbox" name="issue-multi-compare" value="Bike">I have a bike<br>');
+	// var $selection = $('.compare-issues-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
+	// $selection.append(histObj.allRepoName.map(function(data){
+	// 	return '<option>' + data.name + '</option>';
+	// }));
+	// $selection.on('change', function(){
+	// 	var chosenVal = $(this).val();
+	// 	if(chosenVal !== 'Compare Issues')
+	// 		compareRepositories(chosenVal, histObj.allRepoIssueHistory);
+	// });
+	}
+}
+
+var getCheckValues = function(histObj) {
+	var obj = histObj.allRepoIssueHistory;
+	console.log(obj)
+	var checkedRepoData = [];
+	var checkedVals = $('.multi-compare:checkbox:checked').map(function() {
+    return this.value;
+	}).get();
+	_.map(checkedVals, function(name) {
+		for(var i = 0; i < obj.length; i++) {
+			
+			if(name === obj[i][0].team) {
+				checkedRepoData.push(obj[i]);
+			}
+		}
+	});
+	console.log(checkedRepoData)
+}
+
+
 
 var setComparisonChart = function(oppData,data , team, isIssue) {
 	var dataVal1 = isIssue ? 'issues' : 'pulls';

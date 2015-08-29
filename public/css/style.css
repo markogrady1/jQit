@@ -127,9 +127,21 @@ body {
 	color: #66D9EF;
 }
 
-.btn , .line-btn {
+.btn , .line-btn , .go-compare{
 	margin: 20px 0 0 20px;
 	width: 150px;
+	height: 30px;
+	border-radius: 5px;
+	background-color: #3999dd;
+	color: #fff;
+	border: 0;
+	font-size: 1em;
+	outline: none;
+}
+
+.trigger-multi-compare {
+	margin: 20px 0 0 20px;
+	width: 250px;
 	height: 30px;
 	border-radius: 5px;
 	background-color: #3999dd;
