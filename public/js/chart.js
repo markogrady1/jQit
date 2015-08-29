@@ -923,7 +923,8 @@ var setMultiComparisonCheck = function(histObj) {
 
 var getCheckValues = function(histObj) {
 	var obj = histObj.allRepoIssueHistory;
-	console.log(obj)
+	var currentRepo = $('.current-repo').text();
+	var teams = [];
 	var checkedRepoData = [];
 	var checkedVals = $('.multi-compare:checkbox:checked').map(function() {
     return this.value;
@@ -936,14 +937,33 @@ var getCheckValues = function(histObj) {
 			}
 		}
 	});
-	console.log(checkedRepoData)
+
+var comparedArray = [];
+	var team, multicomparedArray = [];
+	for(var i = 0; i < checkedRepoData.length; i++) {
+	var nameOfRepo = checkedRepoData[i][0].team;
+
+			
+var j = 0;
+var dd = checkedRepoData[i].map(function(val) {
+	var dayOfMonth = stripDate('day');
+	var dom = dayOfMonth(val.rawDate);
+	return  {'date': dom, 'team': val.team, 'issues': val.issues, 'issues2': issuesArr[j++].issues };
+})
+
+		teams.push(dd)
+		
+	}
+setComparisonChart2(pullsArr, teams, team, true);
+// console.log(teams)
 }
 
 
 
-var setComparisonChart = function(oppData,data , team, isIssue) {
+var setComparisonChart2 = function(oppData,data , team, isIssue) {
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
+	var team = 'unknown';
 	var y_ax = isIssue ? 'No. of Issues' : 'No. of Pulls';
 	var $repo = $('.current-repo').text();
 	var toolTipValue = isIssue ? 'Open Issues' : 'Pull Requests';
@@ -951,7 +971,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 	$comparison.remove();
 	var buildStyle = {
 			w: chartWidth,
-			h: lineChartHeight,
+			h: 500,
 			top: 48,
     		bottom: 72,
 		    left: 60,
@@ -983,6 +1003,10 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 				.attr('width', buildStyle.w + buildStyle.padding)
 				.style('padding-top', 30);
 	svg.call(tip);
+
+
+	for (var m = 0; m < data.length; m++) {
+	
 	var chart = svg.append('g')
 					.classed('display', true)
 					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')');
@@ -994,12 +1018,13 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 		        .text($repo + "  - vs -  " + team);
 		        appendLegend($repo, team);
 		var y = d3.scale.linear()
-				.domain([0,d3.max(data, function(d) {
+				.domain([0,d3.max(data[m], function(d) {
+					console.log(d)
 					return Math.max(d[dataVal1], d[dataVal2]);
 				})])
 				.range([height, 0]);
 		var x = d3.scale.ordinal()
-				.domain(data.map(function(entry) {
+				.domain(data[m].map(function(entry) {
 				return entry.date;
 				}))
 				.rangeBands([buildStyle.padding, width - buildStyle.padding]);
@@ -1067,7 +1092,16 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 			.style('text-anchor', 'middle')
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
 			.text('Last 30 days');
-			//enter
+			//try to remove previous data
+			//
+			// this.selectAll('.trendline1')
+			// 	.data(0)
+			// 	.exit()
+			// 	.remove();
+			// this.selectAll('.point')
+			// 	.data(0)
+			// 	.exit()
+			// 	.remove();
 			this.selectAll('.trendline1')
 				.data([params.data])
 				.enter()
@@ -1147,7 +1181,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 
 		}
 		plot.call(chart,{
-			data: data,
+			data: data[m],
 			data2: oppData,
 			axis: {
 				x: xAxis,
@@ -1155,7 +1189,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 			}, 
 			gridlines: yGridlines
 		});
-
+}
   pointListener();
 };
 
