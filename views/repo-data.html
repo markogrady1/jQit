@@ -12,7 +12,8 @@
          //within script tags it can then be used anyhow you wish 
          //not ch is an array or json value set
          
-         var allHistory = <%- JSON.stringify(allRepoHistory) %>
+         var allIssuesHistory = <%- JSON.stringify(allRepoHistory) %>
+         var allPullsHistory = <%- JSON.stringify(allRepoPullsHistory) %>
          var repoData = <%- JSON.stringify(repoData) %>
          var dt = <%- JSON.stringify( fullDate) %>
          var pdt = <%- JSON.stringify( fullPullDate) %>
@@ -38,8 +39,9 @@
       <div id=changeView2></div>
       <div id=display-data-info></div>
       <div class=details></div>
-      <div class=compare-info></div>
+      <div class=compare-issues-info></div>
       <div class=comparison-legend></div>
+      <div class=compare-pulls-info></div>
       <div class=compareChart></div>
       <div id=chartArea></div>
       <div id=chartArea2></div>
@@ -131,7 +133,8 @@
              dataVal: "pulls"
            };
          historyObj = {
-           allRepoHistory: allHistory,
+           allRepoIssueHistory: allIssuesHistory,
+           allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData
          }
          setBarChart(issuesArr, issuesBarData, historyObj)

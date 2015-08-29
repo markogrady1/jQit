@@ -37,7 +37,8 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 
 	if (tot !== 0) {
 		if(buildStyle.isIssue) {
-			setCompareSelection(histObj);
+			setIssueCompareSelection(histObj);
+			setPullsCompareSelection(histObj);
 			var $bt2 = $('.line-btn');
 			$bt2.remove();
 		var lineBtn = document.createElement('button');
@@ -596,17 +597,36 @@ function assignPullButtons(){
 	}
 }
 
-function setCompareSelection(histObj) {
-	if($('.compare-repo-sel').length !== 1){
-	$('.compare-info').append('<select class=compare-repo-sel></select>');
-	var $selection = $('.compare-repo-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
+function setIssueCompareSelection(histObj) {
+	if($('.compare-issues-sel').length !== 1){
+	$('.compare-issues-info').append('<select class=compare-issues-sel></select>');
+	var $selection = $('.compare-issues-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}));
 	$selection.on('change', function(){
 		var chosenVal = $(this).val();
 		if(chosenVal !== 'Compare Issues')
-			compareRepositories(chosenVal, histObj.allRepoHistory);
+			compareRepositories(chosenVal, histObj.allRepoIssueHistory);
+	});
+}
+	//this construct is for a jqueryui style selectmenu
+	//$(function() {
+ 	//	$selection.selectmenu();
+ 	//});
+}
+
+function setPullsCompareSelection(histObj) {
+	if($('.compare-pulls-sel').length !== 1){
+	$('.compare-pulls-info').append('<select class=compare-pulls-sel></select>');
+	var $selection = $('.compare-pulls-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
+	$selection.append(histObj.allRepoName.map(function(data){
+		return '<option>' + data.name + '</option>';
+	}));
+	$selection.on('change', function(){
+		var chosenVal = $(this).val();
+		if(chosenVal !== 'Compare Pulls')
+			comparePullsRepositories(chosenVal, histObj.allRepoPullsHistory);
 	});
 }
 	//this construct is for a jqueryui style selectmenu
@@ -628,12 +648,31 @@ var compareRepositories = function(repoName, allHistory) {
 			}
 		}
 	}
-	setComparisonChart(issuesArr, comparedArray, team);
+	setComparisonChart(issuesArr, comparedArray, team, true);
 };
 
-var setComparisonChart = function(oppData,data , team) {
+var comparePullsRepositories = function(repoName, allHistory) {
+	var comparedArray = [];
+	var team;
+	for(var i = 0; i < allPullsHistory.length; i++) {
+		if(repoName === allPullsHistory[i][0].team){
+			for(var j = 0; j < allPullsHistory[i].length; j++){
+				var dayOfMonth = stripDate('day');
+				var dom = dayOfMonth(allPullsHistory[i][j].rawDate);
+				team = allPullsHistory[i][j].team;
+				comparedArray.push({'date': dom, 'pulls': allPullsHistory[i][j].pulls, 'pulls2': pullsArr[j].pulls});
+			}
+		}
+	}
+	setComparisonChart(pullsArr, comparedArray, team, false);
+};
+
+var setComparisonChart = function(oppData,data , team, isIssue) {
+	var dataVal1 = isIssue ? 'issues' : 'pulls';
+	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
+	var y_ax = isIssue ? 'No. of Issues' : 'No. of Pulls';
 	var $repo = $('.current-repo').text();
-	var toolTipValue = "Open Issues";
+	var toolTipValue = isIssue ? 'Open Issues' : 'Pull Requests';
 	var $comparison = $('#compare-line-chart');
 	$comparison.remove();
 	var buildStyle = {
@@ -658,8 +697,8 @@ var setComparisonChart = function(oppData,data , team) {
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim();
 					var monthStr = getMonthString(dateBits[1]);
-					var str = (d.issues2 <= d.issues) ? "<span class=team1>▶</span> " + team + ": " + d.issues + "</span><br><br> <span class=line-tip><span class=team2>▶</span> " +  $repo + ": " + d.issues2 + "</span>":"<span class=team2>▶</span> " +  $repo + ": " + d.issues2 + "</span><br><br> <span class=line-tip><span class=team1>▶</span> " + team + ": " + d.issues + "</span>";
-				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>Open Issues</span><span class=line-tip><br><br>" + str;
+					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1>▶</span> " + team + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1>▶</span> " + team + ": " + d[dataVal1] + "</span>";
+				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>"+ toolTipValue+"</span><span class=line-tip><br><br>" + str;
 				  });
 	
     var width = buildStyle.w - buildStyle.left - buildStyle.right;
@@ -682,7 +721,7 @@ var setComparisonChart = function(oppData,data , team) {
 		        appendLegend($repo, team);
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data, function(d) {
-					return Math.max(d.issues, d.issues2);
+					return Math.max(d[dataVal1], d[dataVal2]);
 				})])
 				.range([height, 0]);
 		var x = d3.scale.ordinal()
@@ -705,7 +744,7 @@ var setComparisonChart = function(oppData,data , team) {
 						return x(d.date);
 					})
 					.y(function(d){
-						return y(d.issues);
+						return y(d[dataVal1]);
 					})
 					.interpolate('cardinal');
 		var line2 = d3.svg.line()
@@ -713,7 +752,7 @@ var setComparisonChart = function(oppData,data , team) {
 						return x(d.date);
 					})
 					.y(function(d){
-						return y(d.issues2);
+						return y(d[dataVal2]);
 					})
 					.interpolate('cardinal');
 		var yGridlines = d3.svg.axis()
@@ -745,7 +784,7 @@ var setComparisonChart = function(oppData,data , team) {
 			.attr('y', 0)
 			.style('text-anchor', 'middle')
 			.attr('transform', 'translate(-40, ' + height / 2 +') rotate(-90)')
-			.text('No. of issues ');
+			.text(y_ax);
 		this.select('.x.axis')
 			.append('text')
 			.attr('x', 0)
@@ -767,7 +806,7 @@ var setComparisonChart = function(oppData,data , team) {
 				.classed('point', true)
 				.attr('r', 3)
 				.attr('value', function(d){
-					return d.date + " " + d.issues;
+					return d.date + " " + d[dataVal1];
 				})
 				.on('mouseover', tip.show)
       				.on('mouseout', tip.hide);
@@ -781,7 +820,7 @@ var setComparisonChart = function(oppData,data , team) {
 					return x(d.date);
 				})
 				.attr('cy', function(d, i) {
-					return  y(d.issues);
+					return  y(d[dataVal1]);
 				});
 			//exit
 			this.selectAll('.trendline1')
@@ -805,7 +844,7 @@ var setComparisonChart = function(oppData,data , team) {
 				.classed('point2', true)
 				.attr('r', 3)
 				.attr('value', function(d){
-					return d.date + " " + d.issues2;
+					return d.date + " " + d[dataVal2];
 				})
 				.on('mouseover', tip.show)
       				.on('mouseout', tip.hide);
@@ -819,7 +858,7 @@ var setComparisonChart = function(oppData,data , team) {
 					return x(d.date);
 				})
 				.attr('cy', function(d, i) {
-					return  y(d.issues2);
+					return  y(d[dataVal2]);
 				});
 
 			//exit
