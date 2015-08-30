@@ -1092,16 +1092,7 @@ var setComparisonChart2 = function(oppData,data , team, isIssue) {
 			.style('text-anchor', 'middle')
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
 			.text('Last 30 days');
-			//try to remove previous data
-			//
-			// this.selectAll('.trendline1')
-			// 	.data(0)
-			// 	.exit()
-			// 	.remove();
-			// this.selectAll('.point')
-			// 	.data(0)
-			// 	.exit()
-			// 	.remove();
+		//set trendline 1	
 			this.selectAll('.trendline1')
 				.data([params.data])
 				.enter()
