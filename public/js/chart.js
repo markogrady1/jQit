@@ -605,6 +605,7 @@ function setIssueCompareSelection(histObj) {
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}));
+
 	$selection.on('change', function(){
 		var chosenVal = $(this).val();
 		if(chosenVal !== 'Compare Issues')
@@ -624,6 +625,7 @@ function setPullsCompareSelection(histObj) {
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}));
+
 	$selection.on('change', function(){
 		var chosenVal = $(this).val();
 		if(chosenVal !== 'Compare Pulls')
@@ -639,6 +641,7 @@ function setPullsCompareSelection(histObj) {
 var compareRepositories = function(repoName, allHistory) {
 	var comparedArray = [];
 	var team;
+
 	for(var i = 0; i < allHistory.length; i++) {
 		if(repoName === allHistory[i][0].team){
 			for(var j = 0; j < allHistory[i].length; j++){
@@ -923,6 +926,15 @@ var setMultiComparisonCheck = function(histObj) {
 
 var getCheckValues = function(histObj) {
 	var obj = histObj.allRepoIssueHistory;
+	var maximum = 0;
+	_.map(obj, function(data) {
+		_.map(data, function(value) {
+			if(parseInt(value.issues) > maximum) {
+				maximum = value.issues;
+			}
+		});
+	});
+
 	var currentRepo = $('.current-repo').text();
 	var teams = [];
 	var checkedRepoData = [];
@@ -954,12 +966,14 @@ var dd = checkedRepoData[i].map(function(val) {
 		teams.push(dd)
 		
 	}
-setComparisonChart2(pullsArr, teams, team, true);
+setComparisonChart2(pullsArr, teams, team, maximum, true);
 }
 
 var maxCache = 0;;
 
-var setComparisonChart2 = function(oppData,data , team, isIssue) {
+var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
+
+	
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
 	var team = 'unknown';
@@ -1021,7 +1035,7 @@ var setComparisonChart2 = function(oppData,data , team, isIssue) {
 					var max = Math.max(d[dataVal1], d[dataVal2]);
 					if(max > maxCache)
 						maxCache = max;
-					return maxCache;
+					return maximum;
 				})])
 				.range([height, 0]);
 		var x = d3.scale.ordinal()
@@ -1096,6 +1110,7 @@ var setComparisonChart2 = function(oppData,data , team, isIssue) {
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
 			.text('Last 30 days');
 		//set trendline 1	
+		
 			this.selectAll('.trendline1')
 				.data([params.data])
 				.enter()
