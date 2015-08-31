@@ -1004,7 +1004,7 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim();
 					var monthStr = getMonthString(dateBits[1]);
-					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1>▶</span> " + team + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1>▶</span> " + team + ": " + d[dataVal1] + "</span>";
+					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span>";
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>"+ toolTipValue+"</span><span class=line-tip><br><br>" + str;
 				  });
 	
@@ -1111,11 +1111,11 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 			.text('Last 30 days');
 		//set trendline 1	
 		
-			this.selectAll('.trendline1')
+			this.selectAll('.trendline1compare')
 				.data([params.data])
 				.enter()
 				.append('path')
-				.classed('trendline1', true);
+				.classed('trendline1compare', true);
 			this.selectAll('.point')
 				.data(params.data)
 				.enter()
@@ -1123,12 +1123,12 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 				.classed('point', true)
 				.attr('r', 3)
 				.attr('value', function(d){
-					return d.date + " " + d[dataVal1];
+					return d.date + " " + d[dataVal1] + " " +d['team'];
 				})
 				.on('mouseover', tip.show)
       				.on('mouseout', tip.hide);
 			//update
-			this.selectAll('.trendline1')
+			this.selectAll('.trendline1compare')
 				.attr('d', function(d){
 					return line(d);
 				});
@@ -1140,7 +1140,7 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 					return  y(d[dataVal1]);
 				});
 			//exit
-			this.selectAll('.trendline1')
+			this.selectAll('.trendline1compare')
 				.data(params.data)
 				.exit()
 				.remove();
@@ -1149,11 +1149,11 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 				.exit()
 				.remove();
 
-			this.selectAll('.trendline2')
+			this.selectAll('.trendline2compare')
 				.data([params.data])
 				.enter()
 				.append('path')
-				.classed('trendline2', true);
+				.classed('trendline2compare', true);
 			this.selectAll('.point2')
 				.data(params.data)
 				.enter()
@@ -1161,12 +1161,12 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 				.classed('point2', true)
 				.attr('r', 3)
 				.attr('value', function(d){
-					return d.date + " " + d[dataVal2];
+					return d.date + " " + d[dataVal2] + " " +d['team'];
 				})
 				.on('mouseover', tip.show)
       				.on('mouseout', tip.hide);
 			//update
-			this.selectAll('.trendline2')
+			this.selectAll('.trendline2compare')
 				.attr('d', function(d){
 					return line2(d);
 				});
@@ -1179,7 +1179,7 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 				});
 
 			//exit
-			this.selectAll('.trendline2')
+			this.selectAll('.trendline2compare')
 				.data(params.data)
 				.exit()
 				.remove();

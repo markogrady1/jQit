@@ -100,9 +100,8 @@ body {
 
 .gridline path,
 .gridline line {
-	fill: none;
-	stroke: #fff;
-	shape-rendering: chrispEdges;
+	stroke: #eee;
+    opacity: 0.4;
 }
 
 .status {
@@ -185,6 +184,18 @@ body {
 	stroke: #5087af;
 	stroke-width: 4px;
 	/*stroke-dasharray: 0.7;*/
+}
+
+.trendline1compare {
+	fill: none;
+	stroke: #C81A4E;
+	stroke-width: 1.5px;
+}
+
+.trendline2compare {
+	fill: none;
+	stroke: #5087af;
+	stroke-width: 1.5px;
 }
 
 .team1 {
