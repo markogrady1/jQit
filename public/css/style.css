@@ -138,6 +138,7 @@ body {
 	outline: none;
 }
 
+
 .trigger-multi-compare {
 	margin: 20px 0 0 20px;
 	width: 250px;
@@ -150,7 +151,7 @@ body {
 	outline: none;
 }
 
-.btn:hover, .line-btn:hover {
+.btn:hover, .line-btn:hover, .go-compare:hover, .trigger-multi-compare:hover{
 	background-color: #4a84b0;
 	cursor: pointer;
 }
@@ -176,31 +177,35 @@ body {
 	fill: none;
 	stroke: #C81A4E;
 	stroke-width: 4px;
-	/*stroke-dasharray: 0.7;*/
 }
 
 .trendline2 {
 	fill: none;
 	stroke: #5087af;
 	stroke-width: 4px;
-	/*stroke-dasharray: 0.7;*/
 }
 
-.trendline1compare {
-	fill: none;
-	stroke: #C81A4E;
-	stroke-width: 1.5px;
-}
-
+/*home team for compare chart*/
 .trendline2compare {
 	fill: none;
-	stroke: #5087af;
+	stroke: #C81A4E	;
 	stroke-width: 1.5px;
+}
+
+/*away team for tooltip*/
+.team1compare {
+	color:#90B5D2;
+}
+
+/*home team for tooltip*/
+.team2compare {
+	color:#C81A4E;
 }
 
 .team1 {
-	color:#EA594E;
+	color:#C81A4E;
 }
+/*home team for comparison*/
 .team2 {
 	color:#90B5D2;
 

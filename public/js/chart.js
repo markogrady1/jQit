@@ -899,32 +899,24 @@ var setUpMultipleCompareBtn = function(histObj) {
 		var $go = $('.go-compare');
 		$go.on('click', function() {
 			getCheckValues(histObj);
-		})
+		});
 
-	})
-}
+	});
+};
+
 var setMultiComparisonCheck = function(histObj) {
 	var data = histObj.allRepoIssueHistory;
 	var i = 1;
 	if($('.multi-compare').length === 0){
 		_.map(data, function(val){
 			$('.check-append').append('<input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label class=multi-compare-text for=compare'+(i++)+ '>'+ val[0].team+'</label><br>');
-		})
-	// $('.multi-comparison').append('<input type="checkbox" name="issue-multi-compare" value="Bike">I have a bike<br>');
-	// $('.multi-comparison').append('<input type="checkbox" name="issue-multi-compare" value="Bike">I have a bike<br>');
-	// var $selection = $('.compare-issues-sel').css({cursor: 'pointer'}).append('<option>Compare Issues</option>');
-	// $selection.append(histObj.allRepoName.map(function(data){
-	// 	return '<option>' + data.name + '</option>';
-	// }));
-	// $selection.on('change', function(){
-	// 	var chosenVal = $(this).val();
-	// 	if(chosenVal !== 'Compare Issues')
-	// 		compareRepositories(chosenVal, histObj.allRepoIssueHistory);
-	// });
+		});
 	}
-}
+};
 
 var getCheckValues = function(histObj) {
+	var colors = [];
+	var color;
 	var obj = histObj.allRepoIssueHistory;
 	var maximum = 0;
 	_.map(obj, function(data) {
@@ -943,36 +935,36 @@ var getCheckValues = function(histObj) {
 	}).get();
 	_.map(checkedVals, function(name) {
 		for(var i = 0; i < obj.length; i++) {
-			
 			if(name === obj[i][0].team) {
 				checkedRepoData.push(obj[i]);
 			}
 		}
 	});
 
-var comparedArray = [];
+	var comparedArray = [];
 	var team, multicomparedArray = [];
 	for(var i = 0; i < checkedRepoData.length; i++) {
-	var nameOfRepo = checkedRepoData[i][0].team;
-
-			
-var j = 0;
-var dd = checkedRepoData[i].map(function(val) {
-	var dayOfMonth = stripDate('day');
-	var dom = dayOfMonth(val.rawDate);
-	return  {'date': dom, 'team': val.team, 'issues': val.issues, 'issues2': issuesArr[j++].issues };
-})
-
-		teams.push(dd)
-		
+		var nameOfRepo = checkedRepoData[i][0].team;
+		var j = 0;
+		if(i === 0) {
+			color = Math.floor(10 * 100 * 17215).toString(16)
+		} else {
+			color = Math.floor(i * 100 * 17215).toString(16)
+		}	
+		color = color.substring(0,6)
+		colors.push(color);
+		var dd = checkedRepoData[i].map(function(val) {
+			var dayOfMonth = stripDate('day');
+			var dom = dayOfMonth(val.rawDate);
+			return  {'date': dom, 'team': val.team, 'issues': val.issues, 'issues2': issuesArr[j++].issues, 'designatedColor': colors[i]};
+		})
+			teams.push(dd)
 	}
-setComparisonChart2(pullsArr, teams, team, maximum, true);
+	setComparisonChart2(pullsArr, teams, team, maximum, true);
 }
 
-var maxCache = 0;;
-
-var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
-
+var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
+console.log('in compare')
 	
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
@@ -1000,11 +992,13 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 				  	nth(d.date, function(val) {
 				  		date = val;
 				  	});
+				  	
 				  	var s = dt[i].split('T');
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim();
 					var monthStr = getMonthString(dateBits[1]);
-					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span>";
+					console.log(i)
+					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1compare style=\'color:"+d['designatedColor']+"\'>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2compare>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2compare>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1compare style=\'color:"+d['designatedColor']+"\'>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span>";
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>"+ toolTipValue+"</span><span class=line-tip><br><br>" + str;
 				  });
 	
@@ -1032,9 +1026,6 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 		        appendLegend($repo, team);
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data[m], function(d) {
-					var max = Math.max(d[dataVal1], d[dataVal2]);
-					if(max > maxCache)
-						maxCache = max;
 					return maximum;
 				})])
 				.range([height, 0]);
@@ -1111,24 +1102,25 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 			.text('Last 30 days');
 		//set trendline 1	
 		
-			this.selectAll('.trendline1compare')
+			this.selectAll('.trendline1compare' + m)
 				.data([params.data])
 				.enter()
 				.append('path')
-				.classed('trendline1compare', true);
+				.classed('trendline1compare'+ m, true);
 			this.selectAll('.point')
 				.data(params.data)
 				.enter()
 				.append('circle')
 				.classed('point', true)
 				.attr('r', 3)
-				.attr('value', function(d){
-					return d.date + " " + d[dataVal1] + " " +d['team'];
+				.attr('value', function(d, i){
+					setTrendLineColor(m, d['designatedColor']);
+					return d.date + " " + d[dataVal1] + " " +d['team'] + " " + m;
 				})
 				.on('mouseover', tip.show)
       				.on('mouseout', tip.hide);
 			//update
-			this.selectAll('.trendline1compare')
+			this.selectAll('.trendline1compare'+ m)
 				.attr('d', function(d){
 					return line(d);
 				});
@@ -1140,7 +1132,7 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 					return  y(d[dataVal1]);
 				});
 			//exit
-			this.selectAll('.trendline1compare')
+			this.selectAll('.trendline1compare'+ m)
 				.data(params.data)
 				.exit()
 				.remove();
@@ -1187,7 +1179,6 @@ var setComparisonChart2 = function(oppData,data , team, maximum, isIssue) {
 				.data(params.data)
 				.exit()
 				.remove();
-
 		}
 		plot.call(chart,{
 			data: data[m],
@@ -1274,3 +1265,14 @@ var refreshLegend = function() {
 	$title.remove();
 	$br.remove();
 };
+
+function setTrendLineColor(num, colors) {
+	var color = colors;
+	var $elm = $('.trendline1compare' + num);
+	$elm.attr('id', color)
+	$elm.css({
+		fill: 'none',
+		stroke: '#' + color,
+		strokeWidth: '1.5px',
+	})
+}
