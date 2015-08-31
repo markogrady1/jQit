@@ -955,10 +955,9 @@ var dd = checkedRepoData[i].map(function(val) {
 		
 	}
 setComparisonChart2(pullsArr, teams, team, true);
-// console.log(teams)
 }
 
-
+var maxCache = 0;;
 
 var setComparisonChart2 = function(oppData,data , team, isIssue) {
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
@@ -1019,8 +1018,10 @@ var setComparisonChart2 = function(oppData,data , team, isIssue) {
 		        appendLegend($repo, team);
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data[m], function(d) {
-					console.log(d)
-					return Math.max(d[dataVal1], d[dataVal2]);
+					var max = Math.max(d[dataVal1], d[dataVal2]);
+					if(max > maxCache)
+						maxCache = max;
+					return maxCache;
 				})])
 				.range([height, 0]);
 		var x = d3.scale.ordinal()
@@ -1059,6 +1060,8 @@ var setComparisonChart2 = function(oppData,data , team, isIssue) {
 					.tickSize(-width, 0, 0)
 					.tickFormat('')
 					.orient('left');
+	var $tix = $('.ticks')
+	$tix.remove();
 	function plot(params) {
 				this.append('g')
 				.call(params.gridlines)
@@ -1074,7 +1077,7 @@ var setComparisonChart2 = function(oppData,data , team, isIssue) {
 				    .attr('dy', 8)
 				    .attr('transform', 'translate(0,0) rotate(-45)');
 		this.append('g')
-		    .classed('y axis', true)
+		    .classed('y axis ticks', true)
 		    .attr('transform', 'translate(-10,0)')//added -10 here to move y-axis left slightly
 		    .call(params.axis.y);
 		this.select('.y.axis')
