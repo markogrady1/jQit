@@ -316,4 +316,10 @@ td, th {
 	shape-rendering: crispEdges;
 }
 
+.multi-compare-text {
+	cursor: pointer;
+}
 
+.multi-compare {
+	cursor: pointer;
+}

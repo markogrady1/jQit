@@ -908,7 +908,7 @@ var setMultiComparisonCheck = function(histObj) {
 	var i = 1;
 	if($('.multi-compare').length === 0){
 		_.map(data, function(val){
-			$('.check-append').append('<input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label for=compare'+(i++)+ '>'+ val[0].team+'</label><br>');
+			$('.check-append').append('<input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label class=multi-compare-text for=compare'+(i++)+ '>'+ val[0].team+'</label><br>');
 		})
 	// $('.multi-comparison').append('<input type="checkbox" name="issue-multi-compare" value="Bike">I have a bike<br>');
 	// $('.multi-comparison').append('<input type="checkbox" name="issue-multi-compare" value="Bike">I have a bike<br>');
