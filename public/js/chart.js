@@ -1,5 +1,114 @@
 'use strict';
 
+
+function setCharts() {
+	detectWindowSize()
+         var admin = [];
+         for(var l in p) {
+          admin.push({'user': l, 'closed': p[l]})
+         }
+         var jSonArr = JSON.stringify(admin)
+         // var issuesArr = [], pullsArr = [];
+         
+         
+         var dataset = [] ;
+         for(var k in v) {
+             issuesArr.push({'date': v[k].date, 'issues': v[k].issues});
+             dataset.push(v[k].issues);
+         }
+         
+         for(var y in pr) {
+           pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
+         }
+         
+         var jArr = JSON.stringify(issuesArr);
+         var issuesLineData = {
+             w: chartWidth,
+             h: lineChartHeight,
+             top: 48,
+             bottom: 72,
+             left: 60,
+             right: 40,
+             padding: 20,
+             chartArea: "#chartArea",
+             scope: scope,
+             isIssue: true,
+             dataKey: "date",
+             dataVal: "issues",
+             title : {
+               y: 20
+           }
+         }
+         
+         var pullsLineData = {
+             w: chartWidth,
+             h: lineChartHeight,
+             top: 48,
+             bottom: 72,
+             left: 60,
+             right: 40,
+             padding: 10,
+             chartArea: "#chartArea2",
+             scope: scope,
+             isIssue: false,
+             dataKey: "date",
+             dataVal: "pulls",
+             title : {
+               y: 9
+           }
+         }
+         var issuesBarData = {
+             w: chartWidth, 
+             h: barChartHeight,
+             top: 48,
+             bottom: 72,
+             left: 60,
+             right: 40,
+             padding: 0,
+             chartArea: "#chartArea",
+             scope: scope,
+             isIssue: true,
+             dataKey: "date",
+             dataVal: "issues"
+           };
+         
+         
+         var pullsBarData = {
+             w: chartWidth, 
+             h: barChartHeight,
+             top: 48,
+             bottom: 72,
+             left: 60,
+             right: 40,
+             padding: 0,
+             chartArea: "#chartArea2",
+             scope: scope,
+             isIssue: false,
+             dataKey: "date",
+             dataVal: "pulls"
+           };
+        var  historyObj = {
+           allRepoIssueHistory: allIssuesHistory,
+           allRepoPullsHistory: allPullsHistory,
+           allRepoName: repoData
+         }
+         setBarChart(issuesArr, issuesBarData, historyObj)
+         setLineChart(issuesArr, issuesLineData)
+         setBarChart(pullsArr, pullsBarData)
+         setLineChart(pullsArr, pullsLineData)
+         
+         
+         if(issuesArr.length == 0){
+           var el = document.getElementById('chartArea');
+             el.innerHTML = 'There have been no issues in the last 30 days';
+             el.setAttribute('class', 'status');
+         }
+}
+
+
+
+
+
 var totaller;
 var $viewEle;
 var hideLineChart = function() {
