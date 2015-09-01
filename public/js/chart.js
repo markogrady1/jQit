@@ -1363,7 +1363,7 @@ var appendMultipleLegend = function(thisRepo, team, data) {
 	var $elt = $('.multi-comparison-legend');
 	$elt.prepend($('<br class=multi-break><br class=multi-break><br class=multi-break><svg class=multi-home width=10 height=10><rect class=multi-home width=10 height=10 /></rect></svg><span class=multi-text-title > '+thisRepo+'</span><br class=multi-break>'));
 
-	$elt.append(data.map( function(repo){
+	$elt.append(_.map(data, function(repo){
 		console.log(repo[0].team)
 		return '<svg class=multi-away width=10 height=10><rect class=multi-away width=10 height=10 style=fill:#'+repo[0].designatedColor+'/><rect></svg><span class=multi-text-title > '+repo[0].team+'</span><br class=multi-break>'}));
 }
