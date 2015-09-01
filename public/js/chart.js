@@ -8,9 +8,6 @@ function setCharts() {
           admin.push({'user': l, 'closed': p[l]})
          }
          var jSonArr = JSON.stringify(admin)
-         // var issuesArr = [], pullsArr = [];
-         
-         
          var dataset = [] ;
          for(var k in v) {
              issuesArr.push({'date': v[k].date, 'issues': v[k].issues});
