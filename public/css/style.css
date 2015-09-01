@@ -313,6 +313,18 @@ td, th {
 	fill: #5087af;
 	shape-rendering: crispEdges;
 }
+.multi-home{
+	margin-right:5px;
+	border-radius: 8px;
+	fill: #C81A4E;
+	shape-rendering: crispEdges;
+}
+
+.multi-away{
+	margin-right:5px;
+	border-radius: 8px;
+	shape-rendering: crispEdges;
+}
 
 .away {
 	margin-right:5px;	

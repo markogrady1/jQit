@@ -963,9 +963,7 @@ var getCheckValues = function(histObj) {
 	setComparisonChart2(pullsArr, teams, team, maximum, true);
 }
 
-var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
-console.log('in compare')
-	
+var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {	
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
 	var team = 'unknown';
@@ -997,7 +995,6 @@ console.log('in compare')
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim();
 					var monthStr = getMonthString(dateBits[1]);
-					console.log(i)
 					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1compare style=\'color:"+d['designatedColor']+"\'>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2compare>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2compare>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1compare style=\'color:"+d['designatedColor']+"\'>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span>";
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>"+ toolTipValue+"</span><span class=line-tip><br><br>" + str;
 				  });
@@ -1022,8 +1019,8 @@ console.log('in compare')
 		        .attr("x", (width / 2))             
 		        .attr("y", 0 - (buildStyle.top / 2) - 20)
 		        .attr("text-anchor", "middle")
-		        .text($repo + "  - vs -  " + team);
-		        appendLegend($repo, team);
+		        .text($repo + "  Open Issues Comparison");
+		        appendMultipleLegend($repo, team, data);
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data[m], function(d) {
 					return maximum;
@@ -1255,6 +1252,15 @@ var appendLegend = function(thisRepo, otherRepo) {
 	$elt.prepend($('<svg class=home width=10 height=10><rect class=home width=10 height=10 /></rect></svg><span class=text-title >'+thisRepo+'</span><br class=break><svg class=away width=10 height=10><rect class=away width=10 height=10 /><rect></svg><span class=text-title >'+otherRepo+'</span>'));
 };
 
+var appendMultipleLegend = function(thisRepo, team, data) {
+	refreshMultipleLegend();	
+	var $elt = $('.multi-comparison-legend');
+	$elt.prepend($('<br class=multi-break><br class=multi-break><br class=multi-break><svg class=multi-home width=10 height=10><rect class=multi-home width=10 height=10 /></rect></svg><span class=multi-text-title > '+thisRepo+'</span><br class=multi-break>'));
+
+	$elt.append(data.map( function(repo){
+		console.log(repo[0].team)
+		return '<svg class=multi-away width=10 height=10><rect class=multi-away width=10 height=10 style=fill:#'+repo[0].designatedColor+'/><rect></svg><span class=multi-text-title > '+repo[0].team+'</span><br class=multi-break>'}));
+}
 var refreshLegend = function() {
 	var $home = $('.home');
 	var $away = $('.away');
@@ -1264,6 +1270,17 @@ var refreshLegend = function() {
 	$away.remove();
 	$title.remove();
 	$br.remove();
+};
+
+var refreshMultipleLegend = function() {
+	var $multi_home = $('.multi-home');
+	var $multi_away = $('.multi-away');
+	var $multi_br = $('.multi-break');
+	var $multi_title = $('.multi-text-title ');
+	$multi_home.remove();
+	$multi_away.remove();
+	$multi_title.remove();
+	$multi_br.remove();
 };
 
 function setTrendLineColor(num, colors) {
