@@ -23,8 +23,11 @@
          var p = <%- JSON.stringify(events) %>
          var old = <%- JSON.stringify(oldIssueUrl) %>
          var temp = v;
+         console.log(v)
          var temp2 = pr;
-         
+         var issuesMonthlyAvg = getMonthAvg(v, 'issues');
+         var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');
+         console.log(issuesMonthlyAvg, pullsMonthlyAvg)
       </script>
       <script src="/js/detectResize.js"></script>
       <script src="/js/external/d3.v3.min.js"></script>
@@ -55,6 +58,7 @@
         setCharts();
       </script>
       <div class="body-wrap">
+         <div class="average">Total Average:</div>
          <section class="item"></section>
          <h1 class=current-repo><%= data.name %></h1>
          <p><b>Repository name:</b> <%= data.name %></p>

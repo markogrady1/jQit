@@ -209,7 +209,6 @@ schema.checkForAssignee = function(callback) {
 schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 	var assign = [];
 	var value;
-	console.log('Last User:',username)
 	var query = { 'assignee': username};
 	var projection = { 'title': 1, 'assignee': 1, 'created_at': 1, 'html_url': 1,  '_id': 0 };
 	collection = _.map(dataSet, function(collect) { return collect });

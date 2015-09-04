@@ -1399,3 +1399,15 @@ function setTrendLineColor(num, colors) {
 		strokeWidth: '1.5px',
 	})
 }
+
+
+var getMonthAvg = function(data, target) {
+	var total = _.reduce(data, function(acc, o) {
+	    for (var p in o)
+	        acc[p] = (p in acc ? acc[target] : 0) + o[target];
+	    return acc;
+	}, {});
+
+	var totalAvg = Math.round(total[target] / data.length);
+	return totalAvg;
+};
