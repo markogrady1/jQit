@@ -14,7 +14,7 @@ history.init = function (){
 
 history.getDataOverTime = function(database, target) {
 	this.resetHistory(database);
-	fs.readFile('./repoData/repo_' + target + '_history.txt','UTF-8', function(err, data){
+	this.getHistoryFile(target, false, function(err, data) {
     if(err) throw err;
     	history.connect(database, function(db){
 	      	repoChunk = data.split('*');
@@ -40,9 +40,16 @@ history.getDataOverTime = function(database, target) {
 	helper.log('HISTORY', 'new ' + target +' history added', false);
 }
 
+history.getHistoryFile = function(target, closed, callback) {
+	target = closed ? 'closed_' + target : 'repo_' + target;
+	fs.readFile('./repoData/' + target + '_history.txt','UTF-8', function(err, data){
+		callback(err, data);
+	});
+}
+
 history.getClosedDataOverTime = function(database, target) {
 	this.resetHistory(database);
-	fs.readFile('./repoData/closed_' + target + '_history.txt','UTF-8', function(err, data){
+	this.getHistoryFile(target, true, function(err, data) {
     if(err) throw err;
     	history.connect(database, function(db){
 	      	repoChunk = data.split('*');
