@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * sort the table containing the repository data 
+ * when a given header is clicked
+ *
+ */
 var sortTable = function() {
 	var table = document.getElementById('xtable')
 	    ,tableHead = table.querySelector('thead')

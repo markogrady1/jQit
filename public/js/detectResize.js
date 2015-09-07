@@ -1,4 +1,8 @@
 
+/**
+ * Used to detect the change of browser window width
+ *
+ */
 var detectWindowSize = function() {
 
 	var clientWidth = document.body.clientWidth;
@@ -58,11 +62,11 @@ var detectWindowSize = function() {
 
 };
 
-
+/**
+ * Repaint all of the charts when browser window has a change of size
+ *
+ */
 var repaint = function() {
-	// console.log(document.body.clientWidth);
-	// var temp = v;
-	// var temp2 = pr;
 	var standard = true;
 	var clientWidth = document.body.clientWidth;
 	if(clientWidth <= 461 && v.length > 5) {
@@ -216,6 +220,7 @@ setLineChart(n, issuesLineData);
 setBarChart(m, pullsBarData);
 setLineChart(m, pullsLineData);
 };
+
 
 window.addEventListener("resize", repaint);
 
