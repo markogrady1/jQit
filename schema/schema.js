@@ -36,7 +36,13 @@ new CronJob('* 5 * * *', function() {
 }, null, true, "Europe/London");
 */
 
-//connect to mongoDB and aquire data for all documents concerning repositories
+
+
+
+/**
+ * connect to mongoDB and aquire data for all documents concerning repositories
+ * 
+ */
 schema.initConnection = function() {
 	self = this;
  	console.log('schema connecting...');
@@ -64,8 +70,12 @@ schema.initConnection = function() {
 	});
 }
 
-//connect to mongoDB and aquire data for a given repository
-//set the view with relevant data
+/**
+ * Connect to mongoDB and aquire data for a given repository
+ *  
+ * @param {String} param 
+ * @param {Function} callback 
+ */
 schema.getRecord = function(param, callback) {
 	var query = { "name": param };
 	console.log('schema connecting...');
@@ -81,6 +91,12 @@ schema.getRecord = function(param, callback) {
     });
 };
 
+/**
+ * connect to a given database via mongodb
+ *
+ * @param {String} dbase 
+ * @param {Function} callback 
+ */
 var connection = function(dbase, callback) {
 	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db) {
 		if (err) throw err;
@@ -88,6 +104,13 @@ var connection = function(dbase, callback) {
 	});
 };
 
+/**
+ * Execute query to abtain a given collection data
+ *
+ * @param {String} database 
+ * @param {String} param 
+ * @param {Function} callback 
+ */
 schema.executeQuery = function(database, param, callback) {
 	var query = {"repo": param};
 	collection = query.repo;
@@ -106,6 +129,13 @@ schema.executeQuery = function(database, param, callback) {
 	});
 };
  
+ /**
+ * Aquire all jquery repositories issues and PR data within last 30 days
+ *
+ * @param {String} database 
+ * @param {Array} dataSet
+ * @param {Function} callback 
+ */
  schema.getAllHistory = function(database, dataSet, callback) {
  	var collection = [];
  	var completeData = [];
@@ -127,6 +157,12 @@ schema.executeQuery = function(database, param, callback) {
 	});
  }
 
+/**
+ * Create a projection for a given database
+ *
+ * @param {String} db 
+ * @return {Object} projection 
+ */
 var getProjection = function(db) {
 	var projection;
 	if (db === 'issues') {
@@ -143,6 +179,12 @@ var getProjection = function(db) {
 	return projection;
 }
 
+/**
+ * Create a query for a given database
+ *
+ * @param {String} db 
+ * @return {Object} projection 
+ */
 var getQuery = function(db) {
 	var seconds = new Date().getTime() / 1000;
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
@@ -150,7 +192,12 @@ var getQuery = function(db) {
 	return query;
 }
 
-
+/**
+ * This function checks whether the user has an existing email address in database
+ *
+ * @param {String} username 
+ * @param {Function} fn 
+ */
 schema.checkForEmail = function(username, fn) {
 	var projection = { 'username': 1, 'email': 1 };
 	var query = { 'username': username };
@@ -170,12 +217,26 @@ schema.checkForEmail = function(username, fn) {
 }
 
 
-
+/**
+ * Store registered user details to database
+ *
+ * @param {String} username 
+ * @param {String} email 
+ * @param {Object} res 
+ */
 schema.regUser = function(username, email, res) {
 	var user = RegisteredUser(username, email);
 	user.register(res);
 }
 
+/**
+ * Check loggedin user details against database
+ *
+ * @param {String} email 
+ * @param {String} pwd 
+ * @param {Object} res 
+ * @param {Function} fn 
+ */
 schema.loginUser = function(email, pwd, res, fn) {
 	var projection = { 'username': 1, 'email': 1, 'password': 1, '_id': 0 };
 	var query = { 'email': email };
@@ -194,9 +255,13 @@ schema.loginUser = function(email, pwd, res, fn) {
 	});
 }
 
+/**
+ * Check for recent users who are assignees
+ *
+ * @param {Function} callback 
+ */
 schema.checkForAssignee = function(callback) {
 	var projection = { 'username': 1, 'email': 1, '_id': 0 };
-
 	connection('user', function(db){
 		db.collection('users').find({}, projection).toArray(function(err, doc){
 			if(err) throw err;
@@ -206,6 +271,14 @@ schema.checkForAssignee = function(callback) {
 	});
 }
 
+/**
+ * Check for recent users who are assignees of the last 24 hours
+ *
+ * @param {String} database 
+ * @param {String} username 
+ * @param {Array} dataSet 
+ * @param {Function} callback 
+ */
 schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 	var assign = [];
 	var value;
@@ -233,14 +306,32 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 	});
 }
 
+/**
+ * User object constructor
+ *
+ * @param {String} username 
+ * @param {String} email 
+ */
 function User(username, email) {
 	var self = this;
 	this.username = username;
 	this.email = email;
 }
 
+/**
+ * Create new'd up Users
+ *
+ * @param {String} x 
+ * @param {String} y 
+ * @return {Object} User 
+ */
 var RegisteredUser = function(x, y) { return new User(x, y); }
 
+/**
+ * Register the new User
+ *
+ * @param {Object} res 
+ */
 User.prototype.register = function(res) {
 	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));  //not used currently
 	var query = { 'username': this.username, 'email': this.email};
