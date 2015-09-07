@@ -2,10 +2,10 @@
 
 
 function setCharts() {
-	detectWindowSize()
+	detectWindowSize();
          var admin = [];
          for(var l in p) {
-          admin.push({'user': l, 'closed': p[l]})
+          admin.push({'user': l, 'closed': p[l]});
          }
          var jSonArr = JSON.stringify(admin)
          var dataset = [] ;
