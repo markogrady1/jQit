@@ -28,7 +28,7 @@
 
 **Implementation**
 -
-In the Terminal .
+In the Terminal.
 ```bash
 $ cd jquery-issue-tracker-0.1.0
 $ npm install --save
