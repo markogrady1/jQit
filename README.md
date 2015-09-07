@@ -18,6 +18,31 @@
 
 **Actual requirements can be found [here] [requirements].**
 
+  ------
+**Implementation Requirements** 
+-
+ - [NodeJS] [node-requirements]
+ - [MongoDB] [mongodb-requirements] 
+ - Package Manager ([NPM][npm-requirements]/[Homebrew][homebrew-requirements]) 
 
+
+**Implementation**
+-
+In the Terminal .
+```bash
+$ cd jquery-issue-tracker-0.1.0
+$ npm install --save
+$ node app.js
+```
+Open the browser and enter the URL
+```bash
+localhost:3000
+```
 
 [requirements]: https://github.com/jquery/content/issues/4  
+[node-requirements]: https://nodejs.org/
+[mongodb-requirements]: https://www.mongodb.org/
+[npm-requirements]: https://docs.npmjs.com/getting-started/installing-node
+[homebrew-requirements]: http://brew.sh/
+
+####Enjoy!!!
