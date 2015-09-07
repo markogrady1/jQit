@@ -550,6 +550,7 @@ var assignLineListener = function(elem) {
 	$(elem).click(function() {
 		$( '#chart').toggle( "slow" );
 		var els = document.getElementById('line-chart');
+		var $els = $('#line-chart');
 		
 		$( '#line-chart').toggle( "slow" );
 	var el2 = document.getElementById('pulls-line-chart');
@@ -559,7 +560,7 @@ var assignLineListener = function(elem) {
 		$( '#pulls-chart').toggle( "slow" );
 	}
 		setTimeout(function(){
-			if (els.style.display === 'inline') {
+			if ($els.is(":visible")) {
 					$('.line-btn').text('View Bar Chart');
 				} else {
 					$('.line-btn').text('View Line Chart');
