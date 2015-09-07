@@ -8,6 +8,11 @@ var repoArray = _.map(allRepos, function(reps){ return reps.length; });
 
 var migrate = module.exports = {};
 
+/**
+ * Migrate all of the jquery repositories into mongodb
+ * Whilst deleting previous history
+ * 
+ */
 migrate.repositoryMigrate = function() {
 	helper.log('DATA MIGRATION', 'repositories loading...', false);
 	connect('repositories', function(db){
@@ -20,6 +25,10 @@ migrate.repositoryMigrate = function() {
 	});
 }
 
+/**
+ * Migrate all open issue data to mongodb
+ * 
+ */
 migrate.openIssuesMigrate = function() {
 	connect('issues', function(db){
 		for(var i = 1; i < repoArray.length; i++){
@@ -38,6 +47,10 @@ migrate.openIssuesMigrate = function() {
 	});
 }
 
+/**
+ * Migrate all open Pull requests data to mongodb
+ * 
+ */
 migrate.pullsMigrate = function() {
 	connect('pulls', function(db){
 		for(var i = 1; i < repoArray.length; i++){
@@ -59,6 +72,10 @@ migrate.pullsMigrate = function() {
 }
 
 
+/**
+ * Migrate all repository events to mongodb
+ * 
+ */
 migrate.eventsMigrate = function() {
     connect('events', function(db){
 		for(var i = 1; i < repoArray.length; i++){
@@ -79,6 +96,13 @@ migrate.eventsMigrate = function() {
 	});
 }
 
+
+/**
+ * Migrate all closed issue data to mongodb
+ *
+ * @param {String} targetData
+ * 
+ */
 migrate.closedDataMigration = function(targetData){
 	connect(targetData + 'Closed', function(db){
 		for(var i = 1; i < repoArray.length; i++){
@@ -109,6 +133,13 @@ migrate.closedDataMigration = function(targetData){
 	});
 }
 
+
+/**
+ * connect to a given database via mongodb
+ *
+ * @param {String} target 
+ * @param {Function} fn 
+ */
 var connect = function(target, fn) {
 	MongoClient.connect("mongodb://127.0.0.1:27017/" + target, function(err, db){
 		if(err) throw err;
