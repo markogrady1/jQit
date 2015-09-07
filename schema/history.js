@@ -4,7 +4,10 @@ var fs = require('fs')
 
 var history = {}
 
-
+/**
+ * Initiate the process of obtaining repository PR and issue history
+ * 
+ */
 history.init = function (){
 	this.getDataOverTime('repoHistory', 'issue')
 	this.getDataOverTime('repoPullsHistory', 'pulls')
@@ -12,6 +15,12 @@ history.init = function (){
 	this.getClosedDataOverTime('repoClosedIssueHistory', 'issue')
 }
 
+/**
+ * Responsible for obtaining both issues and pulls for a 30 day period
+ * 
+ * @param {String} database
+ * @param {String} target
+ */
 history.getDataOverTime = function(database, target) {
 	this.resetHistory(database);
 	this.getHistoryFile(target, false, function(err, data) {
@@ -40,6 +49,13 @@ history.getDataOverTime = function(database, target) {
 	helper.log('HISTORY', 'new ' + target +' history added', false);
 }
 
+/**
+ * This function reads from a text file to aquire the history of a given repository
+ * 
+ * @param {String} target
+ * @param {Boolean} closed
+ * @param {Function} callback
+ */
 history.getHistoryFile = function(target, closed, callback) {
 	target = closed ? 'closed_' + target : 'repo_' + target;
 	fs.readFile('./repoData/' + target + '_history.txt','UTF-8', function(err, data){
@@ -47,6 +63,12 @@ history.getHistoryFile = function(target, closed, callback) {
 	});
 }
 
+/**
+ * Responsible for obtaining both closed issues and closed pulls for a 30 day period
+ * 
+ * @param {String} database
+ * @param {String} target
+ */
 history.getClosedDataOverTime = function(database, target) {
 	this.resetHistory(database);
 	this.getHistoryFile(target, true, function(err, data) {
@@ -75,6 +97,11 @@ history.getClosedDataOverTime = function(database, target) {
 	helper.log('HISTORY', 'new ' + target +' history added', false);
 }
 
+/**
+ * Reset the history from the previous running of the server
+ * 
+ * @param {String} rep
+ */
 history.resetHistory = function(rep) {
 	history.connect(rep, function(db){
 		db.dropDatabase();
@@ -83,10 +110,17 @@ history.resetHistory = function(rep) {
 	helper.log('HISTORY', 'prev ' + rep +' DB history removed', false);
 }
 
+/**
+ * Connect to a given collection via Mongodb
+ * 
+ * @param {String} dbase
+ * @param {Function} callback
+ */
 history.connect = function(dbase, callback) {
 	MongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
 		if(err) throw err;
 		callback(db);
 	});
 }
+
 module.exports = history.init();
