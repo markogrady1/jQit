@@ -22,6 +22,7 @@
          pr = pr.slice(-30) // return correct array amount for pulls history chart
          var p = <%- JSON.stringify(events) %>
          var old = <%- JSON.stringify(oldIssueUrl) %>
+         var newestIssue = <%- JSON.stringify(newIssueUrl) %>
          var temp = v;
          console.log(v)
          var temp2 = pr;
@@ -84,8 +85,17 @@
                });
 
                if(old !== null){
-                   $('.old').append('<a href='+ old +' target=_blank>Go To Issue</a>');
+                   $('.old').append('<a href='+ old +' target=_blank>Go To Oldest Issue</a>');
                }
+            </script>
+         </p>
+         <p class='newest'>
+            <b> Age of newest issue: </b> <%= newRange %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <script>
+               if(newestIssue !== null){
+                   $('.newest').append('<a href='+ newestIssue +' target=_blank>Go To Newest Issue</a>');
+               }
+
             </script>
          </p>
          <p><b> Average time to close pull request: </b> <%= avgPulls %></p>
