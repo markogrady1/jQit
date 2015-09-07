@@ -7,7 +7,7 @@ function setCharts() {
          for(var l in p) {
           admin.push({'user': l, 'closed': p[l]});
          }
-         var jSonArr = JSON.stringify(admin)
+         var jSonArr = JSON.stringify(admin);
          var dataset = [] ;
          for(var k in v) {
              issuesArr.push({'date': v[k].date, 'issues': v[k].issues});
@@ -35,7 +35,7 @@ function setCharts() {
              title : {
                y: 20
            }
-         }
+         };
          
          var pullsLineData = {
              w: chartWidth,
@@ -53,7 +53,8 @@ function setCharts() {
              title : {
                y: 9
            }
-         }
+         };
+
          var issuesBarData = {
              w: chartWidth, 
              h: barChartHeight,
@@ -84,15 +85,16 @@ function setCharts() {
              dataKey: "date",
              dataVal: "pulls"
            };
-        var  historyObj = {
+
+         var  historyObj = {
            allRepoIssueHistory: allIssuesHistory,
            allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData
-         }
-         setBarChart(issuesArr, issuesBarData, historyObj)
-         setLineChart(issuesArr, issuesLineData)
-         setBarChart(pullsArr, pullsBarData)
-         setLineChart(pullsArr, pullsLineData)
+         };
+         setBarChart(issuesArr, issuesBarData, historyObj);
+         setLineChart(issuesArr, issuesLineData);
+         setBarChart(pullsArr, pullsBarData);
+         setLineChart(pullsArr, pullsLineData);
          
          
          if(issuesArr.length == 0){
