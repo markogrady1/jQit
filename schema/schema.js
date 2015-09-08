@@ -343,7 +343,7 @@ User.prototype.register = function(res) {
 				res.render('register', { register: 'Email has been used before' });
 				 console.log('Duplicate Email: Alert User');
 			} else {
-				res.render('login', { login: 'You will now recieve an  email anytime an issue or PR is assigned to you' });
+				res.render('login', { login: 'You will now receive an  email anytime an issue or PR is assigned to you' });
 				statusR = 'good';
 			}			
 		});
