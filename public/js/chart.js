@@ -1,6 +1,23 @@
 'use strict';
 
+/**
+ * holds the value of the combined object total
+ * 
+ * @var {Number} totaller
+ */
+var totaller;
 
+/**
+ * Global value holding the current jquery targeted view element
+ * 
+ * @var {Object} $viewEle
+ */
+var $viewEle;
+
+/**
+ * Responsible for setting the initial values for the plot of the main charts
+ * 
+ */
 function setCharts() {
 	detectWindowSize();
          var admin = [];
@@ -104,19 +121,24 @@ function setCharts() {
          }
 }
 
-
-
-
-
-var totaller;
-var $viewEle;
+/**
+ * Function called to simply hide the main line chart
+ * 
+ */
 var hideLineChart = function() {
 	var $lineChart = $('#line-chart');
 	$lineChart.css('display', 'none');
 };
 
+/**
+ * Responsible for setting displaying the main bar chart
+ *
+ * @param {Array} data
+ * @param {Object} buildStyle
+ * @param {Object} histObj
+ */
 function setBarChart(data, buildStyle, histObj) {
-var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
+	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var tot = 0;
 	var isIss =false;
 	if(buildStyle.dataVal === 'issues')
@@ -159,7 +181,7 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		});
 
 		$viewEle.append(lineBtn);
-		assignLineListener(lineBtn);
+		toggleLineChart(lineBtn);
 	}
 
 	var width = buildStyle.w - buildStyle.left - buildStyle.right;
@@ -254,118 +276,123 @@ var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 		isIssue: buildStyle.isIssue
 	});
 	} 
+	function plot(params) {
+		var e;
+		var classAppend = params.isIssue ? '' : 's';
+		this.append('g')
+			.call(params.gridlines)
+			.classed('gridline', true)
+			.attr('transform', 'translate(0,0)');
+		this.selectAll('.bar' + classAppend)
+			.data(params.data)
+			.enter()
+			  .append('rect')
+			  .classed('bar'+ classAppend, true)
+			  .attr('x', function(d, i){
+				return x(d[buildStyle.dataKey]);
+			  })
+			  .attr('value', function(d, i) {
+				return d[buildStyle.dataKey]  + ' ' + d[buildStyle.dataVal];
+			  })
+			  .attr('y', function(d, i){
+				return y(d[buildStyle.dataVal]);
+			  })
+			  .attr('width', function(d, i){
+				return x.rangeBand()-2;
+			  })
+			  .attr('height', function(d, i){
+				return height - y(d[buildStyle.dataVal]);
+			  })
+			  .on('click', tip.show)
+	      	  .on('mouseout', tip.hide)
+			  .on('mouseover', function(d, i){
+			  	e = $(this).css('fill');
+				$(this).css('fill', '#3C7BD5');
+				var el = d3.select(this);
+				el.transition()
+					.duration(300)
+					.attr({
+					width: x.rangeBand()+5,
+					height:height - y(d[buildStyle.dataVal])+3,
+					y: y(d[buildStyle.dataVal])-3
+				});						
+			 this.parentNode.appendChild(this); 
+			  })
+			  .on('mouseleave', function(d, i){
+			  	$('.display-data').remove();
+				$(this).css('fill', e);
+				var el = d3.select(this);
+				el.transition()
+					.duration(500)
+					.attr({
+					height: height - y(d[buildStyle.dataVal]),
+					y: y(d[buildStyle.dataVal]),
+					width:x.rangeBand()-2
+				});						
+			  })
+			  .style('fill', function(d, i){
+				//return ordinalColorScale(i);//uncomment line for ordinalScale colours
+				return linearColorScale(i);  //uncomment line for linearScale colours
+			  })
+			  .style('cursor', 'pointer');
 
-function plot(params) {
-	var e;
-	var classAppend = params.isIssue ? '' : 's';
-	this.append('g')
-		.call(params.gridlines)
-		.classed('gridline', true)
-		.attr('transform', 'translate(0,0)');
-	this.selectAll('.bar' + classAppend)
-		.data(params.data)
-		.enter()
-		  .append('rect')
-		  .classed('bar'+ classAppend, true)
-		  .attr('x', function(d, i){
-			return x(d[buildStyle.dataKey]);
-		  })
-		  .attr('value', function(d, i) {
-			return d[buildStyle.dataKey]  + ' ' + d[buildStyle.dataVal];
-		  })
-		  .attr('y', function(d, i){
-			return y(d[buildStyle.dataVal]);
-		  })
-		  .attr('width', function(d, i){
-			return x.rangeBand()-2;
-		  })
-		  .attr('height', function(d, i){
-			return height - y(d[buildStyle.dataVal]);
-		  })
-		  .on('click', tip.show)
-      	  .on('mouseout', tip.hide)
-		  .on('mouseover', function(d, i){
-		  	e = $(this).css('fill');
-			$(this).css('fill', '#3C7BD5');
-			var el = d3.select(this);
-			el.transition()
-				.duration(300)
-				.attr({
-				width: x.rangeBand()+5,
-				height:height - y(d[buildStyle.dataVal])+3,
-				y: y(d[buildStyle.dataVal])-3
-			});						
-		 this.parentNode.appendChild(this); 
-		  })
-		  .on('mouseleave', function(d, i){
-		  	$('.display-data').remove();
-			$(this).css('fill', e);
-			var el = d3.select(this);
-			el.transition()
-				.duration(500)
-				.attr({
-				height: height - y(d[buildStyle.dataVal]),
-				y: y(d[buildStyle.dataVal]),
-				width:x.rangeBand()-2
-			});						
-		  })
-		  .style('fill', function(d, i){
-			//return ordinalColorScale(i);//uncomment line for ordinalScale colours
-			return linearColorScale(i);  //uncomment line for linearScale colours
-		  })
-		  .style('cursor', 'pointer');
-
-	this.selectAll('.bar-label')
-		.data(params.data)
-		.enter()
-		  .append('text')
-		  .classed('bar-label', true)
-		  .attr('x', function(d, i){
-			return x(d[buildStyle.dataKey]) + (x.rangeBand()/2);
-		  })
-		   .attr('y', function(d, i){
-			return y(d[buildStyle.dataVal]);
-		  })
-		  .attr('dx', 0)
-		  .attr('dy', -6)
-		  .text(function(d, i){
-			return d[buildStyle.dataVal];
-		  });
-	this.append('g')
-	    .classed('x axis', true)
-	    .attr('transform', 'translate(' + 0 + ',' + height + ')')
-	    .call(params.axis.x)
-		.selectAll('text')
-		    .style('text-anchor', 'end')
-		    .attr('dx', -8)
-		    .attr('dy', 8)
-		    .attr('transform', 'translate(0,0) rotate(-45)');
-	this.append('g')
-	    .classed('y axis', true)
-	    .attr('transform', 'translate(0,0)')
-	    .call(params.axis.y);
-	this.select('.y.axis')
-		.append('text')
-		.attr('x', 0)
-		.attr('y', 0)
-		.style('text-anchor', 'middle')
-		.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
-		.text('No. of '+ buildStyle.dataVal.charAt(0).toUpperCase() + buildStyle.dataVal.slice(1));
-	this.select('.x.axis')
-		.append('text')
-		.attr('x', 0)
-		.attr('y', 0)
-		.classed('x-axis-title', true)
-		.style('text-anchor', 'middle')
-		.attr('transform', 'translate(' + width / 2 + ', 50)')
-		.text(buildStyle.scope);
-		
+		this.selectAll('.bar-label')
+			.data(params.data)
+			.enter()
+			  .append('text')
+			  .classed('bar-label', true)
+			  .attr('x', function(d, i){
+				return x(d[buildStyle.dataKey]) + (x.rangeBand()/2);
+			  })
+			   .attr('y', function(d, i){
+				return y(d[buildStyle.dataVal]);
+			  })
+			  .attr('dx', 0)
+			  .attr('dy', -6)
+			  .text(function(d, i){
+				return d[buildStyle.dataVal];
+			  });
+		this.append('g')
+		    .classed('x axis', true)
+		    .attr('transform', 'translate(' + 0 + ',' + height + ')')
+		    .call(params.axis.x)
+			.selectAll('text')
+			    .style('text-anchor', 'end')
+			    .attr('dx', -8)
+			    .attr('dy', 8)
+			    .attr('transform', 'translate(0,0) rotate(-45)');
+		this.append('g')
+		    .classed('y axis', true)
+		    .attr('transform', 'translate(0,0)')
+		    .call(params.axis.y);
+		this.select('.y.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
+			.text('No. of '+ buildStyle.dataVal.charAt(0).toUpperCase() + buildStyle.dataVal.slice(1));
+		this.select('.x.axis')
+			.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.classed('x-axis-title', true)
+			.style('text-anchor', 'middle')
+			.attr('transform', 'translate(' + width / 2 + ', 50)')
+			.text(buildStyle.scope);
+			
 	}	
 
 	if (buildStyle.isIssue)
 		$('#chartArea2').hide();
 }
 
+/**
+ * Responsible for setting displaying the main line chart
+ *
+ * @param {Array} data
+ * @param {Object} buildStyle
+ */
 function setLineChart(data, buildStyle) {
 	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var chartId = buildStyle.isIssue ? "" : "pulls-";
@@ -548,7 +575,12 @@ function setLineChart(data, buildStyle) {
 	pointListener();
 }
 
-var assignLineListener = function(elem) {
+/**
+ * Sets listener for 
+ *
+ * @param {Array} data
+ */
+var toggleLineChart = function(elem) {
 	$(elem).click(function() {
 		$( '#chart').toggle( "slow" );
 		var els = document.getElementById('line-chart');
@@ -571,7 +603,7 @@ var assignLineListener = function(elem) {
 	});
 };
 
-var assignListener = function(elem) {
+var toggleBarChart = function(elem) {
 	$(elem ).click(function() {
 	  $( '#chartArea').toggle( "slow" );
 	 var el = document.getElementById('chartArea');
@@ -703,7 +735,7 @@ function assignPullButtons(){
 		});
 		$(btn).text('View Pull Requests');
 		$viewEle.append(btn);
-		assignListener($viewEle);
+		toggleBarChart($viewEle);
 	}
 }
 
