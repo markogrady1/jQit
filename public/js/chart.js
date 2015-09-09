@@ -714,18 +714,16 @@ function setIssueCompareSelection(histObj) {
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}));
-
-	$selection.on('change', function(){
-		var chosenVal = $(this).val();
-		if(chosenVal !== 'Compare Issues')
-			compareRepositories(chosenVal, histObj.allRepoIssueHistory);
-	});
+	getSelectionValue($selection, histObj, true);
 }
 	//this construct is for a jqueryui style selectmenu
 	//$(function() {
  	//	$selection.selectmenu();
  	//});
 }
+
+
+
 
 function setPullsCompareSelection(histObj) {
 	if($('.compare-pulls-sel').length !== 1){
@@ -734,12 +732,7 @@ function setPullsCompareSelection(histObj) {
 	$selection.append(histObj.allRepoName.map(function(data){
 		return '<option>' + data.name + '</option>';
 	}));
-
-	$selection.on('change', function(){
-		var chosenVal = $(this).val();
-		if(chosenVal !== 'Compare Pulls')
-			comparePullsRepositories(chosenVal, histObj.allRepoPullsHistory);
-	});
+	getSelectionValue($selection, histObj, false);
 }
 	//this construct is for a jqueryui style selectmenu
 	//$(function() {
@@ -747,38 +740,39 @@ function setPullsCompareSelection(histObj) {
  	//});
 }
 
-var compareRepositories = function(repoName, allHistory) {
+function getSelectionValue($selection, histObj, isIssue) {
+	$selection.on('change', function(){
+		var chosenVal = $(this).val();
+		if(chosenVal !== 'Compare Issues' || chosenVal !== 'Compare Pulls') {
+			if(isIssue)
+				compareRepositories(chosenVal, histObj.allRepoIssueHistory, true);
+			else
+				compareRepositories(chosenVal, histObj.allRepoPullsHistory, false);
+		}	
+	});
+}
+
+
+var compareRepositories = function(repoName, allHistory, isIssue) {
+	var historyArr = isIssue ? allHistory : allPullsHistory;
+	var usedArray = isIssue ? issuesArr : pullsArr;
 	var comparedArray = [];
 	var team;
-
-	for(var i = 0; i < allHistory.length; i++) {
-		if(repoName === allHistory[i][0].team){
-			for(var j = 0; j < allHistory[i].length; j++){
+		for(var i = 0; i < historyArr.length; i++) {
+		if(repoName === historyArr[i][0].team){
+			for(var j = 0; j < historyArr[i].length; j++){
 				var dayOfMonth = stripDate('day');
-				var dom = dayOfMonth(allHistory[i][j].rawDate);
-				team = allHistory[i][j].team;
-				comparedArray.push({'date': dom, 'issues': allHistory[i][j].issues, 'issues2': issuesArr[j].issues});
+				var dom = dayOfMonth(historyArr[i][j].rawDate);
+				team = historyArr[i][j].team;
+				if(isIssue)
+				comparedArray.push({'date': dom, 'issues': historyArr[i][j].issues, 'issues2': usedArray[j].issues});
+				else
+				comparedArray.push({'date': dom, 'pulls': historyArr[i][j].pulls, 'pulls2': usedArray[j].pulls});
 			}
 		}
 	}
-	setComparisonChart(issuesArr, comparedArray, team, true);
-};
-
-var comparePullsRepositories = function(repoName, allHistory) {
-	var comparedArray = [];
-	var team;
-	for(var i = 0; i < allPullsHistory.length; i++) {
-		if(repoName === allPullsHistory[i][0].team){
-			for(var j = 0; j < allPullsHistory[i].length; j++){
-				var dayOfMonth = stripDate('day');
-				var dom = dayOfMonth(allPullsHistory[i][j].rawDate);
-				team = allPullsHistory[i][j].team;
-				comparedArray.push({'date': dom, 'pulls': allPullsHistory[i][j].pulls, 'pulls2': pullsArr[j].pulls});
-			}
-		}
-	}
-	setComparisonChart(pullsArr, comparedArray, team, false);
-};
+	setComparisonChart(usedArray, comparedArray, team, isIssue);
+}
 
 var setComparisonChart = function(oppData,data , team, isIssue) {
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
