@@ -24,11 +24,9 @@
          var old = <%- JSON.stringify(oldIssueUrl) %>
          var newestIssue = <%- JSON.stringify(newIssueUrl) %>
          var temp = v;
-         console.log(v)
          var temp2 = pr;
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');
-         console.log(issuesMonthlyAvg, pullsMonthlyAvg)
       </script>
       <script src="/js/detectResize.js"></script>
       <script src="/js/external/d3.v3.min.js"></script>
