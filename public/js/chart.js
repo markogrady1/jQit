@@ -1,4 +1,12 @@
 'use strict';
+/**
+ * ==================================
+ * Author: Mark O Grady (c) 2015
+ * ==================================
+ */
+
+
+
 
 /**
  * holds the value of the combined object total
@@ -380,9 +388,7 @@ function setBarChart(data, buildStyle, histObj) {
 			.style('text-anchor', 'middle')
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
 			.text(buildStyle.scope);
-			
 	}	
-
 	if (buildStyle.isIssue)
 		$('#chartArea2').hide();
 }
@@ -1428,7 +1434,6 @@ function setTrendLineColor(num, colors) {
 		strokeWidth: '1.5px',
 	})
 }
-
 
 var getMonthAvg = function(data, target) {
 	var total = _.reduce(data, function(acc, o) {
