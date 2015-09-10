@@ -1,10 +1,10 @@
 'use strict';
-
 /**
- * ==================================
- * Author: Mark O Grady (c) 2015
- * ==================================
+ * @license MIT/GPL
+ * @author Ron Valstar (http://www.sjeiti.com/)
+ * @copyright Ron Valstar <ron@ronvalstar.nl>
  */
+
 
 
 /**
