@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * ==================================
+ * Author: Mark O Grady (c) 2015
+ * ==================================
+ */
+
+
 var scroller = {
 
 	init: function(){

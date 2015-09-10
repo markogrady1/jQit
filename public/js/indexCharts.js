@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * ==================================
+ * Author: Mark O Grady (c) 2015
+ * ==================================
+ */
 
 /**
  * Used to config the colors and layout of the pie chart

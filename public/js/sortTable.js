@@ -1,6 +1,13 @@
 'use strict';
 
 /**
+ * ==================================
+ * Author: Mark O Grady (c) 2015
+ * ==================================
+ */
+
+
+/**
  * sort the table containing the repository data 
  * when a given header is clicked
  *

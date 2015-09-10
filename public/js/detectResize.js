@@ -1,5 +1,11 @@
 
 /**
+ * ==================================
+ * Author: Mark O Grady (c) 2015
+ * ==================================
+ */
+
+/**
  * Used to detect the change of browser window width
  *
  */
