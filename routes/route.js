@@ -93,7 +93,7 @@ router.get('/logins', function(req, res) {
                     if (!error && response.statusCode == 200) {
                        
                         var section = body.split('&');
-                        access_t = helper.getSplitValue(section[0], 1, '=');
+                        access_t = helper.getSplitValue(section[0], '=', 1);
                         
                         var requestify = require('requestify');
 

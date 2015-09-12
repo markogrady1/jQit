@@ -19,7 +19,7 @@ new CronJob('* 5 * * *', function() {
 		}
 		
     	var url = _.map(obj, function(data) {return data.url;})
-	    var dataName = helper.getSplitValue(url, 5, '/');
+	    var dataName = helper.getSplitValue(url, '/', 5);
 	    writeArr += '' + dataName + '  '+obj.length + ',\n';
 	}
 

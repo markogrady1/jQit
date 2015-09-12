@@ -37,7 +37,7 @@ migrate.openIssuesMigrate = function() {
 				continue
 			}
 	        var url = _.map(obj, function(data) { return data.url; })
-		    var dataName = helper.getSplitValue(url, 5, '/');
+		    var dataName = helper.getSplitValue(url, '/', 5);
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
 	            if(err) throw err;
@@ -59,7 +59,7 @@ migrate.pullsMigrate = function() {
 				continue
 			}
         	var url = _.map(obj, function(data) { return data.url; })
-		    var dataName = helper.getSplitValue(url, 5, '/');
+		    var dataName = helper.getSplitValue(url, '/', 5);
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
             	if(err) throw err;
@@ -84,8 +84,8 @@ migrate.eventsMigrate = function() {
 				continue
 			}
         	var url = _.map(obj,function(data) { return data.url; })
-		    var dataName = helper.getSplitValue(url, 5, '/');
-		    dataName = helper.getSplitValue(dataName, 0, ',');
+		    var dataName = helper.getSplitValue(url, '/', 5);
+		    dataName = helper.getSplitValue(dataName, ',', 0);
 		    db.collection(dataName).remove({});
 	        db.collection(dataName).insert(obj, function(err, data){
             	if(err) throw err;
@@ -111,7 +111,7 @@ migrate.closedDataMigration = function(targetData){
 				continue
 			}
         	var url = _.map(obj, function(data) { return data.url; })
-		     var dataName = helper.getSplitValue(url, 5, '/');
+		     var dataName = helper.getSplitValue(url, '/', 5);
 		    db.collection(dataName).remove({});
 		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: false}); //enable bulk inserting of data 
 		    for(var j = 0; j < obj.length; j++){	
