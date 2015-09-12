@@ -199,7 +199,7 @@ function setBarChart(data, buildStyle, histObj) {
 		  .offset([-10, 0])
 		  .html(function(d, i) {
 		  	var date;
-		  	if(buildStyle.dataVal !== 'issues') { dt = pdt; }
+		  	// if(buildStyle.dataVal !== 'issues') { dt = pdt; }
 		  	nth(d[buildStyle.dataKey], function(val){
 		  		date = val;
 		  	});
@@ -414,7 +414,7 @@ function setLineChart(data, buildStyle) {
 				  .offset([-10, 0])
 				  .html(function(d, i) {
 				  	var date;
-				  	if(buildStyle.dataVal !== 'issues') { dt = pdt; }
+				  	// if(buildStyle.dataVal !== 'issues') { dt = pdt; }
 				  	nth(d[buildStyle.dataKey], function(val) {
 				  		date = val;
 				  	});
@@ -1399,7 +1399,6 @@ var appendMultipleLegend = function(thisRepo, team, data) {
 	$elt.prepend($('<br class=multi-break><br class=multi-break><br class=multi-break><svg class=multi-home width=10 height=10><rect class=multi-home width=10 height=10 /></rect></svg><span class=multi-text-title > '+thisRepo+'</span><br class=multi-break>'));
 
 	$elt.append(_.map(data, function(repo){
-		console.log(repo[0].team)
 		return '<svg class=multi-away width=10 height=10><rect class=multi-away width=10 height=10 style=fill:#'+repo[0].designatedColor+'/><rect></svg><span class=multi-text-title > '+repo[0].team+'</span><br class=multi-break>'}));
 }
 var refreshLegend = function() {
