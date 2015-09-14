@@ -1,9 +1,16 @@
-
+'use strict'
 /**
  * ==================================
  * Author: Mark O Grady (c) 2015
  * ==================================
  */
+
+
+/**
+ * Global variables for different window sizes
+ *
+ */
+var chartWidth, barChartHeight, lineChartHeight, standard, scope, $text;
 
 /**
  * Used to detect the change of browser window width
@@ -125,78 +132,42 @@ var repaint = function() {
 		lineChartHeight = 350;
 	}
 
+var issuesLineData = setChartObject(chartWidth, lineChartHeight, 48, 72, 60, 40, 20, "#chartArea", scope, true, "date", "issues", 20);
+
+var pullsLineData = setChartObject(chartWidth, lineChartHeight, 48, 72, 60, 40, 10, "#chartArea2", scope, false, "date", "pulls", 9);
+
+var issuesBarData = setChartObject(chartWidth, barChartHeight, 48, 72, 60, 40, 0, "#chartArea", scope, true, "date", "issues")
+
+var pullsBarData = setChartObject(chartWidth, barChartHeight, 48, 72, 60, 40, 0, "#chartArea2", scope, false, "date", "pulls");
+
+function setChartObject(w, h, top, bottom, left, right, padding, chArea, scope, isIssue, key, val, titleY) {
+
+	if(typeof titleY === "undefined") titleY = null;
+
+	var obj = {
+		w: w, 
+	    h: h,
+	    top: top,
+	    bottom: bottom,
+	    left: left,
+	    right: right,
+	    padding: padding,
+	    chartArea: chArea,
+	    scope: scope,
+	    isIssue: isIssue,
+	    dataKey: key,
+	    dataVal: val,
+	    title: {
+	    	y: titleY
+	    }
+	}
+	return obj;
+}
 
 
 
 
-
-issuesLineData = {
-    w: chartWidth,
-    h: lineChartHeight,
-    top: 48,
-    bottom: 72,
-    left: 60,
-    right: 40,
-    padding: 20,
-    chartArea: "#chartArea",
-    scope: scope,
-    isIssue: true,
-    dataKey: "date",
-    dataVal: "issues",
-    title : {
-      y: 20
-  }
-};
-
-pullsLineData = {
-    w: chartWidth,
-    h: lineChartHeight,
-    top: 48,
-    bottom: 72,
-    left: 60,
-    right: 40,
-    padding: 10,
-    chartArea: "#chartArea2",
-    scope: scope,
-    isIssue: false,
-    dataKey: "date",
-    dataVal: "pulls",
-    title : {
-      y: 9
-  }
-};
-
-issuesBarData = {
-    w: chartWidth, 
-    h: barChartHeight,
-    top: 48,
-    bottom: 72,
-    left: 60,
-    right: 40,
-    padding: 0,
-    chartArea: "#chartArea",
-    scope: scope,
-    isIssue: true,
-    dataKey: "date",
-    dataVal: "issues"
-  };
-
-
- pullsBarData = {
-    w: chartWidth, 
-    h: barChartHeight,
-    top: 48,
-    bottom: 72,
-    left: 60,
-    right: 40,
-    padding: 0,
-    chartArea: "#chartArea2",
-    scope: scope,
-    isIssue: false,
-    dataKey: "date",
-    dataVal: "pulls"
-  };
-	dataset = [] ;
+	var dataset = [] ;
 	var n = [];
 	var m = [];
 	if(standard) {
@@ -220,11 +191,11 @@ issuesBarData = {
 		  m.push({'date': pr[y].date, 'pulls': pr[y].pulls});
 		    //dataset.push(pr[y].pulls);
 		}
-}
-setBarChart(n, issuesBarData);
-setLineChart(n, issuesLineData);
-setBarChart(m, pullsBarData);
-setLineChart(m, pullsLineData);
+	}
+	setBarChart(n, issuesBarData);
+	setLineChart(n, issuesLineData);
+	setBarChart(m, pullsBarData);
+	setLineChart(m, pullsLineData);
 };
 
 
