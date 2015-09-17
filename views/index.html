@@ -12,7 +12,7 @@
     <script>
       var cd = <%- JSON.stringify(pullsNo) %>
       var pd = <%- JSON.stringify(completeD) %>
-      
+      console.log(pd)
       pd.pop(pd.length-1)
     </script>
 </head>
@@ -61,6 +61,7 @@ sortTable();
 </div>
 <script>
 var data = <%- JSON.stringify(completeDoc) %>
+
 scroller.init(); 
 </script>
 </div>

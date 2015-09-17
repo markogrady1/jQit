@@ -1444,3 +1444,46 @@ var getMonthAvg = function(data, target) {
 	var totalAvg = Math.round(total[target] / data.length);
 	return totalAvg;
 };
+
+var getRepoPercentage = function(data) {
+	var homeRepoArray = [];
+	var pathname = window.location.pathname;
+	var repo = pathname.split('/');
+	for (var pos in data) {
+		if(data[pos].name === repo[repo.length-1]) {
+			homeRepoArray =  data[pos];
+		}
+	}
+	console.log(homeRepoArray.name)
+	var issuesArray = [], pullsArray = [];
+	_.map(data, function(val) {
+		issuesArray.push(parseInt(val.issues));
+		if(typeof val.pulls !== 'undefined')
+			pullsArray.push(parseInt(val.pulls));
+	});
+
+	var issuesTotal = getTotalAmount(issuesArray);
+	var pullsTotal = typeof pullsArray[1] !== 'undefined' ? getTotalAmount(pullsArray) : 0;
+	var issuePercentage = calculatePercentage(issuesTotal, homeRepoArray, true);
+	var pullsPercentage = pullsTotal !== 0 ? calculatePercentage(pullsTotal, homeRepoArray, false) : 0;
+	var totals = {
+		issues: issuePercentage,
+		pulls: pullsPercentage
+	}
+
+	return totals;
+}
+
+var getTotalAmount = function(data) {
+	var tot = _.reduce(data, function(previousValue, currentValue, index, array) {
+	  return previousValue + currentValue;
+	}, 0);
+	return tot;
+}
+
+var calculatePercentage = function(repoTotal, homeData, isIssue) {
+	var home = isIssue ? homeData.issues : homeData.pulls;
+	var percentage = (home / repoTotal) * 100;
+	console.log(percentage.toFixed(2) + "%")
+	return percentage;
+}

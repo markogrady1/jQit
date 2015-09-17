@@ -25,6 +25,7 @@
          var newestIssue = <%- JSON.stringify(newIssueUrl) %>
          var temp = v;
          var temp2 = pr;
+         var totals = getRepoPercentage(repoData);
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');
       </script>
@@ -71,6 +72,9 @@
          <p><b> Description: </b> <%= data.description %></p>
          <p><b> Number of forks: </b> <%= data.forks_count %></p>
          <p><b> Average time to close issues: </b> <%= avgIssues %></p>
+         <p><b> Percentage of Open Issues: </b><span class="issuesPercent"><span></p>
+         <p><b> Percentage of Open Pull Requests: </b><span class="pullsPercent"><span></p>
+         <p><b> Average time to close issues: </b> <%= avgIssues %></p>
          <p class='old'>
             <b> Age of oldest issue: </b> <%= issueRange %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <script>
@@ -116,6 +120,11 @@
          </div>
       </div>
       <script>
+      var elm, elm2;
+      elm = document.getElementsByClassName('issuesPercent');
+      elm[0].innerHTML = totals.issues.toFixed(2) + "%";
+      elm2 = document.getElementsByClassName('pullsPercent');
+      elm2[0].innerHTML = totals.pulls.toFixed(2) + "%";
          scroller.init(); 
       </script> 
    </body>

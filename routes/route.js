@@ -36,6 +36,8 @@ router.get('/', function(req, res){
           	compDoc[i].pulls = name[1];
       }
      }
+
+     reslv.cacheRepoData(compDoc);
 	res.render('index', {
 		names: schema.names,
 		issuesNo: schema.issues,
