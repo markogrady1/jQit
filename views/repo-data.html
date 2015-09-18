@@ -25,6 +25,9 @@
          var newestIssue = <%- JSON.stringify(newIssueUrl) %>
          var temp = v;
          var temp2 = pr;
+         var iDiff = getDiff(v, true);
+         var pDiff = getDiff(pr, false);
+         console.log(iDiff+"\n",pDiff)
          var totals = getRepoPercentage(repoData);
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');
@@ -59,6 +62,8 @@
       </script>
       <div class="body-wrap">
          <div class="average"></div>
+         <div><b class="istatus"></b></div>
+         <div><b class="pstatus"></b></div>
          <section class="item"></section>
          <h1 class=current-repo><%= data.name %></h1>
          <p><b>Repository name:</b> <%= data.name %></p>
@@ -125,6 +130,10 @@
       elm[0].innerHTML = totals.issues.toFixed(2) + "%";
       elm2 = document.getElementsByClassName('pullsPercent');
       elm2[0].innerHTML = totals.pulls.toFixed(2) + "%";
+      elm3  = document.getElementsByClassName('istatus');
+      elm3[0].innerHTML = iDiff;
+      elm4  = document.getElementsByClassName('pstatus');
+      elm4[0].innerHTML = pDiff;
          scroller.init(); 
       </script> 
    </body>

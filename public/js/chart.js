@@ -1442,6 +1442,7 @@ var getMonthAvg = function(data, target) {
 	}, {});
 
 	var totalAvg = Math.round(total[target] / data.length);
+	
 	return totalAvg;
 };
 
@@ -1484,6 +1485,28 @@ var getTotalAmount = function(data) {
 var calculatePercentage = function(repoTotal, homeData, isIssue) {
 	var home = isIssue ? homeData.issues : homeData.pulls;
 	var percentage = (home / repoTotal) * 100;
-	console.log(percentage.toFixed(2) + "%")
+
 	return percentage;
+}
+
+var getDiff = function(data, isIssue) {
+	var currentStatus = getDifference(data, isIssue);
+	var strStart = "";
+	var s = currentStatus === 1 ? ""  : "s";
+	var strEnd = isIssue ? " Issue" + s + " since last month" : " Pull Request" + s + " since last month"
+	if(currentStatus <= 0) {
+		currentStatus = currentStatus.toString().replace('-','');
+		strStart = "Down ";
+	} else {
+		strStart = "Up ";
+	}
+	return strStart + currentStatus + strEnd;
+}
+
+function getDifference(data, isIssue) {
+	var first = isIssue ? data[0].issues : data[0].pulls;
+	var last = isIssue ? data[data.length-1].issues : data[data.length-1].pulls;
+	var currentStatus = last - first;
+
+	return currentStatus;
 }
