@@ -1,7 +1,7 @@
 var helper = require('../lib/helper')
 	, MongoClient = require('mongodb').MongoClient
 	, request = require('request')
-	, _ = require('underscore')
+	, _ = require('lodash')
 	, allRepos = require('../repoData/rep');
 		
 var repoArray = _.map(allRepos, function(reps){ return reps.length; });

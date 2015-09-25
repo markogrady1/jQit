@@ -2,7 +2,7 @@ var mongoClient = require("mongodb").MongoClient
     , helper = require('../lib/helper')
     , fs = require('fs')
     , bcrypt = require('bcryptjs')
-    , _ = require('underscore')
+    , _ = require('lodash')
     , CronJob = require('cron').CronJob;
 var hash;
 writeArr = '';
