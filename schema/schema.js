@@ -208,7 +208,8 @@ schema.checkForEmail = function(username, fn) {
 			if (!doc.length) {
 				fn(false)
 			} else {
-				for(var s in doc) {
+				var index = -1;
+				while(++index < doc.length) {
 					fn(doc[0].email)
 				}
 			}
