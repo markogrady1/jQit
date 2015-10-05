@@ -1,4 +1,4 @@
-## jquery-issue-tracker-0.1.0
+## jQit
 ####Requirements:
 - [ ] Make the tracking code public
 - [ ] Monitor all repositories
