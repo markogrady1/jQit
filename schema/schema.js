@@ -152,7 +152,9 @@ schema.executeQuery = function(database, param, callback) {
 				completeData.push(allHistory);
 			});
 		});
-		// db.close();
+		setTimeout(function() {
+			db.close();
+		}, 1000)
 		callback(completeData)
 	});
  }
@@ -304,6 +306,9 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 				} 
 			});
 		});
+		setTimeout(function() {
+			db.close();
+		}, 1000)
 	});
 }
 

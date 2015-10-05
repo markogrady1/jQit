@@ -31,8 +31,9 @@ migrate.repositoryMigrate = function() {
  */
 migrate.openIssuesMigrate = function() {
 	connect('issues', function(db){
-		for(var i = 1; i < repoArray.length; i++){
-			var obj = require('../repoData/issues/open/' + i + "_issues");
+		var index = 0;
+		while(++index < repoArray.length) {
+			var obj = require('../repoData/issues/open/' + index + "_issues");
 			if(obj == ""){
 				continue
 			}
@@ -42,6 +43,9 @@ migrate.openIssuesMigrate = function() {
 	        db.collection(dataName).insert(obj, function(err, data){
 	            if(err) throw err;
 	        });
+			setTimeout(function() {
+				db.close();	
+			}, 3000);
 		}
 		helper.log('DATA MIGRATION', 'jquery open issues loaded', true);
 	});
@@ -53,8 +57,9 @@ migrate.openIssuesMigrate = function() {
  */
 migrate.pullsMigrate = function() {
 	connect('pulls', function(db){
-		for(var i = 1; i < repoArray.length; i++){
-			var obj = require('../repoData/pulls/open/' + i + "_pulls");
+		var index = 0;
+		while(++index < repoArray.length) {
+			var obj = require('../repoData/pulls/open/' + index + "_pulls");
 			if(obj == ""){
 				continue
 			}
@@ -64,13 +69,13 @@ migrate.pullsMigrate = function() {
 	        db.collection(dataName).insert(obj, function(err, data){
             	if(err) throw err;
         	});
+			setTimeout(function() {
+				db.close();
+			}, 3000)
 		}
-		// db.close();
 		helper.log('DATA MIGRATION', 'jquery open pulls loaded', true);
-	// });
 	});
 }
-
 
 /**
  * Migrate all repository events to mongodb
@@ -78,8 +83,9 @@ migrate.pullsMigrate = function() {
  */
 migrate.eventsMigrate = function() {
     connect('events', function(db){
-		for(var i = 1; i < repoArray.length; i++){
-			var obj = require('../repoData/events/' + i + "events");
+    	var index = 0;
+    	while(++index < repoArray.length) {
+			var obj = require('../repoData/events/' + index + "events");
 			if(obj == ""){
 				continue
 			}
@@ -90,12 +96,13 @@ migrate.eventsMigrate = function() {
 	        db.collection(dataName).insert(obj, function(err, data){
             	if(err) throw err;
         	});
+			setTimeout(function() {
+				db.close();
+			}, 1000)
 		}
-		// db.close();
 		helper.log('DATA MIGRATION', 'jquery events loaded', true);
 	});
 }
-
 
 /**
  * Migrate all closed issue data to mongodb
@@ -132,7 +139,6 @@ migrate.closedDataMigration = function(targetData){
 		helper.log('DATA MIGRATION', 'jquery closed ' + targetData + ' loaded', true);
 	});
 }
-
 
 /**
  * connect to a given database via mongodb

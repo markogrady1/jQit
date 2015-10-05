@@ -44,6 +44,9 @@ history.getDataOverTime = function(database, target) {
 			   		});
 				}
 		    }
+			setTimeout(function() {
+				db.close();
+			}, 1000)
     	});
 	});
 	helper.log('HISTORY', 'new ' + target +' history added', false);
@@ -92,6 +95,9 @@ history.getClosedDataOverTime = function(database, target) {
 			   		});
 				}
 		    }
+			setTimeout(function() {
+				db.close();
+			}, 600)
     	});
 	});
 	helper.log('HISTORY', 'new ' + target +' history added', false);
