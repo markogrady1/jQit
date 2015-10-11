@@ -9,13 +9,14 @@ var hst = require('./schema/history')
     , bodyParser = require('body-parser')
     , cookieParser = require('cookie-parser')
     , session = require('express-session')
+    , color = require('./lib/helper').terminalCol();
 
 schema.initConnection();
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + "/views/");
 app.set('view engine', 'html');
 
-app.locals.repoComparison = require('./schema/schema');
+    app.locals.repoComparison = require('./schema/schema');
 
 // app.locals.visualHelper = require('./lib/dataProvider');
 //app.locals.getEvents = require('./lib/resolve')
@@ -35,7 +36,7 @@ app.use(function(req, res, next){
 var server = app.listen('3000', function(){
 	host = server.address().address;
 	port = server.address().port;
-  	console.log('Listening on port: %s', port);
+  	console.log(color['cyan']+color['yellow'],'Listening on port: ', port);
 });
     
 resolve.checkForAssigneeAddition();

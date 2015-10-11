@@ -3,7 +3,7 @@ var fs = require('fs')
 	, MongoClient = require('mongodb').MongoClient;
 
 var history = {}
-
+var color = helper.terminalCol();
 /**
  * Initiate the process of obtaining repository PR and issue history
  * 
@@ -49,7 +49,8 @@ history.getDataOverTime = function(database, target) {
 			}, 1000)
     	});
 	});
-	helper.log('HISTORY', 'new ' + target +' history added', false);
+	var col = [color['cyan']];
+	helper.print(color['cyan'],'HISTORY', '- new ' + target +' history added');
 }
 
 /**
@@ -100,7 +101,7 @@ history.getClosedDataOverTime = function(database, target) {
 			}, 600)
     	});
 	});
-	helper.log('HISTORY', 'new ' + target +' history added', false);
+	helper.print(color['cyan'],'HISTORY', '- new ' + target +' history added');
 }
 
 /**
@@ -113,7 +114,7 @@ history.resetHistory = function(rep) {
 		db.dropDatabase();
 		db.close();
 	});
-	helper.log('HISTORY', 'prev ' + rep +' DB history removed', false);
+	helper.print(color['cyan'],'HISTORY', '- prev ' + rep +' DB history removed');
 }
 
 /**

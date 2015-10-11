@@ -5,7 +5,7 @@ var helper = require('../lib/helper')
 	, allRepos = require('../repoData/rep');
 		
 var repoArray = _.map(allRepos, function(reps){ return reps.length; });
-
+var color = helper.terminalCol();
 var migrate = module.exports = {};
 
 /**
@@ -14,12 +14,12 @@ var migrate = module.exports = {};
  * 
  */
 migrate.repositoryMigrate = function() {
-	helper.log('DATA MIGRATION', 'repositories loading...', false);
+	helper.print(color['cyan'],'DATA MIGRATION', 'repositories loading...');
 	connect('repositories', function(db){
 		db.collection('repos').remove({});
 	    db.collection('repos').insert(allRepos, function(err, data){
 	    	if(err) throw err;
-	    	helper.log('DATA MIGRATION', 'jquery repositories loaded', true);
+	    	helper.print(color['cyan'],'DATA MIGRATION', '- jquery repositories loaded');
 			db.close();
 	    });
 	});
@@ -47,7 +47,7 @@ migrate.openIssuesMigrate = function() {
 				db.close();	
 			}, 3000);
 		}
-		helper.log('DATA MIGRATION', 'jquery open issues loaded', true);
+		helper.print(color['cyan'],'DATA MIGRATION', '- jquery open issues loaded');
 	});
 }
 
@@ -73,7 +73,7 @@ migrate.pullsMigrate = function() {
 				db.close();
 			}, 3000)
 		}
-		helper.log('DATA MIGRATION', 'jquery open pulls loaded', true);
+		helper.print(color['cyan'],'DATA MIGRATION', '- jquery open pulls loaded');
 	});
 }
 
@@ -100,7 +100,7 @@ migrate.eventsMigrate = function() {
 				db.close();
 			}, 1000)
 		}
-		helper.log('DATA MIGRATION', 'jquery events loaded', true);
+		helper.print(color['cyan'],'DATA MIGRATION', '- jquery events loaded');
 	});
 }
 
@@ -136,7 +136,7 @@ migrate.closedDataMigration = function(targetData){
 		    batch.execute(function(err, result){});
 		}
 		db.close();
-		helper.log('DATA MIGRATION', 'jquery closed ' + targetData + ' loaded', true);
+		helper.print(color['cyan'],'DATA MIGRATION', '- jquery closed ' + targetData + ' loaded');
 	});
 }
 
