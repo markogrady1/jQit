@@ -44,9 +44,9 @@ history.getDataOverTime = function(database, target) {
 			   		});
 				}
 		    }
-			setTimeout(function() {
-				db.close();
-			}, 1000)
+			// setTimeout(function() {/////////////////////////////////////
+			// 	db.close();
+			// }, 1000)
     	});
 	});
 	var col = [color['cyan']];

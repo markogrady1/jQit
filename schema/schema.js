@@ -36,9 +36,6 @@ new CronJob('* 5 * * *', function() {
 }, null, true, "Europe/London");
 */
 
-
-
-
 /**
  * connect to mongoDB and aquire data for all documents concerning repositories
  * 
@@ -218,7 +215,6 @@ schema.checkForEmail = function(username, fn) {
 		})
 	})
 }
-
 
 /**
  * Store registered user details to database
