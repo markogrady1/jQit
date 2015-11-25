@@ -20,7 +20,10 @@ migrate.repositoryMigrate = function() {
 	    db.collection('repos').insert(allRepos, function(err, data){
 	    	if(err) throw err;
 	    	helper.print(color['cyan'],'DATA MIGRATION', '- jquery repositories loaded');
-			db.close();
+			setTimeout(function() {
+				if(db !== null)
+					db.close();	
+			}, 1000);
 	    });
 	});
 }
