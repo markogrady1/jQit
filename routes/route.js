@@ -1,4 +1,4 @@
-var migrate = require('../schema/migrate')
+var migrate = require('../schema/repoMigrate')
 	, schema = require('../schema/schema')
 	, df = require('../lib/date')
 	, helper = require('../lib/helper')

@@ -97,7 +97,8 @@ history.getClosedDataOverTime = function(database, target) {
 				}
 		    }
 			setTimeout(function() {
-				db.close();
+				if(db !== null)
+					db.close();
 			}, 600)
     	});
 	});

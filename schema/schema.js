@@ -42,7 +42,6 @@ new CronJob('* 5 * * *', function() {
  */
 schema.initConnection = function() {
 	self = this;
- 	console.log('schema connecting...');
     helper.log('CONNECTION','mongoDB connection made', true);
 	var projection = { "name": 1, "open_issues": 1,"forks_count": 1, "watchers":1, "_id": 0 }
 	repoNames = [];

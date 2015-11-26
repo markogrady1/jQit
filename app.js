@@ -1,5 +1,5 @@
 var hst = require('./schema/history')
-    , migrate = require('./schema/migrate')
+    , migrate = require('./schema/repoMigrate')
     , express = require('express')
     , app = express()
     , routes = require('./routes/route')
