@@ -18,7 +18,7 @@
          var dt = <%- JSON.stringify( fullDate) %>
          var pdt = <%- JSON.stringify( fullPullDate) %>
          var v = <%- JSON.stringify(ch) %>
-         var pr = <%- JSON.stringify(chPull) %>   
+         var pr = <%- JSON.stringify(chPull) %>
          pr = pr.slice(-29) // return correct array amount for pulls history chart
          var p = <%- JSON.stringify(events) %>
          var old = <%- JSON.stringify(oldIssueUrl) %>
@@ -40,7 +40,7 @@
       </style>
    </head>
    <body>
-     
+
       <div id=changeView></div>
       <div id=changeView2></div>
       <div id=display-data-info></div>
@@ -68,7 +68,8 @@
          <h1 class=current-repo><%= data.name %></h1>
          <p><b>Repository name:</b> <%= data.name %></p>
          <p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
-         <p><b> Open Issues: </b> <%= data.open_issues %>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
+          <!--this line below uses the calculated issues amount after subtracting the PRs from it -->
+         <p><b> Open Issues: </b> <span class="openIssuesNumDisplay"></span>&nbsp;<a href=../issue/details/<%= data.name %>>Details</a></p>
          <p><b> Closed issues: </b> <%= closedissues %></p>
          <p><b> Pull Requests: </b> <%= pullRequestNo %></p>
          <p><b> Closed Pull Requests: </b> <%= closedPulls %></p>
@@ -125,6 +126,11 @@
          </div>
       </div>
       <script>
+
+          $(document).ready(function(){
+              $(".openIssuesNumDisplay").html(v[v.length-1].issues);
+          });
+
       var elm, elm2;
       elm = document.getElementsByClassName('issuesPercent');
       elm[0].innerHTML = totals.issues.toFixed(2) + "%";

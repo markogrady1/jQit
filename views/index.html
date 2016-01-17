@@ -34,11 +34,13 @@
   </tr>
   </thead>
   <tbody>
-    <% for (var i = 0; i < completeD.length; i++) { %>
-    
+    <% for (var i = 0; i < completeD.length; i++) {
+        var calculatedIssues = completeD[i].issues - completeD[i].pulls
+        calculatedIssues = calculatedIssues < 0 ? 0 : calculatedIssues
+    %>
    <tr>
    <td > <a class='index-name-link' href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a></td>
-    <td ><%- completeD[i].issues%></td>
+    <td ><%= calculatedIssues %></td>
     <td ><%- completeD[i].pulls%></td>
     <td><%- completeD[i].forks%></td>
     <td><%- completeD[i].watchers%></td>
@@ -47,9 +49,8 @@
 <% } %> 
   </tbody>
 </table>
-<script> 
-// indexChart({'mark':'hi'});
-sortTable();
+<script>
+    sortTable();
 </script>
 
 <div class="chart-area"></div>

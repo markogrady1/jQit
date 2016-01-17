@@ -92,7 +92,7 @@ history.getClosedDataOverTime = function(database, target) {
 					{ 'team': collection, 'isoDate': new Date(dates[0]), 'rawDate': dates[0], 'secondsDate': parseInt(dates[1]), 'issues': amount }
 
 			   		db.collection(collection).insert(doc, function(err, inserted){
-			   			if(err) throw err;
+			   			//if(err) throw err;
 			   		});
 				}
 		    }
