@@ -154,24 +154,24 @@ router.get('*', function(req, res) {
 var setBodyValue = function(body, res) {
 	var bd = body;
 
-	 localStorage.setItem('data','')
+	 localStorage.setItem('data','');
 	 localStorage.setItem('data', bd.login + "=>" + bd.avatar_url + "=>" + bd.email + "")
 	
-						
+
 	var userDetails = {
 		'login': bd.login,
 		'email': bd.email,
 		'avatar_url': bd.avatar_url
-	}
+	};
  	
  	return userDetails;
-}
+};
 
 module.exports = function(appl, serv) {
 	app = appl;
 	app.locals.username = '';
 	return router;
-}
+};
 
 function resetStorage() {
 	localStorage.setItem('data','');

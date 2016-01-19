@@ -38,7 +38,7 @@ var server = app.listen('3000', function(){
 	port = server.address().port;
   	console.log(color['cyan']+color['yellow'],'Listening on port: ', port);
 });
-    
+
 resolve.checkForAssigneeAddition();
 app.use('/', routes(app, server));
 module.exports = app;
