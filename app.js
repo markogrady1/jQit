@@ -33,7 +33,7 @@ app.use(function(req, res, next){
 	next();
 });
 
-var server = app.listen('3000', function(){
+var server = app.listen('3000', () => {
 	host = server.address().address;
 	port = server.address().port;
   	console.log(color['cyan']+color['yellow'],'Listening on port: ', port);

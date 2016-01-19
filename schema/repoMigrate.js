@@ -4,7 +4,7 @@ var helper = require('../lib/helper')
 	, _ = require('lodash')
 	, allRepos = require('../repoData/rep');
 		
-var repoArray = _.map(allRepos, function(reps){ return reps.length; });
+var repoArray = _.map(allRepos, (reps) => { return reps.length; });
 var color = helper.terminalCol();
 var migrate = module.exports = {};
 
@@ -15,12 +15,12 @@ var migrate = module.exports = {};
  */
 migrate.repositoryMigrate = function() {
 	helper.print(color['cyan'],'DATA MIGRATION', 'repositories loading...');
-	connect('repositories', function(db){
+	connect('repositories', (db) => {
 		db.collection('repos').remove({});
-	    db.collection('repos').insert(allRepos, function(err, data){
+	    db.collection('repos').insert(allRepos, (err, data) => {
 	    	if(err) throw err;
 	    	helper.print(color['cyan'],'DATA MIGRATION', '- jquery repositories loaded');
-			setTimeout(function() {
+			setTimeout(() => {
 				if(db !== null)
 					db.close();	
 			}, 1000);
@@ -40,13 +40,13 @@ migrate.openIssuesMigrate = function() {
 			if(obj == ""){
 				continue
 			}
-	        var url = _.map(obj, function(data) { return data.url; })
+	        var url = _.map(obj, (data) => { return data.url; })
 		    var dataName = helper.getSplitValue(url, '/', 5);
 		    db.collection(dataName).remove({});
-	        db.collection(dataName).insert(obj, function(err, data){
+	        db.collection(dataName).insert(obj, (err, data) => {
 	            if(err) throw err;
 	        });
-			setTimeout(function() {
+			setTimeout(() => {
 				db.close();	
 			}, 3000);
 		}
@@ -59,20 +59,20 @@ migrate.openIssuesMigrate = function() {
  * 
  */
 migrate.pullsMigrate = function() {
-	connect('pulls', function(db){
+	connect('pulls', (db) => {
 		var index = 0;
 		while(++index < repoArray.length) {
 			var obj = require('../repoData/pulls/open/' + index + "_pulls");
 			if(obj == ""){
 				continue
 			}
-        	var url = _.map(obj, function(data) { return data.url; })
+        	var url = _.map(obj, (data) => { return data.url; })
 		    var dataName = helper.getSplitValue(url, '/', 5);
 		    db.collection(dataName).remove({});
-	        db.collection(dataName).insert(obj, function(err, data){
+	        db.collection(dataName).insert(obj, (err, data) => {
             	if(err) throw err;
         	});
-			setTimeout(function() {
+			setTimeout(() => {
 				db.close();
 			}, 3000)
 		}

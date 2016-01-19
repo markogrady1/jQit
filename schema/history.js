@@ -23,9 +23,9 @@ history.init = function (){
  */
 history.getDataOverTime = function(database, target) {
 	this.resetHistory(database);
-	this.getHistoryFile(target, false, function(err, data) {
+	this.getHistoryFile(target, false, (err, data) => {
     if(err) throw err;
-    	history.connect(database, function(db){
+    	history.connect(database, (db) => {
 	      	repoChunk = data.split('*');
 		    for(var i = 1; i < repoChunk.length; i++){
 		    	repoDt = repoChunk[i].split(',');
@@ -75,9 +75,9 @@ history.getHistoryFile = function(target, closed, callback) {
  */
 history.getClosedDataOverTime = function(database, target) {
 	this.resetHistory(database);
-	this.getHistoryFile(target, true, function(err, data) {
+	this.getHistoryFile(target, true, (err, data) => {
     if(err) throw err;
-    	history.connect(database, function(db){
+    	history.connect(database, (db) => {
 	      	repoChunk = data.split('*');
 		    for(var i = 1; i < repoChunk.length; i++){
 		    	repoDt = repoChunk[i].split(',');
@@ -111,7 +111,7 @@ history.getClosedDataOverTime = function(database, target) {
  * @param {String} rep
  */
 history.resetHistory = function(rep) {
-	history.connect(rep, function(db){
+	history.connect(rep, (db) => {
 		db.dropDatabase();
 		db.close();
 	});
@@ -125,7 +125,7 @@ history.resetHistory = function(rep) {
  * @param {Function} callback
  */
 history.connect = function(dbase, callback) {
-	MongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db){
+	MongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, (err, db) => {
 		if(err) throw err;
 		callback(db);
 	});
