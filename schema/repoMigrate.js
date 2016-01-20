@@ -46,9 +46,10 @@ migrate.openIssuesMigrate = function() {
 	        db.collection(dataName).insert(obj, (err, data) => {
 	            if(err) throw err;
 	        });
-			setTimeout(() => {
-				db.close();	
-			}, 3000);
+			//setTimeout(() => {
+			//	if(db !== null)
+			//		db.close();
+			//}, 3000);
 		}
 		helper.print(color['cyan'],'DATA MIGRATION', '- jquery open issues loaded');
 	});
@@ -73,7 +74,8 @@ migrate.pullsMigrate = function() {
             	if(err) throw err;
         	});
 			setTimeout(() => {
-				db.close();
+				if(db !== null)
+					db.close();
 			}, 3000)
 		}
 		helper.print(color['cyan'],'DATA MIGRATION', '- jquery open pulls loaded');
@@ -138,7 +140,8 @@ migrate.closedDataMigration = function(targetData){
 		    }
 		    batch.execute(function(err, result){});
 		}
-		db.close();
+		if(db !== null)
+			db.close();
 		helper.print(color['cyan'],'DATA MIGRATION', '- jquery closed ' + targetData + ' loaded');
 	});
 }

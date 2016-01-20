@@ -21,11 +21,11 @@ app.set('view engine', 'html');
 // app.locals.visualHelper = require('./lib/dataProvider');
 //app.locals.getEvents = require('./lib/resolve')
 app.use(cookieParser());
-app.use(session({ 
+app.use(session({
 	secret:'jkgabglhantiovqatapiteioatbthtipw4uiwtwu4hthtui42htuohRUVH3932HRTEJGWTWVEHGUIHAIHJSoheojahghvghjkher9turhtreig',
 	saveUninitialized: true,
 	resave: true 
-	})); 
+	}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next){

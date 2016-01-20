@@ -83,7 +83,7 @@ router.get('/logins', function(req, res) {
     var request = require('request');
 
     if (state === localState) {
-        console.log(localState + ' is matched.')
+        console.log(localState + ' token is matched.')
             request.post(
                 'https://github.com/login/oauth/access_token?client_id=' + auth.github_client_id + '&client_secret=' + auth.github_client_secret + '&code=' + code, {
                     form: {

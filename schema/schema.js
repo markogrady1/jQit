@@ -149,7 +149,8 @@ schema.executeQuery = function(database, param, callback) {
 			});
 		});
 		setTimeout(function() {
-			db.close();
+			if(db !== null)
+				db.close();
 		}, 1000)
 		callback(completeData)
 	});
@@ -302,7 +303,8 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 			});
 		});
 		setTimeout(function() {
-			db.close();
+			if(db !== null)
+				db.close();
 		}, 1000)
 	});
 }
@@ -348,7 +350,8 @@ User.prototype.register = function(res) {
 				statusR = 'good';
 			}			
 		});
-		db.close();
+		if(db !== null)
+			db.close();
 	});	
 }
 
