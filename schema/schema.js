@@ -335,7 +335,8 @@ var RegisteredUser = function(x, y) { return new User(x, y); }
  *
  * @param {Object} res 
  */
-User.prototype.register = function(res) {
+User.prototype.register = function(res, io) {
+	this.io = io;
 	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));  //not used currently
 	var query = { 'username': this.username, 'email': this.email};
 	connection('user', function(db) {
@@ -346,7 +347,12 @@ User.prototype.register = function(res) {
 				res.render('register', { register: 'Email has been used before' });
 				 console.log('Duplicate Email: Alert User');
 			} else {
-				res.render('login', { login: 'You will now receive an  email anytime an issue or PR is assigned to you' });
+				var data = localStorage.getItem('data');
+				var avatar = helper.getSplitValue(data, '=>', 1);
+				var avatNum = helper.getSplitValue(avatar, '/', -1)
+				//res.render('login', { login: 'You will now receive an  email anytime an issue or PR is assigned to you' });
+				this.io.emit("user", "true")
+				res.redirect('/?state=true&av=' + avatNum);
 				statusR = 'good';
 			}			
 		});

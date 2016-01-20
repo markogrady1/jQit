@@ -25,7 +25,9 @@ app.use(session({
 	secret:'jkgabglhantiovqatapiteioatbthtipw4uiwtwu4hthtui42htuohRUVH3932HRTEJGWTWVEHGUIHAIHJSoheojahghvghjkher9turhtreig',
 	saveUninitialized: true,
 	resave: true 
-	}));
+}));
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next){
@@ -38,7 +40,12 @@ var server = app.listen('3000', () => {
 	port = server.address().port;
   	console.log(color['cyan']+color['yellow'],'Listening on port: ', port);
 });
+var io_ = require("socket.io");
+var io = io_.listen(server);
 
+io.on("disconnect", function(socket){
+	localStorage.setItem("data", "");
+});
 resolve.checkForAssigneeAddition();
-app.use('/', routes(app, server));
+app.use('/', routes(app, server, io));
 module.exports = app;

@@ -8,7 +8,7 @@ state = state.split('=');
 
 if(state[0] === '?state') {
 
-	$('.login-seq').append("<a class=git-log href=logout>Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+state[state.length-2]+ "="+state[state.length-1]+">".toString())
+	$('.login-seq').append("<a id=gitlogout class='git-log git-logout' href=logout>Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+state[state.length-2]+ "="+state[state.length-1]+">".toString())
 	var pathname = window.location.pathname;
 	if(pathname !== '/')
 		$('.git-log').remove()

@@ -5,7 +5,8 @@ var migrate = require('../schema/repoMigrate')
 	, reslv = require('../lib/mainController')
 	, express = require('express')
 	, auth = require('../config/auth')
-	, router = express.Router();
+	, router = express.Router()
+    , fs = require('fs');
 
 if (typeof localStorage === "undefined" || localStorage === null) {
 	  var LocalStorage = require('node-localstorage').LocalStorage;
@@ -18,7 +19,7 @@ console.log('router called');
 
 //route for the home page
 router.get('/', function(req, res){
-
+	var avaNum = checkLoggedInStatusofUser();
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log('index router called');
@@ -104,7 +105,7 @@ router.get('/logins', function(req, res) {
 	                            acc = response.getBody();
 	                            resetStorage();
 	                            acc = setBodyValue(acc, res)
-	                            reslv.initiateRegistration(req, res, state, acc);
+	                            reslv.initiateRegistration(req, res, state, acc, this.io);
                         });
                     }
                 }
@@ -138,6 +139,7 @@ router.post('/register', function(req, res) {
 });
 
 router.get('/logout', function(req, res) {
+	removeLoggedInStatusofUser();
 	req.session.destroy();
 	var localState = localStorage.setItem('state', '');
 	app.locals.username = '';
@@ -145,6 +147,9 @@ router.get('/logout', function(req, res) {
 	res.redirect('/');
 });
 
+router.get('/profile', (req, res) => {
+	res.render('profile', {})
+})
 //STATUS: 404 back-up
 router.get('*', function(req, res) {
 	res.end('<h1>you\'ve been 404\'d</h1>');
@@ -167,12 +172,38 @@ var setBodyValue = function(body, res) {
  	return userDetails;
 };
 
-module.exports = function(appl, serv) {
+module.exports = function(appl, serv, io) {
 	app = appl;
+	this.io = io;
 	app.locals.username = '';
 	return router;
 };
 
 function resetStorage() {
 	localStorage.setItem('data','');
+}
+
+function checkLoggedInStatusofUser() {
+	var data = localStorage.getItem('data')
+
+	if(data === ' ') {
+		console.log("no user")
+		return 'undefined';
+	} else {
+		var name = helper.getSplitValue(data, '=>', 0)
+		var email = helper.getSplitValue(data, '=>', 2)
+		var avatar = helper.getSplitValue(data, '=>', 1)
+		avatNum = helper.getSplitValue(avatar, '/', -1)
+		console.log("user logged in")
+
+		return avatNum;
+	}
+}
+
+function removeLoggedInStatusofUser() {
+	fs.writeFile('./scratch/data', ' ', (err) => {
+		if (err) throw err;
+		console.log('User temporary data removed');
+	});
+
 }
