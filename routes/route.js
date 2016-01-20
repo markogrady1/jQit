@@ -148,7 +148,11 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/profile', (req, res) => {
-	res.render('profile', {})
+	var avatar = checkLoggedInStatusofUser();
+	res.render('profile', {
+		state: "true",
+		av: avatar
+	})
 })
 //STATUS: 404 back-up
 router.get('*', function(req, res) {
