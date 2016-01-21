@@ -20,6 +20,7 @@ console.log('router called');
 //route for the home page
 router.get('/', function(req, res){
 	var avaNum = checkLoggedInStatusofUser();
+
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log('index router called');
@@ -46,10 +47,13 @@ router.get('/', function(req, res){
 		pullsNo: prs,
 		urlstate: urlstate,
 		state: c,
-		header: 'Main page'
+		header: 'Main page',
+		av: avaNum
 		});
+		io.emit("logevent", { av: avaNum })
 	});
 });
+
 
 //route for single repository data
 router.get('/repo/details/:repoName?', function(req, res) {
@@ -191,14 +195,12 @@ function checkLoggedInStatusofUser() {
 	var data = localStorage.getItem('data')
 
 	if(data === ' ') {
-		console.log("no user")
 		return 'undefined';
 	} else {
 		var name = helper.getSplitValue(data, '=>', 0)
 		var email = helper.getSplitValue(data, '=>', 2)
 		var avatar = helper.getSplitValue(data, '=>', 1)
 		avatNum = helper.getSplitValue(avatar, '/', -1)
-		console.log("user logged in")
 
 		return avatNum;
 	}

@@ -17,6 +17,8 @@
     <script>
       var cd = <%- JSON.stringify(pullsNo) %>
       var pd = <%- JSON.stringify(completeD) %>
+      var av = <%- JSON.stringify(av) %>
+
       console.log(pd)
       pd.pop(pd.length-1)
     </script>
@@ -25,31 +27,39 @@
 <header class='header'>
     <h1><%= header %></h1>
     <div class='login-seq'></div>
+    <div class="login-status"></div>
     <script>
-        var user = localStorage.getItem('9d7g9d8a7g7dsaas0')
-        var state = window.location.search;
-        state = state.split('=');
+//        var user = localStorage.getItem('9d7g9d8a7g7dsaas0')
+//        var state = window.location.search;
+//        state = state.split('=');
+//
+//        if(state[0] === '?state') {
+//
+//            $('.login-seq').append("<a id=gitlogout class='git-log git-logout' href=logout>Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+state[state.length-2]+ "="+state[state.length-1]+">".toString())
+//            $('.login-seq').append("<div><a class='profile' href='profile'>yoyoyoyo</a></div>")
+//            var pathname = window.location.pathname;
+//            if(pathname !== '/')
+//                $('.git-log').remove()
+//            localStorage.setItem('9d7g9d8a7g7dsaas0', true)
+//            $('.git-log').attr('class', 'login-seq logout');
+//            $('.logout').on('click', function(){
+//                localStorage.setItem('9d7g9d8a7g7dsaas0', false)
+//            })
+//
+//        } else {
+//            $('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a><br><br>'.toString())
+//            localStorage.setItem('9d7g9d8a7g7dsaas0', false)
+//            var pathname = window.location.pathname;
+//            if(pathname !== '/')
+//                $('.git-log').remove()
+//        }
 
-        if(state[0] === '?state') {
-
-            $('.login-seq').append("<a id=gitlogout class='git-log git-logout' href=logout>Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+state[state.length-2]+ "="+state[state.length-1]+">".toString())
-            $('.login-seq').append("<div><a class='profile' href='profile'>yoyoyoyo</a></div>")
-            var pathname = window.location.pathname;
-            if(pathname !== '/')
-                $('.git-log').remove()
-            localStorage.setItem('9d7g9d8a7g7dsaas0', true)
-            $('.git-log').attr('class', 'login-seq logout');
-            $('.logout').on('click', function(){
-                localStorage.setItem('9d7g9d8a7g7dsaas0', false)
-            })
-
+        if (av !== 'undefined') {
+            $(".login-status").append("<a id=gitlogout class='git-log git-logout' href=logout>Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+av+">")
         } else {
-            $('.login-seq').append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a><br><br>'.toString())
-            localStorage.setItem('9d7g9d8a7g7dsaas0', false)
-            var pathname = window.location.pathname;
-            if(pathname !== '/')
-                $('.git-log').remove()
+            $(".login-status").append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a><br><br>'.toString())
         }
+        console.log("this is the av from load " + av)
     </script>
 </header>
 <div class="pie"></div>
@@ -98,7 +108,9 @@
 var data = <%- JSON.stringify(completeDoc) %>
 
 scroller.init();
-
+    socket.on("logevent", function(socket) {
+        console.log(socket)
+    })
     socket.on("user", function(socket) {
         console.log('user emitted')
     })

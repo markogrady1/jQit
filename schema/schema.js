@@ -343,17 +343,14 @@ User.prototype.register = function(res, io) {
 		db.collection('users').insert(query, function(err, result){
 			console.log('user made');
 			if (err && err.code == 11000) {
-				statusR = 'Email has been used before.';
 				res.render('register', { register: 'Email has been used before' });
-				 console.log('Duplicate Email: Alert User');
+                console.log('Duplicate Email: Alert User');
 			} else {
 				var data = localStorage.getItem('data');
 				var avatar = helper.getSplitValue(data, '=>', 1);
 				var avatNum = helper.getSplitValue(avatar, '/', -1)
-				//res.render('login', { login: 'You will now receive an  email anytime an issue or PR is assigned to you' });
-				this.io.emit("user", "true")
-				res.redirect('/?state=true&av=' + avatNum);
-				statusR = 'good';
+				res.redirect('/');
+				this.io.emit("logevent",{ av: avatNum })
 			}			
 		});
 		if(db !== null)
