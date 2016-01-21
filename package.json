@@ -2,7 +2,7 @@
   "name": "jquery-issue-tracker",
   "version": "0.1.0",
   "description": "Tracker for jQuery issues and push requests",
-  "main": "app.js",
+  "main": "server.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/markogrady1/jquery-issue-tracker-0.1.0.git"

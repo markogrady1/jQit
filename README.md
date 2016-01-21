@@ -32,7 +32,7 @@ In the Terminal.
 ```bash
 $ cd jquery-issue-tracker-0.1.0
 $ npm install --save
-$ node app.js
+$ node server.js
 ```
 Open the browser and enter the URL
 ```bash
