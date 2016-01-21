@@ -17,7 +17,7 @@
     <script>
       var cd = <%- JSON.stringify(pullsNo) %>
       var pd = <%- JSON.stringify(completeD) %>
-      var av = <%- JSON.stringify(av) %>
+
 /**
  * The pd variable contains all the data needed for each of the repositories
  * The values are set out as the example below displays.
@@ -37,29 +37,18 @@
     </script>
 </head>
 <body>
-<header class='header'>
-    <h1><%= header %></h1>
-    <div class="login-status"></div>
-    <script>
-        if (av !== 'undefined') {
-            $(".login-status").append("<a id=gitlogout class='git-log git-logout' href=logout>Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+av+">")
-        } else {
-            $(".login-status").append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a><br><br>'.toString())
-        }
-        console.log("this is the av from load " + av)
-    </script>
-</header>
+<% include partials/header.html %>
 <div class="pie"></div>
 <div class="body-wrap">
 <table class="props xmpl" id="xtable">
   <thead>
   <tr >
-    <th class='head'>Name</th>
-    <th class='head'>Issues</th>
-    <th class='head'>PR's</th>
-    <th class='head'>Forks</th>
-    <th class='head'>Watchers</th>
-    <th class='head github-head'>GitHub</th>
+    <th class="head">Name</th>
+    <th class="head">Issues</th>
+    <th class="head">PR's</th>
+    <th class="head">Forks</th>
+    <th class="head">Watchers</th>
+    <th class="head github-head">GitHub</th>
   </tr>
   </thead>
   <tbody>
@@ -68,14 +57,14 @@
         calculatedIssues = calculatedIssues < 0 ? 0 : calculatedIssues
     %>
    <tr>
-   <td > <a class='index-name-link' href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a></td>
+   <td > <a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a></td>
     <td ><%= calculatedIssues %></td>
     <td ><%- completeD[i].pulls%></td>
     <td><%- completeD[i].forks%></td>
     <td><%- completeD[i].watchers%></td>
-    <td class='github-detail'><a class='index-github-link' target='_blank' href=<%- completeD[i].github_url%>> <%- completeD[i].github_url%></a></td>
+    <td class="github-detail"><a class="index-github-link" target="_blank" href=<%- completeD[i].github_url%>> <%- completeD[i].github_url%></a></td>
   </tr>
-<% } %> 
+<% } %>
   </tbody>
 </table>
 <script>
@@ -86,21 +75,21 @@
 <p><%= username %>
 <div class="button-wrap">
 <% for (var i = 0; i < names.length; i++) { %>
-   <a href=repo/details/<%= names[i] %>><div class='open-issue-repo'><%= names[i] %><span class='issue-count' ><%= issuesNo[i] %></span></div></a>   
-<% } %> 
+   <a href=repo/details/<%= names[i] %>><div class="open-issue-repo"><%= names[i] %><span class="issue-count" ><%= issuesNo[i] %></span></div></a>
+<% } %>
 </div>
 <script>
 var data = <%- JSON.stringify(completeDoc) %>
 
 scroller.init();
 
-    socket.on("logevent", function(socket) {
+    socket.on("userStatus", function(socket) {
         console.log(socket)
     });
 
     $("#gitlogout").on("click", function() {
         socket.emit("logout-hit");
-    })
+    });
 </script>
 </div>
 </body>

@@ -350,7 +350,7 @@ User.prototype.register = function(res, io) {
 				var avatar = helper.getSplitValue(data, '=>', 1);
 				var avatNum = helper.getSplitValue(avatar, '/', -1)
 				res.redirect('/');
-				this.io.emit("logevent",{ av: avatNum })
+				this.io.emit("userStatus",{ av: avatNum })
 			}			
 		});
 		if(db !== null)
