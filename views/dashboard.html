@@ -8,8 +8,81 @@
 <script src="/js/external/scrilla.js"></script>
 <script src="/js/sortTable.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<body>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
 <% include partials/header.html %>
 <a href="/">back</a>
+<br><br><br>
+<select name="dashboard-watch1" id="dashboard-watch1">
+    <option value="">Watch</option>
+
+        <% for (var i = 0; i < compDoc.length; i++) { %>
+    <option value="<%= compDoc[i].name %>"><%= compDoc[i].name %></option>
+    <% } %>
+</select>
+<div>Issues increase limit: <span id="issue-slider-amount"></span></div>
+<div id="issue-slider"></div>
+<div>Pull Requests increase limit: <span id="pulls-slider-amount"></span></div>
+<div id="pulls-slider"></div>
+<input type="checkbox" id="receive-email" class="receive-email-chck">
+<label for="receive-email">Receive Email</label>
+<br>
+<input type="checkbox" id="flag-chart" class="flag-chart-chck">
+<label for="flag-chart">Flag Chart</label>
+<div class="ajax-btn">&nbsp;&nbsp;&nbsp;&nbsp;click me</div>
+
+<script>
+    //function to handle the slider setup
+    $(function() {
+        sliderInit("#issue-slider", "#issue-slider-amount");
+        sliderInit("#pulls-slider", "#pulls-slider-amount");
+    });
+
+
+    //ajax call for save settings
+    $(".ajax-btn").click(function() {
+        console.log("ckickd")
+
+        $.ajax({
+            method: "POST",
+            url: "ajaxcall",
+            data: {
+                watchTarget: function() {
+                    var watchtarget = $('#dashboard-watch1 :selected').text();
+                    return watchtarget;
+                },
+                receiveEmail: function() {
+                    var receive = $("#receive-email").is(":checked") ? true : false;
+                    return receive;
+                },
+                flagChart: function() {
+                    var flagchrt = $("#flag-chart").is(":checked") ? true : false;
+                    return flagchrt;
+                },
+                issueSlider: $("#issue-slider-amount").html(),
+                pullsSlider: $("#pulls-slider-amount").html()
+            }
+        }).done(function(msg) {
+            $(".ajax-btn").html(msg)
+        });
+    });
+
+    function sliderInit(sliderElem, amountDisplay) {
+        $( sliderElem).slider({
+            range: "min",
+            value:1,
+            min: 1,
+            max: 20,
+            step: 1,
+            slide: function( event, ui ) {
+                $( amountDisplay ).html(ui.value );
+            }
+        });
+        $( amountDisplay).html($( sliderElem).slider( "value" ) );
+    }
+</script>
+
+
 </body>
 </html>

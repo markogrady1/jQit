@@ -158,18 +158,38 @@ router.get("/dashboard", (req, res) => {
 		res.redirect("/")
 	} else {
 		c = helper.getRandomString();
-		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
+		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+        compDoc = schema.completeDoc;
 		res.render("dashboard", {
 			state: "true",
 			av: avatar,
 			header: "Dashboard",
 			urlstate: urlstate,
 			state: c,
-			dashLink: ""
+			dashLink: "",
+            compDoc: compDoc
 		});
 	}
-
 });
+
+router.post("/ajaxcall", (req, res) => {
+    var watchTarget = req.body.watchTarget;
+    var receiveEmail = req.body.receiveEmail;
+    var flagchart = req.body.flagChart;
+    var issueBoundary = req.body.issueSlider;
+    var pullsBoundary = req.body.pullsSlider;
+    watchTarget = watchTarget === "Watch" ? null : watchTarget;
+    var data = localStorage.getItem("data");
+    var name = helper.getSplitValue(data, "=>", 0);
+    var email = helper.getSplitValue(data, "=>", 2);
+    var avatar = helper.getSplitValue(data, "=>", 1);
+    avatNum = helper.getSplitValue(avatar, "/", -1);
+    console.log(name);
+    console.log(email);
+    console.log(avatar);
+    //this next line is for debugging purposes
+    res.send("from server: - target: " + watchTarget +  " - Receive email:" + receiveEmail + " - flag chart: " + flagchart + " - issue limit: " + issueBoundary + " - pulls limit: " + pullsBoundary )
+})
 //STATUS: 404 back-up
 router.get("*", function(req, res) {
 	res.end("<h1>you\"ve been 404\"d</h1>");
