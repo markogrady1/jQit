@@ -6,7 +6,9 @@ var migrate = require("../schema/repoMigrate")
 	, express = require("express")
 	, auth = require("../config/auth")
 	, router = express.Router()
-    , fs = require("fs");
+    , fs = require("fs")
+    , color = helper.terminalCol();
+
 
 if (typeof localStorage === "undefined" || localStorage === null) {
 	  var LocalStorage = require("node-localstorage").LocalStorage;
@@ -89,15 +91,15 @@ router.get("/logins", function(req, res) {
     var request = require("request");
 
     if (state === localState) {
-        console.log(localState + " token is matched.")
-            request.post(
+        helper.print(color['cyan'],"Matched: ", localState + " TOKEN");
+         request.post(
                 "https://github.com/login/oauth/access_token?client_id=" + auth.github_client_id + "&client_secret=" + auth.github_client_secret + "&code=" + code, {
                     form: {
                         key: "value"
                     }
                 },
                 function(error, response, body) {
-                    console.log("outh status code",response.statusCode)
+                    helper.print(color['cyan'],"GET " + response.statusCode,": Oauth HTTP status code.");
                     if (!error && response.statusCode == 200) {
                        
                         var section = body.split("&");
@@ -197,6 +199,7 @@ router.post("/ajaxcall", (req, res) => {
     }
     res.send("Data Received");
 
+    reslv.assignWatcher(watcher);
 })
 //STATUS: 404 back-up
 router.get("*", function(req, res) {

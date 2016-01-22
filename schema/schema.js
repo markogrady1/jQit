@@ -64,7 +64,7 @@ schema.initConnection = function() {
 			db.close();
 		});  
 	});
-}
+};
 
 /**
  * Connect to mongoDB and aquire data for a given repository
@@ -154,7 +154,7 @@ schema.executeQuery = function(database, param, callback) {
 		}, 1000)
 		callback(completeData)
 	});
- }
+ };
 
 /**
  * Create a projection for a given database
@@ -176,7 +176,7 @@ var getProjection = function(db) {
 		projection = { '_id': 0 }
 	}
 	return projection;
-}
+};
 
 /**
  * Create a query for a given database
@@ -189,7 +189,7 @@ var getQuery = function(db) {
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
 	var query = (db === 'repoHistory') ? {"secondsDate": { "$gt": seconds }} : {};
 	return query;
-}
+};
 
 /**
  * This function checks whether the user has an existing email address in database
@@ -214,7 +214,7 @@ schema.checkForEmail = function(username, fn) {
 			}
 		})
 	})
-}
+};
 
 /**
  * Store registered user details to database
@@ -252,7 +252,7 @@ schema.loginUser = function(email, pwd, res, fn) {
 			}
 		});
 	});
-}
+};
 
 /**
  * Check for recent users who are assignees
@@ -268,7 +268,7 @@ schema.checkForAssignee = function(callback) {
 			callback(doc)
 		});
 	});
-}
+};
 
 /**
  * Check for recent users who are assignees of the last 24 hours
@@ -307,8 +307,38 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 				db.close();
 		}, 1000)
 	});
-}
+};
 
+
+schema.storeWatchData = function(obj) {
+
+    var flagObj = {
+        username: obj.user,
+        email: obj.email,
+        avatar: obj.avatar,
+        target: obj.target,
+        receiveEmail: obj.receiveEmailUpadate,
+        highlightchart: obj.highlightchart,
+        issuesboundary: obj.issuesboundary,
+        pullsboundary: obj.pullsboundary
+    }
+    connection("user", (db) => {
+        db.collection('flags').findOne({ username: obj.user }, function(err, doc) {
+            if (err) throw err;
+            if(doc === null) {
+                db.collection("flags").insert( flagObj, (err, data) => {
+                    if(err) throw err;
+                    db.close();
+                });
+            } else {
+                db.collection("flags").update({ username:obj.user }, flagObj, (err, data) => {
+                    if(err) throw err;
+                    db.close();
+                });
+            }
+        });
+    });
+};
 /**
  * User object constructor
  *
@@ -316,7 +346,6 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
  * @param {String} email 
  */
 function User(username, email) {
-	var self = this;
 	this.username = username;
 	this.email = email;
 }
@@ -341,7 +370,7 @@ User.prototype.register = function(res, io) {
 	var query = { 'username': this.username, 'email': this.email};
 	connection('user', function(db) {
 		db.collection('users').insert(query, function(err, result){
-			console.log('user made');
+			console.log('User Created => ' + new Date());
 			if (err && err.code == 11000) {
 				res.render('register', { register: 'Email has been used before' });
                 console.log('Duplicate Email: Alert User');
