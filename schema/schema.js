@@ -223,9 +223,9 @@ schema.checkForEmail = function(username, fn) {
  * @param {String} email 
  * @param {Object} res 
  */
-schema.regUser = function(username, email, res) {
+schema.regUser = function(username, email, res, io) {
 	var user = RegisteredUser(username, email);
-	user.register(res);
+	user.register(res, io);
 }
 
 /**

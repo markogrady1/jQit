@@ -179,16 +179,24 @@ router.post("/ajaxcall", (req, res) => {
     var issueBoundary = req.body.issueSlider;
     var pullsBoundary = req.body.pullsSlider;
     watchTarget = watchTarget === "Watch" ? null : watchTarget;
+
     var data = localStorage.getItem("data");
     var name = helper.getSplitValue(data, "=>", 0);
     var email = helper.getSplitValue(data, "=>", 2);
     var avatar = helper.getSplitValue(data, "=>", 1);
     avatNum = helper.getSplitValue(avatar, "/", -1);
-    console.log(name);
-    console.log(email);
-    console.log(avatar);
-    //this next line is for debugging purposes
-    res.send("from server: - target: " + watchTarget +  " - Receive email:" + receiveEmail + " - flag chart: " + flagchart + " - issue limit: " + issueBoundary + " - pulls limit: " + pullsBoundary )
+    var watcher = {
+        user: name,
+        email: email,
+        avatar: avatar,
+        target: watchTarget,
+        receiveEmailUpadate: receiveEmail,
+        highlightchart: flagchart,
+        issuesboundary: issueBoundary,
+        pullsboundary: pullsBoundary
+    }
+    res.send("Data Received");
+
 })
 //STATUS: 404 back-up
 router.get("*", function(req, res) {
@@ -198,10 +206,8 @@ router.get("*", function(req, res) {
 
 var setBodyValue = function(body, res) {
 	var bd = body;
-
 	 localStorage.setItem("data","");
 	 localStorage.setItem("data", bd.login + "=>" + bd.avatar_url + "=>" + bd.email + "")
-	
 
 	var userDetails = {
 		"login": bd.login,
