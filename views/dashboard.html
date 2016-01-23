@@ -10,16 +10,36 @@
 <script src="/socket.io/socket.io.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
+<script>
+flagData = <%- JSON.stringify(flag) %>
+var issuesboundary, pullsboundary, receiveEmail, highlightchart;
+    if(flagData === null) {
+        issuesboundary = 1;
+        pullsboundary = 1;
+        receiveEmail = false;
+        highlightchart = false;
+    } else {
+        issuesboundary = flagData.issuesboundary;
+        pullsboundary = flagData.pullsboundary;
+        receiveEmail = flagData.receiveEmail;
+        highlightchart = flagData.highlightchart;
+    }
+</script>
 <% include partials/header.html %>
 <a href="/">back</a>
 <br><br><br>
 <select name="dashboard-watch1" id="dashboard-watch1">
-    <option value="">Watch</option>
-        <% for (var i = 0; i < compDoc.length; i++) { %>
-    <option value="<%= compDoc[i].name %>"><%= compDoc[i].name %></option>
+    <option value="title">Watch</option>
+    <% for (var i = 0; i < compDoc.length; i++) {
+    var targetedRepo = flag === null ? "" : flag.target;
+    if(compDoc[i].name === targetedRepo) { %>
+                <option value="<%= compDoc[i].name %>" selected><%= compDoc[i].name %></option>
+          <%  } else { %>
+                <option value="<%= compDoc[i].name %>"><%= compDoc[i].name %></option>
+           <% } %>
     <% } %>
 </select>
+
 <div>Issues increase limit: <span id="issue-slider-amount"></span></div>
 <div id="issue-slider"></div>
 <div>Pull Requests increase limit: <span id="pulls-slider-amount"></span></div>
@@ -32,10 +52,18 @@
 <div class="ajax-btn">&nbsp;&nbsp;&nbsp;&nbsp;click me</div>
 
 <script>
+    if(receiveEmail === "true"){
+        $("#receive-email").attr("checked", true);
+    }
+    if(highlightchart === "true"){
+        $("#flag-chart").attr("checked", true);
+    }
+</script>
+<script>
     //function to handle the slider setup
     $(function() {
-        sliderInit("#issue-slider", "#issue-slider-amount");
-        sliderInit("#pulls-slider", "#pulls-slider-amount");
+        sliderInit("#issue-slider", "#issue-slider-amount", issuesboundary);
+        sliderInit("#pulls-slider", "#pulls-slider-amount", pullsboundary);
     });
 
     //ajax call for save settings
@@ -66,10 +94,10 @@
         });
     });
 
-    function sliderInit(sliderElem, amountDisplay) {
+    function sliderInit(sliderElem, amountDisplay, boundary) {
         $( sliderElem).slider({
             range: "min",
-            value:1,
+            value: parseInt(boundary),
             min: 1,
             max: 20,
             step: 1,

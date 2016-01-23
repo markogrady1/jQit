@@ -179,16 +179,30 @@ router.get("/dashboard", (req, res) => {
 	} else {
 		c = helper.getRandomString();
 		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+        function getFlagData(callback) {
+            if (avatar !== "undefined") {
+                var data = getStorage();
+                reslv.getFlagData(data, (flagObj) => {
+                    callback(flagObj);
+                });
+            } else {
+                callback(null)
+            }
+        }
         compDoc = schema.completeDoc;
-		res.render("dashboard", {
-			state: "true",
-			av: avatar,
-			header: "Dashboard",
-			urlstate: urlstate,
-			state: c,
-			dashLink: "",
-            compDoc: compDoc
-		});
+        getFlagData((flag) => {
+            res.render("dashboard", {
+                state: "true",
+                av: avatar,
+                header: "Dashboard",
+                urlstate: urlstate,
+                state: c,
+                dashLink: "",
+                compDoc: compDoc,
+                flag: flag
+            });
+        })
+
 	}
 });
 
