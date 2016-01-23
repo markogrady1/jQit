@@ -9,7 +9,7 @@ var migrate = require("../schema/repoMigrate")
     , fs = require("fs")
     , color = helper.terminalCol();
 
-
+// condition to check if local-server storage has been set already
 if (typeof localStorage === "undefined" || localStorage === null) {
 	  var LocalStorage = require("node-localstorage").LocalStorage;
 	  localStorage = new LocalStorage("./scratch");
@@ -38,6 +38,7 @@ router.get("/", function(req, res){
         }
     }
 
+    //inner function to retreive pull requests and insert them into complete repository data
     reslv.getPRs("pulls", function(pullsdata){
 		c = helper.getRandomString();
 		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
@@ -52,7 +53,9 @@ router.get("/", function(req, res){
           	compDoc[i].pulls = name[1];
       }
      }
+
      reslv.cacheRepoData(compDoc);
+        // obtain any flags that may have been set and render the home page
         getFlagData((flag) => {
             res.render("index", {
                 names: schema.names,
@@ -88,12 +91,6 @@ router.get("/repo/issue/details/:team?", function(req, res) {
   	reslv.resolveIssueDates(nameParam, req, res);
 });
 
-function resolveDate(fullDate) {
-	partDate = fullDate.split(" = ");
-
-	return partDate[0];
-}
-
 
 //route for login page ==> GET
 router.get("/logins", function(req, res) {
@@ -111,28 +108,27 @@ router.get("/logins", function(req, res) {
                     form: {
                         key: "value"
                     }
-                },
-                function(error, response, body) {
-                    console.log(color['cyan']+color['yellow']+color['white'],"GET " , response.statusCode,": Oauth HTTP status code.");
-                    if (!error && response.statusCode == 200) {
+             },
+             function(error, response, body) {
+                 console.log(color['cyan']+color['yellow']+color['white'],"GET " , response.statusCode,": Oauth HTTP status code.");
+                 if (!error && response.statusCode == 200) {
                        
-                        var section = body.split("&");
-                        access_t = helper.getSplitValue(section[0], "=", 1);
+                     var section = body.split("&");
+                     access_t = helper.getSplitValue(section[0], "=", 1);
                         
-                        var requestify = require("requestify");
+                     var requestify = require("requestify");
 
-                        requestify.get("https://api.github.com/user?access_token=" + access_t)
-                            .then(function(response) {
-	                            acc = response.getBody();
-	                            resetStorage();
-	                            acc = setBodyValue(acc, res)
-	                            reslv.initiateRegistration(req, res, state, acc, this.io);
-                        });
-                    }
-                }
-            );
+                     requestify.get("https://api.github.com/user?access_token=" + access_t)
+                         .then(function(response) {
+                             acc = response.getBody();
+                             resetStorage();
+                             acc = setBodyValue(acc, res)
+                             reslv.initiateRegistration(req, res, state, acc, this.io);
+                         });
+                 }
+             }
+         );
     }
-    
 });
 
 //route for login page ==> GET
@@ -151,16 +147,19 @@ router.post("/login", function(req, res){
 	});
 });
 
+//route for the register page requests
 router.get("/register", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /register");
 	reslv.initiateRegistration(req, res);
 });
 
+//route for posting the users email data
 router.post("/register", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /logins");
     reslv.validateRegistration(req, res);
 });
 
+//route for logging out
 router.get("/logout", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /logout");
     removeLoggedInStatusofUser();
@@ -171,6 +170,7 @@ router.get("/logout", function(req, res) {
 	res.redirect("/");
 });
 
+//route for requesting the users dashboard
 router.get("/dashboard", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /dashboard");
     var avatar = getAvatarImage();
@@ -206,6 +206,7 @@ router.get("/dashboard", (req, res) => {
 	}
 });
 
+//route for posting the dashboard settings
 router.post("/dashboard/edit", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /dashboard/edit");
     var watchTarget = req.body.watchTarget;
@@ -229,17 +230,18 @@ router.post("/dashboard/edit", (req, res) => {
         highlightchart: flagchart,
         issuesboundary: issueBoundary,
         pullsboundary: pullsBoundary
-    }
+    };
     res.send("Data Received");
 
     reslv.assignWatcher(watcher);
-})
-//STATUS: 404 back-up
+});
+
+//route for 404 requests
 router.get("*", function(req, res) {
 	res.end("<h1>you\"ve been 404\"d</h1>");
 });
 
-
+// function responsible for setting and returning the users GitHub details
 var setBodyValue = function(body, res) {
 	var bd = body;
 	 localStorage.setItem("data","");
@@ -254,6 +256,7 @@ var setBodyValue = function(body, res) {
  	return userDetails;
 };
 
+// return the router module
 module.exports = function(appl, serv, io) {
 	app = appl;
 	this.io = io;
@@ -261,6 +264,7 @@ module.exports = function(appl, serv, io) {
 	return router;
 };
 
+// function responsible for resetting the users details from server-local storage
 function resetStorage() {
 	localStorage.setItem("data","");
 }
@@ -270,6 +274,7 @@ function getStorage() {
     return data === " " ? "undefined" : data;
 }
 
+// function responsible for resetting the users details from local-server storage
 function getAvatarImage() {
 	var data = localStorage.getItem("data");
 	if(data === " ") {
@@ -282,10 +287,10 @@ function getAvatarImage() {
 	}
 }
 
+// function to responsible for deleting the local-server storage
 function removeLoggedInStatusofUser() {
 	fs.writeFile("./scratch/data", " ", (err) => {
 		if (err) throw err;
 		console.log("User temp data removed");
 	});
-
 }

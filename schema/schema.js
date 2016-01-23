@@ -7,7 +7,6 @@ var mongoClient = require("mongodb").MongoClient
 var hash;
 writeArr = '';
 
-
 var schema = {};
 /*  //////////keep this code for switching cronjobs from PHP to nodeJS///////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +134,6 @@ schema.executeQuery = function(database, param, callback) {
  schema.getAllHistory = function(database, dataSet, callback) {
  	var collection = [];
  	var completeData = [];
- 	var field = database === 'repoHistory' ? 'issues' : 'pulls';
  	var seconds = new Date().getTime() / 1000;
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
 	var queryStr = { "secondsDate": { "$gt": seconds }};
@@ -309,7 +307,10 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 	});
 };
 
-
+/**
+ * Function responsible for storing the settings to watch over a given repository
+ * @param {Object} obj
+ */
 schema.storeWatchData = function(obj) {
 
     var flagObj = {
@@ -340,6 +341,12 @@ schema.storeWatchData = function(obj) {
     });
 };
 
+/**
+ * Function responsible for searching for a flag set by the current user
+ * @param {String} username
+ * @param {String} email
+ * @param {Function} callback
+ */
 schema.checkForFlags = function(username, email, callback) {
     connection("user", (db) => {
         db.collection("flags").findOne({ username: username, email: email, highlightchart: "true" }, function (err, doc) {
@@ -348,7 +355,8 @@ schema.checkForFlags = function(username, email, callback) {
             db.close();
         });
     });
-}
+};
+
 /**
  * User object constructor
  *
@@ -361,13 +369,13 @@ function User(username, email) {
 }
 
 /**
- * Create new'd up Users
+ * Create new instances of Users
  *
  * @param {String} x 
  * @param {String} y 
  * @return {Object} User 
  */
-var RegisteredUser = function(x, y) { return new User(x, y); }
+var RegisteredUser = function(x, y) { return new User(x, y); };
 
 /**
  * Register the new User
@@ -376,7 +384,7 @@ var RegisteredUser = function(x, y) { return new User(x, y); }
  */
 User.prototype.register = function(res, io) {
 	this.io = io;
-	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));  //not used currently
+	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));  //not used currently because no passwords stored
 	var query = { 'username': this.username, 'email': this.email};
 	connection('user', function(db) {
 		db.collection('users').insert(query, function(err, result){
@@ -395,7 +403,7 @@ User.prototype.register = function(res, io) {
 		if(db !== null)
 			db.close();
 	});	
-}
+};
 
 
 module.exports = schema;
