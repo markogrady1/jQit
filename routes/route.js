@@ -17,16 +17,28 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 
 var app;
 var acc = [];
-console.log("router called");
+console.log(color["cyan"],"Router Initialised.");
 
 //route for the home page
 router.get("/", function(req, res){
-	var avaNum = checkLoggedInStatusofUser();
+	var avaNum = getAvatarImage();
 
 	migrate.repositoryMigrate();
 	var prs, c;
-	console.log("index router called");
-	reslv.getPRs("pulls", function(pullsdata){
+	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
+    function getFlagData(callback) {
+        if (avaNum !== "undefined") {
+            var data = getStorage();
+            reslv.getFlagData(data, (flagObj) => {
+                callback(flagObj);
+
+            });
+        } else {
+            callback(null)
+        }
+    }
+
+    reslv.getPRs("pulls", function(pullsdata){
 		c = helper.getRandomString();
 		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
 		prs = pullsdata;
@@ -40,18 +52,20 @@ router.get("/", function(req, res){
           	compDoc[i].pulls = name[1];
       }
      }
-
      reslv.cacheRepoData(compDoc);
-	res.render("index", {
-		names: schema.names,
-		issuesNo: schema.issues,
-		completeDoc: compDoc,
-		pullsNo: prs,
-		urlstate: urlstate,
-		state: c,
-		header: "Main page",
-		av: avaNum,
-		dashLink: "dashboard"
+        getFlagData((flag) => {
+            res.render("index", {
+                names: schema.names,
+                issuesNo: schema.issues,
+                completeDoc: compDoc,
+                pullsNo: prs,
+                urlstate: urlstate,
+                state: c,
+                header: "Main page",
+                av: avaNum,
+                dashLink: "dashboard",
+                flagData:flag
+            })
 		});
 		io.emit("userStatus", { av: avaNum })
 	});
@@ -60,7 +74,7 @@ router.get("/", function(req, res){
 
 //route for single repository data
 router.get("/repo/details/:repoName?", function(req, res) {
-	console.log("repoName router called");
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:repoName?");
   	var nameParam = null;
   	nameParam = req.params.repoName;	
   	reslv.resolveIssueData(nameParam, req, res);	
@@ -68,7 +82,7 @@ router.get("/repo/details/:repoName?", function(req, res) {
 
 //route for single repository details
 router.get("/repo/issue/details/:team?", function(req, res) {
-	console.log("team issues router called");
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:team?");
   	var nameParam = null;
   	nameParam = req.params.team;
   	reslv.resolveIssueDates(nameParam, req, res);
@@ -83,7 +97,7 @@ function resolveDate(fullDate) {
 
 //route for login page ==> GET
 router.get("/logins", function(req, res) {
-    
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /logins");
     query = require("url").parse(req.url, true).query;
     var state = query.state;
     var code = query.code;
@@ -99,7 +113,7 @@ router.get("/logins", function(req, res) {
                     }
                 },
                 function(error, response, body) {
-                    helper.print(color['cyan'],"GET " + response.statusCode,": Oauth HTTP status code.");
+                    console.log(color['cyan']+color['yellow']+color['white'],"GET " , response.statusCode,": Oauth HTTP status code.");
                     if (!error && response.statusCode == 200) {
                        
                         var section = body.split("&");
@@ -123,7 +137,8 @@ router.get("/logins", function(req, res) {
 
 //route for login page ==> GET
 router.post("/login", function(req, res){
-    	username = req.body.username;
+    console.log(color["cyan"]+color["yellow"],"Router:"," POST /login");
+    username = req.body.username;
     	password = req.body.password;
 	reslv.validateLogin(req, res, function(result, data){
 		if(!result) {
@@ -137,16 +152,18 @@ router.post("/login", function(req, res){
 });
 
 router.get("/register", function(req, res) {
-	console.log("register page called");
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /register");
 	reslv.initiateRegistration(req, res);
 });
 
 router.post("/register", function(req, res) {
-	 reslv.validateRegistration(req, res);
+    console.log(color["cyan"]+color["yellow"],"Router:"," POST /logins");
+    reslv.validateRegistration(req, res);
 });
 
 router.get("/logout", function(req, res) {
-	removeLoggedInStatusofUser();
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /logout");
+    removeLoggedInStatusofUser();
 	req.session.destroy();
 	var localState = localStorage.setItem("state", "");
 	app.locals.username = "";
@@ -155,7 +172,8 @@ router.get("/logout", function(req, res) {
 });
 
 router.get("/dashboard", (req, res) => {
-	var avatar = checkLoggedInStatusofUser();
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /dashboard");
+    var avatar = getAvatarImage();
 	if(avatar === "undefined") {
 		res.redirect("/")
 	} else {
@@ -174,7 +192,8 @@ router.get("/dashboard", (req, res) => {
 	}
 });
 
-router.post("/ajaxcall", (req, res) => {
+router.post("/dashboard/edit", (req, res) => {
+    console.log(color["cyan"]+color["yellow"],"Router:"," POST /dashboard/edit");
     var watchTarget = req.body.watchTarget;
     var receiveEmail = req.body.receiveEmail;
     var flagchart = req.body.flagChart;
@@ -232,16 +251,18 @@ function resetStorage() {
 	localStorage.setItem("data","");
 }
 
-function checkLoggedInStatusofUser() {
-	var data = localStorage.getItem("data")
+function getStorage() {
+    data = localStorage.getItem("data");
+    return data === " " ? "undefined" : data;
+}
 
+function getAvatarImage() {
+	var data = localStorage.getItem("data");
 	if(data === " ") {
 		return "undefined";
 	} else {
-		var name = helper.getSplitValue(data, "=>", 0)
-		var email = helper.getSplitValue(data, "=>", 2)
-		var avatar = helper.getSplitValue(data, "=>", 1)
-		avatNum = helper.getSplitValue(avatar, "/", -1)
+		var avatar = helper.getSplitValue(data, "=>", 1);
+		avatNum = helper.getSplitValue(avatar, "/", -1);
 
 		return avatNum;
 	}
@@ -250,7 +271,7 @@ function checkLoggedInStatusofUser() {
 function removeLoggedInStatusofUser() {
 	fs.writeFile("./scratch/data", " ", (err) => {
 		if (err) throw err;
-		console.log("User temporary data removed");
+		console.log("User temp data removed");
 	});
 
 }

@@ -1,7 +1,7 @@
 <html>
 <title>Dashboard</title>
 <meta charset='utf-8'>
-<link rel='stylesheet' href='/css/style.css' />
+<link rel='stylesheet' href='/css/jqit.css' />
 <script src="/js/external/jquery-1.11.3.min.js"></script>
 <script src="/js/external/d3.v3.min.js"></script>
 <script src="/js/external/tinysort.js"></script>
@@ -16,7 +16,6 @@
 <br><br><br>
 <select name="dashboard-watch1" id="dashboard-watch1">
     <option value="">Watch</option>
-
         <% for (var i = 0; i < compDoc.length; i++) { %>
     <option value="<%= compDoc[i].name %>"><%= compDoc[i].name %></option>
     <% } %>
@@ -39,14 +38,13 @@
         sliderInit("#pulls-slider", "#pulls-slider-amount");
     });
 
-
     //ajax call for save settings
     $(".ajax-btn").click(function() {
         console.log("ckickd")
 
         $.ajax({
             method: "POST",
-            url: "ajaxcall",
+            url: "dashboard/edit",
             data: {
                 watchTarget: function() {
                     var watchtarget = $('#dashboard-watch1 :selected').text();

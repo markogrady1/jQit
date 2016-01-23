@@ -109,8 +109,8 @@ body {
 }
 
 .displ-wrap span{
-	margin: 0 0 10 0;
-	padding: 0 0 10 0;
+	margin: 0 0 10px 0;
+	padding: 0 0 10px 0;
 }
 .increase, .decrease, .same {
 	padding: 0 4px 0 0;
@@ -231,7 +231,7 @@ SVG#line-chart {
   font-size: 10px;
   width: 100%;
   line-height: 1;
-  color: #cacaca
+  color: #cacaca;
   content: "\25BC";
   position: absolute;
   text-align: center;
@@ -339,4 +339,10 @@ td, th {
 
 .multi-compare {
 	cursor: pointer;
+}
+
+/*/////////////////flagged list item style //////////////*/
+
+#flagged {
+	background-color: #8BDCFA;
 }

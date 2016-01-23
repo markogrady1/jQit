@@ -2,14 +2,14 @@
 <html>
 <head>
 	<title>Issue Tracker</title>
-  <meta charset='utf-8'>
-	<link rel='stylesheet' href='/css/style.css' />
+    <meta charset='utf-8'>
 	<script src="/js/external/jquery-1.11.3.min.js"></script>
-   <script src="/js/external/d3.v3.min.js"></script>
-	 <script src="/js/external/tinysort.js"></script>
+    <script src="/js/external/d3.v3.min.js"></script>
+    <script src="/js/external/tinysort.js"></script>
     <script src="/js/external/scrilla.js"></script>
     <script src="/js/sortTable.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <link rel='stylesheet' href='/css/jqit.css' />
     <script>
         var socket = io();
     </script>
@@ -17,7 +17,8 @@
     <script>
       var cd = <%- JSON.stringify(pullsNo) %>
       var pd = <%- JSON.stringify(completeD) %>
-
+      var flagData = <%- JSON.stringify(flagData) %>
+console.log("Flag Data: " ,flagData)
 /**
  * The pd variable contains all the data needed for each of the repositories
  * The values are set out as the example below displays.
@@ -53,15 +54,20 @@
   </thead>
   <tbody>
     <% for (var i = 0; i < completeD.length; i++) {
-        var calculatedIssues = completeD[i].issues - completeD[i].pulls
-        calculatedIssues = calculatedIssues < 0 ? 0 : calculatedIssues
-    %>
-   <tr>
-   <td > <a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a></td>
-    <td ><%= calculatedIssues %></td>
-    <td ><%- completeD[i].pulls%></td>
-    <td><%- completeD[i].forks%></td>
-    <td><%- completeD[i].watchers%></td>
+        var calculatedIssues = completeD[i].issues - completeD[i].pulls;
+        calculatedIssues = calculatedIssues < 0 ? 0 : calculatedIssues;
+        var targetedRepo = flagData === null ? "" : flagData.target;
+
+       if(completeD[i].name === targetedRepo){ %>
+            <tr id="flagged">
+       <% } else { %>
+            <tr>
+       <% }  %>
+        <td ><a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a></td>
+        <td ><%= calculatedIssues %></td>
+        <td ><%- completeD[i].pulls%></td>
+        <td><%- completeD[i].forks%></td>
+        <td><%- completeD[i].watchers%></td>
     <td class="github-detail"><a class="index-github-link" target="_blank" href=<%- completeD[i].github_url%>> <%- completeD[i].github_url%></a></td>
   </tr>
 <% } %>

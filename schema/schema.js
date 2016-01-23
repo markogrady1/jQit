@@ -339,6 +339,16 @@ schema.storeWatchData = function(obj) {
         });
     });
 };
+
+schema.checkForFlags = function(username, email, callback) {
+    connection("user", (db) => {
+        db.collection("flags").findOne({ username: username, email: email, highlightchart: "true" }, function (err, doc) {
+            if (err) throw err;
+            callback(doc);
+            db.close();
+        });
+    });
+}
 /**
  * User object constructor
  *
