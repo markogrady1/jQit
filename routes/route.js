@@ -21,14 +21,14 @@ console.log(color["cyan"],"Router Initialised.");
 
 //route for the home page
 router.get("/", function(req, res){
-	var avaNum = getAvatarImage();
+	var avaNum = reslv.getAvatarImage();
 
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
     function getFlagData(callback) {
         if (avaNum !== "undefined") {
-            var data = getStorage();
+            var data = reslv.getStorage();
             reslv.getFlagData(data, (flagObj) => {
                 callback(flagObj);
 
@@ -66,7 +66,7 @@ router.get("/", function(req, res){
                 state: c,
                 header: "Main page",
                 av: avaNum,
-                dashLink: "dashboard",
+                dashboardLink: "dashboard",
                 flagData:flag
             })
 		});
@@ -121,7 +121,7 @@ router.get("/logins", function(req, res) {
                      requestify.get("https://api.github.com/user?access_token=" + access_t)
                          .then(function(response) {
                              acc = response.getBody();
-                             resetStorage();
+                             reslv.resetStorage();
                              acc = setBodyValue(acc, res)
                              reslv.initiateRegistration(req, res, state, acc, this.io);
                          });
@@ -162,7 +162,7 @@ router.post("/register", function(req, res) {
 //route for logging out
 router.get("/logout", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /logout");
-    removeLoggedInStatusofUser();
+    reslv.removeLoggedInStatusofUser();
 	req.session.destroy();
 	var localState = localStorage.setItem("state", "");
 	app.locals.username = "";
@@ -173,7 +173,7 @@ router.get("/logout", function(req, res) {
 //route for requesting the users dashboard
 router.get("/dashboard", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /dashboard");
-    var avatar = getAvatarImage();
+    var avatar = reslv.getAvatarImage();
 	if(avatar === "undefined") {
 		res.redirect("/")
 	} else {
@@ -181,7 +181,7 @@ router.get("/dashboard", (req, res) => {
 		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
         function getFlagData(callback) {
             if (avatar !== "undefined") {
-                var data = getStorage();
+                var data = reslv.getStorage();
                 reslv.getFlagData(data, (flagObj) => {
                     callback(flagObj);
                 });
@@ -197,7 +197,7 @@ router.get("/dashboard", (req, res) => {
                 header: "Dashboard",
                 urlstate: urlstate,
                 state: c,
-                dashLink: "",
+                dashboardLink: "",
                 compDoc: compDoc,
                 flag: flag
             });
@@ -263,34 +263,3 @@ module.exports = function(appl, serv, io) {
 	app.locals.username = "";
 	return router;
 };
-
-// function responsible for resetting the users details from server-local storage
-function resetStorage() {
-	localStorage.setItem("data","");
-}
-
-function getStorage() {
-    data = localStorage.getItem("data");
-    return data === " " ? "undefined" : data;
-}
-
-// function responsible for resetting the users details from local-server storage
-function getAvatarImage() {
-	var data = localStorage.getItem("data");
-	if(data === " ") {
-		return "undefined";
-	} else {
-		var avatar = helper.getSplitValue(data, "=>", 1);
-		avatNum = helper.getSplitValue(avatar, "/", -1);
-
-		return avatNum;
-	}
-}
-
-// function to responsible for deleting the local-server storage
-function removeLoggedInStatusofUser() {
-	fs.writeFile("./scratch/data", " ", (err) => {
-		if (err) throw err;
-		console.log("User temp data removed");
-	});
-}

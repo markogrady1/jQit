@@ -355,6 +355,15 @@ schema.checkForFlags = function(username, email, callback) {
     });
 };
 
+schema.checkForFlaggedRepo = function(username, email, target, callback) {
+    connection("user", (db) => {
+        db.collection("flags").findOne({username:username, email: email, highlightchart: "true", target: target}, (err, doc) => {
+            if(err) throw err;
+            callback(doc);
+            db.close();
+        });
+    })
+};
 /**
  * User object constructor
  *

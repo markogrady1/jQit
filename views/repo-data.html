@@ -11,7 +11,7 @@
          //this section of code displays how to pass a nodejs value to ejs and then on to code
          //within script tags it can then be used anyhow you wish 
          //not ch is an array or json value set
-         
+         var flagdata = <%- JSON.stringify(flagData) %>
          var allIssuesHistory = <%- JSON.stringify(allRepoHistory) %>
          var allPullsHistory = <%- JSON.stringify(allRepoPullsHistory) %>
          var repoData = <%- JSON.stringify(repoData) %>
@@ -27,7 +27,8 @@
          var temp2 = pr;
          var iDiff = getDiff(v, true);
          var pDiff = getDiff(pr, false);
-         console.log(iDiff+"\n",pDiff)
+         console.log(iDiff+"\n",pDiff);
+         console.log(flagdata);
          var totals = getRepoPercentage(repoData);
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');

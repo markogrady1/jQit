@@ -3,11 +3,11 @@
 	<div class="login-status"></div>
 	<script>
         var av = <%- JSON.stringify(av) %>
-        dashLink = <%- JSON.stringify(dashLink) %>
+		dashboardLink = <%- JSON.stringify(dashboardLink) %>
         $loginLogo = $(".login-status");
 		if (av !== "undefined") {
 			$loginLogo.append("<a id=gitlogout class='git-log git-logout' href=logout>Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+av+">")
-			$loginLogo.append("<a href=dashboard>" + dashLink + "</a>")
+			$loginLogo.append("<a href=dashboard>" + dashboardLink + "</a>")
 		} else {
 			$loginLogo.append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a><br><br>'.toString())
 		}
