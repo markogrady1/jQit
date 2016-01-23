@@ -137,7 +137,6 @@ schema.executeQuery = function(database, param, callback) {
  	var seconds = new Date().getTime() / 1000;
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
 	var queryStr = { "secondsDate": { "$gt": seconds }};
-	var projection = { 'isoDate': 1, 'name': 1, 'rawDate': 1, field: 1, '_id': 0 };
  	collection = _.map(dataSet, function(collect){	return collect.name	});
  	connection(database, function(db){
  		_.map(collection, function(coll) {
@@ -278,7 +277,6 @@ schema.checkForAssignee = function(callback) {
  */
 schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 	var assign = [];
-	var value;
 	var query = { 'assignee': username};
 	var projection = { 'title': 1, 'assignee': 1, 'created_at': 1, 'html_url': 1,  '_id': 0 };
 	collection = _.map(dataSet, function(collect) { return collect });
