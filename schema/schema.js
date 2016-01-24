@@ -41,7 +41,7 @@ new CronJob('* 5 * * *', function() {
  */
 schema.initConnection = function() {
 	self = this;
-    helper.log('CONNECTION','mongoDB connection made', true);
+    helper.log('CONNECTION','mongoDB connection waiting....', true);
 	var projection = { "name": 1, "open_issues": 1,"forks_count": 1, "watchers":1, "_id": 0 }
 	repoNames = [];
 	issueNo = [];
@@ -148,7 +148,7 @@ schema.executeQuery = function(database, param, callback) {
 		setTimeout(function() {
 			if(db !== null)
 				db.close();
-		}, 1000)
+		}, 1000);
 		callback(completeData)
 	});
  };

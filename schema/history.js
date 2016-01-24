@@ -50,7 +50,7 @@ history.getDataOverTime = function(database, target) {
     	});
 	});
 	var col = [color['cyan']];
-	helper.print(color['cyan'],'HISTORY', '- new ' + target +' history added');
+	helper.print(color['cyan'],'HISTORY', '- new [open] ' + target +' history added');
 }
 
 /**
@@ -102,7 +102,7 @@ history.getClosedDataOverTime = function(database, target) {
 			}, 600)
     	});
 	});
-	helper.print(color['cyan'],'HISTORY', '- new ' + target +' history added');
+	helper.print(color['cyan'],'HISTORY', '- new [closed] ' + target +' history added');
 }
 
 /**
