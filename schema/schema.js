@@ -316,10 +316,11 @@ schema.storeWatchData = function(obj) {
         email: obj.email,
         avatar: obj.avatar,
         target: obj.target,
-        receiveEmail: obj.receiveEmailUpadate,
-        highlightchart: obj.highlightchart,
-        issuesboundary: obj.issuesboundary,
-        pullsboundary: obj.pullsboundary
+        receive_email: obj.receiveEmailUpadate,
+        highlight_issues_chart: obj.highlightissueschart,
+		highlight_pulls_chart: obj.highlightpullschart,
+		issues_boundary: obj.issuesboundary,
+        pulls_boundary: obj.pullsboundary
     }
     connection("user", (db) => {
         db.collection('flags').findOne({ username: obj.user }, function(err, doc) {
@@ -347,7 +348,7 @@ schema.storeWatchData = function(obj) {
  */
 schema.checkForFlags = function(username, email, callback) {
     connection("user", (db) => {
-        db.collection("flags").findOne({ username: username, email: email, highlightchart: "true" }, function (err, doc) {
+        db.collection("flags").findOne({ username: username, email: email}, function (err, doc) {
             if (err) throw err;
             callback(doc);
             db.close();
@@ -357,7 +358,7 @@ schema.checkForFlags = function(username, email, callback) {
 
 schema.checkForFlaggedRepo = function(username, email, target, callback) {
     connection("user", (db) => {
-        db.collection("flags").findOne({username:username, email: email, highlightchart: "true", target: target}, (err, doc) => {
+        db.collection("flags").findOne({username:username, email: email, highlight_issues_chart: "true", target: target}, (err, doc) => {
             if(err) throw err;
             callback(doc);
             db.close();

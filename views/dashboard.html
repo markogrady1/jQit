@@ -17,12 +17,16 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart;
         issuesboundary = 1;
         pullsboundary = 1;
         receiveEmail = false;
-        highlightchart = false;
+        highlightissueschart = false;
+        highlightpullschart = false;
     } else {
-        issuesboundary = flagData.issuesboundary;
-        pullsboundary = flagData.pullsboundary;
-        receiveEmail = flagData.receiveEmail;
-        highlightchart = flagData.highlightchart;
+        issuesboundary = flagData.issues_boundary;
+        console.log(issuesboundary)
+        pullsboundary = flagData.pulls_boundary;
+        console.log(pullsboundary)
+        receiveEmail = flagData.receive_email;
+        highlightissueschart = flagData.highlight_issues_chart;
+        highlightpullschart = flagData.highlight_pulls_chart;
     }
 </script>
 <% include partials/header.html %>
@@ -47,16 +51,22 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart;
 <input type="checkbox" id="receive-email" class="receive-email-chck">
 <label for="receive-email">Receive Email</label>
 <br>
-<input type="checkbox" id="flag-chart" class="flag-chart-chck">
-<label for="flag-chart">Flag Chart</label>
-<div class="ajax-btn">&nbsp;&nbsp;&nbsp;&nbsp;click me</div>
-
+<input type="checkbox" id="flag-issues-chart" class="flag-pulls-chart-chck">
+<label for="flag-issues-chart">Flag issues increase in chart</label>
+<br>
+<input type="checkbox" id="flag-pulls-chart" class="flag-issues-chart-chck">
+<label for="flag-pulls-chart">Flag pull requests increase in chart</label>
+<div class="dashboard-ajax-btn">Save</div>
+<div class="feedback"></div>
 <script>
     if(receiveEmail === "true"){
         $("#receive-email").attr("checked", true);
     }
-    if(highlightchart === "true"){
-        $("#flag-chart").attr("checked", true);
+    if(highlightissueschart === "true"){
+        $("#flag-issues-chart").attr("checked", true);
+    }
+    if(highlightpullschart === "true"){
+        $("#flag-pulls-chart").attr("checked", true);
     }
 </script>
 <script>
@@ -67,30 +77,31 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart;
     });
 
     //ajax call for save settings
-    $(".ajax-btn").click(function() {
-        console.log("ckickd")
-
+    $(".dashboard-ajax-btn").click(function() {
         $.ajax({
             method: "POST",
             url: "dashboard/edit",
             data: {
                 watchTarget: function() {
-                    var watchtarget = $('#dashboard-watch1 :selected').text();
-                    return watchtarget;
+                    return $('#dashboard-watch1 :selected').text();
                 },
                 receiveEmail: function() {
-                    var receive = $("#receive-email").is(":checked") ? true : false;
-                    return receive;
+                    return $("#receive-email").is(":checked") ? true : false;
                 },
-                flagChart: function() {
-                    var flagchrt = $("#flag-chart").is(":checked") ? true : false;
-                    return flagchrt;
+                flagIssuesChart: function() {
+                    return $("#flag-issues-chart").is(":checked") ? true : false;
+                },
+                flagPullsChart: function() {
+                    return $("#flag-pulls-chart").is(":checked") ? true : false;
                 },
                 issueSlider: $("#issue-slider-amount").html(),
                 pullsSlider: $("#pulls-slider-amount").html()
             }
         }).done(function(msg) {
-            $(".ajax-btn").html(msg)
+            $(".dashboard-ajax-btn").html("Saved");
+            setTimeout(function(){
+                $(".dashboard-ajax-btn").html("Save");
+            }, 1000);
         });
     });
 

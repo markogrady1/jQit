@@ -77,7 +77,7 @@ router.get("/", function(req, res){
 
 //route for single repository data
 router.get("/repo/details/:repoName?", function(req, res) {
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:repoName?");
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
   	var nameParam = null;
   	nameParam = req.params.repoName;	
   	reslv.resolveIssueData(nameParam, req, res);	
@@ -85,7 +85,7 @@ router.get("/repo/details/:repoName?", function(req, res) {
 
 //route for single repository details
 router.get("/repo/issue/details/:team?", function(req, res) {
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:team?");
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:" + req.params.repoName);
   	var nameParam = null;
   	nameParam = req.params.team;
   	reslv.resolveIssueDates(nameParam, req, res);
@@ -211,7 +211,9 @@ router.post("/dashboard/edit", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /dashboard/edit");
     var watchTarget = req.body.watchTarget;
     var receiveEmail = req.body.receiveEmail;
-    var flagchart = req.body.flagChart;
+    var flagIssuesChart = req.body.flagIssuesChart;
+    var flagPullsChart = req.body.flagPullsChart;
+
     var issueBoundary = req.body.issueSlider;
     var pullsBoundary = req.body.pullsSlider;
     watchTarget = watchTarget === "Watch" ? null : watchTarget;
@@ -227,7 +229,8 @@ router.post("/dashboard/edit", (req, res) => {
         avatar: avatar,
         target: watchTarget,
         receiveEmailUpadate: receiveEmail,
-        highlightchart: flagchart,
+        highlightissueschart: flagIssuesChart,
+        highlightpullschart: flagPullsChart,
         issuesboundary: issueBoundary,
         pullsboundary: pullsBoundary
     };
@@ -247,13 +250,11 @@ var setBodyValue = function(body, res) {
 	 localStorage.setItem("data","");
 	 localStorage.setItem("data", bd.login + "=>" + bd.avatar_url + "=>" + bd.email + "")
 
-	var userDetails = {
+	return  {
 		"login": bd.login,
 		"email": bd.email,
 		"avatar_url": bd.avatar_url
 	};
- 	
- 	return userDetails;
 };
 
 // return the router module
