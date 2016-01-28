@@ -13,6 +13,7 @@
          //not ch is an array or json value set
          var flagdata = <%- JSON.stringify(flagData) %>
          var allIssuesHistory = <%- JSON.stringify(allRepoHistory) %>
+
          var allPullsHistory = <%- JSON.stringify(allRepoPullsHistory) %>
          var repoData = <%- JSON.stringify(repoData) %>
          var dt = <%- JSON.stringify( fullDate) %>
@@ -27,8 +28,9 @@
          var temp2 = pr;
          var iDiff = getDiff(v, true);
          var pDiff = getDiff(pr, false);
-         console.log(iDiff+"\n",pDiff);
-         console.log(flagdata);
+
+         console.log(iDiff + "\n",pDiff);
+
          var totals = getRepoPercentage(repoData);
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');

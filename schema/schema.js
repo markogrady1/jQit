@@ -123,7 +123,7 @@ schema.executeQuery = function(database, param, callback) {
 		});
 	});
 };
- 
+
  /**
  * Aquire all jquery repositories issues and PR data within last 30 days
  *
