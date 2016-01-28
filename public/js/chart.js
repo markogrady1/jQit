@@ -42,7 +42,7 @@ function setCharts() {
          for(var y in pr) {
            pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
          }
-         
+
          var jArr = JSON.stringify(issuesArr);
          var issuesLineData = {
              w: chartWidth,
@@ -796,16 +796,17 @@ var compareRepositories = function(repoName, allHistory, isIssue) {
 	var usedArray = isIssue ? issuesArr : pullsArr;
 	var comparedArray = [];
 	var team;
-		for(var i = 0; i < historyArr.length; i++) {
+		for(var i = 1; i < historyArr.length; i++) {
 		if(repoName === historyArr[i][0].team){
-			for(var j = 0; j < historyArr[i].length; j++){
+			for(var j = 1; j < historyArr[i].length; j++){
 				var dayOfMonth = stripDate('day');
 				var dom = dayOfMonth(historyArr[i][j].rawDate);
 				team = historyArr[i][j].team;
 				if(isIssue)
 				comparedArray.push({'date': dom, 'issues': historyArr[i][j].issues, 'issues2': usedArray[j].issues});
 				else
-				comparedArray.push({'date': dom, 'pulls': historyArr[i][j].pulls, 'pulls2': usedArray[j].pulls});
+				comparedArray.push({'date': dom, 'pulls': historyArr[i][j].pulls, 'pulls2': usedArray[j-1].pulls});
+				//if there is a problem with this section of code, make the var i = 0 and remove the -1 of usedArray[j-1].pulls above
 			}
 		}
 	}
@@ -1455,7 +1456,6 @@ var getRepoPercentage = function(data) {
 			homeRepoArray =  data[pos];
 		}
 	}
-	console.log(homeRepoArray.name)
 	var issuesArray = [], pullsArray = [];
 	_.map(data, function(val) {
 		issuesArray.push(parseInt(val.issues));
