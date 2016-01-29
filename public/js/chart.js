@@ -345,7 +345,7 @@ function setBarChart(data, buildStyle, histObj) {
 				});						
 			  })
 			  .style('fill', function(d, i){
-				   
+
 				  //the commented out code will be used for highlighting the chart when there is an increase in PRs or issues
 				  //if(d.pulls === 36){
 					//  return 'ff0000'

@@ -358,7 +358,7 @@ schema.checkForFlags = function(username, email, callback) {
 
 schema.checkForFlaggedRepo = function(username, email, target, callback) {
     connection("user", (db) => {
-        db.collection("flags").findOne({username:username, email: email, highlight_issues_chart: "true", target: target}, (err, doc) => {
+        db.collection("flags").findOne({$or: [ { highlight_issues_chart: "true" }, { highlight_pulls_chart: "true" } ], username:username, email: email, target: target}, (err, doc) => {
             if(err) throw err;
             callback(doc);
             db.close();
