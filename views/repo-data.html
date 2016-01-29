@@ -2,6 +2,8 @@
    <head>
       <title>Repository Details</title>
       <meta charset="utf-8">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
       <link rel='stylesheet' href='/css/jqit.css' />
       <script src="/js/external/jquery-1.11.3.min.js"></script>
       <script src="/js/external/lodash.min.js"></script>
@@ -12,6 +14,7 @@
          //within script tags it can then be used anyhow you wish 
          //not ch is an array or json value set
          var flagdata = <%- JSON.stringify(flagData) %>
+                 console.log(flagdata)
          var allIssuesHistory = <%- JSON.stringify(allRepoHistory) %>
 
          var allPullsHistory = <%- JSON.stringify(allRepoPullsHistory) %>
@@ -43,8 +46,7 @@
       </style>
    </head>
    <body>
-
-      <div id=changeView></div>
+   <div id=changeView></div>
       <div id=changeView2></div>
       <div id=display-data-info></div>
       <div class=details></div>

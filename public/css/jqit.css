@@ -33,6 +33,7 @@ body {
 	border-radius: 8px;
 	margin-bottom: 10px;
 }
+
 .button-wrap a{
 	text-decoration: none;
 }
@@ -137,7 +138,25 @@ body {
 	font-size: 1em;
 	outline: none;
 }
+.line-btn {
+	padding-bottom: 0;
+	margin: 20px 0 0 20px;
+	width: 30px;
+	height: 30px;
+	border-radius: 5px;
+	background-color: #3999dd;
+	color: #fff;
+	border: 0;
+		font-size: 2em;
+	outline: none;
+}
 
+.chart-icon {
+	padding-bottom:0;
+	color: #fff;
+	font-size: 0.6em;
+	padding:0
+}
 
 .trigger-multi-compare {
 	margin: 20px 0 0 20px;

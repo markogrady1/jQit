@@ -1,7 +1,7 @@
 'use strict';
 /**
  * ==================================
- * Author: Mark O Grady (c) 2015
+ * Author: Mark O Grady (c) 2016
  * ==================================
  */
 
@@ -181,12 +181,18 @@ function setBarChart(data, buildStyle, histObj) {
 			var $bt2 = $('.line-btn');
 			$bt2.remove();
 		var lineBtn = document.createElement('button');
-		$(lineBtn).text('View Line Chart');
+			var icon = document.createElement('i'); //created for icon element
+			$(lineBtn).text();        /// spare symbol '≃'
 		$viewEle.append(lineBtn);
+		$(lineBtn).append(icon)
 		$(lineBtn).attr({
-			width: 200,
-			class: 'line-btn'	
+			class: 'line-btn',
+			title: 'Line Chart'
 		});
+			$(icon).attr({
+				class: 'chart-icon fa fa-line-chart',
+				title: 'Line Chart'
+			});
 
 		$viewEle.append(lineBtn);
 		toggleLineChart(lineBtn);
@@ -339,6 +345,7 @@ function setBarChart(data, buildStyle, histObj) {
 				});						
 			  })
 			  .style('fill', function(d, i){
+				   
 				  //the commented out code will be used for highlighting the chart when there is an increase in PRs or issues
 				  //if(d.pulls === 36){
 					//  return 'ff0000'
@@ -596,6 +603,7 @@ function setLineChart(data, buildStyle) {
  */
 var toggleLineChart = function(elem) {
 	$(elem).click(function() {
+		console.log(elem)
 		$( '#chart').toggle( "slow" );
 		var els = document.getElementById('line-chart');
 		var $els = $('#line-chart');
@@ -609,10 +617,19 @@ var toggleLineChart = function(elem) {
 	}
 		setTimeout(function(){
 			if ($els.is(":visible")) {
-					$('.line-btn').text('View Bar Chart');
+					// spare icon '⫫'
+					$('.chart-icon').attr({
+						class: 'chart-icon fa fa-bar-chart',
+						title: 'Bar Chart'
+					});
 				} else {
-					$('.line-btn').text('View Line Chart');
-				}
+					// spare icon '≃'
+				$('.chart-icon').attr({
+					class: 'chart-icon fa fa-line-chart',
+					title: 'Line Chart'
+				});
+
+			}
 		 }, 800	);
 	});
 };
@@ -819,7 +836,7 @@ var compareRepositories = function(repoName, allHistory, isIssue) {
 		}
 	}
 	setComparisonChart(usedArray, comparedArray, team, isIssue);
-}
+};
 
 var setComparisonChart = function(oppData,data , team, isIssue) {
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
@@ -1107,11 +1124,11 @@ var getCheckValues = function(histObj) {
 			var dayOfMonth = stripDate('day');
 			var dom = dayOfMonth(val.rawDate);
 			return  {'date': dom, 'team': val.team, 'issues': val.issues, 'issues2': issuesArr[j++].issues, 'designatedColor': colors[i]};
-		})
+		});
 			teams.push(dd)
 	}
 	setComparisonChart2(pullsArr, teams, team, maximum, true);
-}
+};
 
 var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {	
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
@@ -1409,7 +1426,7 @@ var appendMultipleLegend = function(thisRepo, team, data) {
 
 	$elt.append(_.map(data, function(repo){
 		return '<svg class=multi-away width=10 height=10><rect class=multi-away width=10 height=10 style=fill:#'+repo[0].designatedColor+'/><rect></svg><span class=multi-text-title > '+repo[0].team+'</span><br class=multi-break>'}));
-}
+};
 var refreshLegend = function() {
 	var $home = $('.home');
 	var $away = $('.away');
@@ -1481,22 +1498,24 @@ var getRepoPercentage = function(data) {
 	}
 
 	return totals;
-}
+};
 
 var getTotalAmount = function(data) {
 	var tot = _.reduce(data, function(previousValue, currentValue, index, array) {
 	  return previousValue + currentValue;
 	}, 0);
 	return tot;
-}
+};
 
 var calculatePercentage = function(repoTotal, homeData, isIssue) {
 	var home = isIssue ? homeData.issues : homeData.pulls;
 	var percentage = (home / repoTotal) * 100;
 
 	return percentage;
-}
+};
 
+
+//use this function to check whether the assigned watch has a result
 var getDiff = function(data, isIssue) {
 	var currentStatus = getDifference(data, isIssue);
 	var strStart = "";
