@@ -339,8 +339,16 @@ function setBarChart(data, buildStyle, histObj) {
 				});						
 			  })
 			  .style('fill', function(d, i){
-				//return ordinalColorScale(i);//uncomment line for ordinalScale colours
+				  //the commented out code will be used for highlighting the chart when there is an increase in PRs or issues
+				  //if(d.pulls === 36){
+					//  return 'ff0000'
+				  //}else if( d.issues === 310) {
+					//  return 'ff0000'
+				  //} else {
+					//  return linearColorScale(i);  //uncomment line for linearScale colours
+				  //}
 				return linearColorScale(i);  //uncomment line for linearScale colours
+				  //return ordinalColorScale(i);//uncomment line for ordinalScale colours
 			  })
 			  .style('cursor', 'pointer');
 
