@@ -1589,12 +1589,9 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 	if (periodic) {
 		for (var i = 1; i < data.length; i++) {
 			var df = data[i][targetType] - data[i - 1][targetType];
-			console.log(df, i);
 			if (df >= boundary) {
-				console.log("trigger");
 				triggerArray.push(i);  //index of triggered items
 			}
-
 		}
 	} else {
 		var increase = data[data.length - 1][targetType] - data[data.length - 2][targetType];
@@ -1610,35 +1607,5 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 	}
 
 	return triggerArray;
-}
-
-
-var checkPullsIncrease = function(data, boundary, periodic, targetType ) {
-	var triggerArray = [];
-	console.log(data)
-	if(periodic) {
-		for (var i = 1; i < data.length; i++) {
-			var df = data[i][targetType] - data[i-1][targetType];
-			console.log(df, i);
-			if(df >= boundary) {
-				console.log("trigger");
-				triggerArray.push(i);  //index of triggered items
-			}
-
-		}
-	} else {
-		var increase = data[data.length-1][targetType] - data[data.length-2][targetType];
-		if(increase >= boundary) {
-			triggerArray.push(999);
-			triggerArray.push(data.length-1);
-
-		} else {
-			triggerArray.push(-999);
-			triggerArray.push(-999);
-		}
-		return triggerArray;
-	}
-
-	return triggerArray;
-}
+};
 

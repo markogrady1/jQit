@@ -75,7 +75,7 @@
             }
             console.log(flagdata.highlight_pulls_chart === "true")
             if(flagdata.highlight_pulls_chart) {
-               pullsflagsIndexs = checkPullsIncrease(pr, pullsLimit, everyIncrease, "pulls"); //check for issues increases
+               pullsflagsIndexs = checkIncrease(pr, pullsLimit, everyIncrease, "pulls"); //check for issues increases
 
             }
          }
