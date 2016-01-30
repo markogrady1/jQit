@@ -26,7 +26,7 @@ var $viewEle;
  * Responsible for setting the initial values for the plot of the main charts
  * 
  */
-function setCharts() {
+function setCharts(flagIssues, flagPulls) {
 	detectWindowSize();
          var admin = [];
          for(var l in p) {
@@ -92,7 +92,8 @@ function setCharts() {
              scope: scope,
              isIssue: true,
              dataKey: "date",
-             dataVal: "issues"
+             dataVal: "issues",
+			 flagIssues: flagIssues
            };
          
          
@@ -108,8 +109,10 @@ function setCharts() {
              scope: scope,
              isIssue: false,
              dataKey: "date",
-             dataVal: "pulls"
-           };
+             dataVal: "pulls",
+			 flagPulls: flagPulls
+
+		 };
 
          var  historyObj = {
            allRepoIssueHistory: allIssuesHistory,
@@ -346,6 +349,49 @@ function setBarChart(data, buildStyle, histObj) {
 			  })
 			  .style('fill', function(d, i){
 
+				  if(buildStyle.dataVal === "issues") {
+
+					  if(buildStyle.flagIssues !== null) {
+
+						  if(buildStyle.flagIssues[0] === 999) {
+
+							  if(i === buildStyle.flagIssues[1]) {
+								  return 'ff0000'
+							  }
+						  } else {
+							  for (var d = 0; d < buildStyle.flagIssues.length; d++) {
+								  if(buildStyle.flagIssues[d] === i) {
+									  return 'ff0000'
+								  }
+							  }
+						  }
+
+					  }
+
+				  } else if(buildStyle.dataVal === "pulls"){
+					  if(buildStyle.flagPulls !== null) {
+
+						  if(buildStyle.flagPulls[0] === 999) {
+
+							  if(i === buildStyle.flagPulls[1]) {
+								  return 'ff0000'
+							  }
+						  } else {
+							  for (var d = 0; d < buildStyle.flagPulls.length; d++) {
+								  if(buildStyle.flagPulls[d] === i) {
+									  return 'ff0000'
+								  }
+									  // else {
+									//  return linearColorScale(i);
+								  //}
+							  }
+						  }
+
+					  }
+					  return linearColorScale(i);
+				  }
+
+				  //console.log(buildStyle.flagIssues)
 				  //the commented out code will be used for highlighting the chart when there is an increase in PRs or issues
 				  //if(d.pulls === 36){
 					//  return 'ff0000'
@@ -1538,17 +1584,61 @@ function getDifference(data, isIssue) {
 	return currentStatus;
 }
 
-var checkIncrease = function(data, boundary) {
+var checkIncrease = function(data, boundary, periodic, targetType ) {
 	var triggerArray = [];
-	for (var i = 1; i < data.length; i++) {
-		var df = data[i].issues - data[i-1].issues
-		console.log(df, i);
-		if(df >= boundary) {
-			console.log("trigger")
-			triggerArray.push(i)//index of triggered items
+	if (periodic) {
+		for (var i = 1; i < data.length; i++) {
+			var df = data[i][targetType] - data[i - 1][targetType];
+			console.log(df, i);
+			if (df >= boundary) {
+				console.log("trigger");
+				triggerArray.push(i);  //index of triggered items
+			}
 
 		}
+	} else {
+		var increase = data[data.length - 1][targetType] - data[data.length - 2][targetType];
+		if (increase >= boundary) {
+			triggerArray.push(999);
+			triggerArray.push(data.length - 1);
 
+		} else {
+			triggerArray.push(-999);
+			triggerArray.push(-999);
+		}
+		return triggerArray;
 	}
+
 	return triggerArray;
 }
+
+
+var checkPullsIncrease = function(data, boundary, periodic, targetType ) {
+	var triggerArray = [];
+	console.log(data)
+	if(periodic) {
+		for (var i = 1; i < data.length; i++) {
+			var df = data[i][targetType] - data[i-1][targetType];
+			console.log(df, i);
+			if(df >= boundary) {
+				console.log("trigger");
+				triggerArray.push(i);  //index of triggered items
+			}
+
+		}
+	} else {
+		var increase = data[data.length-1][targetType] - data[data.length-2][targetType];
+		if(increase >= boundary) {
+			triggerArray.push(999);
+			triggerArray.push(data.length-1);
+
+		} else {
+			triggerArray.push(-999);
+			triggerArray.push(-999);
+		}
+		return triggerArray;
+	}
+
+	return triggerArray;
+}
+

@@ -21,16 +21,26 @@
          var flagdata = {};
          flagdata = <%- JSON.stringify(flagData) %>
          if(flagdata !== null) {
-            everyIncrease = flagdata.show_every_increase;
-            console.log(everyIncrease)
+
+            everyIncrease = false;
+            if(flagdata.show_every_increase === "true") {
+               everyIncrease = true;
+            } else {
+               everyIncrease = false;
+            }
             if(flagdata.highlight_issues_chart === "true") {
+
                isIssuesHighlighted = true;
                issuesLimit = flagdata.issues_boundary
+            } else {
+               isIssuesHighlighted = false;
             }
 
             if(flagdata.highlight_pulls_chart === "true") {
                isPullsHighlighted = true;
                pullsLimit = flagdata.pulls_boundary
+            } else {
+               isPullsHighlighted = false;
             }
          }
 
@@ -56,17 +66,25 @@
          var temp2 = pr;
          var iDiff = getDiff(v, true);
          var pDiff = getDiff(pr, false);
-
+         var issueflagsIndexs = null;
+         var pullsflagsIndexs = null;
 
          if(flagdata !== null) {
-            if(flagdata.highlight_issues_chart || flagdata.highlight_pulls_chart) {
-               var issueflagsIndexs = checkIncrease(v, issuesLimit, everyIncrease);
+            if(flagdata.highlight_issues_chart === "true") {
+               issueflagsIndexs = checkIncrease(v, issuesLimit, everyIncrease, "issues"); //check for issues increases
+            }
+            console.log(flagdata.highlight_pulls_chart === "true")
+            if(flagdata.highlight_pulls_chart) {
+               pullsflagsIndexs = checkPullsIncrease(pr, pullsLimit, everyIncrease, "pulls"); //check for issues increases
+
             }
          }
 
 
          console.log(iDiff + "\n",pDiff);
-         console.log(issueflagsIndexs)
+         console.log("issues result:",issueflagsIndexs)
+         console.log("pulls result:",pullsflagsIndexs)
+
          var totals = getRepoPercentage(repoData);
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');
@@ -96,7 +114,7 @@
       <div class='point point2'></div>
       <script>
         var issuesArr = [], pullsArr = [];
-        setCharts();
+        setCharts(issueflagsIndexs, pullsflagsIndexs);
       </script>
       <div class="body-wrap">
          <div class="average"></div>
