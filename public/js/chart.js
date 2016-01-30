@@ -348,7 +348,7 @@ function setBarChart(data, buildStyle, histObj) {
 				});						
 			  })
 			  .style('fill', function(d, i){
-
+				// this section of code is responsible for highlighting any increases if specified
 				  if(buildStyle.dataVal === "issues") {
 
 					  if(buildStyle.flagIssues !== null) {
@@ -365,10 +365,9 @@ function setBarChart(data, buildStyle, histObj) {
 								  }
 							  }
 						  }
-
 					  }
-
 				  } else if(buildStyle.dataVal === "pulls"){
+
 					  if(buildStyle.flagPulls !== null) {
 
 						  if(buildStyle.flagPulls[0] === 999) {
@@ -381,25 +380,12 @@ function setBarChart(data, buildStyle, histObj) {
 								  if(buildStyle.flagPulls[d] === i) {
 									  return 'ff0000'
 								  }
-									  // else {
-									//  return linearColorScale(i);
-								  //}
 							  }
 						  }
-
 					  }
 					  return linearColorScale(i);
 				  }
 
-				  //console.log(buildStyle.flagIssues)
-				  //the commented out code will be used for highlighting the chart when there is an increase in PRs or issues
-				  //if(d.pulls === 36){
-					//  return 'ff0000'
-				  //}else if( d.issues === 310) {
-					//  return 'ff0000'
-				  //} else {
-					//  return linearColorScale(i);  //uncomment line for linearScale colours
-				  //}
 				return linearColorScale(i);  //uncomment line for linearScale colours
 				  //return ordinalColorScale(i);//uncomment line for ordinalScale colours
 			  })
