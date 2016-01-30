@@ -41,7 +41,7 @@ router.get("/", function(req, res){
     //inner function to retreive pull requests and insert them into complete repository data
     reslv.getPRs("pulls", function(pullsdata){
 		c = helper.getRandomString();
-		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + ""
+		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
 		prs = pullsdata;
 		compDoc = schema.completeDoc;
 		localStorage.setItem("state", c);
@@ -67,6 +67,7 @@ router.get("/", function(req, res){
                 header: "Main page",
                 av: avaNum,
                 dashboardLink: "dashboard",
+                logoutLink: "logout",
                 flagData:flag
             })
 		});
@@ -199,6 +200,7 @@ router.get("/dashboard", (req, res) => {
                 state: c,
                 dashboardLink: "",
                 compDoc: compDoc,
+                logoutLink: "logout",
                 flag: flag
             });
         })
