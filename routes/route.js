@@ -216,6 +216,8 @@ router.post("/dashboard/edit", (req, res) => {
 
     var issueBoundary = req.body.issueSlider;
     var pullsBoundary = req.body.pullsSlider;
+    var showEveryIncrease = req.body.showEveryIncrease;
+
     watchTarget = watchTarget === "Watch" ? null : watchTarget;
 
     var data = localStorage.getItem("data");
@@ -232,7 +234,9 @@ router.post("/dashboard/edit", (req, res) => {
         highlightissueschart: flagIssuesChart,
         highlightpullschart: flagPullsChart,
         issuesboundary: issueBoundary,
-        pullsboundary: pullsBoundary
+        pullsboundary: pullsBoundary,
+        showEveryIncrease: showEveryIncrease
+
     };
     res.send("Data Received");
 

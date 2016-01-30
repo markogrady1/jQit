@@ -13,8 +13,33 @@
          //this section of code displays how to pass a nodejs value to ejs and then on to code
          //within script tags it can then be used anyhow you wish 
          //not ch is an array or json value set
-         var flagdata = <%- JSON.stringify(flagData) %>
-                 console.log(flagdata)
+         var isIssuesHighlighted = false;
+         var isPullsHighlighted = false;
+         var issuesLimit = null;
+         var pullsLimit = null;
+
+         var flagdata = {};
+         flagdata = <%- JSON.stringify(flagData) %>
+         if(flagdata !== null) {
+            everyIncrease = flagdata.show_every_increase;
+            console.log(everyIncrease)
+            if(flagdata.highlight_issues_chart === "true") {
+               isIssuesHighlighted = true;
+               issuesLimit = flagdata.issues_boundary
+            }
+
+            if(flagdata.highlight_pulls_chart === "true") {
+               isPullsHighlighted = true;
+               pullsLimit = flagdata.pulls_boundary
+            }
+         }
+
+
+         console.log("Issues:",isIssuesHighlighted);
+         console.log("Pulls:",isPullsHighlighted);
+         console.log("Issues_boundary:",issuesLimit);
+         console.log("Pulls_boundary:",pullsLimit);
+
          var allIssuesHistory = <%- JSON.stringify(allRepoHistory) %>
 
          var allPullsHistory = <%- JSON.stringify(allRepoPullsHistory) %>
@@ -32,8 +57,16 @@
          var iDiff = getDiff(v, true);
          var pDiff = getDiff(pr, false);
 
-         console.log(iDiff + "\n",pDiff);
 
+         if(flagdata !== null) {
+            if(flagdata.highlight_issues_chart || flagdata.highlight_pulls_chart) {
+               var issueflagsIndexs = checkIncrease(v, issuesLimit, everyIncrease);
+            }
+         }
+
+
+         console.log(iDiff + "\n",pDiff);
+         console.log(issueflagsIndexs)
          var totals = getRepoPercentage(repoData);
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');

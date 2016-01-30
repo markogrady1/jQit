@@ -12,13 +12,14 @@
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
 flagData = <%- JSON.stringify(flag) %>
-var issuesboundary, pullsboundary, receiveEmail, highlightchart;
+var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrease;
     if(flagData === null) {
         issuesboundary = 1;
         pullsboundary = 1;
         receiveEmail = false;
         highlightissueschart = false;
         highlightpullschart = false;
+        showeveryincrease = false;
     } else {
         issuesboundary = flagData.issues_boundary;
         console.log(issuesboundary)
@@ -27,6 +28,7 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart;
         receiveEmail = flagData.receive_email;
         highlightissueschart = flagData.highlight_issues_chart;
         highlightpullschart = flagData.highlight_pulls_chart;
+        showeveryincrease = flagData.show_every_increase;
     }
 </script>
 <% include partials/header.html %>
@@ -56,6 +58,14 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart;
 <br>
 <input type="checkbox" id="flag-pulls-chart" class="flag-issues-chart-chck">
 <label for="flag-pulls-chart">Flag pull requests increase in chart</label>
+<br>
+<script>
+
+</script>
+<div class="radio-highlight-choice">
+    <input class="highlight-choice" id="highlight-every-choice" type="checkbox" name="highlight-option" value="every-increase">
+    <label  class="radio-label" for="highlight-every-choice">Highlight every increase</label>
+</div>
 <div class="dashboard-ajax-btn">Save</div>
 <div class="feedback"></div>
 <script>
@@ -68,14 +78,28 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart;
     if(highlightpullschart === "true"){
         $("#flag-pulls-chart").attr("checked", true);
     }
+    if(showeveryincrease === "true") {
+        $("#highlight-every-choice").attr("checked", true);
+    }
 </script>
 <script>
     //function to handle the slider setup
     $(function() {
         sliderInit("#issue-slider", "#issue-slider-amount", issuesboundary);
         sliderInit("#pulls-slider", "#pulls-slider-amount", pullsboundary);
+
+    });
+    $(window).on('load', function() {
+        prepRadioBtns();
     });
 
+    $('#flag-issues-chart').change(function(){
+       prepRadioBtns();
+    });
+
+    $('#flag-pulls-chart').change(function(){
+        prepRadioBtns();
+    });
     //ajax call for save settings
     $(".dashboard-ajax-btn").click(function() {
         $.ajax({
@@ -95,7 +119,10 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart;
                     return $("#flag-pulls-chart").is(":checked") ? true : false;
                 },
                 issueSlider: $("#issue-slider-amount").html(),
-                pullsSlider: $("#pulls-slider-amount").html()
+                pullsSlider: $("#pulls-slider-amount").html(),
+                showEveryIncrease: function() {
+                    return $('#highlight-every-choice').is(":checked")? true : false;
+                }
             }
         }).done(function(msg) {
             $(".dashboard-ajax-btn").html("Saved");
@@ -117,6 +144,21 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart;
             }
         });
         $( amountDisplay).html($( sliderElem).slider( "value" ) );
+    }
+
+    function prepRadioBtns() {
+        if($('#flag-pulls-chart').is(":checked") || $('#flag-issues-chart').is(":checked")){
+            $(".highlight-choice").removeAttr('disabled');
+            $(".radio-label").css({
+                color:"#000"
+            });
+        }else{
+            $(".highlight-choice").attr('disabled', 'disabled');
+            $(".highlight-choice").attr("checked", false);
+            $(".radio-label").css({
+                color:"#a9a9a9"
+            });
+        }
     }
 </script>
 

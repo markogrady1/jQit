@@ -320,7 +320,8 @@ schema.storeWatchData = function(obj) {
         highlight_issues_chart: obj.highlightissueschart,
 		highlight_pulls_chart: obj.highlightpullschart,
 		issues_boundary: obj.issuesboundary,
-        pulls_boundary: obj.pullsboundary
+        pulls_boundary: obj.pullsboundary,
+		show_every_increase: obj.showEveryIncrease
     }
     connection("user", (db) => {
         db.collection('flags').findOne({ username: obj.user }, function(err, doc) {

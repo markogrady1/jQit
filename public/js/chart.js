@@ -1537,3 +1537,18 @@ function getDifference(data, isIssue) {
 
 	return currentStatus;
 }
+
+var checkIncrease = function(data, boundary) {
+	var triggerArray = [];
+	for (var i = 1; i < data.length; i++) {
+		var df = data[i].issues - data[i-1].issues
+		console.log(df, i);
+		if(df >= boundary) {
+			console.log("trigger")
+			triggerArray.push(i)//index of triggered items
+
+		}
+
+	}
+	return triggerArray;
+}
