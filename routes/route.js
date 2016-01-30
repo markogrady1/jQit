@@ -80,8 +80,8 @@ router.get("/", function(req, res){
 router.get("/repo/details/:repoName?", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
   	var nameParam = null;
-  	nameParam = req.params.repoName;	
-  	reslv.resolveIssueData(nameParam, req, res);	
+  	nameParam = req.params.repoName;
+  	reslv.resolveIssueData(nameParam, req, res);
 });
 
 //route for single repository details
@@ -113,10 +113,10 @@ router.get("/logins", function(req, res) {
              function(error, response, body) {
                  console.log(color['cyan']+color['yellow']+color['white'],"GET " , response.statusCode,": Oauth HTTP status code.");
                  if (!error && response.statusCode == 200) {
-                       
+
                      var section = body.split("&");
                      access_t = helper.getSplitValue(section[0], "=", 1);
-                        
+
                      var requestify = require("requestify");
 
                      requestify.get("https://api.github.com/user?access_token=" + access_t)
