@@ -1,4 +1,8 @@
 'use strict';
+if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+	console.log('this is fireman')
+
+}
 /**
  * ==================================
  * Author: Mark O Grady (c) 2016
@@ -635,11 +639,10 @@ function setLineChart(data, buildStyle) {
  */
 var toggleLineChart = function(elem) {
 	$(elem).click(function() {
-		console.log(elem)
 		$( '#chart').toggle( "slow" );
 		var els = document.getElementById('line-chart');
-		var $els = $('#line-chart');
-		
+		var $issue_lchart = $('#line-chart');
+		var $pulls_lchart = $('#pulls-line-chart');
 		$( '#line-chart').toggle( "slow" );
 	var el2 = document.getElementById('pulls-line-chart');
 	var ca = document.getElementById('chartArea');
@@ -648,7 +651,7 @@ var toggleLineChart = function(elem) {
 		$( '#pulls-chart').toggle( "slow" );
 	}
 		setTimeout(function(){
-			if ($els.is(":visible")) {
+			if ($issue_lchart.is(":visible") || $pulls_lchart.is(":visible")) {
 					// spare icon '⫫'
 					$('.chart-icon').attr({
 						class: 'chart-icon fa fa-bar-chart',

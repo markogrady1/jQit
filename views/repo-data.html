@@ -4,11 +4,11 @@
       <meta charset="utf-8">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-      <link rel='stylesheet' href='/css/jqit.css' />
+
       <script src="/js/external/jquery-1.11.3.min.js"></script>
       <script src="/js/external/lodash.min.js"></script>
       <script src="/js/chart.js"></script>
-      
+      <link rel='stylesheet' href='/css/jqit.css' />
       <script>
          //this section of code displays how to pass a nodejs value to ejs and then on to code
          //within script tags it can then be used anyhow you wish 
@@ -100,9 +100,11 @@
    <% include partials/header.html %>
    <div id=changeView></div>
       <div id=changeView2></div>
+   <br>
       <div id=display-data-info></div>
       <div class=details></div>
       <div class=compare-issues-info></div>
+   <br>
       <div class=compare-pulls-info></div>  
       <div class=comparison-legend></div>
       <div class=multi-comparison-legend></div>
@@ -198,6 +200,6 @@
       elm4  = document.getElementsByClassName('pstatus');
       elm4[0].innerHTML = pDiff;
          scroller.init(); 
-      </script> 
+      </script>
    </body>
 </html> 

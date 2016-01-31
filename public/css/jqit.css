@@ -229,6 +229,20 @@ body {
 	color:#90B5D2;
 
 }
+
+select {
+	height: 35px;
+	border-radius: 0px;
+	background: #3999DD;
+	color: #fff;
+	font-size: 1em;
+	border:none;
+}
+ select:hover {
+	 background-color: #4a84b0;
+
+ }
+ 
 SVG#line-chart {
 	padding-top: 20px;
 }
@@ -384,3 +398,11 @@ td, th {
 	text-align: center;
 	cursor: pointer;
 }
+
+
+
+
+
+
+
+
