@@ -78,7 +78,7 @@ schema.getRecord = function(param, callback) {
 	connection("repositories", function(db) {
 		db.collection('repos').findOne(query, function(err, doc) {
  			if (err) throw err;
-  			helper.log('QUERY TARGET' ,doc.name + ": outstanding issues: " + doc.open_issues, false);
+  			helper.log('QUERY TARGET' ,doc.name + ": outstanding issues/pulls combined: " + doc.open_issues, false);
   			db.close();
 
 			callback(doc);
