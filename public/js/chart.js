@@ -386,6 +386,7 @@ function setBarChart(data, buildStyle, histObj) {
 								  }
 							  }
 						  }
+						  return linearColorScale(i);
 					  }
 					  return linearColorScale(i);
 				  }
@@ -1563,25 +1564,25 @@ var getDiff = function(data, isIssue) {
 		strStart = "Up ";
 	}
 	return strStart + currentStatus + strEnd;
-}
+};
 
 function getDifference(data, isIssue) {
 	var first = isIssue ? data[0].issues : data[0].pulls;
 	var last = isIssue ? data[data.length-1].issues : data[data.length-1].pulls;
-	var currentStatus = last - first;
 
-	return currentStatus;
+	return last - first;
 }
 
 var checkIncrease = function(data, boundary, periodic, targetType ) {
 	var triggerArray = [];
 	if (periodic) {
 		for (var i = 1; i < data.length; i++) {
-			var df = data[i][targetType] - data[i - 1][targetType];
+			var df = data[i][targetType] - data[i-1][targetType];
 			if (df >= boundary) {
 				triggerArray.push(i);  //index of triggered items
 			}
 		}
+
 	} else {
 		var increase = data[data.length - 1][targetType] - data[data.length - 2][targetType];
 		if (increase >= boundary) {

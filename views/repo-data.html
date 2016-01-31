@@ -70,13 +70,13 @@
          var pullsflagsIndexs = null;
 
          if(flagdata !== null) {
+
             if(flagdata.highlight_issues_chart === "true") {
                issueflagsIndexs = checkIncrease(v, issuesLimit, everyIncrease, "issues"); //check for issues increases
             }
-            console.log(flagdata.highlight_pulls_chart === "true")
-            if(flagdata.highlight_pulls_chart) {
-               pullsflagsIndexs = checkIncrease(pr, pullsLimit, everyIncrease, "pulls"); //check for issues increases
 
+            if(flagdata.highlight_pulls_chart === "true") {
+               pullsflagsIndexs = checkIncrease(pr, pullsLimit, everyIncrease, "pulls"); //check for issues increases
             }
          }
 
@@ -174,7 +174,7 @@
          </p>
          <p></p>
          <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
-      
+
       <script>
 
           $(document).ready(function(){
