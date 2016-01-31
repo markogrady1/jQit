@@ -73,8 +73,17 @@ body {
 }
 
 .header {
-	background-color: #97DDFD;
-	padding:20px;
+	background-color: #34352E;
+	padding:5px 5px 20px 5px;
+	color: #fff;
+}
+.header a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.header a:hover {
+	text-decoration: underline;
 }
 
 #chartArea {
@@ -242,7 +251,7 @@ select {
 	 background-color: #4a84b0;
 
  }
- 
+
 SVG#line-chart {
 	padding-top: 20px;
 }
