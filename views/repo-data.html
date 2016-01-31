@@ -174,16 +174,7 @@
          </p>
          <p></p>
          <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
-         <div class="button-wrap-static">
-            <% for (var i = 0; i < history.length; i++) { %>
-            <%      
-               date = history[i].split('-');
-               cd = date[2]+ " " + date[1] + " " + date[0]
-               %>
-            <div  class='open-issue-repo'><%= cd %><span class='issue-count'><%= issuesTrend[i] %></span></div>
-            <% i} %> 
-         </div>
-      </div>
+      
       <script>
 
           $(document).ready(function(){
