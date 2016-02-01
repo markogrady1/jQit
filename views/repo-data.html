@@ -84,6 +84,8 @@
          console.log("pulls result:",pullsflagsIndexs)
 
          var totals = getRepoPercentage(repoData);
+         var foundationPullsAvg = totals.foundationPullsAverage.toFixed(2);
+         var foundationIssuesAvg = totals.foundationIssuesAverage.toFixed(2);
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');
       </script>
@@ -103,11 +105,11 @@
       <div class=details></div>
       <div class=compare-issues-info></div>
    <br>
-      <div class=compare-pulls-info></div>  
+      <div class=compare-pulls-info></div>
       <div class=comparison-legend></div>
       <div class=multi-comparison-legend></div>
       <div class=multi-comparison></div>
-      
+
       <div class=compareChart></div>
       <div class=multi-compareChart></div>
       <div id=chartArea></div>
@@ -145,9 +147,9 @@
             <b> Age of oldest issue: </b> <%= issueRange %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <script>
                $('.btn').on('click', function() {
-                 if($('#chartArea').is(":visible")) { 
+                 if($('#chartArea').is(":visible")) {
                      $('.average').html('Month Average: ' + pullsMonthlyAvg)
-                  } else if($('#chartArea').is(":hidden")) { 
+                  } else if($('#chartArea').is(":hidden")) {
                       $('.average').html('Month Average: ' + issuesMonthlyAvg)
                   }
                });
@@ -197,7 +199,7 @@
              "value":jqueryPieVal
           }];
 
-          pieChart(pieData, "#issues-pie-chart");
+          pieChart(pieData, "#issues-pie-chart", foundationIssuesAvg);
 
           jqueryPieVal = 100 - totals.pulls;
           jqueryPieVal = jqueryPieVal.toFixed(2);
@@ -213,7 +215,7 @@
                 "value":jqueryPieVal
              }];
 
-          pieChart(pieData, "#pulls-pie-chart");
+          pieChart(pieData, "#pulls-pie-chart", foundationPullsAvg  );
 
       var elm, elm2;
       elm = document.getElementsByClassName('issuesPercent');

@@ -1523,17 +1523,16 @@ var getRepoPercentage = function(data) {
 		if(typeof val.pulls !== 'undefined')
 			pullsArray.push(parseInt(val.pulls));
 	});
-
 	var issuesTotal = getTotalAmount(issuesArray);
 	var pullsTotal = typeof pullsArray[1] !== 'undefined' ? getTotalAmount(pullsArray) : 0;
 	var issuePercentage = calculatePercentage(issuesTotal, homeRepoArray, true);
 	var pullsPercentage = pullsTotal !== 0 ? calculatePercentage(pullsTotal, homeRepoArray, false) : 0;
-	var totals = {
-		issues: issuePercentage,
-		pulls: pullsPercentage
+	return  {
+		issues: issuePercentage[0],
+		pulls: pullsPercentage[0],
+		foundationIssuesAverage: issuePercentage[1],
+		foundationPullsAverage: pullsPercentage[1]
 	}
-
-	return totals;
 };
 
 var getTotalAmount = function(data) {
@@ -1544,10 +1543,12 @@ var getTotalAmount = function(data) {
 };
 
 var calculatePercentage = function(repoTotal, homeData, isIssue) {
+	var percentageArray = [];
 	var home = isIssue ? homeData.issues : homeData.pulls;
-	var percentage = (home / repoTotal) * 100;
+	percentageArray.push((home / repoTotal) * 100);
+	percentageArray.push((repoTotal/49));
 
-	return percentage;
+	return percentageArray;
 };
 
 
@@ -1599,11 +1600,14 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 	return triggerArray;
 };
 
- function pieChart(data, targetEl) {
+ function pieChart(data, targetEl, foundationAvg) {
+
 	 //tooltip needs styling
 	 var tip = d3.tip()
 		 .html(function(d) {
-			 return d.data.label+ "    " +d.value
+			 return "<div class='pie-chart-tooltip'>" + d.data.label + "    " + d.value + "<br><br><br><span>jQuery Average:  " + foundationAvg+ "</span>"+
+				 "</div>"
+
 		 });
 	 var svg = d3.select(targetEl).append("svg")
 		 .attr('id', 'issues-pie-chart')
@@ -1645,7 +1649,7 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 		 .range(["#8EB4D3", "#4A84B0"]);
 
 	 change(data);
-	
+
 	 function change(data) {
 		 /* ------- PIE SLICES -------*/
 		 var slice = svg.select(".slices").selectAll("path.slice")
