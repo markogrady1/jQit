@@ -1600,6 +1600,11 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 };
 
  function pieChart(data, targetEl) {
+	 //tooltip needs styling
+	 var tip = d3.tip()
+		 .html(function(d) {
+			 return d.data.label+ "    " +d.value
+		 });
 	 var svg = d3.select(targetEl).append("svg")
 		 .attr('id', 'issues-pie-chart')
 		.append("g")
@@ -1610,7 +1615,7 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 		 .attr("class", "labels");
 	 svg.append("g")
 		 .attr("class", "lines");
-
+	 svg.call(tip);
 	 var width = 550,
 		 height = 250,
 		 radius = Math.min(width, height) ;
@@ -1640,11 +1645,8 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 		 .range(["#8EB4D3", "#4A84B0"]);
 
 	 change(data);
-
-
-
+	
 	 function change(data) {
-
 		 /* ------- PIE SLICES -------*/
 		 var slice = svg.select(".slices").selectAll("path.slice")
 			 .data(pie(data), key);
@@ -1654,10 +1656,10 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 			 .style("fill", function(d) {
 				 return color(d.data.label);
 			 })
-			 .attr("class", "slice");
-
-		 slice
-			 .transition().duration(1000)
+			 .attr("class", "slice")
+			 .on('mouseover', tip.show)
+		 	 .on('mouseleave', tip.hide)
+		 slice.transition().duration(1000)
 			 .attrTween("d", function(d) {
 				 this._current = this._current || d;
 				 var interpolate = d3.interpolate(this._current, d);
