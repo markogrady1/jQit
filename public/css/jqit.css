@@ -409,6 +409,31 @@ td, th {
 }
 
 
+/*///////////PIE CHARTS/////////////////*/
+
+.pie-label {
+	font-weight: bold;
+}
+#issues-pie-chart {
+	float:left;
+	width: 610px;
+	height: 250px;
+}
+
+.slice{
+	stroke-width: 1px;
+	stroke: #555;
+}
+
+polyline{
+	opacity: 1;
+	stroke: black;
+	stroke-width: 1px;
+	fill: none;
+}
+.line-break {
+	clear: both;
+}
 
 
 

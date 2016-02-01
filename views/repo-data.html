@@ -3,8 +3,6 @@
       <title>Repository Details</title>
       <meta charset="utf-8">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-
       <script src="/js/external/jquery-1.11.3.min.js"></script>
       <script src="/js/external/lodash.min.js"></script>
       <script src="/js/chart.js"></script>
@@ -119,7 +117,10 @@
         var issuesArr = [], pullsArr = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs);
       </script>
-      <div class="body-wrap">
+   <div id="issues-pie-chart"></div>
+   <div id="pulls-pie-chart"></div>
+<div class="line-break"></div>
+   <div class="body-wrap">
          <div class="average"></div>
          <div><b class="istatus"></b></div>
          <div><b class="pstatus"></b></div>
@@ -180,6 +181,39 @@
           $(document).ready(function(){
               $(".openIssuesNumDisplay").html(v[v.length-1].issues);
           });
+
+          var jqueryPieVal = 100 - totals.issues;
+          jqueryPieVal = jqueryPieVal.toFixed(2);
+          var issuesPieVal = totals.issues.toFixed(2);
+          var pathname = window.location.pathname.split("/");
+          var rep = pathname[3];
+          // pie chart data for issues
+          var pieData = [{
+             "label":rep,
+             "value":issuesPieVal
+          },
+          {
+             "label":"Other jQuery repos",
+             "value":jqueryPieVal
+          }];
+
+          pieChart(pieData, "#issues-pie-chart");
+
+          jqueryPieVal = 100 - totals.pulls;
+          jqueryPieVal = jqueryPieVal.toFixed(2);
+          var pullsPieVal = totals.pulls.toFixed(2);
+
+          // pie chart data for PRs
+          pieData = [{
+                "label":rep,
+                "value":pullsPieVal
+             },
+             {
+                "label":"Other jQuery repos",
+                "value":jqueryPieVal
+             }];
+
+          pieChart(pieData, "#pulls-pie-chart");
 
       var elm, elm2;
       elm = document.getElementsByClassName('issuesPercent');
