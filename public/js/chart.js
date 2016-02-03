@@ -14,21 +14,21 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
 
 /**
  * holds the value of the combined object total
- * 
+ *
  * @var {Number} totaller
  */
 var totaller;
 
 /**
  * Global value holding the current jquery targeted view element
- * 
+ *
  * @var {Object} $viewEle
  */
 var $viewEle;
 
 /**
  * Responsible for setting the initial values for the plot of the main charts
- * 
+ *
  */
 function setCharts(flagIssues, flagPulls) {
 	detectWindowSize();
@@ -42,7 +42,7 @@ function setCharts(flagIssues, flagPulls) {
              issuesArr.push({'date': v[k].date, 'issues': v[k].issues});
              dataset.push(v[k].issues);
          }
-         
+
          for(var y in pr) {
            pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
          }
@@ -65,7 +65,7 @@ function setCharts(flagIssues, flagPulls) {
                y: 20
            }
          };
-         
+
          var pullsLineData = {
              w: chartWidth,
              h: lineChartHeight,
@@ -85,7 +85,7 @@ function setCharts(flagIssues, flagPulls) {
          };
 
          var issuesBarData = {
-             w: chartWidth, 
+             w: chartWidth,
              h: barChartHeight,
              top: 48,
              bottom: 72,
@@ -99,10 +99,10 @@ function setCharts(flagIssues, flagPulls) {
              dataVal: "issues",
 			 flagIssues: flagIssues
            };
-         
-         
+
+
          var pullsBarData = {
-             w: chartWidth, 
+             w: chartWidth,
              h: barChartHeight,
              top: 48,
              bottom: 72,
@@ -127,8 +127,8 @@ function setCharts(flagIssues, flagPulls) {
          setLineChart(issuesArr, issuesLineData);
          setBarChart(pullsArr, pullsBarData);
          setLineChart(pullsArr, pullsLineData);
-         
-         
+
+
          if(issuesArr.length == 0){
            var el = document.getElementById('chartArea');
              el.innerHTML = 'There have been no issues in the last 30 days';
@@ -138,7 +138,7 @@ function setCharts(flagIssues, flagPulls) {
 
 /**
  * Function called to simply hide the main line chart
- * 
+ *
  */
 var hideLineChart = function() {
 	var $lineChart = $('#line-chart');
@@ -168,7 +168,7 @@ function setBarChart(data, buildStyle, histObj) {
 	_.map(data, function(d){
 		if(buildStyle.dataVal === 'issues')
 			issuetmp.push(d[buildStyle.dataVal]);
-		else 
+		else
 			pulltmp.push(d[buildStyle.dataVal]);
 	});
 
@@ -249,7 +249,7 @@ function setBarChart(data, buildStyle, histObj) {
 		.rangeBands([0, width]);
 	var y = d3.scale.linear()
 		.domain([0, d3.max(data, function(d){
-			return d[buildStyle.dataVal];	
+			return d[buildStyle.dataVal];
 		})])
 		.range([height, 0]);
 	var yGridlines = d3.svg.axis()
@@ -282,9 +282,9 @@ function setBarChart(data, buildStyle, histObj) {
 			.attr('transform', 'translate(' + buildStyle.left + ',' + buildStyle.right + ')');
 	chart.append("text")
 			.classed(buildStyle.dataVal+ '-title', true)
-	        .attr("x", (width / 2))             
+	        .attr("x", (width / 2))
 	        .attr("y", 0 - (buildStyle.top / 2))
-	        .attr("text-anchor", "middle")  
+	        .attr("text-anchor", "middle")
 	        .text(toolTipValue.toUpperCase());
 
 	plot.call(chart, {
@@ -292,11 +292,11 @@ function setBarChart(data, buildStyle, histObj) {
 		axis: {
 		    x: xAxis,
 		    y: yAxis,
-		}, 
+		},
 		gridlines: yGridlines,
 		isIssue: buildStyle.isIssue
 	});
-	} 
+	}
 	function plot(params) {
 		var e;
 		var classAppend = params.isIssue ? '' : 's';
@@ -336,8 +336,8 @@ function setBarChart(data, buildStyle, histObj) {
 					width: x.rangeBand()+5,
 					height:height - y(d[buildStyle.dataVal])+3,
 					y: y(d[buildStyle.dataVal])-3
-				});						
-			 this.parentNode.appendChild(this); 
+				});
+			 this.parentNode.appendChild(this);
 			  })
 			  .on('mouseleave', function(d, i){
 			  	$('.display-data').remove();
@@ -349,7 +349,7 @@ function setBarChart(data, buildStyle, histObj) {
 					height: height - y(d[buildStyle.dataVal]),
 					y: y(d[buildStyle.dataVal]),
 					width:x.rangeBand()-2
-				});						
+				});
 			  })
 			  .style('fill', function(d, i){
 				// this section of code is responsible for highlighting any increases if specified
@@ -440,7 +440,7 @@ function setBarChart(data, buildStyle, histObj) {
 			.style('text-anchor', 'middle')
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
 			.text(buildStyle.scope);
-	}	
+	}
 	if (buildStyle.isIssue)
 		$('#chartArea2').hide();
 }
@@ -460,7 +460,7 @@ function setLineChart(data, buildStyle) {
 	}
 
 	if (tot !== 0) {
-		
+
 		var tip = d3.tip()
 				  .attr('class', 'd3-tip')
 				  .offset([-10, 0])
@@ -474,7 +474,7 @@ function setLineChart(data, buildStyle) {
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim();
 					var monthStr = getMonthString(dateBits[1]);
-					
+
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d[buildStyle.dataVal] + "</span>";
 				  });
 		var width = buildStyle.w - buildStyle.left - buildStyle.right;
@@ -492,9 +492,9 @@ function setLineChart(data, buildStyle) {
 					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')');
 		chart.append("text")
 				.classed(buildStyle.dataVal + '-title', true)
-		        .attr("x", (width / 2))             
+		        .attr("x", (width / 2))
 		        .attr("y", 0 - (buildStyle.top / 2) - 20)
-		        .attr("text-anchor", "middle")  
+		        .attr("text-anchor", "middle")
 		        .text(toolTipValue.toUpperCase());
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data, function(d) {
@@ -622,7 +622,7 @@ function setLineChart(data, buildStyle) {
 			axis: {
 				x: xAxis,
 				y: yAxis
-			}, 
+			},
 			gridlines: yGridlines
 		});
 		if (buildStyle.isIssue)
@@ -634,7 +634,7 @@ function setLineChart(data, buildStyle) {
 }
 
 /**
- * Sets listener for 
+ * Sets listener for
  *
  * @param {Array} data
  */
@@ -696,7 +696,7 @@ var getMonthString = function(date) {
 		case '02':
 			month = 'Febuary';
 			break;
-		case '03': 
+		case '03':
 			month = 'March';
 			break;
 		case '04':
@@ -769,7 +769,7 @@ var nth = function(data ,cb) {
 		}
 	}, 0);
 };
- 
+
 var getDayFormat = function(dd) {
 	var d = new Date(dd);
 	var n = d.getDay();
@@ -798,7 +798,7 @@ function assignPullButtons(){
 		var btn = document.createElement('button');
 		$(btn).attr({
 			width: 200,
-			class: 'btn'	
+			class: 'btn'
 		});
 		$(btn).text('View Pull Requests');
 		$viewEle.append(btn);
@@ -847,7 +847,7 @@ function getSelectionValue($selection, histObj, isIssue) {
 				compareRepositories(chosenVal, histObj.allRepoIssueHistory, true);
 			else
 				compareRepositories(chosenVal, histObj.allRepoPullsHistory, false);
-		}	
+		}
 	});
 }
 
@@ -907,7 +907,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1>▶</span> " + team + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1>▶</span> " + team + ": " + d[dataVal1] + "</span>";
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>"+ toolTipValue+"</span><span class=line-tip><br><br>" + str;
 				  });
-	
+
     var width = buildStyle.w - buildStyle.left - buildStyle.right;
 	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
 	var svg = d3.select('.compareChart').append('svg')
@@ -921,7 +921,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')');
 		chart.append("text")
 				.classed('issues-title', true)
-		        .attr("x", (width / 2))             
+		        .attr("x", (width / 2))
 		        .attr("y", 0 - (buildStyle.top / 2) - 20)
 		        .attr("text-anchor", "middle")
 		        .text($repo + "  - vs -  " + team);
@@ -1085,7 +1085,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 			axis: {
 				x: xAxis,
 				y: yAxis
-			}, 
+			},
 			gridlines: yGridlines
 		});
 
@@ -1153,7 +1153,7 @@ var getCheckValues = function(histObj) {
 			color = Math.floor(10 * 100 * 17215).toString(16)
 		} else {
 			color = Math.floor(i * 100 * 17215).toString(16)
-		}	
+		}
 		color = color.substring(0,6)
 		colors.push(color);
 		var dd = checkedRepoData[i].map(function(val) {
@@ -1166,7 +1166,7 @@ var getCheckValues = function(histObj) {
 	setComparisonChart2(pullsArr, teams, team, maximum, true);
 };
 
-var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {	
+var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
 	var team = 'unknown';
@@ -1193,7 +1193,7 @@ var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
 				  	nth(d.date, function(val) {
 				  		date = val;
 				  	});
-				  	
+
 				  	var s = dt[i].split('T');
 				  	var dateBits = s[0].split('-');
 	    			var da = s[0].substring(s[0].length, 8).trim();
@@ -1201,7 +1201,7 @@ var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
 					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1compare style=\'color:"+d['designatedColor']+"\'>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2compare>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2compare>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1compare style=\'color:"+d['designatedColor']+"\'>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span>";
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>"+ toolTipValue+"</span><span class=line-tip><br><br>" + str;
 				  });
-	
+
     var width = buildStyle.w - buildStyle.left - buildStyle.right;
 	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
 	var svg = d3.select('.compareChart').append('svg')
@@ -1213,13 +1213,13 @@ var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
 
 
 	for (var m = 0; m < data.length; m++) {
-	
+
 	var chart = svg.append('g')
 					.classed('display', true)
 					.attr('transform', 'translate('+ buildStyle.left+','+buildStyle.right+')');
 		chart.append("text")
 				.classed('issues-title', true)
-		        .attr("x", (width / 2))             
+		        .attr("x", (width / 2))
 		        .attr("y", 0 - (buildStyle.top / 2) - 20)
 		        .attr("text-anchor", "middle")
 		        .text($repo + "  Open Issues Comparison");
@@ -1300,8 +1300,8 @@ var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
 			.style('text-anchor', 'middle')
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
 			.text('Last 30 days');
-		//set trendline 1	
-		
+		//set trendline 1
+
 			this.selectAll('.trendline1compare' + m)
 				.data([params.data])
 				.enter()
@@ -1386,7 +1386,7 @@ var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
 			axis: {
 				x: xAxis,
 				y: yAxis
-			}, 
+			},
 			gridlines: yGridlines
 		});
 }
@@ -1429,7 +1429,7 @@ var pointListener = function() {
 	});
 
 	$point.on('mouseleave', function(){
-		
+
 		$(this).animate({
 			'r':3
 		})
@@ -1439,7 +1439,7 @@ var pointListener = function() {
 	});
 
 	$point2.on('mouseleave', function(){
-		
+
 		$(this).animate({
 			'r':3
 		})
@@ -1450,13 +1450,13 @@ var pointListener = function() {
 };
 
 var appendLegend = function(thisRepo, otherRepo) {
-	refreshLegend();	
+	refreshLegend();
 	var $elt = $('.comparison-legend');
 	$elt.prepend($('<svg class=home width=10 height=10><rect class=home width=10 height=10 /></rect></svg><span class=text-title >'+thisRepo+'</span><br class=break><svg class=away width=10 height=10><rect class=away width=10 height=10 /><rect></svg><span class=text-title >'+otherRepo+'</span>'));
 };
 
 var appendMultipleLegend = function(thisRepo, team, data) {
-	refreshMultipleLegend();	
+	refreshMultipleLegend();
 	var $elt = $('.multi-comparison-legend');
 	$elt.prepend($('<br class=multi-break><br class=multi-break><br class=multi-break><svg class=multi-home width=10 height=10><rect class=multi-home width=10 height=10 /></rect></svg><span class=multi-text-title > '+thisRepo+'</span><br class=multi-break>'));
 
@@ -1504,7 +1504,7 @@ var getMonthAvg = function(data, target) {
 	}, {});
 
 	var totalAvg = Math.round(total[target] / data.length);
-	
+
 	return totalAvg;
 };
 
@@ -1600,13 +1600,16 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 	return triggerArray;
 };
 
- function pieChart(data, targetEl, foundationAvg) {
-
+ function pieChart(data, targetEl, foundationAvg, currentValue, isIssue) {
+	 var record = isIssue ? "Issues" : "Pull Requests";
 	 //tooltip needs styling
 	 var tip = d3.tip()
 		 .html(function(d) {
-			 return "<div class='pie-chart-tooltip'>" + d.data.label + "    " + d.value + "<br><br><br><span>jQuery Average:  " + foundationAvg+ "</span>"+
-				 "</div>"
+			 if(d.data.label !== "Other jQuery repos") {
+				 return "<div class='pie-chart-tooltip'><p>" + d.data.label + ": " + d.value + " %</p><p>"+record+": " + currentValue + "</p><p>jQuery Average:  " + foundationAvg+ "</p>"+
+					 "</div>"
+			 }
+
 
 		 });
 	 var svg = d3.select(targetEl).append("svg")

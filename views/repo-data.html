@@ -9,7 +9,7 @@
       <link rel='stylesheet' href='/css/jqit.css' />
       <script>
          //this section of code displays how to pass a nodejs value to ejs and then on to code
-         //within script tags it can then be used anyhow you wish 
+         //within script tags it can then be used anyhow you wish
          //not ch is an array or json value set
          var isIssuesHighlighted = false;
          var isPullsHighlighted = false;
@@ -198,8 +198,8 @@
              "label":"Other jQuery repos",
              "value":jqueryPieVal
           }];
-
-          pieChart(pieData, "#issues-pie-chart", foundationIssuesAvg);
+          var currentIssues = v[v.length-1].issues;
+          pieChart(pieData, "#issues-pie-chart", foundationIssuesAvg, currentIssues, true);
 
           jqueryPieVal = 100 - totals.pulls;
           jqueryPieVal = jqueryPieVal.toFixed(2);
@@ -215,7 +215,7 @@
                 "value":jqueryPieVal
              }];
 
-          pieChart(pieData, "#pulls-pie-chart", foundationPullsAvg  );
+          pieChart(pieData, "#pulls-pie-chart", foundationPullsAvg, <%= pullRequestNo %>, false);
 
       var elm, elm2;
       elm = document.getElementsByClassName('issuesPercent');
@@ -226,7 +226,7 @@
       elm3[0].innerHTML = iDiff;
       elm4  = document.getElementsByClassName('pstatus');
       elm4[0].innerHTML = pDiff;
-         scroller.init(); 
+         scroller.init();
       </script>
    </body>
-</html> 
+</html>

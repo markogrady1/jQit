@@ -411,6 +411,15 @@ td, th {
 
 /*///////////PIE CHARTS/////////////////*/
 
+.pie-chart-tooltip {
+
+	/*font-weight: bold;*/
+	padding: 12px;
+	background: #3a3a3a;
+	color: #cacaca;
+	border-radius: 4px;
+	border: 2px solid #a3a3a3;
+}
 .pie-label {
 	font-weight: bold;
 }
