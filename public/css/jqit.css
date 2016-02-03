@@ -427,7 +427,15 @@ td, th {
 	color: #1D214D;
 	cursor: pointer;
 }
-/**/
+
+.more-than {
+	color: #C81A4E;
+}
+
+.less-than {
+	color: #52DD48;
+}
+
 .pie-chart-tooltip {
 
 	/*font-weight: bold;*/

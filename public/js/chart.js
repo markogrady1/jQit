@@ -1602,11 +1602,13 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 
  function pieChart(data, targetEl, foundationAvg, currentValue, isIssue) {
 	 var record = isIssue ? "Issues" : "Pull Requests";
+ 	 var styleClass = foundationAvg < currentValue ? "more-than" : "less-than";
 	 //tooltip needs styling
 	 var tip = d3.tip()
 		 .html(function(d) {
 			 if(d.data.label !== "Other jQuery repos") {
-				 return "<div class='pie-chart-tooltip'><p>" + d.data.label + ": " + d.value + " %</p><p>"+record+": " + currentValue + "</p><p>jQuery Average:  " + foundationAvg+ "</p>"+
+				 return "<div class='pie-chart-tooltip'><p>" + d.data.label + ": " + d.value + " %</p><p>"+record+": " +
+					"<span class='" + styleClass + "'>" + currentValue +"</span></p><p>jQuery Average:  " + foundationAvg+ "</p>"+
 					 "</div>"
 			 }
 
