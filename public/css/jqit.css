@@ -410,7 +410,24 @@ td, th {
 
 
 /*///////////PIE CHARTS/////////////////*/
+#pulls-pie-chart {
+	display: none;
+}
 
+.pie-link {
+	color:#1985E2;
+}
+
+.i {
+	color: #1D214D;
+	font-weight: bold;
+}
+
+.pie-link:hover {
+	color: #1D214D;
+	cursor: pointer;
+}
+/**/
 .pie-chart-tooltip {
 
 	/*font-weight: bold;*/

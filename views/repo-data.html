@@ -119,6 +119,7 @@
         var issuesArr = [], pullsArr = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs);
       </script>
+   <p><span class="pie-link i">Issues</span> | <span class="pie-link p">Pull Requests</span></p>
    <div id="issues-pie-chart"></div>
    <div id="pulls-pie-chart"></div>
 <div class="line-break"></div>
@@ -165,7 +166,6 @@
                if(newestIssue !== null){
                    $('.newest').append('<a href='+ newestIssue +' target=_blank>Go To Newest Issue</a>');
                }
-
             </script>
          </p>
          <p><b> Average time to close pull request: </b> <%= avgPulls %></p>
@@ -217,16 +217,51 @@
 
           pieChart(pieData, "#pulls-pie-chart", foundationPullsAvg, <%= pullRequestNo %>, false);
 
-      var elm, elm2;
-      elm = document.getElementsByClassName('issuesPercent');
-      elm[0].innerHTML = totals.issues.toFixed(2) + "%";
-      elm2 = document.getElementsByClassName('pullsPercent');
-      elm2[0].innerHTML = totals.pulls.toFixed(2) + "%";
-      elm3  = document.getElementsByClassName('istatus');
-      elm3[0].innerHTML = iDiff;
-      elm4  = document.getElementsByClassName('pstatus');
-      elm4[0].innerHTML = pDiff;
+          $(".pie-link").on("click", function() {
+              if($(this).html() === "Issues") {
+                  $(this).css({
+
+                      color: "#1D214D",
+                      fontWeight: "bold"
+                  } );
+                  $(".p").css({
+                      color: "#1985E2",
+                      fontWeight: "normal"
+
+                  });
+                  $("#issues-pie-chart").css("display", "block");
+                  $("#pulls-pie-chart").css("display", "none");
+              }
+          })
+          $(".pie-link").on("click", function() {
+              if($(this).html() === "Pull Requests") {
+                  $(this).css({
+
+                      color: "#1D214D",
+                      fontWeight: "bold"
+                  } );
+                  $(".i").css({
+                      color: "#1985E2",
+                      fontWeight: "normal"
+
+                  });
+                  $("#issues-pie-chart").css("display", "none");
+                  $("#pulls-pie-chart").css("display", "block");
+              }
+          })
+
+          var elm, elm2;
+          elm = document.getElementsByClassName('issuesPercent');
+          elm[0].innerHTML = totals.issues.toFixed(2) + "%";
+          elm2 = document.getElementsByClassName('pullsPercent');
+          elm2[0].innerHTML = totals.pulls.toFixed(2) + "%";
+          elm3  = document.getElementsByClassName('istatus');
+          elm3[0].innerHTML = iDiff;
+          elm4  = document.getElementsByClassName('pstatus');
+          elm4[0].innerHTML = pDiff;
          scroller.init();
+
+
       </script>
    </body>
 </html>
