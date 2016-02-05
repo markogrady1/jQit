@@ -52,7 +52,7 @@ schema.initConnection = function() {
 
 			if (doc == null) {
 				db.close();
-			} else {	
+			} else {
 				repoNames.push(doc.name);
 				issueNo.push(doc.open_issues);
 				completeD.push({ "name": doc.name, "issues": doc.open_issues, "forks": doc.forks_count, "watchers": doc.watchers, "github_url": doc.html_url })
