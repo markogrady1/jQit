@@ -1527,6 +1527,7 @@ var getRepoPercentage = function(data) {
 	var pullsTotal = typeof pullsArray[1] !== 'undefined' ? getTotalAmount(pullsArray) : 0;
 	var issuePercentage = calculatePercentage(issuesTotal, homeRepoArray, true);
 	var pullsPercentage = pullsTotal !== 0 ? calculatePercentage(pullsTotal, homeRepoArray, false) : 0;
+	console.log(issuePercentage[0], pullsPercentage[0])
 	return  {
 		issues: issuePercentage[0],
 		pulls: pullsPercentage[0],
