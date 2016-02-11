@@ -1,13 +1,18 @@
 <html>
-   <head>
-      <title>Repository Details</title>
-      <meta charset="utf-8">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-      <script src="/js/external/jquery-1.11.3.min.js"></script>
-      <script src="/js/external/lodash.min.js"></script>
-      <script src="/js/chart.js"></script>
-      <link rel='stylesheet' href='/css/jqit.css' />
-      <script>
+<head>
+    <title>Repository Details</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="/js/external/jquery-1.11.3.min.js"></script>
+    <script src="/js/external/lodash.min.js"></script>
+    <script src="/js/chart.js"></script>
+    <link rel='stylesheet' href='/css/jqit.css' />
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+//        var socket = io();
+        var socket = io();
+
+        socket.emit("test", {test: "booo"})
          //this section of code displays how to pass a nodejs value to ejs and then on to code
          //within script tags it can then be used anyhow you wish
          //not ch is an array or json value set
@@ -98,6 +103,17 @@
    </head>
    <body>
    <% include partials/header.html %>
+   <p class="attention-marker">Mark For Attention</p>
+   <script>
+
+
+
+       $(".attention-marker").on("click", function() {
+           var pathname = window.location.pathname.split("/")[3];
+           socket.emit("attention-marker", { path: pathname});
+           console.log(pathname)
+       });
+   </script>
    <div id=changeView></div>
       <div id=changeView2></div>
    <br>
@@ -248,7 +264,9 @@
                   $("#issues-pie-chart").css("display", "none");
                   $("#pulls-pie-chart").css("display", "block");
               }
-          })
+          });
+
+
 
           var elm, elm2;
           elm = document.getElementsByClassName('issuesPercent');

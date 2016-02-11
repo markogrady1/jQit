@@ -22,7 +22,9 @@ console.log(color["cyan"],"Router Initialised.");
 //route for the home page
 router.get("/", function(req, res){
 	var avaNum = reslv.getAvatarImage();
-
+    io.on("hit", function() {
+        console.log("booooooooooooom")
+    })
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
@@ -81,7 +83,7 @@ router.get("/repo/details/:repoName?", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
   	var nameParam = null;
   	nameParam = req.params.repoName;
-  	reslv.resolveIssueData(nameParam, req, res);
+  	reslv.resolveIssueData(nameParam, req, res, io);
 });
 
 //route for single repository details
