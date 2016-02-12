@@ -150,6 +150,7 @@ router.post("/login", function(req, res){
 	});
 });
 
+//route for adding the attention pin to the repo list item
 router.post("/repo/details/attention", (req, res) => {
     var userAvatar = req.body.userAvatar;
     var username = req.body.username;
@@ -160,6 +161,7 @@ router.post("/repo/details/attention", (req, res) => {
     });
 })
 
+//route for removing the attention pin
 router.post("/remove-pin", (req, res) => {
     var username = req.body.username;
     var team = req.body.repoName;

@@ -21,9 +21,9 @@
         var flagData = <%- JSON.stringify(flagData) %>
         var attention = <%- JSON.stringify(attention) %>
         var username = <%- JSON.stringify(username) %>
-attention = attention === null ? "" : attention;
-        console.log(attention)
-        console.log("Flag Data: " ,flagData)
+        attention = attention === null ? "" : attention;
+
+        console.log("Flag Data: " ,flagData);
 /**
  * The pd variable contains all the data needed for each of the repositories
  * The values are set out as the example below displays.
@@ -78,7 +78,7 @@ attention = attention === null ? "" : attention;
   </tr>
     <script>
         if (attention.target === <%- JSON.stringify(completeD[i].name) %>) {
-            $(".attention<%- i %>").append("<img class='attention-tag <%- completeD[i].name%>' src='img/attention_pin.png'/>")
+            $(".attention<%- i %>").append("<img class='attention-tag <%- completeD[i].name%>' title='click to remove pin' src='img/attention_pin.png'/>")
         }
     </script>
 <% } %>
@@ -87,22 +87,26 @@ attention = attention === null ? "" : attention;
 </table>
 <script>
     sortTable();
-$attPin = $(".attention-tag");
-    $attPin.on("click", function() {
-        var el = this.className.split(" ")[1];
+    if($(".attention-tag").length != 0) {
 
-        $.ajax({
-            method: "POST",
-            url: "/remove-pin",
-            data: {
-                repoName: el,
-                username: username
-
-            }
-        }).done(function(msg) {
-           $attPin.remove();
+        $attPin = $(".attention-tag");
+        $attPin.css({
+            cursor: "pointer"
         })
-    });
+        $attPin.on("click", function() {
+            var el = this.className.split(" ")[1];
+            $attPin.remove();
+            $.ajax({
+                method: "POST",
+                url: "/remove-pin",
+                data: {
+                    repoName: el,
+                    username: username
+                }
+            });
+        });
+    }
+
 var data = <%- JSON.stringify(completeDoc) %>
 
 scroller.init();
