@@ -11,18 +11,17 @@
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/css/jqit.css' />
     <script>
-        var socket = io.connect('http://localhost');
+        var socket = io();
 
-        socket.on("conn", function() {
-            socket.emit("boom")
-        })
     </script>
 
     <script>
-      var cd = <%- JSON.stringify(pullsNo) %>
-      var pd = <%- JSON.stringify(completeD) %>
-      var flagData = <%- JSON.stringify(flagData) %>
-console.log("Flag Data: " ,flagData)
+        var cd = <%- JSON.stringify(pullsNo) %>
+        var pd = <%- JSON.stringify(completeD) %>
+        var flagData = <%- JSON.stringify(flagData) %>
+        var attention = <%- JSON.stringify(attention) %>
+        console.log(attention)
+        console.log("Flag Data: " ,flagData)
 /**
  * The pd variable contains all the data needed for each of the repositories
  * The values are set out as the example below displays.
@@ -67,7 +66,12 @@ console.log("Flag Data: " ,flagData)
        <% } else { %>
             <tr>
        <% }  %>
-        <td ><a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a></td>
+        <td ><a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a><span class="attention<%- i %>"></span></td>
+        <script>
+            if (attention.target === <%- JSON.stringify(completeD[i].name) %>) {
+                    $(".attention<%- i %>").append("<img class='attention-tag' src='img/attention_pin.png'/>")
+            }
+            </script>
         <td ><%= calculatedIssues %></td>
         <td ><%- completeD[i].pulls%></td>
         <td><%- completeD[i].forks%></td>
@@ -79,10 +83,7 @@ console.log("Flag Data: " ,flagData)
 </table>
 <script>
     sortTable();
-</script>
 
-
-<script>
 var data = <%- JSON.stringify(completeDoc) %>
 
 scroller.init();
@@ -91,8 +92,7 @@ scroller.init();
         console.log("socket", socket)
     });
 $("index-name-link").on("click", function(socket) {
-    socket.emit("hit");
-    console.log("client hit")
+
 });
     $("#gitlogout").on("click", function() {
         socket.emit("logout-hit");

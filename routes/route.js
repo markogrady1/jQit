@@ -22,18 +22,14 @@ console.log(color["cyan"],"Router Initialised.");
 //route for the home page
 router.get("/", function(req, res){
 	var avaNum = reslv.getAvatarImage();
-    io.on("hit", function() {
-        console.log("booooooooooooom")
-    })
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
     function getFlagData(callback) {
         if (avaNum !== "undefined") {
             var data = reslv.getStorage();
-            reslv.getFlagData(data, (flagObj) => {
-                callback(flagObj);
-
+            reslv.getFlagData(data, (flagObj, att) => {
+                callback(flagObj, att);
             });
         } else {
             callback(null)
@@ -58,7 +54,8 @@ router.get("/", function(req, res){
 
      reslv.cacheRepoData(compDoc);
         // obtain any flags that may have been set and render the home page
-        getFlagData((flag) => {
+        getFlagData((flag, att) => {
+
             res.render("index", {
                 names: schema.names,
                 issuesNo: schema.issues,
@@ -70,7 +67,8 @@ router.get("/", function(req, res){
                 av: avaNum,
                 dashboardLink: "dashboard",
                 logoutLink: "logout",
-                flagData:flag
+                flagData:flag,
+                attention: att
             })
 		});
 		io.emit("userStatus", { av: avaNum })
@@ -150,6 +148,15 @@ router.post("/login", function(req, res){
 	});
 });
 
+router.post("/repo/details/attention", (req, res) => {
+    var userAvatar = req.body.userAvatar;
+    var username = req.body.username;
+    var attentionTarget = req.body.attentionTarget;
+    var email = req.body.email;
+    schema.assignAttentionMarker(attentionTarget, username, email, userAvatar, (response) => {
+        console.log(response)
+    });
+})
 //route for the register page requests
 router.get("/register", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /register");

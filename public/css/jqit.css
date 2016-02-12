@@ -385,6 +385,11 @@ td, th {
 
 /*/////////////////flagged list item style //////////////*/
 
+.attention-tag {
+	width: 15px;
+	height: 15px;
+	float: right;
+}
 #flagged {
 	background-color: #8BDCFA;
 }

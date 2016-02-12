@@ -44,12 +44,8 @@ var io_ = require("socket.io");
 var io = io_.listen(server);
 io.on("connection", function() {
 	console.log("connection")
-
 });
 
-io.on("hit", function() {
-	console.log("booooooooooooom")
-})
 resolve.checkForAssigneeAddition();
 app.use("/", routes(app, server, io));
 module.exports = app;

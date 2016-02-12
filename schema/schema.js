@@ -305,6 +305,31 @@ schema.checkForAssigneeMatch = function(database, username, dataSet, callback) {
 	});
 };
 
+schema.assignAttentionMarker = function(attentionTarget, username, email, useravatar,  callback) {
+	var attentionObj = {
+		username: username,
+		email: email,
+		userAvatar: useravatar,
+		target: attentionTarget
+	};
+	console.log(typeof username);
+	connection("user", (db) => {
+		db.collection('attention').findOne({ username: username }, function(err, doc) {
+			if (err) throw err;
+			if(doc === null) {
+				db.collection("attention").insert( attentionObj, (err, data) => {
+					if(err) throw err;
+					db.close();
+				});
+			} else {
+				db.collection("attention").update({ username:username }, attentionObj, (err, data) => {
+					if(err) throw err;
+					db.close();
+				});
+			}
+		});
+	});
+	};
 /**
  * Function responsible for storing the settings to watch over a given repository
  * @param {Object} obj
@@ -351,11 +376,22 @@ schema.checkForFlags = function(username, email, callback) {
     connection("user", (db) => {
         db.collection("flags").findOne({ username: username, email: email}, function (err, doc) {
             if (err) throw err;
-            callback(doc);
+			callback(doc);
             db.close();
         });
     });
 };
+
+
+schema.checkForAttention = function(username, email, callback) {
+	connection("user", (db) => {
+		db.collection("attention").findOne({ username: username, email: email }, (err, attentDoc) => {
+			if(err) throw err;
+			callback(attentDoc);
+			db.close();
+		});
+	})
+}
 
 schema.checkForFlaggedRepo = function(username, email, target, callback) {
     connection("user", (db) => {

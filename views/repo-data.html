@@ -9,10 +9,9 @@
     <link rel='stylesheet' href='/css/jqit.css' />
     <script src="/socket.io/socket.io.js"></script>
     <script>
-//        var socket = io();
+
         var socket = io();
 
-        socket.emit("test", {test: "booo"})
          //this section of code displays how to pass a nodejs value to ejs and then on to code
          //within script tags it can then be used anyhow you wish
          //not ch is an array or json value set
@@ -23,6 +22,10 @@
 
          var flagdata = {};
          flagdata = <%- JSON.stringify(flagData) %>
+        console.log(flagdata)
+        var username =  <%- JSON.stringify(username) %>
+        var email =  <%- JSON.stringify(email) %>
+
          if(flagdata !== null) {
 
             everyIncrease = false;
@@ -103,15 +106,30 @@
    </head>
    <body>
    <% include partials/header.html %>
-   <p class="attention-marker">Mark For Attention</p>
+   <a href="/">Back</a>
+   <p class="attention-marker"></p>
    <script>
 
+       if (username !== null) {
+           $(".attention-marker").html("Mark for attention")
+       }
 
 
        $(".attention-marker").on("click", function() {
-           var pathname = window.location.pathname.split("/")[3];
-           socket.emit("attention-marker", { path: pathname});
-           console.log(pathname)
+           var teamname = window.location.pathname.split("/")[3];
+           console.log(teamname)
+           $.ajax({
+               method: "POST",
+               url: "attention",
+               data: {
+                   username: username,
+                   email: email,
+                   userAvatar: av,
+                   attentionTarget: teamname
+               }
+           }).done(function(msg) {
+                console.log(msg)
+           });
        });
    </script>
    <div id=changeView></div>
