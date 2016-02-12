@@ -22,6 +22,8 @@ console.log(color["cyan"],"Router Initialised.");
 //route for the home page
 router.get("/", function(req, res){
 	var avaNum = reslv.getAvatarImage();
+    var username = reslv.getStorageItem(0);
+
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
@@ -65,6 +67,7 @@ router.get("/", function(req, res){
                 state: c,
                 header: "Main page",
                 av: avaNum,
+                username: username === "undefined" ? null : username,
                 dashboardLink: "dashboard",
                 logoutLink: "logout",
                 flagData:flag,
@@ -74,7 +77,6 @@ router.get("/", function(req, res){
 		io.emit("userStatus", { av: avaNum })
 	});
 });
-
 
 //route for single repository data
 router.get("/repo/details/:repoName?", function(req, res) {
@@ -157,6 +159,15 @@ router.post("/repo/details/attention", (req, res) => {
         console.log(response)
     });
 })
+
+router.post("/remove-pin", (req, res) => {
+    var username = req.body.username;
+    var team = req.body.repoName;
+    schema.removePin(username, team, (data) => {
+       return data;
+    });
+});
+
 //route for the register page requests
 router.get("/register", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /register");
@@ -202,7 +213,7 @@ router.get("/dashboard", (req, res) => {
         compDoc = schema.completeDoc;
         getFlagData((flag) => {
             res.render("dashboard", {
-                state: "true",
+                // state: "true",
                 av: avatar,
                 header: "Dashboard",
                 urlstate: urlstate,

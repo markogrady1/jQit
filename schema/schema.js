@@ -382,6 +382,16 @@ schema.checkForFlags = function(username, email, callback) {
     });
 };
 
+schema.removePin = function(username, repoName, callback) {
+	connection("user", (db) => {
+		db.collection("attention").deleteOne({ username: username, target: repoName}, (err, doc) => {
+			if(err) throw err;
+			callback(doc);
+			db.close();
+		});
+	});
+};
+
 
 schema.checkForAttention = function(username, email, callback) {
 	connection("user", (db) => {

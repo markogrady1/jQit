@@ -13,16 +13,15 @@
         var socket = io();
 
          //this section of code displays how to pass a nodejs value to ejs and then on to code
-         //within script tags it can then be used anyhow you wish
-         //not ch is an array or json value set
-         var isIssuesHighlighted = false;
-         var isPullsHighlighted = false;
-         var issuesLimit = null;
-         var pullsLimit = null;
+         //within script tags. It can then be used anyhow you wish.
+        var isIssuesHighlighted = false;
+        var isPullsHighlighted = false;
+        var issuesLimit = null;
+        var pullsLimit = null;
 
-         var flagdata = {};
-         flagdata = <%- JSON.stringify(flagData) %>
-        console.log(flagdata)
+        var flagdata = {};
+        flagdata = <%- JSON.stringify(flagData) %>
+        console.log(flagdata);
         var username =  <%- JSON.stringify(username) %>
         var email =  <%- JSON.stringify(email) %>
 
@@ -107,30 +106,11 @@
    <body>
    <% include partials/header.html %>
    <a href="/">Back</a>
-   <p class="attention-marker"></p>
+
    <script>
 
-       if (username !== null) {
-           $(".attention-marker").html("Mark for attention")
-       }
 
 
-       $(".attention-marker").on("click", function() {
-           var teamname = window.location.pathname.split("/")[3];
-           console.log(teamname)
-           $.ajax({
-               method: "POST",
-               url: "attention",
-               data: {
-                   username: username,
-                   email: email,
-                   userAvatar: av,
-                   attentionTarget: teamname
-               }
-           }).done(function(msg) {
-                console.log(msg)
-           });
-       });
    </script>
    <div id=changeView></div>
       <div id=changeView2></div>
@@ -150,9 +130,11 @@
       <div id=chartArea2></div>
       <div class='point point2'></div>
       <script>
+
         var issuesArr = [], pullsArr = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs);
       </script>
+   <p class="attention-marker"></p>
    <p><span class="pie-link i">Issues</span> | <span class="pie-link p">Pull Requests</span></p>
    <div id="issues-pie-chart"></div>
    <div id="pulls-pie-chart"></div>
@@ -162,6 +144,7 @@
          <div><b class="istatus"></b></div>
          <div><b class="pstatus"></b></div>
          <section class="item"></section>
+
          <h1 class=current-repo><%= data.name %></h1>
          <p><b>Repository name:</b> <%= data.name %></p>
          <p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
@@ -181,6 +164,28 @@
          <p class='old'>
             <b> Age of oldest issue: </b> <%= issueRange %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <script>
+                if (username !== null) {
+                    $(".attention-marker").html("Mark for attention")
+                }
+
+
+                $(".attention-marker").on("click", function() {
+
+                    var teamname = window.location.pathname.split("/")[3];
+                    console.log(teamname)
+                    $.ajax({
+                        method: "POST",
+                        url: "attention",
+                        data: {
+                            username: username,
+                            email: email,
+                            userAvatar: av,
+                            attentionTarget: teamname
+                        }
+                    }).done(function(msg) {
+                        console.log(msg)
+                    });
+                });
                $('.btn').on('click', function() {
                  if($('#chartArea').is(":visible")) {
                      $('.average').html('Month Average: ' + pullsMonthlyAvg)

@@ -20,6 +20,8 @@
         var pd = <%- JSON.stringify(completeD) %>
         var flagData = <%- JSON.stringify(flagData) %>
         var attention = <%- JSON.stringify(attention) %>
+        var username = <%- JSON.stringify(username) %>
+attention = attention === null ? "" : attention;
         console.log(attention)
         console.log("Flag Data: " ,flagData)
 /**
@@ -67,23 +69,40 @@
             <tr>
        <% }  %>
         <td ><a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a><span class="attention<%- i %>"></span></td>
-        <script>
-            if (attention.target === <%- JSON.stringify(completeD[i].name) %>) {
-                    $(".attention<%- i %>").append("<img class='attention-tag' src='img/attention_pin.png'/>")
-            }
-            </script>
+
         <td ><%= calculatedIssues %></td>
         <td ><%- completeD[i].pulls%></td>
         <td><%- completeD[i].forks%></td>
         <td><%- completeD[i].watchers%></td>
     <td class="github-detail"><a class="index-github-link" target="_blank" href=<%- completeD[i].github_url%>> <%- completeD[i].github_url%></a></td>
   </tr>
+    <script>
+        if (attention.target === <%- JSON.stringify(completeD[i].name) %>) {
+            $(".attention<%- i %>").append("<img class='attention-tag <%- completeD[i].name%>' src='img/attention_pin.png'/>")
+        }
+    </script>
 <% } %>
+
   </tbody>
 </table>
 <script>
     sortTable();
+$attPin = $(".attention-tag");
+    $attPin.on("click", function() {
+        var el = this.className.split(" ")[1];
 
+        $.ajax({
+            method: "POST",
+            url: "/remove-pin",
+            data: {
+                repoName: el,
+                username: username
+
+            }
+        }).done(function(msg) {
+           $attPin.remove();
+        })
+    });
 var data = <%- JSON.stringify(completeDoc) %>
 
 scroller.init();
