@@ -55,6 +55,7 @@ router.get("/", function(req, res){
      }
 
      reslv.cacheRepoData(compDoc);
+        var teamData = require("../teams.json")
         // obtain any flags that may have been set and render the home page
         getFlagData((flag, att) => {
 
@@ -71,7 +72,8 @@ router.get("/", function(req, res){
                 dashboardLink: "dashboard",
                 logoutLink: "logout",
                 flagData:flag,
-                attention: att
+                attention: att,
+                teams: teamData
             })
 		});
 		io.emit("userStatus", { av: avaNum })
@@ -86,6 +88,10 @@ router.get("/repo/details/:repoName?", function(req, res) {
   	reslv.resolveIssueData(nameParam, req, res, io);
 });
 
+router.get("/jquery/team/:teamName?", function(req, res) {
+    var teamname = req.params.teamName;
+    console.log(teamname)
+});
 //route for single repository details
 router.get("/repo/issue/details/:team?", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:" + req.params.repoName);

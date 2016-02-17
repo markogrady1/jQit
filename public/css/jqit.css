@@ -6,6 +6,23 @@ body {
     font-size: 13px;
 }
 
+
+.team-table {
+	width: 80%;
+	/*margin: 0 auto*/
+}
+
+.team-name {
+	font-size: 1em;
+	font-weight: bold;
+	color: #444;
+}
+
+.team-table-title {
+	font-size: 1.2em;
+	color: #444;
+}
+
 .body-wrap {
 	padding: 10px;
 }
@@ -340,7 +357,9 @@ td, th {
 	.github-head, .github-detail {
 	display:none;
 }
-
+.team-table {
+	width: 100%;
+}
 /* style for github avatar */
 }
 .avatar {

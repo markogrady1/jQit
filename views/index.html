@@ -21,6 +21,8 @@
         var flagData = <%- JSON.stringify(flagData) %>
         var attention = <%- JSON.stringify(attention) %>
         var username = <%- JSON.stringify(username) %>
+        var teams = <%- JSON.stringify(teams) %>
+
         attention = attention === null ? "" : attention;
 
         console.log("Flag Data: " ,flagData);
@@ -46,6 +48,8 @@
 <% include partials/header.html %>
 <div class="pie"></div>
 <div class="body-wrap">
+
+    <br><br><br>
 <table class="props xmpl" id="xtable">
   <thead>
   <tr >
@@ -85,6 +89,30 @@
 
   </tbody>
 </table>
+
+
+<p class="team-table-title">jQuery Team Table</p>
+    <table class="props xmpl team-table" id="xtable">
+    <thead>
+    <tr >
+    <th class="head">Team</th>
+    <th class="head">Responsibility</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <% for (var k = 0; k < teams.length; k++) { %>
+    <tr>
+        <td class="team-name"><a class="index-name-link"  href="jquery/team/<%- teams[k].team %>"><%- teams[k].team %></a></td>
+        <td>
+        <%  for (var j in teams[k].responsibilty) { %>
+            <a class="index-name-link"  href="repo/details/<%- teams[k].responsibilty[j]%>"><%- teams[k].responsibilty[j] %></a><br>
+        <% } %>
+        </td>
+    </tr>
+    <% } %>
+    </tbody>
+    </table>
 <script>
     sortTable();
     if($(".attention-tag").length != 0) {

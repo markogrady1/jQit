@@ -1,0 +1,102 @@
+[
+  {
+    "team": "core",
+    "responsibilty": [
+      "api.jquery.com",
+      "jquery",
+      "jquery-migrate",
+      "jquery.com"
+    ]},
+  {
+    "team": "globalize",
+    "responsibilty": [
+      "api.globalizejs.com",
+      "globalize",
+      "globalizejs.com"
+    ]},
+  {
+    "team": "qunit",
+    "responsibilty": [
+      "api.qunitjs.com",
+      "qunit",
+      "qunitjs.com",
+      "testswarm"
+    ]},
+  {
+    "team": "content",
+    "responsibilty": [
+      "blog.jquery.com-theme",
+      "content",
+      "jquery-wp-content",
+      "learn.jquery.com"
+    ]},
+  {
+    "team": "mobile",
+    "responsibilty": [
+      "api.jquerymobile.com",
+      "demos.jquerymobile.com",
+      "jquery-mobile",
+      "jquerymobile.com",
+      "themeroller-jquerymobile.com"
+    ]},
+  {
+    "team": "ui",
+    "responsibilty": [
+      "api.jqueryui.com",
+      "download.jqueryui.com",
+      "jquery-simulate",
+      "jquery-ui",
+      "jqueryui.com"
+    ]},
+  {
+    "team": "foundation (ED)",
+    "responsibilty": [
+      "brand.jquery.org",
+      "contacts",
+      "jquery.github.io"
+    ]},
+  {
+    "team": "infra",
+    "responsibilty": [
+      "codeorigin.jquery.com",
+      "grunt-jquery-content",
+      "infrastructure"
+    ]},
+  {
+    "team": "events",
+    "responsibilty": [
+      "2012-dev-summit",
+      "events.jquery.org"
+    ]},
+  {
+    "team": "dev-rel",
+    "responsibilty": [
+      "contribute.jquery.org",
+      "irc.jquery.org"
+    ]},
+  {
+    "team": "foundation",
+    "responsibilty": [
+      "jquery.org"
+    ]},
+  {
+    "team": "chassis",
+    "responsibilty": [
+      "css-chassis"
+    ]},
+  {
+    "team": "PEP",
+    "responsibilty": [
+      "PEP"
+    ]},
+  {
+    "team": "sizzle",
+    "responsibilty": [
+      "sizzle"
+    ]},
+  {
+    "team": "standards",
+    "responsibilty": [
+      "standards"
+    ]}
+]
