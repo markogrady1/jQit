@@ -1,7 +1,7 @@
 [
   {
     "team": "core",
-    "responsibilty": [
+    "responsibility": [
       "api.jquery.com",
       "jquery",
       "jquery-migrate",
@@ -9,14 +9,14 @@
     ]},
   {
     "team": "globalize",
-    "responsibilty": [
+    "responsibility": [
       "api.globalizejs.com",
       "globalize",
       "globalizejs.com"
     ]},
   {
     "team": "qunit",
-    "responsibilty": [
+    "responsibility": [
       "api.qunitjs.com",
       "qunit",
       "qunitjs.com",
@@ -24,7 +24,7 @@
     ]},
   {
     "team": "content",
-    "responsibilty": [
+    "responsibility": [
       "blog.jquery.com-theme",
       "content",
       "jquery-wp-content",
@@ -32,7 +32,7 @@
     ]},
   {
     "team": "mobile",
-    "responsibilty": [
+    "responsibility": [
       "api.jquerymobile.com",
       "demos.jquerymobile.com",
       "jquery-mobile",
@@ -41,7 +41,7 @@
     ]},
   {
     "team": "ui",
-    "responsibilty": [
+    "responsibility": [
       "api.jqueryui.com",
       "download.jqueryui.com",
       "jquery-simulate",
@@ -50,53 +50,53 @@
     ]},
   {
     "team": "foundation (ED)",
-    "responsibilty": [
+    "responsibility": [
       "brand.jquery.org",
       "contacts",
       "jquery.github.io"
     ]},
   {
     "team": "infra",
-    "responsibilty": [
+    "responsibility": [
       "codeorigin.jquery.com",
       "grunt-jquery-content",
       "infrastructure"
     ]},
   {
     "team": "events",
-    "responsibilty": [
+    "responsibility": [
       "2012-dev-summit",
       "events.jquery.org"
     ]},
   {
     "team": "dev-rel",
-    "responsibilty": [
+    "responsibility": [
       "contribute.jquery.org",
       "irc.jquery.org"
     ]},
   {
     "team": "foundation",
-    "responsibilty": [
+    "responsibility": [
       "jquery.org"
     ]},
   {
     "team": "chassis",
-    "responsibilty": [
+    "responsibility": [
       "css-chassis"
     ]},
   {
     "team": "PEP",
-    "responsibilty": [
+    "responsibility": [
       "PEP"
     ]},
   {
     "team": "sizzle",
-    "responsibilty": [
+    "responsibility": [
       "sizzle"
     ]},
   {
     "team": "standards",
-    "responsibilty": [
+    "responsibility": [
       "standards"
     ]}
 ]

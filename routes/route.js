@@ -88,10 +88,21 @@ router.get("/repo/details/:repoName?", function(req, res) {
   	reslv.resolveIssueData(nameParam, req, res, io);
 });
 
+
+ // route for viewing jquery team data
 router.get("/jquery/team/:teamName?", function(req, res) {
     var teamname = req.params.teamName;
-    console.log(teamname)
+    reslv.resolveTeamData(teamname, req, res, (repoData, teams) => {
+        res.render("team-view", {
+            data:"team:",
+            team: teamname,
+            repoData: repoData,
+            teams: teams
+        })
+    });
+
 });
+
 //route for single repository details
 router.get("/repo/issue/details/:team?", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:" + req.params.repoName);
