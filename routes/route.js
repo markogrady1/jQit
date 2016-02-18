@@ -7,6 +7,7 @@ var migrate = require("../schema/repoMigrate")
 	, auth = require("../config/auth")
 	, router = express.Router()
     , fs = require("fs")
+    , _ = require("lodash")
     , color = helper.terminalCol();
 
 // condition to check if local-server storage has been set already
@@ -16,7 +17,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 }
 
 var app;
-var acc = [];
+var acc = [], dtt = [];
 console.log(color["cyan"],"Router Initialised.");
 
 //route for the home page
@@ -91,14 +92,31 @@ router.get("/repo/details/:repoName?", function(req, res) {
 
  // route for viewing jquery team data
 router.get("/jquery/team/:teamName?", function(req, res) {
-    var teamname = req.params.teamName;
-    reslv.resolveTeamData(teamname, req, res, (repoData, teams) => {
+    setTimeout( () => {
         res.render("team-view", {
-            data:"team:",
-            team: teamname,
-            repoData: repoData,
-            teams: teams
-        })
+            data:dtt,
+            team:team,
+            teams:teamRepos
+        });
+    }, 500);
+    var team = req.params.teamName;
+    var d = '';
+    var teamRepos = [], repoData = ["first"];
+    var teams = require("../teams.json");
+    for (var i in teams) {
+        if (team === teams[i].team) {
+            for (var j in teams[i].responsibility) {
+                var repo = teams[i].responsibility[j];
+                teamRepos.push(repo);
+
+            }
+        }
+    }
+    reslv.getTeamData("repoPullsHistory", "pulls", teamRepos, (data) => {
+        console.log(teamRepos[0], teamRepos[1], teamRepos[2])
+
+        dtt.push(data);
+
     });
 
 });
