@@ -8,6 +8,7 @@ var migrate = require("../schema/repoMigrate")
 	, router = express.Router()
     , fs = require("fs")
     , _ = require("lodash")
+    , async = require("async")
     , color = helper.terminalCol();
 
 // condition to check if local-server storage has been set already
@@ -92,32 +93,62 @@ router.get("/repo/details/:repoName?", function(req, res) {
 
  // route for viewing jquery team data
 router.get("/jquery/team/:teamName?", function(req, res) {
-    setTimeout( () => {
-        res.render("team-view", {
-            data:dtt,
-            team:team,
-            teams:teamRepos
-        });
-    }, 500);
+    'use strict';
+    var arrayBack= [];
+
     var team = req.params.teamName;
-    var d = '';
+    var count = 0;
     var teamRepos = [], repoData = ["first"];
     var teams = require("../teams.json");
-    for (var i in teams) {
+    for (let i in teams) {
         if (team === teams[i].team) {
-            for (var j in teams[i].responsibility) {
+            for (let j in teams[i].responsibility) {
+                count++;
                 var repo = teams[i].responsibility[j];
                 teamRepos.push(repo);
 
             }
         }
     }
-    reslv.getTeamData("repoPullsHistory", "pulls", teamRepos, (data) => {
-        console.log(teamRepos[0], teamRepos[1], teamRepos[2])
+    async.each(teamRepos,   function(item, callback){
+            // Call an asynchronous function, often a save() to DB
+           reslv.getTeamData("repoPullsHistory", "pulls", item, (d) => {
+               arrayBack.push(d)
+                callback()
+            })
 
-        dtt.push(data);
 
-    });
+    }, function(err){
+
+            res.render("team-view", {
+                data:arrayBack,
+                team:repo,
+                teams:teamRepos
+            });
+
+        }
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 });
 

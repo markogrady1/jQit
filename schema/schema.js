@@ -107,7 +107,7 @@ var connection = function(dbase, callback) {
  * @param {Function} callback 
  */
 schema.executeQuery = function(database, param, callback) {
-	var query = {"repo": param};
+	var query = { "repo": param };
 	collection = query.repo;
 	var queryStr = getQuery(database);
 	var projection = getProjection(database);
@@ -184,7 +184,7 @@ var getProjection = function(db) {
 var getQuery = function(db) {
 	var seconds = new Date().getTime() / 1000;
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
-	var query = (db === 'repoHistory') ? {"secondsDate": { "$gt": seconds }} : {};
+	var query = (db === 'repoHistory') ? { "secondsDate": { "$gt": seconds }} : {};
 	return query;
 };
 
