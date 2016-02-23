@@ -90,7 +90,9 @@ router.get("/repo/details/:repoName?", function(req, res) {
   	reslv.resolveIssueData(nameParam, req, res, io);
 });
 
-
+router.get("/previous-month/data/", function(req, res) {
+    console.log("previous month of data called")
+})
  // route for viewing jquery team data
 router.get("/jquery/team/:teamName?", function(req, res) {
     'use strict';

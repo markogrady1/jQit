@@ -128,9 +128,24 @@
       <div class=multi-compareChart></div>
       <div id=chartArea></div>
       <div id=chartArea2></div>
+   <div class="change-chart-output">change chart output</div>
       <div class='point point2'></div>
       <script>
+        $chartChange = $(".change-chart-output");
+        $chartChange.on("click", function() {
+            console.log("click")
 
+            $.ajax({
+                method: "GET",
+                url: "previous-month/data"
+            }).done(function(msg) {
+                console.log(msg)
+            });
+
+
+
+
+        })
         var issuesArr = [], pullsArr = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs);
       </script>
