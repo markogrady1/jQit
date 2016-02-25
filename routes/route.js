@@ -121,7 +121,7 @@ router.get("/jquery/team/:teamName?", function(req, res) {
             }
         }
     }
-  
+
     async.each(teamRepos,   function(item, callback){
             // Call an asynchronous function, often a save() to DB
            reslv.getTeamData("repoPullsHistory", "pulls", item, (d) => {

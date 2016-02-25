@@ -31,7 +31,7 @@ var $viewEle;
  *
  */
 function setCharts(flagIssues, flagPulls) {
-	var issuesLineData = {}, pullsLineData = {}, issuesBarData = {}, pullsBarData = {}, historyObj = {};
+	//var issuesLineData = {}, pullsLineData = {}, issuesBarData = {}, pullsBarData = {}, historyObj = {};
 	detectWindowSize();
          var admin = [], issuesArr = [];
          for(var l in p) {
@@ -49,7 +49,7 @@ function setCharts(flagIssues, flagPulls) {
          }
 
          var jArr = JSON.stringify(issuesArr);
-         issuesLineData = {
+        var issuesLineData = {
              w: chartWidth,
              h: lineChartHeight,
              top: 48,
@@ -67,7 +67,7 @@ function setCharts(flagIssues, flagPulls) {
            }
          };
 
-         pullsLineData = {
+        var pullsLineData = {
              w: chartWidth,
              h: lineChartHeight,
              top: 48,
@@ -85,7 +85,7 @@ function setCharts(flagIssues, flagPulls) {
            }
          };
 
-         issuesBarData = {
+        var issuesBarData = {
              w: chartWidth,
              h: barChartHeight,
              top: 48,
@@ -102,7 +102,7 @@ function setCharts(flagIssues, flagPulls) {
            };
 
 
-         pullsBarData = {
+       var  pullsBarData = {
              w: chartWidth,
              h: barChartHeight,
              top: 48,
@@ -119,7 +119,7 @@ function setCharts(flagIssues, flagPulls) {
 
 		 };
 
-         historyObj = {
+        var historyObj = {
            allRepoIssueHistory: allIssuesHistory,
            allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData
@@ -1094,6 +1094,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 };
 
 var setUpMultipleCompareBtn = function(histObj) {
+	$('.trigger-multi-compare').remove()
 	$('.multi-comparison').append('<button class=trigger-multi-compare>Compare Multiple Repos</button><div class=check-append></div>');
 	var $btn = $('.trigger-multi-compare');
 	$btn.on('click', function() {

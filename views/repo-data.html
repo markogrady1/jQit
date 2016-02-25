@@ -137,8 +137,9 @@
           $nextChartVal = $(".next-issue-chart");
 
           $prevChartVal.on("click", function() {
-  
+
             var rangeParam = $chartRange.val();
+              $chartRange.val(++rangeParam);
             $.ajax('previous-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
                 type: 'GET',
                 dataType: 'json',
@@ -149,12 +150,18 @@
                 },
                 error  : function()     { console.log(null); }
             });
-            $chartRange.val(++rangeParam);
+
         });
 
           $nextChartVal.on("click", function() {
-
               var rangeParam = $chartRange.val();
+              if(rangeParam < 1) {
+                  $chartRange.val(2);
+              } else {
+                  $chartRange.val(--rangeParam);
+              }
+
+
               $.ajax('previous-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
                   type: 'GET',
                   dataType: 'json',
@@ -165,11 +172,6 @@
                   },
                   error  : function()     { console.log(null); }
               });
-              if(rangeParam-1 < 1) {
-                  $chartRange.val(1);
-              } else {
-                  $chartRange.val(--rangeParam);
-              }
 
           });
         var issuesArr = [], pullsArr = [];

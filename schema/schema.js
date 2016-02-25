@@ -222,9 +222,18 @@ var getQuery = function(db) {
  * @return {Object} projection
  */
 var getNextMonthQuery = function(db, range) {
+	var nseconds, query;
 	var seconds = new Date().getTime() / 1000;
-	var nseconds = seconds - (2592000 * range); // ensure only the last 30 days of data are displayed
-	return (db === 'repoHistory') ? { "secondsDate": { "$gt": nseconds, $lt: seconds - 2592000 }} : {};
+
+	if(range <= 2) {
+		seconds = seconds - (2592000); // ensure only the last 30 days of data are displayed
+		query = { "$gt": seconds };
+	} else {
+		nseconds = seconds - (2592000 * range); // ensure only the last 30 days of data are displayed
+		query = { "$gt": nseconds, $lt: seconds - 2592000 };
+	}
+
+	return (db === 'repoHistory') ? { "secondsDate": query } : {};
 
 };
 
