@@ -21,7 +21,6 @@
 
         var flagdata = {};
         flagdata = <%- JSON.stringify(flagData) %>
-        console.log(flagdata);
         var username =  <%- JSON.stringify(username) %>
         var email =  <%- JSON.stringify(email) %>
 
@@ -88,7 +87,6 @@
          console.log(iDiff + "\n",pDiff);
          console.log("issues result:",issueflagsIndexs)
          console.log("pulls result:",pullsflagsIndexs)
-
          var totals = getRepoPercentage(repoData);
          var foundationPullsAvg = totals.foundationPullsAverage.toFixed(2);
          var foundationIssuesAvg = totals.foundationIssuesAverage.toFixed(2);
@@ -210,11 +208,13 @@
                     $(".attention-marker").html("Mark for attention")
                 }
 
+                if(old !== null){
+                    $('.old').append('<a href='+ old +' target=_blank>Go To Oldest Issue</a>');
+                }
 
                 $(".attention-marker").on("click", function() {
 
                     var teamname = window.location.pathname.split("/")[3];
-                    console.log(teamname)
                     $.ajax({
                         method: "POST",
                         url: "attention",
@@ -236,9 +236,6 @@
                   }
                });
 
-               if(old !== null){
-                   $('.old').append('<a href='+ old +' target=_blank>Go To Oldest Issue</a>');
-               }
             </script>
          </p>
          <p class='newest'>
