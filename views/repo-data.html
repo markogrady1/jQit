@@ -71,7 +71,7 @@
          var pDiff = getDiff(pr, false);
          var issueflagsIndexs = null;
          var pullsflagsIndexs = null;
-
+         var startDate = dt[0].split("T")[0];
          if(flagdata !== null) {
 
             if(flagdata.highlight_issues_chart === "true") {
@@ -142,8 +142,10 @@
                 dataType: 'json',
                 success: function(data) {
                     dt = data.obj.raw;
+
                     v = JSON.parse(data.obj.chart);
-                    setCharts(issueflagsIndexs, pullsflagsIndexs, true);
+                    startDate = data.obj.raw[0].split("T")[0];
+                    setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
                 },
                 error  : function()     { console.log(null); }
             });
@@ -165,7 +167,9 @@
                   success: function(data) {
                       dt = data.obj.raw;
                       v = JSON.parse(data.obj.chart);
-                      setCharts(issueflagsIndexs, pullsflagsIndexs, true);
+                      v = JSON.parse(data.obj.chart);
+                      startDate = data.obj.raw[0].split("T")[0];
+                      setCharts(issueflagsIndexs, pullsflagsIndexs, true,startDate);
                   },
                   error  : function()     { console.log(null); }
               });

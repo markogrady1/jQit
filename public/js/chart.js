@@ -30,7 +30,7 @@ var $viewEle;
  * Responsible for setting the initial values for the plot of the main charts
  *
  */
-function setCharts(flagIssues, flagPulls, isPreviousMonthOfData) {
+function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startdDate) {
 	//var issuesLineData = {}, pullsLineData = {}, issuesBarData = {}, pullsBarData = {}, historyObj = {};
 	detectWindowSize();
 		if(isPreviousMonthOfData) {
@@ -129,10 +129,10 @@ function setCharts(flagIssues, flagPulls, isPreviousMonthOfData) {
            allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData
          };
-         setBarChart(issuesArr, issuesBarData, historyObj);
-         setLineChart(issuesArr, issuesLineData);
-         setBarChart(pullsArr, pullsBarData);
-         setLineChart(pullsArr, pullsLineData);
+         setBarChart(issuesArr, issuesBarData, historyObj, startdDate);
+         setLineChart(issuesArr, issuesLineData, startdDate);
+         setBarChart(pullsArr, pullsBarData, startdDate);
+         setLineChart(pullsArr, pullsLineData, startdDate);
 
 
          if(issuesArr.length == 0){
@@ -291,7 +291,7 @@ function setBarChart(data, buildStyle, histObj) {
 	        .attr("x", (width / 2))
 	        .attr("y", 0 - (buildStyle.top / 2))
 	        .attr("text-anchor", "middle")
-	        .text(toolTipValue.toUpperCase());
+	        .text(toolTipValue.toUpperCase() + " from " + startDate);
 
 	plot.call(chart, {
 		data:data,
