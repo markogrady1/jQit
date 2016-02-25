@@ -56,7 +56,6 @@
          console.log("Pulls_boundary:",pullsLimit);
 
          var allIssuesHistory = <%- JSON.stringify(allRepoHistory) %>
-
          var allPullsHistory = <%- JSON.stringify(allRepoPullsHistory) %>
          var repoData = <%- JSON.stringify(repoData) %>
          var dt = <%- JSON.stringify( fullDate) %>
@@ -146,7 +145,7 @@
                 success: function(data) {
                     dt = data.obj.raw;
                     v = JSON.parse(data.obj.chart);
-                    setCharts(issueflagsIndexs, pullsflagsIndexs);
+                    setCharts(issueflagsIndexs, pullsflagsIndexs, true);
                 },
                 error  : function()     { console.log(null); }
             });
@@ -168,14 +167,14 @@
                   success: function(data) {
                       dt = data.obj.raw;
                       v = JSON.parse(data.obj.chart);
-                      setCharts(issueflagsIndexs, pullsflagsIndexs);
+                      setCharts(issueflagsIndexs, pullsflagsIndexs, true);
                   },
                   error  : function()     { console.log(null); }
               });
 
           });
-        var issuesArr = [], pullsArr = [];
-        setCharts(issueflagsIndexs, pullsflagsIndexs);
+        var issuesArr = [], issuesArrSpare = [], pullsArr = [];
+        setCharts(issueflagsIndexs, pullsflagsIndexs, false);
       </script>
    <p class="attention-marker"></p>
    <p><span class="pie-link i">Issues</span> | <span class="pie-link p">Pull Requests</span></p>

@@ -3,6 +3,7 @@ var mongoClient = require("mongodb").MongoClient
     , fs = require('fs')
     , bcrypt = require('bcryptjs')
     , _ = require('lodash')
+	, async = require("async")
     , CronJob = require('cron').CronJob;
 var hash;
 writeArr = '';
@@ -165,17 +166,22 @@ schema.executeNextMonthQuery = function(database, param, callback, range) {
 	var queryStr = { "secondsDate": { "$gt": seconds }};
  	collection = _.map(dataSet, function(collect){	return collect.name	});
  	connection(database, function(db){
- 		_.map(collection, function(coll) {
-			db.collection(coll).find(queryStr,{}).toArray(function(err, allHistory){
-				if(err) throw err;
-				completeData.push(allHistory);
-			});
-		});
-		setTimeout(function() {
-			if(db !== null)
-				db.close();
-		}, 1000);
-		callback(completeData)
+		async.each(collection,   function(coll, callback){
+				db.collection(coll).find(queryStr,{}).toArray(function(err, allHistory){
+					if(err) throw err;
+					completeData.push(allHistory);
+					callback();
+				});
+			setTimeout(function() {
+				if(db !== null)
+					db.close();
+			}, 1000);
+
+			}, function(err){
+				callback(completeData)
+			}
+		);
+
 	});
  };
 

@@ -30,18 +30,23 @@ var $viewEle;
  * Responsible for setting the initial values for the plot of the main charts
  *
  */
-function setCharts(flagIssues, flagPulls) {
+function setCharts(flagIssues, flagPulls, isPreviousMonthOfData) {
 	//var issuesLineData = {}, pullsLineData = {}, issuesBarData = {}, pullsBarData = {}, historyObj = {};
 	detectWindowSize();
-         var admin = [], issuesArr = [];
+		if(isPreviousMonthOfData) {
+			issuesArr = [];
+		}
+         var admin = [];
          for(var l in p) {
           admin.push({'user': l, 'closed': p[l]});
          }
          var jSonArr = JSON.stringify(admin);
          var dataset = [] ;
          for(var k in v) {
-             issuesArr.push({'date': v[k].date, 'issues': v[k].issues});
-             dataset.push(v[k].issues);
+             issuesArr.push({'date': v[k].date, 'issues': v[k].issues});//this array is used for the actual tables
+			 issuesArrSpare.push({'date': v[k].date, 'issues': v[k].issues});//spare is used solely for comparing repos
+
+			 dataset.push(v[k].issues);
          }
 
          for(var y in pr) {
@@ -854,8 +859,9 @@ function getSelectionValue($selection, histObj, isIssue) {
 
 
 var compareRepositories = function(repoName, allHistory, isIssue) {
+
 	var historyArr = isIssue ? allHistory : allPullsHistory;
-	var usedArray = isIssue ? issuesArr : pullsArr;
+	var usedArray = isIssue ? issuesArrSpare : pullsArr;
 	var comparedArray = [];
 	var team;
 		for(var i = 1; i < historyArr.length; i++) {
