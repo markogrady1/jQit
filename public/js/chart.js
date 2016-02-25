@@ -31,8 +31,9 @@ var $viewEle;
  *
  */
 function setCharts(flagIssues, flagPulls) {
+	var issuesLineData = {}, pullsLineData = {}, issuesBarData = {}, pullsBarData = {}, historyObj = {};
 	detectWindowSize();
-         var admin = [];
+         var admin = [], issuesArr = [];
          for(var l in p) {
           admin.push({'user': l, 'closed': p[l]});
          }
@@ -48,7 +49,7 @@ function setCharts(flagIssues, flagPulls) {
          }
 
          var jArr = JSON.stringify(issuesArr);
-         var issuesLineData = {
+         issuesLineData = {
              w: chartWidth,
              h: lineChartHeight,
              top: 48,
@@ -66,7 +67,7 @@ function setCharts(flagIssues, flagPulls) {
            }
          };
 
-         var pullsLineData = {
+         pullsLineData = {
              w: chartWidth,
              h: lineChartHeight,
              top: 48,
@@ -84,7 +85,7 @@ function setCharts(flagIssues, flagPulls) {
            }
          };
 
-         var issuesBarData = {
+         issuesBarData = {
              w: chartWidth,
              h: barChartHeight,
              top: 48,
@@ -101,7 +102,7 @@ function setCharts(flagIssues, flagPulls) {
            };
 
 
-         var pullsBarData = {
+         pullsBarData = {
              w: chartWidth,
              h: barChartHeight,
              top: 48,
@@ -118,7 +119,7 @@ function setCharts(flagIssues, flagPulls) {
 
 		 };
 
-         var  historyObj = {
+         historyObj = {
            allRepoIssueHistory: allIssuesHistory,
            allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData

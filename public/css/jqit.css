@@ -177,6 +177,16 @@ body {
 	outline: none;
 }
 
+.prev-issue-chart, .next-issue-chart {
+	color: cornflowerblue;
+	stroke: #000;
+	stroke-width: 1px;
+}
+
+.prev-issue-chart:hover,  .next-issue-chart:hover{
+	color: #1D214D;
+	cursor: pointer;
+}
 .chart-icon {
 	padding-bottom:0;
 	color: #fff;

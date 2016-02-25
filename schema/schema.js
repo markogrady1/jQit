@@ -28,7 +28,7 @@ new CronJob('* 5 * * *', function() {
 		var n = d.toISOString();
 		n = n.substring(19,0)
 		newString = '*' + n + 'Z = ' + seconds[0] +',\n'+writeArr;
-		fs.appendFile('repoData/repo_pulls_history.txt', newString, function (err) {
+		fs.appendFile('repoData/repo_pulls_2015-12-28-until-2016-02-12.txt', newString, function (err) {
   				if (err) throw err;
   				helper.log('CRONJOB','Job written for '+ new Date(), true);
 				});
@@ -66,6 +66,19 @@ schema.initConnection = function() {
 };
 
 /**
+ * connect to a given database via mongodb
+ *
+ * @param {String} dbase
+ * @param {Function} callback
+ */
+var connection = function(dbase, callback) {
+	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db) {
+		if (err) throw err;
+		callback(db)
+	});
+};
+
+/**
  * Connect to mongoDB and aquire data for a given repository
  *  
  * @param {String} param 
@@ -86,18 +99,6 @@ schema.getRecord = function(param, callback) {
     });
 };
 
-/**
- * connect to a given database via mongodb
- *
- * @param {String} dbase 
- * @param {Function} callback 
- */
-var connection = function(dbase, callback) {
-	mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db) {
-		if (err) throw err;
-		callback(db)
-	});
-};
 
 /**
  * Execute query to abtain a given collection data
@@ -110,6 +111,31 @@ schema.executeQuery = function(database, param, callback) {
 	var query = { "repo": param };
 	collection = query.repo;
 	var queryStr = getQuery(database);
+	var projection = getProjection(database);
+	connection(database, function(db){
+		db.collection(collection).find(queryStr, projection).toArray(function(err, doc) {
+			if (err) throw err;
+			if (database == 'issues') {
+				callback(doc, collection);
+			} else {
+				callback(doc);
+			}
+			db.close();
+		});
+	});
+};
+
+/**
+ * Execute query to abtain a given collection data
+ *
+ * @param {String} database
+ * @param {String} param
+ * @param {Function} callback
+ */
+schema.executeNextMonthQuery = function(database, param, callback, range) {
+	var query = { "repo": param };
+	collection = query.repo;
+	var queryStr = getNextMonthQuery(database, range);
 	var projection = getProjection(database);
 	connection(database, function(db){
 		db.collection(collection).find(queryStr, projection).toArray(function(err, doc) {
@@ -186,6 +212,20 @@ var getQuery = function(db) {
 	seconds = seconds - 2592000; // ensure only the last 30 days of data are displayed
 	var query = (db === 'repoHistory') ? { "secondsDate": { "$gt": seconds }} : {};
 	return query;
+};
+
+/**
+ * Create a query for a given database
+ *
+ * @param {String} db
+ * @param {String} range
+ * @return {Object} projection
+ */
+var getNextMonthQuery = function(db, range) {
+	var seconds = new Date().getTime() / 1000;
+	var nseconds = seconds - (2592000 * range); // ensure only the last 30 days of data are displayed
+	return (db === 'repoHistory') ? { "secondsDate": { "$gt": nseconds, $lt: seconds - 2592000 }} : {};
+
 };
 
 /**
@@ -411,6 +451,24 @@ schema.checkForFlaggedRepo = function(username, email, target, callback) {
             db.close();
         });
     })
+};
+
+schema.getNextMonth = function(repo, range, callback) {
+	var query = { "repo": param };
+	collection = query.repo;
+	var queryStr = getQuery(database);
+	var projection = getProjection(database);
+	connection(database, function(db){
+		db.collection(collection).find(queryStr, projection).toArray(function(err, doc) {
+			if (err) throw err;
+			if (database == 'issues') {
+				callback(doc, collection);
+			} else {
+				callback(doc);
+			}
+			db.close();
+		});
+	});
 };
 /**
  * User object constructor

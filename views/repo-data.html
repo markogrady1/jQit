@@ -103,7 +103,7 @@
       <style>
       </style>
    </head>
-   <body>
+   <>
    <% include partials/header.html %>
    <a href="/">Back</a>
 
@@ -128,24 +128,50 @@
       <div class=multi-compareChart></div>
       <div id=chartArea></div>
       <div id=chartArea2></div>
-   <div class="change-chart-output">change chart output</div>
+   <span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span><!-- ⮀-->
       <div class='point point2'></div>
+   <input class="range" value=2>
       <script>
-        $chartChange = $(".change-chart-output");
-        $chartChange.on("click", function() {
-            console.log("click")
+          $chartRange = $(".range");
+          $prevChartVal = $(".prev-issue-chart");
+          $nextChartVal = $(".next-issue-chart");
 
-            $.ajax({
-                method: "GET",
-                url: "previous-month/data"
-            }).done(function(msg) {
-                console.log(msg)
+          $prevChartVal.on("click", function() {
+  
+            var rangeParam = $chartRange.val();
+            $.ajax('previous-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    dt = data.obj.raw;
+                    v = JSON.parse(data.obj.chart);
+                    setCharts(issueflagsIndexs, pullsflagsIndexs);
+                },
+                error  : function()     { console.log(null); }
             });
+            $chartRange.val(++rangeParam);
+        });
 
+          $nextChartVal.on("click", function() {
 
+              var rangeParam = $chartRange.val();
+              $.ajax('previous-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
+                  type: 'GET',
+                  dataType: 'json',
+                  success: function(data) {
+                      dt = data.obj.raw;
+                      v = JSON.parse(data.obj.chart);
+                      setCharts(issueflagsIndexs, pullsflagsIndexs);
+                  },
+                  error  : function()     { console.log(null); }
+              });
+              if(rangeParam-1 < 1) {
+                  $chartRange.val(1);
+              } else {
+                  $chartRange.val(--rangeParam);
+              }
 
-
-        })
+          });
         var issuesArr = [], pullsArr = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs);
       </script>

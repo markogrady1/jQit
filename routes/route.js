@@ -90,10 +90,19 @@ router.get("/repo/details/:repoName?", function(req, res) {
   	reslv.resolveIssueData(nameParam, req, res, io);
 });
 
-router.get("/previous-month/data/", function(req, res) {
-    console.log("previous month of data called")
-})
- // route for viewing jquery team data
+router.get("/repo/details/previous-month/:repo/:range", function(req, res) {
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/previous-month/:" + req.params.repo+"/"+req.params.range);
+    var range = req.params.range;
+    var repo = req.params.repo;
+    console.log(range, repo)
+    reslv.getNextMonth(repo, range, (obj) => {
+        res.writeHead(200, {'content-type': 'text/json' });
+        res.write( JSON.stringify({ obj } ) );
+        res.end('\n');
+    }, range);
+
+});
+
 router.get("/jquery/team/:teamName?", function(req, res) {
     'use strict';
     var arrayBack= [];
@@ -112,7 +121,7 @@ router.get("/jquery/team/:teamName?", function(req, res) {
             }
         }
     }
-    console.log(teamRepos)
+  
     async.each(teamRepos,   function(item, callback){
             // Call an asynchronous function, often a save() to DB
            reslv.getTeamData("repoPullsHistory", "pulls", item, (d) => {
@@ -228,7 +237,8 @@ router.post("/repo/details/attention", (req, res) => {
     schema.assignAttentionMarker(attentionTarget, username, email, userAvatar, (response) => {
         console.log(response)
     });
-})
+    res.end();
+});
 
 //route for removing the attention pin
 router.post("/remove-pin", (req, res) => {
