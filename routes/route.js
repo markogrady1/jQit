@@ -60,7 +60,9 @@ router.get("/", function(req, res){
         var teamData = require("../teams.json")
         // obtain any flags that may have been set and render the home page
         getFlagData((flag, att) => {
-
+            if(typeof att === "undefined") {
+                att = null;
+            }
             res.render("index", {
                 names: schema.names,
                 issuesNo: schema.issues,

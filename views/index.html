@@ -13,18 +13,13 @@
     <script>
         var socket = io();
 
-    </script>
-
-    <script>
         var cd = <%- JSON.stringify(pullsNo) %>
         var pd = <%- JSON.stringify(completeD) %>
         var flagData = <%- JSON.stringify(flagData) %>
         var attention = <%- JSON.stringify(attention) %>
         var username = <%- JSON.stringify(username) %>
         var teams = <%- JSON.stringify(teams) %>
-
         attention = attention === null ? "" : attention;
-
         console.log("Flag Data: " ,flagData);
 /**
  * The pd variable contains all the data needed for each of the repositories
@@ -38,9 +33,6 @@
  * watchers: 6
  *
  * **/
-
-
-
       pd.pop(pd.length-1)
     </script>
 </head>

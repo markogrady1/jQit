@@ -6,6 +6,7 @@
     <script src="/js/external/jquery-1.11.3.min.js"></script>
     <script src="/js/external/lodash.min.js"></script>
     <script src="/js/chart.js"></script>
+    <script src="/js/ajax-calls.js"></script>
     <link rel='stylesheet' href='/css/jqit.css' />
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -103,12 +104,6 @@
    <body>
    <% include partials/header.html %>
    <a href="/">Back</a>
-
-   <script>
-
-
-
-   </script>
    <div id=changeView></div>
       <div id=changeView2></div>
    <br>
@@ -122,10 +117,10 @@
       <div class=multi-comparison></div>
 
       <div class=compareChart></div>
-      <div class=multi-compareChart></div>
+
+   <div class=multi-compareChart></div><span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span><!-- ⮀-->
       <div id=chartArea></div>
       <div id=chartArea2></div>
-   <span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span><!-- ⮀-->
       <div class='point point2'></div>
    <input class="range" value=2>
       <script>
@@ -134,80 +129,11 @@
           $nextChartVal = $(".next-issue-chart");
 
           $prevChartVal.on("click", function() {
-              $("#chartArea2").css("display", "none")
-//              var brs = document.getElementsByClassName("bar");
-//              console.log(brs)
-//          for(var t = 0; t < brs.length; t++) {
-//              console.log(brs[t].style)//
-//               brs[t].style.fill = "red";
-//              console.log(t)//.style.fill = "red";
-//
-//              brs[t].style.fill = "538AB4"
-//          }
-
-            var rangeParam = $chartRange.val();
-              $chartRange.val(++rangeParam);
-              $.ajax('change-issue-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
-                  type: 'GET',
-                  dataType: 'json',
-                  success: function(data) {
-                      dt = data.obj.raw;
-                      v = JSON.parse(data.obj.chart);
-                      startDate = data.obj.raw[0].split("T")[0];
-//                      setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
-                  },
-                  error  : function()     { console.log(null); }
-              });
-
-              $.ajax('change-pulls-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
-                  type: 'GET',
-                  dataType: 'json',
-                  success: function(data) {
-                      pdt = data.obj.raw;
-                      pr = JSON.parse(data.obj.chart);
-                      pr = pr.slice(-29);
-                      startDate = data.obj.raw[0].split("T")[0];
-                      setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
-                  },
-                  error  : function()     { console.log(null); }
-              });
-
-        });
+              getPreviousMonthViaAjax();
+          });
 
           $nextChartVal.on("click", function() {
-              var rangeParam = $chartRange.val();
-              if(rangeParam < 1) {
-                  $chartRange.val(2);
-              } else {
-                  $chartRange.val(--rangeParam);
-              }
-
-
-              $.ajax('change-issue-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
-                  type: 'GET',
-                  dataType: 'json',
-                  success: function(data) {
-                      dt = data.obj.raw;
-                      v = JSON.parse(data.obj.chart);
-                      startDate = data.obj.raw[0].split("T")[0];
-//                      setCharts(issueflagsIndexs, pullsflagsIndexs, true,startDate);
-                  },
-                  error  : function()     { console.log(null); }
-              });
-
-              $.ajax('change-pulls-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
-                  type: 'GET',
-                  dataType: 'json',
-                  success: function(data) {
-                      pdt = data.obj.raw;
-                      pr = JSON.parse(data.obj.chart);
-                      pr = pr.slice(-29);
-                      startDate = data.obj.raw[0].split("T")[0];
-                      setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
-                  },
-                  error  : function()     { console.log(null); }
-              });
-
+              getNextMonthViaAjax();
           });
         var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs, false);
@@ -381,5 +307,6 @@
 
 
       </script>
+
    </body>
 </html>
