@@ -100,7 +100,7 @@
       <style>
       </style>
    </head>
-   <>
+   <body>
    <% include partials/header.html %>
    <a href="/">Back</a>
 
@@ -147,17 +147,30 @@
 
             var rangeParam = $chartRange.val();
               $chartRange.val(++rangeParam);
-            $.ajax('change-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    dt = data.obj.raw;
-                    v = JSON.parse(data.obj.chart);
-                    startDate = data.obj.raw[0].split("T")[0];
-                    setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
-                },
-                error  : function()     { console.log(null); }
-            });
+              $.ajax('change-issue-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
+                  type: 'GET',
+                  dataType: 'json',
+                  success: function(data) {
+                      dt = data.obj.raw;
+                      v = JSON.parse(data.obj.chart);
+                      startDate = data.obj.raw[0].split("T")[0];
+//                      setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
+                  },
+                  error  : function()     { console.log(null); }
+              });
+
+              $.ajax('change-pulls-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
+                  type: 'GET',
+                  dataType: 'json',
+                  success: function(data) {
+                      pdt = data.obj.raw;
+                      pr = JSON.parse(data.obj.chart);
+                      pr = pr.slice(-29);
+                      startDate = data.obj.raw[0].split("T")[0];
+                      setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
+                  },
+                  error  : function()     { console.log(null); }
+              });
 
         });
 
@@ -170,21 +183,33 @@
               }
 
 
-              $.ajax('change-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
+              $.ajax('change-issue-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
                   type: 'GET',
                   dataType: 'json',
                   success: function(data) {
                       dt = data.obj.raw;
                       v = JSON.parse(data.obj.chart);
-                      v = JSON.parse(data.obj.chart);
                       startDate = data.obj.raw[0].split("T")[0];
-                      setCharts(issueflagsIndexs, pullsflagsIndexs, true,startDate);
+//                      setCharts(issueflagsIndexs, pullsflagsIndexs, true,startDate);
+                  },
+                  error  : function()     { console.log(null); }
+              });
+
+              $.ajax('change-pulls-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
+                  type: 'GET',
+                  dataType: 'json',
+                  success: function(data) {
+                      pdt = data.obj.raw;
+                      pr = JSON.parse(data.obj.chart);
+                      pr = pr.slice(-29);
+                      startDate = data.obj.raw[0].split("T")[0];
+                      setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
                   },
                   error  : function()     { console.log(null); }
               });
 
           });
-        var issuesArr = [], issuesArrSpare = [], pullsArr = [];
+        var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs, false);
       </script>
    <p class="attention-marker"></p>

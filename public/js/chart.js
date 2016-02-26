@@ -36,6 +36,7 @@ function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startdDate) {
 	detectWindowSize();
 		if(isPreviousMonthOfData) {
 			issuesArr = [];
+			pullsArr = [];
 		}
          var admin = [];
          for(var l in p) {
@@ -46,13 +47,13 @@ function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startdDate) {
          for(var k in v) {
              issuesArr.push({'date': v[k].date, 'issues': v[k].issues});//this array is used for the actual tables
 			 issuesArrSpare.push({'date': v[k].date, 'issues': v[k].issues});//spare is used solely for comparing repos
-
 			 dataset.push(v[k].issues);
          }
 
          for(var y in pr) {
-           pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
-         }
+			 pullsArr.push({'date': pr[y].date, 'pulls': pr[y].pulls});
+			 pullsArrSpare.push({'date': pr[y].date, 'pulls': pr[y].pulls});
+		 }
 
          var jArr = JSON.stringify(issuesArr);
         var issuesLineData = {
@@ -873,7 +874,7 @@ function getSelectionValue($selection, histObj, isIssue) {
 var compareRepositories = function(repoName, allHistory, isIssue) {
 
 	var historyArr = isIssue ? allHistory : allPullsHistory;
-	var usedArray = isIssue ? issuesArrSpare : pullsArr;
+	var usedArray = isIssue ? issuesArrSpare : pullsArrSpare;
 	var comparedArray = [];
 	var team;
 		for(var i = 1; i < historyArr.length; i++) {

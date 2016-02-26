@@ -90,12 +90,25 @@ router.get("/repo/details/:repoName?", function(req, res) {
   	reslv.resolveIssueData(nameParam, req, res, io);
 });
 
-router.get("/repo/details/change-month/:repo/:range", function(req, res) {
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-month/:" + req.params.repo+"/"+req.params.range);
+router.get("/repo/details/change-issue-month/:repo/:range", function(req, res) {
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-issue-month/:" + req.params.repo+"/"+req.params.range);
     var range = req.params.range;
     var repo = req.params.repo;
     console.log(range, repo)
-    reslv.getNextMonth(repo, range, (obj) => {
+    reslv.getNextIssueMonth(repo, range, (obj) => {
+        res.writeHead(200, {'content-type': 'text/json' });
+        res.write( JSON.stringify({ obj } ) );
+        res.end('\n');
+    }, range);
+
+});
+
+router.get("/repo/details/change-pulls-month/:repo/:range", function(req, res) {
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-pulls-month/:" + req.params.repo+"/"+req.params.range);
+    var range = req.params.range;
+    var repo = req.params.repo;
+    console.log(range, repo)
+    reslv.getNextPullsMonth(repo, range, (obj) => {
         res.writeHead(200, {'content-type': 'text/json' });
         res.write( JSON.stringify({ obj } ) );
         res.end('\n');
