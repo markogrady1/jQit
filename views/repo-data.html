@@ -134,15 +134,24 @@
           $nextChartVal = $(".next-issue-chart");
 
           $prevChartVal.on("click", function() {
+              $("#chartArea2").css("display", "none")
+//              var brs = document.getElementsByClassName("bar");
+//              console.log(brs)
+//          for(var t = 0; t < brs.length; t++) {
+//              console.log(brs[t].style)//
+//               brs[t].style.fill = "red";
+//              console.log(t)//.style.fill = "red";
+//
+//              brs[t].style.fill = "538AB4"
+//          }
 
             var rangeParam = $chartRange.val();
               $chartRange.val(++rangeParam);
-            $.ajax('previous-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
+            $.ajax('change-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     dt = data.obj.raw;
-
                     v = JSON.parse(data.obj.chart);
                     startDate = data.obj.raw[0].split("T")[0];
                     setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
@@ -161,7 +170,7 @@
               }
 
 
-              $.ajax('previous-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
+              $.ajax('change-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
                   type: 'GET',
                   dataType: 'json',
                   success: function(data) {

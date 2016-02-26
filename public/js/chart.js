@@ -1,6 +1,6 @@
 'use strict';
 if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-	console.log('this is fireman')
+	console.log('this is firefox')
 
 }
 /**
@@ -31,6 +31,7 @@ var $viewEle;
  *
  */
 function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startdDate) {
+	console.log(isPreviousMonthOfData	)
 	//var issuesLineData = {}, pullsLineData = {}, issuesBarData = {}, pullsBarData = {}, historyObj = {};
 	detectWindowSize();
 		if(isPreviousMonthOfData) {
@@ -129,10 +130,10 @@ function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startdDate) {
            allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData
          };
-         setBarChart(issuesArr, issuesBarData, historyObj, startdDate);
-         setLineChart(issuesArr, issuesLineData, startdDate);
-         setBarChart(pullsArr, pullsBarData, startdDate);
-         setLineChart(pullsArr, pullsLineData, startdDate);
+         setBarChart(issuesArr, issuesBarData, historyObj, startdDate, isPreviousMonthOfData);
+         setLineChart(issuesArr, issuesLineData, startdDate, isPreviousMonthOfData);
+         setBarChart(pullsArr, pullsBarData, historyObj, startdDate, isPreviousMonthOfData);
+         setLineChart(pullsArr, pullsLineData, startdDate, isPreviousMonthOfData);
 
 
          if(issuesArr.length == 0){
@@ -158,7 +159,7 @@ var hideLineChart = function() {
  * @param {Object} buildStyle
  * @param {Object} histObj
  */
-function setBarChart(data, buildStyle, histObj) {
+function setBarChart(data, buildStyle, histObj, startdate, isPreviousMonthOfData) {
 	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var tot = 0;
 	var isIss =false;
@@ -182,7 +183,10 @@ function setBarChart(data, buildStyle, histObj) {
 
 	if (!buildStyle.isIssue){
 		if (tot !== 0 && totaller !== 0) {
-			assignPullButtons();
+			if(!isPreviousMonthOfData) {
+				assignPullButtons();
+			}
+
 		}
 	}
 
@@ -208,7 +212,10 @@ function setBarChart(data, buildStyle, histObj) {
 			});
 
 		$viewEle.append(lineBtn);
-		toggleLineChart(lineBtn);
+			if(!isPreviousMonthOfData) {
+				toggleLineChart(lineBtn);
+			}
+
 	}
 
 	var width = buildStyle.w - buildStyle.left - buildStyle.right;
@@ -447,8 +454,13 @@ function setBarChart(data, buildStyle, histObj) {
 			.attr('transform', 'translate(' + width / 2 + ', 50)')
 			.text(buildStyle.scope);
 	}
-	if (buildStyle.isIssue)
-		$('#chartArea2').hide();
+	if (buildStyle.isIssue){
+		if(!isPreviousMonthOfData){
+			$('#chartArea2').hide();
+		}
+
+	}
+
 }
 
 /**
@@ -457,7 +469,7 @@ function setBarChart(data, buildStyle, histObj) {
  * @param {Array} data
  * @param {Object} buildStyle
  */
-function setLineChart(data, buildStyle) {
+function setLineChart(data, buildStyle, startdate, isPreviousMonthOfData) {
 	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var chartId = buildStyle.isIssue ? "" : "pulls-";
 	var tot = 0;
