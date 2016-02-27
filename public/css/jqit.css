@@ -56,6 +56,7 @@ body {
 	background-color: #E7E4E5;
 	z-index: 4;
 	height: 70px;
+	margin-bottom: 30px;
 }
 
 .top-bar-element-list {
@@ -68,7 +69,9 @@ body {
 }
 
 ul.top-bar-element-list {
-	margin:0;
+	width: 70%;
+	padding: 0;
+	margin: 0 auto;
 }
 
 #changeView2 {
