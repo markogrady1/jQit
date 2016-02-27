@@ -2,11 +2,12 @@
 	<h1><%= header %></h1>
 	<div class="login-status"></div>
 	<script>
+		var userState = <%- userStat %>
         var av = <%- JSON.stringify(av) %>
 		dashboardLink = <%- JSON.stringify(dashboardLink) %>
 		logoutLink = <%- JSON.stringify(logoutLink) %>
         $loginLogo = $(".login-status");
-		if (av !== "undefined") {
+		if (av !== "undefined" && userState) {
 			$loginLogo.append("<a id=gitlogout class='git-log git-logout' href=" + logoutLink + ">Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+av+">")
 			$loginLogo.append("<a href=" + dashboardLink + ">DashBoard</a>")
 		} else {

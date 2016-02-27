@@ -31,11 +31,13 @@ router.get("/", function(req, res){
 	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
     function getFlagData(callback) {
         if (avaNum !== "undefined") {
+            res.locals.userStat = true;
             var data = reslv.getStorage();
             reslv.getFlagData(data, (flagObj, att) => {
                 callback(flagObj, att);
             });
         } else {
+            res.locals.userStat = false;
             callback(null)
         }
     }
@@ -238,6 +240,7 @@ router.post("/login", function(req, res){
 		} else {
 			req.session.username = data[0].username;
 			app.locals.username = data[0].username;
+            res.locals.userStat = true;
 			res.redirect("/");
 		}
 	});
@@ -280,6 +283,7 @@ router.post("/register", function(req, res) {
 router.get("/logout", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /logout");
     reslv.removeLoggedInStatusofUser();
+    res.locals.userStat = false;
 	req.session.destroy();
 	var localState = localStorage.setItem("state", "");
 	app.locals.username = "";
@@ -289,20 +293,24 @@ router.get("/logout", function(req, res) {
 
 //route for requesting the users dashboard
 router.get("/dashboard", (req, res) => {
+    helper.noCache(res);
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /dashboard");
     var avatar = reslv.getAvatarImage();
 	if(avatar === "undefined") {
+        res.locals.userStat = false;
 		res.redirect("/")
 	} else {
 		c = helper.getRandomString();
 		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
         function getFlagData(callback) {
             if (avatar !== "undefined") {
+                res.locals.userStat = true;
                 var data = reslv.getStorage();
                 reslv.getFlagData(data, (flagObj) => {
                     callback(flagObj);
                 });
             } else {
+                res.locals.userStat = false;
                 callback(null)
             }
         }
