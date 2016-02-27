@@ -50,7 +50,38 @@ body {
 	top: 65px;
 	left: 65px;
 	font-size: 1.1em;
+}
 
+#top-bar {
+	background-color: #E7E4E5;
+	z-index: 4;
+	height: 70px;
+}
+
+.top-bar-element-list {
+	list-style:none;
+
+}
+
+.top-bar-element-list li {
+	display: inline-block;
+}
+
+ul.top-bar-element-list {
+	margin:0;
+}
+
+#changeView2 {
+
+	margin: 0 20px 20px 0;
+}
+
+.compare-issues-info {
+	margin: 0 20px -20px 0;
+}
+
+.compare-pulls-info {
+	margin: 0 20px -20px 0;
 }
 
 .team-table {
@@ -187,7 +218,12 @@ body {
 	color: #66D9EF;
 }
 
-.btn , .line-btn , .go-compare{
+.btn {
+	width: 200px;
+	text-align: center;
+}
+
+.line-btn , .go-compare{
 	margin: 20px 0 0 20px;
 	width: 150px;
 	height: 30px;

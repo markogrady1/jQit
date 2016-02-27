@@ -815,7 +815,7 @@ function assignPullButtons(){
 			$bt2.remove();
 	var bt = document.getElementsByClassName('btn');
 	if (bt[0] !== null) {
-		var btn = document.createElement('button');
+		var btn = document.createElement('div');
 		$(btn).attr({
 			width: 200,
 			class: 'btn'
@@ -1115,7 +1115,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 
 var setUpMultipleCompareBtn = function(histObj) {
 	$('.trigger-multi-compare').remove()
-	$('.multi-comparison').append('<button class=trigger-multi-compare>Compare Multiple Repos</button><div class=check-append></div>');
+	$('.multi-comparison').append('<div class=trigger-multi-compare>Compare Multiple Repos</div><div class=check-append></div>');
 	var $btn = $('.trigger-multi-compare');
 	$btn.on('click', function() {
 		$btn.remove();

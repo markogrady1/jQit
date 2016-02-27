@@ -106,22 +106,25 @@
    </head>
    <body>
    <% include partials/header.html %>
-   <a href="/">Back</a>
-   <div id=changeView></div>
-      <div id=changeView2></div>
-   <br>
-      <div id=display-data-info></div>
-      <div class=details></div>
-      <div class=compare-issues-info></div>
-   <br>
-      <div class=compare-pulls-info></div>
-      <div class=comparison-legend></div>
-      <div class=multi-comparison-legend></div>
-      <div class=multi-comparison></div>
 
-      <div class=compareChart></div>
+   <div id="top-bar">
+       <ul class="top-bar-element-list">
+           <li><div id=changeView></div></li>
+           <li><div id=changeView2></div></li>
+           <!--<li><div id=display-data-info></div></li>-->
+           <!--<li><div class=details></div></li>-->
+           <li><div class=compare-issues-info></div></li>
+           <li><div class=compare-pulls-info></div></li>
+       <span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span><!-- ⮀-->
+       </ul>
+       <a href="/">Back</a>
+   </div>
+   <div class=compareChart></div>
+   <div class=comparison-legend></div>
+   <div class=multi-comparison-legend></div>
 
-   <div class=multi-compareChart></div><span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span><!-- ⮀-->
+   <div class=multi-compareChart></div>
+   <div class=multi-comparison></div>
       <div id=chartArea></div>
       <div id=chartArea2></div>
       <div class='point point2'></div>
