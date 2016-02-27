@@ -6,6 +6,52 @@ body {
     font-size: 13px;
 }
 
+.header {
+	background-color: #34352E;
+	height: 50px;
+	padding:5px 5px 20px 5px;
+	color: #fff;
+}
+.header a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.header a:hover {
+	text-decoration: underline;
+}
+
+
+.login-status {
+	position: relative;
+	top: -105px;
+	height: 50px;
+	width: 150px;
+	float:right;
+}
+
+.git-log {
+	position: absolute;
+	top: 65px;
+	left: -70px;
+	color:#000;
+	z-index: 1;
+	font-size: 1.2em;
+}
+
+.avatar {
+	background-color: #4682B4;
+	border: 1px solid #fff;
+	padding: 2px;
+}
+
+.dashboard-link {
+	position: absolute;
+	top: 65px;
+	left: 65px;
+	font-size: 1.1em;
+
+}
 
 .team-table {
 	width: 80%;
@@ -89,19 +135,7 @@ body {
 	shape-rendering: crispEdges;
 }
 
-.header {
-	background-color: #34352E;
-	padding:5px 5px 20px 5px;
-	color: #fff;
-}
-.header a {
-	text-decoration: none;
-	color: #fff;
-}
 
-.header a:hover {
-	text-decoration: underline;
-}
 
 #chartArea {
 	width: 1200px;

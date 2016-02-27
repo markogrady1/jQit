@@ -9,10 +9,10 @@
         $loginLogo = $(".login-status");
 		if (av !== "undefined" && userState) {
 			$loginLogo.append("<a id=gitlogout class='git-log git-logout' href=" + logoutLink + ">Logout</a><br><br><br><img class=avatar src=https://avatars.githubusercontent.com/u/"+av+">")
-			$loginLogo.append("<a href=" + dashboardLink + ">DashBoard</a>")
+			$loginLogo.append("<a class='dashboard-link' href=" + dashboardLink + ">DashBoard</a>")
 		} else {
 			$loginLogo.append('<a class=git-log href=https://github.com/login/oauth/authorize?<%= urlstate %>>Login with Github</a><br><br>'.toString())
-		} 
+		}
         console.log("User:",av)
 	</script>
 </header>
