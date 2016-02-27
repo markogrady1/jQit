@@ -15,7 +15,6 @@ var getNextMonthViaAjax = function() {
             dt = data.obj.raw;
             v = JSON.parse(data.obj.chart);
             startDate = data.obj.raw[0].split("T")[0];
-//                      setCharts(issueflagsIndexs, pullsflagsIndexs, true,startDate);
         },
         error  : function()     { console.log(null); }
     });
@@ -27,13 +26,12 @@ var getNextMonthViaAjax = function() {
             pdt = data.obj.raw;
             pr = JSON.parse(data.obj.chart);
             pr = pr.slice(-29);
-            startDate = data.obj.raw[0].split("T")[0];
             setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
         },
         error  : function()     { console.log(null); }
     });
 
-}
+};
 
 
 
@@ -48,7 +46,6 @@ var getPreviousMonthViaAjax = function() {
             dt = data.obj.raw;
             v = JSON.parse(data.obj.chart);
             startDate = data.obj.raw[0].split("T")[0];
-//                      setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
         },
         error  : function()     { console.log(null); }
     });
@@ -59,8 +56,8 @@ var getPreviousMonthViaAjax = function() {
         success: function(data) {
             pdt = data.obj.raw;
             pr = JSON.parse(data.obj.chart);
-            pr = pr.slice(-29);
             startDate = data.obj.raw[0].split("T")[0];
+            pr = pr.slice(-29);
             setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
         },
         error  : function()     { console.log(null); }

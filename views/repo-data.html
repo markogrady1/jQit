@@ -59,9 +59,12 @@
          var allPullsHistory = <%- JSON.stringify(allRepoPullsHistory) %>
          var repoData = <%- JSON.stringify(repoData) %>
          var dt = <%- JSON.stringify( fullDate) %>
+         sd = dt[0].split("T")[0];
          var pdt = <%- JSON.stringify( fullPullDate) %>
          var v = <%- JSON.stringify(ch) %>
+
          var pr = <%- JSON.stringify(chPull) %>
+
          pr = pr.slice(-29) // return correct array amount for pulls history chart
          var p = <%- JSON.stringify(events) %>
          var old = <%- JSON.stringify(oldIssueUrl) %>
@@ -130,10 +133,34 @@
 
           $prevChartVal.on("click", function() {
               getPreviousMonthViaAjax();
+              var bars = document.getElementsByClassName("bars");
+              var i = bars.length-1, max = 0 , delay = 10, run;
+              run = function(){
+                  var color = bars[i].style.fill;
+                  if(i-- > max){
+                      bars[i].style.fill = "rgb(0, 0, 0)";
+                      setTimeout(run, delay);
+                      bars[i].style.fill = color;
+                  }
+              };
+              run();
+              return false;
           });
 
           $nextChartVal.on("click", function() {
               getNextMonthViaAjax();
+              var bars = document.getElementsByClassName("bars");
+              var i =  0, max = bars.length-1, delay = 10, run;
+              run = function(){
+                  var color = bars[i].style.fill;
+                  if(i++ < max){
+                      bars[i].style.fill = "rgb(0, 0, 0)";
+                      setTimeout(run, delay);
+                      bars[i].style.fill = color;
+                  }
+              };
+              run();
+              return false;
           });
         var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs, false);

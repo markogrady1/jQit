@@ -30,9 +30,8 @@ var $viewEle;
  * Responsible for setting the initial values for the plot of the main charts
  *
  */
-function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startdDate) {
-	console.log(isPreviousMonthOfData	)
-	//var issuesLineData = {}, pullsLineData = {}, issuesBarData = {}, pullsBarData = {}, historyObj = {};
+function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate) {
+	startDate = typeof startDate === "undefined" ? sd : startDate;
 	detectWindowSize();
 		if(isPreviousMonthOfData) {
 			issuesArr = [];
@@ -131,10 +130,10 @@ function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startdDate) {
            allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData
          };
-         setBarChart(issuesArr, issuesBarData, historyObj, startdDate, isPreviousMonthOfData);
-         setLineChart(issuesArr, issuesLineData, startdDate, isPreviousMonthOfData);
-         setBarChart(pullsArr, pullsBarData, historyObj, startdDate, isPreviousMonthOfData);
-         setLineChart(pullsArr, pullsLineData, startdDate, isPreviousMonthOfData);
+         setBarChart(issuesArr, issuesBarData, historyObj, startDate, isPreviousMonthOfData);
+         setLineChart(issuesArr, issuesLineData, startDate, isPreviousMonthOfData);
+         setBarChart(pullsArr, pullsBarData, historyObj, startDate, isPreviousMonthOfData);
+         setLineChart(pullsArr, pullsLineData, startDate, isPreviousMonthOfData);
 
 
          if(issuesArr.length == 0){
@@ -154,13 +153,15 @@ var hideLineChart = function() {
 };
 
 /**
- * Responsible for setting displaying the main bar chart
+ * Responsible for setting and displaying the main bar chart
  *
  * @param {Array} data
  * @param {Object} buildStyle
  * @param {Object} histObj
+ * @param {String} startDate
+ * @param {Boolean} isPreviousMonthOfData
  */
-function setBarChart(data, buildStyle, histObj, startdate, isPreviousMonthOfData) {
+function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData) {
 	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var tot = 0;
 	var isIss =false;
@@ -198,21 +199,21 @@ function setBarChart(data, buildStyle, histObj, startdate, isPreviousMonthOfData
 			setUpMultipleCompareBtn(histObj);
 			var $bt2 = $('.line-btn');
 			$bt2.remove();
-		var lineBtn = document.createElement('button');
+			var lineBtn = document.createElement('button');
 			var icon = document.createElement('i'); //created for icon element
 			$(lineBtn).text();        /// spare symbol '≃'
-		$viewEle.append(lineBtn);
-		$(lineBtn).append(icon)
-		$(lineBtn).attr({
-			class: 'line-btn',
-			title: 'Line Chart'
-		});
+			$viewEle.append(lineBtn);
+			$(lineBtn).append(icon)
+			$(lineBtn).attr({
+				class: 'line-btn',
+				title: 'Line Chart'
+			});
 			$(icon).attr({
 				class: 'chart-icon fa fa-line-chart',
 				title: 'Line Chart'
 			});
 
-		$viewEle.append(lineBtn);
+			$viewEle.append(lineBtn);
 			if(!isPreviousMonthOfData) {
 				toggleLineChart(lineBtn);
 			}
