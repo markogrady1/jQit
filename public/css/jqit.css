@@ -57,6 +57,7 @@ body {
 	z-index: 4;
 	height: 70px;
 	margin-bottom: 30px;
+	border-bottom: 1px solid #a9a9a9;
 }
 
 .top-bar-element-list {
@@ -222,7 +223,9 @@ ul.top-bar-element-list {
 }
 
 .btn {
-	width: 200px;
+	font-size: 1.1em;
+	color: #4E87B2;
+	width: 130px;
 	text-align: center;
 }
 
@@ -243,7 +246,7 @@ ul.top-bar-element-list {
 	width: 30px;
 	height: 30px;
 	border-radius: 5px;
-	background-color: #3999dd;
+	background-color: #4E87B2;
 	color: #fff;
 	border: 0;
 		font-size: 2em;
@@ -279,11 +282,14 @@ ul.top-bar-element-list {
 	outline: none;
 }
 
-.btn:hover, .line-btn:hover, .go-compare:hover, .trigger-multi-compare:hover{
-	background-color: #4a84b0;
+.line-btn:hover, .go-compare:hover, .trigger-multi-compare:hover{
+	background-color: #7FA9CB;
 	cursor: pointer;
 }
-
+.btn:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
 .issues-title {
 	font-size: 1.2em;
 	color: #a9a9a9;
@@ -342,13 +348,13 @@ ul.top-bar-element-list {
 select {
 	height: 35px;
 	border-radius: 0px;
-	background: #3999DD;
+	background: #4E87B2;
 	color: #fff;
 	font-size: 1em;
 	border:none;
 }
  select:hover {
-	 background-color: #4a84b0;
+	 background-color: #7FA9CB;
 
  }
 

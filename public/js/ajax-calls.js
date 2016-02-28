@@ -12,29 +12,24 @@ var getNextMonthViaAjax = function() {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            dt = data.obj.raw;
-            v = JSON.parse(data.obj.chart);
-            startDate = data.obj.raw[0].split("T")[0];
-        },
-        error  : function()     { console.log(null); }
-    });
-
-    $.ajax('change-pulls-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            pdt = data.obj.raw;
-            pr = JSON.parse(data.obj.chart);
+            allIssuesHistory = data.obj.allRepoHistory;
+            allPullsHistory = data.obj.allRepoPullsHistory;
+            repoData = data.obj.repoData;
+            dt = data.obj.fullDate;
+            pdt = data.obj.fullPullDate;
+            v = data.obj.ch;
+            pr = data.obj.chPull;
             pr = pr.slice(-29);
+            p = data.obj.events;
+            old = data.obj.oldIssueUrl;
+            newestIssue = data.obj.newIssueUrl;
+            startDate = data.obj.fullDate[0].split("T")[0];
             setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
         },
         error  : function()     { console.log(null); }
     });
 
 };
-
-
-
 
 var getPreviousMonthViaAjax = function() {
     var rangeParam = $chartRange.val();
@@ -43,26 +38,22 @@ var getPreviousMonthViaAjax = function() {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            dt = data.obj.raw;
-            v = JSON.parse(data.obj.chart);
-            startDate = data.obj.raw[0].split("T")[0];
-        },
-        error  : function()     { console.log(null); }
-    });
-
-    $.ajax('change-pulls-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            pdt = data.obj.raw;
-            pr = JSON.parse(data.obj.chart);
-            startDate = data.obj.raw[0].split("T")[0];
+            allIssuesHistory = data.obj.allRepoHistory;
+            allPullsHistory = data.obj.allRepoPullsHistory;
+            repoData = data.obj.repoData;
+            dt = data.obj.fullDate;
+            pdt = data.obj.fullPullDate;
+            v = data.obj.ch;
+            pr = data.obj.chPull;
             pr = pr.slice(-29);
+            p = data.obj.events;
+            old = data.obj.oldIssueUrl;
+            newestIssue = data.obj.newIssueUrl;
+            startDate = data.obj.fullDate[0].split("T")[0];
             setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
         },
         error  : function()     { console.log(null); }
     });
-
 };
 
 

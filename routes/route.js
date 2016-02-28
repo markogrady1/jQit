@@ -3,6 +3,7 @@ var migrate = require("../schema/repoMigrate")
 	, df = require("../lib/date")
 	, helper = require("../lib/helper")
 	, reslv = require("../lib/mainController")
+    , monthly = require("../lib/monthly")
 	, express = require("express")
 	, auth = require("../config/auth")
 	, router = express.Router()
@@ -99,7 +100,7 @@ router.get("/repo/details/change-issue-month/:repo/:range", function(req, res) {
     var range = req.params.range;
     var repo = req.params.repo;
     console.log(range, repo)
-    reslv.getNextIssueMonth(repo, range, (obj) => {
+    monthly.getNewMonth(repo, range,req, res, io, (obj) => {
         res.writeHead(200, {'content-type': 'text/json' });
         res.write( JSON.stringify({ obj } ) );
         res.end('\n');
@@ -107,18 +108,18 @@ router.get("/repo/details/change-issue-month/:repo/:range", function(req, res) {
 
 });
 
-router.get("/repo/details/change-pulls-month/:repo/:range", function(req, res) {
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-pulls-month/:" + req.params.repo+"/"+req.params.range);
-    var range = req.params.range;
-    var repo = req.params.repo;
-    console.log(range, repo)
-    reslv.getNextPullsMonth(repo, range, (obj) => {
-        res.writeHead(200, {'content-type': 'text/json' });
-        res.write( JSON.stringify({ obj } ) );
-        res.end('\n');
-    }, range);
-
-});
+//router.get("/repo/details/change-pulls-month/:repo/:range", function(req, res) {
+//    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-pulls-month/:" + req.params.repo+"/"+req.params.range);
+//    var range = req.params.range;
+//    var repo = req.params.repo;
+//    console.log(range, repo)
+//    reslv.getNextPullsMonth(repo, range, (obj) => {
+//        res.writeHead(200, {'content-type': 'text/json' });
+//        res.write( JSON.stringify({ obj } ) );
+//        res.end('\n');
+//    }, range);
+//
+//});
 
 router.get("/jquery/team/:teamName?", function(req, res) {
     'use strict';
