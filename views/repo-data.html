@@ -7,6 +7,7 @@
     <script src="/js/external/lodash.min.js"></script>
     <script src="/js/chart.js"></script>
     <script src="/js/ajax-calls.js"></script>
+    <script src="/js/events.js"></script>
     <link rel='stylesheet' href='/css/jqit.css' />
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -106,7 +107,6 @@
    </head>
    <body>
    <% include partials/header.html %>
-
    <div id="top-bar">
        <ul class="top-bar-element-list">
            <li class="change-up"><div id=changeView></div></li>
@@ -119,10 +119,16 @@
        </ul>
        <a href="/">Back</a>
    </div>
+   <div class="complete-compare-overlay">
+
+   </div>
+   <div class="compare-overlay"><img src="/img/clear_dot.gif" class="close-img" alt="">
+       <div class=compareChart></div>
+   </div>
 
       <div id=chartArea></div>
       <div id=chartArea2></div>
-   <div class=compareChart></div>
+
    <div class=comparison-legend></div>
    <div class=multi-comparison-legend></div>
 
@@ -135,37 +141,6 @@
           $prevChartVal = $(".prev-issue-chart");
           $nextChartVal = $(".next-issue-chart");
 
-          $prevChartVal.on("click", function() {
-              getPreviousMonthViaAjax();
-              var bars = document.getElementsByClassName("bars");
-              var i = bars.length-1, max = 0 , delay = 10, run;
-              run = function(){
-                  var color = bars[i].style.fill;
-                  if(i-- > max){
-                      bars[i].style.fill = "rgb(0, 0, 0)";
-                      setTimeout(run, delay);
-                      bars[i].style.fill = color;
-                  }
-              };
-              run();
-              return false;
-          });
-
-          $nextChartVal.on("click", function() {
-              getNextMonthViaAjax();
-              var bars = document.getElementsByClassName("bars");
-              var i =  0, max = bars.length-1, delay = 10, run;
-              run = function(){
-                  var color = bars[i].style.fill;
-                  if(i++ < max){
-                      bars[i].style.fill = "rgb(0, 0, 0)";
-                      setTimeout(run, delay);
-                      bars[i].style.fill = color;
-                  }
-              };
-              run();
-              return false;
-          });
         var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs, false);
       </script>
@@ -206,31 +181,6 @@
                 if(old !== null){
                     $('.old').append('<a href='+ old +' target=_blank>Go To Oldest Issue</a>');
                 }
-
-                $(".attention-marker").on("click", function() {
-
-                    var teamname = window.location.pathname.split("/")[3];
-                    $.ajax({
-                        method: "POST",
-                        url: "attention",
-                        data: {
-                            username: username,
-                            email: email,
-                            userAvatar: av,
-                            attentionTarget: teamname
-                        }
-                    }).done(function(msg) {
-                        console.log(msg)
-                    });
-                });
-               $('.btn').on('click', function() {
-                 if($('#chartArea').is(":visible")) {
-                     $('.average').html('Month Average: ' + pullsMonthlyAvg)
-                  } else if($('#chartArea').is(":hidden")) {
-                      $('.average').html('Month Average: ' + issuesMonthlyAvg)
-                  }
-               });
-
             </script>
          </p>
          <p class='newest'>
@@ -289,41 +239,6 @@
              }];
 
           pieChart(pieData, "#pulls-pie-chart", foundationPullsAvg, <%= pullRequestNo %>, false);
-
-          $(".pie-link").on("click", function() {
-              if($(this).html() === "Issues") {
-                  $(this).css({
-
-                      color: "#1D214D",
-                      fontWeight: "bold"
-                  } );
-                  $(".p").css({
-                      color: "#1985E2",
-                      fontWeight: "normal"
-
-                  });
-                  $("#issues-pie-chart").css("display", "block");
-                  $("#pulls-pie-chart").css("display", "none");
-              }
-          })
-          $(".pie-link").on("click", function() {
-              if($(this).html() === "Pull Requests") {
-                  $(this).css({
-
-                      color: "#1D214D",
-                      fontWeight: "bold"
-                  } );
-                  $(".i").css({
-                      color: "#1985E2",
-                      fontWeight: "normal"
-
-                  });
-                  $("#issues-pie-chart").css("display", "none");
-                  $("#pulls-pie-chart").css("display", "block");
-              }
-          });
-
-
 
           var elm, elm2;
           elm = document.getElementsByClassName('issuesPercent');

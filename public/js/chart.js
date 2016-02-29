@@ -31,6 +31,7 @@ var $viewEle;
  *
  */
 function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate) {
+
 	startDate = typeof startDate === "undefined" ? sd : startDate;
 	detectWindowSize();
 		if(isPreviousMonthOfData) {
@@ -660,6 +661,9 @@ function setLineChart(data, buildStyle, startdate, isPreviousMonthOfData) {
  */
 var toggleLineChart = function(elem) {
 	$(elem).click(function() {
+		ScrollMovement.enableScroll();
+		$(".complete-compare-overlay").css("display", "none");
+		$(".compare-overlay").css("display", "none");
 		$( '#chart').toggle( "slow" );
 		var els = document.getElementById('line-chart');
 		var $issue_lchart = $('#line-chart');
@@ -692,6 +696,10 @@ var toggleLineChart = function(elem) {
 
 var toggleBarChart = function(elem) {
 	$(elem ).click(function() {
+		ScrollMovement.enableScroll();
+		$(".complete-compare-overlay").css("display", "none");
+		$(".compare-overlay").css("display", "none");
+
 	  $( '#chartArea').toggle( "slow" );
 	 var el = document.getElementById('chartArea');
 		$('#chartArea2').toggle('slow');
@@ -861,6 +869,10 @@ function setPullsCompareSelection(histObj) {
 
 function getSelectionValue($selection, histObj, isIssue) {
 	$selection.on('change', function(){
+		ScrollMovement.disableScroll();
+		$(".complete-compare-overlay").css("display", "block");
+		$(".compare-overlay").css("display", "block");
+
 		var chosenVal = $(this).val();
 		if(chosenVal !== 'Compare Issues' || chosenVal !== 'Compare Pulls') {
 			if(isIssue)
@@ -896,6 +908,7 @@ var compareRepositories = function(repoName, allHistory, isIssue) {
 };
 
 var setComparisonChart = function(oppData,data , team, isIssue) {
+
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
 	var y_ax = isIssue ? 'No. of Issues' : 'No. of Pulls';
