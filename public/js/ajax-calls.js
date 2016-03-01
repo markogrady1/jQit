@@ -32,6 +32,7 @@ var getNextMonthViaAjax = function() {
 };
 
 var getPreviousMonthViaAjax = function() {
+
     var rangeParam = $chartRange.val();
     $chartRange.val(++rangeParam);
     $.ajax('change-issue-month/' + window.location.pathname.split("/")[3] + '/'+ rangeParam, {

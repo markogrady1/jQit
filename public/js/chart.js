@@ -907,8 +907,8 @@ var compareRepositories = function(repoName, allHistory, isIssue) {
 	setComparisonChart(usedArray, comparedArray, team, isIssue);
 };
 
-var setComparisonChart = function(oppData,data , team, isIssue) {
-
+var setComparisonChart = function(homeData,data , team, isIssue) {
+	displayInfoInOverLay(data, team, isIssue);
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
 	var y_ax = isIssue ? 'No. of Issues' : 'No. of Pulls';
@@ -1115,7 +1115,7 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 		}
 		plot.call(chart,{
 			data: data,
-			data2: oppData,
+			data2: homeData,
 			axis: {
 				x: xAxis,
 				y: yAxis
@@ -1124,6 +1124,58 @@ var setComparisonChart = function(oppData,data , team, isIssue) {
 		});
 
   pointListener();
+};
+
+var displayInfoInOverLay = function(comparisonData, team, isIssue) {
+	var $homeText = $(".home-text-title");
+	var $awayText = $(".away-text-title");
+	var $homerange = $(".home-range");
+	var $awayrange = $(".away-range");
+	$homeText.html("");
+	$awayText.html("");
+	$homerange.html("");
+	$awayrange.html("");
+	var homeTarget = isIssue ? "issues" : "pulls";
+	var awayTarget = isIssue ? "issues2" : "pulls2";
+	var homeAvg = 0, awayAvg = 0;
+	for(var j in comparisonData) {
+		homeAvg += parseInt(comparisonData[j][homeTarget]);
+		awayAvg += comparisonData[j][awayTarget];
+
+
+	}
+	homeAvg = Math.round( homeAvg / comparisonData.length);
+	awayAvg = Math.round( awayAvg / comparisonData.length);
+	$(".home-comp").html("Monthly Avg: " + homeAvg);
+	$(".away-comp").html("Monthly Avg: " + awayAvg);
+	var home = getComparisonDifference(comparisonData, isIssue, "2");
+	var away = getComparisonDifference(comparisonData, isIssue, "");
+	home = getComparisonFinalString(home);
+	away = getComparisonFinalString(away);
+	$homerange.html(home);
+	$awayrange.html(away);
+
+};
+
+function getComparisonDifference(data, isIssue, target) {
+	var first = isIssue ? data[0]["issues" + target] : data[0]["pulls" + target];
+	var last = isIssue ? data[data.length-1]["issues" + target]  : data[data.length-1]["pulls" + target];
+	console.log(first, last);
+	return last - parseInt(first);
+}
+
+var getComparisonFinalString = function(currentStatus) {
+
+	var strStart = "";
+	if(currentStatus < 0) {
+		currentStatus = currentStatus.toString().replace('-', '');
+		strStart = "Past 30 days <span class=decrease>▼ </span> ";
+	} else if(currentStatus === 0){
+		return "Past 30 days <span class=same>▶ </span>No Gain";
+	} else {
+		strStart = "Past 30 days <span class=increase-icon>▲ </span>";
+	}
+	return strStart + currentStatus// + strEnd;
 };
 
 var setUpMultipleCompareBtn = function(histObj) {
@@ -1201,7 +1253,7 @@ var getCheckValues = function(histObj) {
 	setComparisonChart2(pullsArr, teams, team, maximum, true);
 };
 
-var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
+var setComparisonChart2 = function(homeData, data, team, maximum, isIssue) {
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
 	var team = 'unknown';
@@ -1417,7 +1469,7 @@ var setComparisonChart2 = function(oppData, data, team, maximum, isIssue) {
 		}
 		plot.call(chart,{
 			data: data[m],
-			data2: oppData,
+			data2: homeData,
 			axis: {
 				x: xAxis,
 				y: yAxis
@@ -1487,7 +1539,7 @@ var pointListener = function() {
 var appendLegend = function(thisRepo, otherRepo) {
 	refreshLegend();
 	var $elt = $('.comparison-legend');
-	$elt.prepend($('<svg class=home width=10 height=10><rect class=home width=10 height=10 /></rect></svg><span class=text-title >'+thisRepo+'</span><br class=break><svg class=away width=10 height=10><rect class=away width=10 height=10 /><rect></svg><span class=text-title >'+otherRepo+'</span>'));
+	$elt.prepend($('<svg class=home width=10 height=10><rect class=home width=10 height=10 /></rect></svg><span class=home-text-title >'+thisRepo+'</span><br class=break><svg class=away width=10 height=10><rect class=away width=10 height=10 /><rect></svg><span class=away-text-title >'+otherRepo+'</span>'));
 };
 
 var appendMultipleLegend = function(thisRepo, team, data) {

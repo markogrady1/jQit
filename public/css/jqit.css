@@ -214,7 +214,57 @@ ul.top-bar-element-list {
 	shape-rendering: crispEdges;
 }
 
+.home {
+	position: absolute;
+	bottom: 130px;
+	left: 180px
+}
 
+.home-text-title {
+	font-weight: bold;
+	position: absolute;
+	bottom: 128px;
+	left: 199px;
+ }
+
+.home-comp {
+	position: absolute;
+	bottom: 108px;
+	left: 199px;
+}
+
+.home-range {
+	position: absolute;
+	bottom: 88px;
+	left: 199px;
+}
+
+
+.away {
+	position: absolute;
+	bottom: 130px;
+	left: 780px
+}
+
+
+.away-text-title {
+	font-weight: bold;
+	position: absolute;
+	bottom: 128px;
+	left: 799px;
+}
+
+.away-comp {
+	position: absolute;
+	bottom: 108px;
+	left: 799px;
+}
+
+.away-range {
+	position: absolute;
+	bottom: 88px;
+	left: 799px;
+}
 
 #chartArea {
 	width: 1200px;
@@ -254,6 +304,9 @@ ul.top-bar-element-list {
 }
 .increase, .decrease, .same {
 	padding: 0 4px 0 0;
+}
+.increase-icon {
+	color: #ff0000;
 }
 .increase {
 	color: #EA594E;
