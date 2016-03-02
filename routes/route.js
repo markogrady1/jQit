@@ -10,6 +10,7 @@ var migrate = require("../schema/repoMigrate")
     , fs = require("fs")
     , _ = require("lodash")
     , async = require("async")
+    , teamsControl = require("../lib/teamsController")
     , color = helper.terminalCol();
 
 // condition to check if local-server storage has been set already
@@ -138,79 +139,17 @@ router.get("/repo/details/change-issue-month/:repo/:range", function(req, res) {
 
 });
 
-//router.get("/repo/details/change-pulls-month/:repo/:range", function(req, res) {
-//    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-pulls-month/:" + req.params.repo+"/"+req.params.range);
-//    var range = req.params.range;
-//    var repo = req.params.repo;
-//    console.log(range, repo)
-//    reslv.getNextPullsMonth(repo, range, (obj) => {
-//        res.writeHead(200, {'content-type': 'text/json' });
-//        res.write( JSON.stringify({ obj } ) );
-//        res.end('\n');
-//    }, range);
-//
-//});
+router.get("/jquery/team/:teamName?", (req, res) => {
 
-router.get("/jquery/team/:teamName?", function(req, res) {
-    'use strict';
-    var arrayBack= [];
-
-    var team = req.params.teamName;
-    var count = 0;
-    var teamRepos = [], repoData = ["first"];
-    var teams = require("../teams.json");
-    for (let i in teams) {
-        if (team === teams[i].team) {
-            for (let j in teams[i].responsibility) {
-                count++;
-                var repo = teams[i].responsibility[j];
-                teamRepos.push(repo);
-
-            }
-        }
-    }
-
-    async.each(teamRepos,   function(item, callback){
-            // Call an asynchronous function, often a save() to DB
-           reslv.getTeamData("repoPullsHistory", "pulls", item, (d) => {
-               arrayBack.push(d)
-                callback()
-            })
-
-
-    }, function(err){
-
+    var selectedTeam = req.params.teamName;
+    teamsControl.getTeamData(selectedTeam, "repoPullsHistory", req, res, (teamPullsData) => {
+        teamsControl.getTeamData(selectedTeam, "repoHistory", req, res, (teamIssueData) => {
             res.render("team-view", {
-                data:arrayBack,
-                team:repo,
-                teams:teamRepos,
-                avatar_url: null
-            });
-
-        }
-);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                issuesData: teamIssueData,
+                pullsData: teamPullsData
+            })
+        })
+    });
 });
 
 //route for single repository details

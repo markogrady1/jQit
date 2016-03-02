@@ -1,15 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Team Page</title>
-</head>
-<body>
-<script>console.log(<%- JSON.stringify(data) %>)</script>
-test: <%= data %>
+    <title>Repository Details</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="/js/external/jquery-1.11.3.min.js"></script>
+    <script src="/js/external/lodash.min.js"></script>
+    <script src="/js/teamchart.js"></script>
+    <script src="/js/ajax-calls.js"></script>
 
-test: <%= team %>
-test: <%= teams %>
+    <script src="/js/external/d3.v3.min.js"></script>
+    <script src="/js/external/d3.tip.v0.6.3.js"></script>
+    <script src="/js/external/scrilla.js"></script>
+
+    <link rel='stylesheet' href='/css/jqit.css' />
+    <script src="/socket.io/socket.io.js"></script>
+<body>
+<div class="team-chart-area"></div>
+<script>
+    var chartLayout = "";
+    var pullsDataHistory = <%- JSON.stringify(pullsData) %>
+    var issuesDataHistory = <%- JSON.stringify(issuesData) %>
+            var newPullsData = [], newIssuesData = [];
+            for(var i in pullsDataHistory) {
+                for(var inner in pullsDataHistory[i]){
+                    pullsDataHistory[i][inner].plainDate = pullsDataHistory[i][inner].isoDate.split("T")[0];
+                }
+                chartLayout += "<div class='team-chart" + i + "'></div>";
+                newPullsData.push(pullsDataHistory[i].slice(-29))
+            }
+    
+            for(var j in issuesDataHistory) {
+                for(var inner2 in issuesDataHistory[j]){
+                    issuesDataHistory[j][inner2].plainDate = issuesDataHistory[j][inner2].isoDate.split("T")[0];
+                }
+                newIssuesData.push(issuesDataHistory[j].slice(-29))
+            }
+        $(".team-chart-area").append(chartLayout);
+    console.log(newPullsData)
+    console.log(newIssuesData)
+    setCharts(issuesDataHistory, true)
+</script>
+
 
 </body>
 </html>

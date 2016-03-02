@@ -52,15 +52,13 @@
     "team": "foundation (ED)",
     "responsibility": [
       "brand.jquery.org",
-      "contacts",
       "jquery.github.io"
     ]},
   {
     "team": "infra",
     "responsibility": [
       "codeorigin.jquery.com",
-      "grunt-jquery-content",
-      "infrastructure"
+      "grunt-jquery-content"
     ]},
   {
     "team": "events",

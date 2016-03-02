@@ -43,7 +43,7 @@ var server = app.listen("3000", () => {
 var io_ = require("socket.io");
 var io = io_.listen(server);
 io.on("connection", function() {
-	console.log("connection")
+
 });
 
 resolve.checkForAssigneeAddition();
