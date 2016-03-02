@@ -66,6 +66,7 @@ router.get("/", function(req, res){
             if(typeof att === "undefined") {
                 att = null;
             }
+
             res.render("index", {
                 names: schema.names,
                 issuesNo: schema.issues,
@@ -80,7 +81,8 @@ router.get("/", function(req, res){
                 logoutLink: "logout",
                 flagData:flag,
                 attention: att,
-                teams: teamData
+                teams: teamData,
+                avatar_url: null
             })
 		});
 		io.emit("userStatus", { av: avaNum })
@@ -181,7 +183,8 @@ router.get("/jquery/team/:teamName?", function(req, res) {
             res.render("team-view", {
                 data:arrayBack,
                 team:repo,
-                teams:teamRepos
+                teams:teamRepos,
+                avatar_url: null
             });
 
         }
@@ -354,7 +357,8 @@ router.get("/dashboard", (req, res) => {
                 dashboardLink: "",
                 compDoc: compDoc,
                 logoutLink: "logout",
-                flag: flag
+                flag: flag,
+                avatar_url: null
             });
         })
 

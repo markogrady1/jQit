@@ -1,5 +1,7 @@
+
+
 <header class="header">
-	<h1><%= header %></h1>
+	<div class="top-left-logo"><span class="header-repo-title"><%= header %></span></div>
 	<div class="login-status"></div>
 	<script>
 		var userState = <%- userStat %>
@@ -16,3 +18,14 @@
         console.log("User:",av)
 	</script>
 </header>
+
+<script>
+	var avatarImage = <%- JSON.stringify(avatar_url) %>
+	if(avatarImage !== null) {
+		avatarImage = "<img class='header-logo' src="+ avatarImage + " alt=''>";
+		$(".top-left-logo").prepend(avatarImage);
+	} else {
+		avatarImage = ""
+	}
+
+</script>

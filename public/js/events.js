@@ -44,6 +44,11 @@ var ScrollMovement = {
 
 $(document).ready(function() {
 
+    $(".complete-compare-overlay").on("click", function() {
+        ScrollMovement.enableScroll();
+        $(".complete-compare-overlay").css("display", "none");
+        $(".compare-overlay").css("display", "none");
+    })
     $prevChartVal.on("click", function() {
         AjaxCalls.getPreviousMonthViaAjax();
         var bars = document.getElementsByClassName("bars");
