@@ -908,6 +908,7 @@ var compareRepositories = function(repoName, allHistory, isIssue) {
 };
 
 var setComparisonChart = function(homeData,data , team, isIssue) {
+	getCompetitorAverageClosureTime(team, isIssue);
 	displayInfoInOverLay(data, team, isIssue);
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
@@ -1141,8 +1142,6 @@ var displayInfoInOverLay = function(comparisonData, team, isIssue) {
 	for(var j in comparisonData) {
 		homeAvg += parseInt(comparisonData[j][homeTarget]);
 		awayAvg += comparisonData[j][awayTarget];
-
-
 	}
 	homeAvg = Math.round( homeAvg / comparisonData.length);
 	awayAvg = Math.round( awayAvg / comparisonData.length);
@@ -1155,6 +1154,27 @@ var displayInfoInOverLay = function(comparisonData, team, isIssue) {
 	$homerange.html(home);
 	$awayrange.html(away);
 
+};
+
+var getCompetitorAverageClosureTime = function(teamName, isIssue) {
+	var $homeAvg = $(".home-avg");
+	var $awayAvg = $(".away-avg");
+	var $homeAvgClosureTitle = $(".home-avg-closure-title");
+	var $awayAvgClosureTitle = $(".away-avg-closure-title");
+	AjaxCalls.getCompetitorClosureAvg(teamName, function(data) {
+		if(isIssue) {
+			$homeAvgClosureTitle.html("Average Issue Closure:");
+			$awayAvgClosureTitle.html("Average Issue Closure:");
+			$homeAvg.html(avgIssues);
+			$awayAvg.html(data.issuesString);
+		} else {
+			$awayAvgClosureTitle.html("Average PR Closure:");
+			$homeAvgClosureTitle.html("Average PR Closure:");
+			$homeAvg.html(avgIssues);
+			$awayAvg.html(data.pullString);
+		}
+
+	});
 };
 
 function getComparisonDifference(data, isIssue, target) {

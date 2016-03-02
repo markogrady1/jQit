@@ -95,6 +95,34 @@ router.get("/repo/details/:repoName?", function(req, res) {
   	reslv.resolveIssueData(nameParam, req, res, io);
 });
 
+//route for single repository data
+router.get("/repo/details/competitor-closure-avg/:competitorName?", function(req, res) {
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
+    var nameParam = null;
+    nameParam = req.params.competitorName;
+    var clIssues;
+    reslv.getClosedIssueNo(nameParam, (closedNumber) => {
+        clIssues = closedNumber[closedNumber.length-1].issues;
+    });
+
+    reslv.getClosedNo(nameParam, (pullClosedNumber, pullDat, issueClosedNumber, issueDat) => {
+        var pullTimeString = "";
+        var issueTimeString = "";
+        reslv.getTimeString(pullDat, (time) => {
+            pullTimeString = time;
+        });
+
+        reslv.getTimeString(issueDat, (time) => {
+            issueTimeString = time;
+        });
+
+        res.writeHead(200, {'content-type': 'text/json' });
+        res.write( JSON.stringify({ pullString: pullTimeString, issuesString: issueTimeString } ) );
+        res.end('\n');
+    });
+
+    });
+
 router.get("/repo/details/change-issue-month/:repo/:range", function(req, res) {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-issue-month/:" + req.params.repo+"/"+req.params.range);
     var range = req.params.range;

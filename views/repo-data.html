@@ -25,7 +25,7 @@
         flagdata = <%- JSON.stringify(flagData) %>
         var username =  <%- JSON.stringify(username) %>
         var email =  <%- JSON.stringify(email) %>
-
+        var avgIssues =  <%- JSON.stringify(avgIssues) %>
          if(flagdata !== null) {
 
             everyIncrease = false;
@@ -127,6 +127,10 @@
        <div class="home-comp"></div>
        <div class="away-range"></div>
        <div class="home-range"></div>
+       <div class="away-avg-closure-title"></div>
+       <div class="home-avg-closure-title"></div>
+       <div class="away-avg"></div>
+       <div class="home-avg"></div>
    </div>
 
       <div id=chartArea></div>
@@ -214,7 +218,7 @@
           jqueryPieVal = jqueryPieVal.toFixed(2);
           var issuesPieVal = totals.issues.toFixed(2);
           var rep = homeRepository;
-        
+
           // pie chart data for issues
           var pieData = [{
              "label":rep,

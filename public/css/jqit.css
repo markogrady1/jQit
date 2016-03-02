@@ -238,7 +238,18 @@ ul.top-bar-element-list {
 	bottom: 88px;
 	left: 199px;
 }
+.home-avg-closure-title {
+	font-weight: bold;
+	position: absolute;
+	bottom: 68px;
+	left: 199px;
+}
 
+.home-avg {
+	position: absolute;
+	bottom: 48px;
+	left: 199px;
+}
 
 .away {
 	position: absolute;
@@ -266,6 +277,19 @@ ul.top-bar-element-list {
 	left: 799px;
 }
 
+.away-avg-closure-title {
+	font-weight: bold;
+	position: absolute;
+	bottom: 68px;
+	left: 799px;
+}
+
+.away-avg {
+	position: absolute;
+	bottom: 48px;
+	left: 799px;
+}
+
 #chartArea {
 	width: 1200px;
 	margin: 0 auto;
@@ -290,8 +314,8 @@ ul.top-bar-element-list {
 
 .gridline path,
 .gridline line {
-	stroke: #eee;
-    opacity: 0.4;
+	stroke: #555;
+    opacity: 0.2;
 }
 
 .status {

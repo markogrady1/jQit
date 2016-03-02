@@ -45,7 +45,7 @@ var ScrollMovement = {
 $(document).ready(function() {
 
     $prevChartVal.on("click", function() {
-        getPreviousMonthViaAjax();
+        AjaxCalls.getPreviousMonthViaAjax();
         var bars = document.getElementsByClassName("bars");
         var i = bars.length-1, max = 0 , delay = 10, run;
         run = function(){
@@ -61,7 +61,7 @@ $(document).ready(function() {
     });
 
     $nextChartVal.on("click", function() {
-        getNextMonthViaAjax();
+        AjaxCalls.getNextMonthViaAjax();
         var bars = document.getElementsByClassName("bars");
         var i =  0, max = bars.length-1, delay = 10, run;
         run = function(){
