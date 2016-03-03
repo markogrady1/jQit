@@ -265,7 +265,7 @@ function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData
 		.rangeBands([0, width]);
 	var y = d3.scale.linear()
 		.domain([0, d3.max(data, function(d){
-			return d[buildStyle.dataVal];
+			return d[buildStyle.dataVal] + d[buildStyle.dataVal] / 3;
 		})])
 		.range([height, 0]);
 	var yGridlines = d3.svg.axis()
@@ -519,7 +519,7 @@ function setLineChart(data, buildStyle, startdate, isPreviousMonthOfData) {
 		        .text(toolTipValue.toUpperCase());
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data, function(d) {
-					return d[buildStyle.dataVal];
+					return d[buildStyle.dataVal] + d[buildStyle.dataVal]/3;
 				})])
 				.range([height, 0]);
 		var x = d3.scale.ordinal()
@@ -963,7 +963,7 @@ var setComparisonChart = function(homeData,data , team, isIssue) {
 		        appendLegend($repo, team);
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data, function(d) {
-					return Math.max(d[dataVal1], d[dataVal2]);
+					return Math.max(d[dataVal1], d[dataVal2]) + Math.max(d[dataVal1], d[dataVal2]) / 3;
 				})])
 				.range([height, 0]);
 		var x = d3.scale.ordinal()
@@ -1180,7 +1180,7 @@ var getCompetitorAverageClosureTime = function(teamName, isIssue) {
 function getComparisonDifference(data, isIssue, target) {
 	var first = isIssue ? data[0]["issues" + target] : data[0]["pulls" + target];
 	var last = isIssue ? data[data.length-1]["issues" + target]  : data[data.length-1]["pulls" + target];
-	console.log(first, last);
+
 	return last - parseInt(first);
 }
 
@@ -1238,7 +1238,7 @@ var getCheckValues = function(histObj) {
 	});
 
 	var currentRepo = $('.current-repo').text();
-	var teams = [];
+	var comparisonTeams = [];
 	var checkedRepoData = [];
 	var checkedVals = $('.multi-compare:checkbox:checked').map(function() {
     return this.value;
@@ -1268,9 +1268,9 @@ var getCheckValues = function(histObj) {
 			var dom = dayOfMonth(val.rawDate);
 			return  {'date': dom, 'team': val.team, 'issues': val.issues, 'issues2': issuesArr[j++].issues, 'designatedColor': colors[i]};
 		});
-			teams.push(dd)
+			comparisonTeams.push(dd)
 	}
-	setComparisonChart2(pullsArr, teams, team, maximum, true);
+	setComparisonChart2(pullsArr, comparisonTeams, team, maximum, true);
 };
 
 var setComparisonChart2 = function(homeData, data, team, maximum, isIssue) {
@@ -1634,7 +1634,7 @@ var getRepoPercentage = function(data) {
 	var pullsTotal = typeof pullsArray[1] !== 'undefined' ? getTotalAmount(pullsArray) : 0;
 	var issuePercentage = calculatePercentage(issuesTotal, homeRepoArray, true);
 	var pullsPercentage = pullsTotal !== 0 ? calculatePercentage(pullsTotal, homeRepoArray, false) : 0;
-	console.log(issuePercentage[0], pullsPercentage[0])
+
 	return  {
 		issues: issuePercentage[0],
 		pulls: pullsPercentage[0],

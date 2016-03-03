@@ -142,6 +142,8 @@ router.get("/repo/details/change-issue-month/:repo/:range", function(req, res) {
 router.get("/jquery/team/:teamName?", (req, res) => {
 
     var selectedTeam = req.params.teamName;
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
+
     teamsControl.getTeamData(selectedTeam, "repoPullsHistory", req, res, (teamPullsData) => {
         teamsControl.getTeamData(selectedTeam, "repoHistory", req, res, (teamIssueData) => {
             res.render("team-view", {
