@@ -3,36 +3,33 @@
 
 var setCharts = function(data, isIssue) {
     var buildStyle = {
-        w: 400,
+        w: 900,
         h: 300,
         top: 48,
         bottom: 72,
         left: 60,
         right: 40,
-        padding: 20
+        padding: 20,
+        dataType: isIssue ? "Issues" : "Pulls"
     };
 
-    for(var i in data) {
-        setTeamBarChart(data, isIssue, buildStyle, i)
+    for(var t in data) {
+        setTeamBarChart(data[t], isIssue, buildStyle, i)
     }
 };
-
-
-
-
 
 var setTeamBarChart = function(data, isIssue, buildStyle, i) {
     var width = buildStyle.w - buildStyle.left - buildStyle.right;
     var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
     var chartClass = ".team-chart" + i;
     var x = d3.scale.ordinal()
-        .domain(data[i].map(function(entry){
+        .domain(data.map(function(entry){
             return entry["plainDate"].split("-")[2];
         }))
         .rangeBands([0, width]);
     var y = d3.scale.linear()
         .domain([0, d3.max(data, function(d,i){
-            return d["issues"];
+            return d["issues"] + d["issues"]/2;
         })])
         .range([height, 0]);
     var yGridlines = d3.svg.axis()
@@ -41,7 +38,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
         .tickFormat('')
         .orient('left');
     var linearColorScale = d3.scale.linear()
-        .domain([0, data[i].length])
+        .domain([0, 29])
         .range(['#4A84B0', '#c6dbef']);
     var ordinalColorScale = d3.scale.category20();
     var xAxis = d3.svg.axis()
@@ -52,9 +49,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
         .scale(y)
         .tickFormat(frm)
         .orient('left');
-    //console.log(data[i][0].issues)
-    //
-    //console.log(chartClass)
+
     var svg = d3.select(chartClass).append('svg')
         .attr('id', i + 'schart')
         .attr('height', buildStyle.h)
@@ -68,11 +63,11 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
         .attr("x", (width / 2))
         .attr("y", 0 - (buildStyle.top / 2))
         .attr("text-anchor", "middle")
-        .text(data[i][0]["team"]);
+        .text(data[0]["team"]);
 
 
     plot.call(chart, {
-        data:data[i],
+        data:data,
         axis: {
             x: xAxis,
             y: yAxis
@@ -94,7 +89,6 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
             .classed('bar'+ classAppend, true)
             .attr('x', function(d, i){
 
-                console.log(d)
                 return x(d["plainDate"].split("-")[2]);
             })
             .attr('value', function(d, i) {
@@ -217,7 +211,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
             .attr('y', 0)
             .style('text-anchor', 'middle')
             .attr('transform', 'translate(-50, ' + height / 2 +') rotate(-90)')
-            .text('No. of ');
+            .text('No. of ' + buildStyle.dataType);
         this.select('.x.axis')
             .append('text')
             .attr('x', 0)
@@ -225,7 +219,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
             .classed('x-axis-title', true)
             .style('text-anchor', 'middle')
             .attr('transform', 'translate(' + width / 2 + ', 50)')
-            .text("Date");
+            .text("Last 30 Days");
     }
     //if (buildStyle.isIssue){
     //    if(!isPreviousMonthOfData){

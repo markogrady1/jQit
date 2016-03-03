@@ -24,21 +24,25 @@
             for(var i in pullsDataHistory) {
                 for(var inner in pullsDataHistory[i]){
                     pullsDataHistory[i][inner].plainDate = pullsDataHistory[i][inner].isoDate.split("T")[0];
+                    pullsDataHistory[i][inner].pulls = parseInt(pullsDataHistory[i][inner].pulls);
+
                 }
                 chartLayout += "<div class='team-chart" + i + "'></div>";
                 newPullsData.push(pullsDataHistory[i].slice(-29))
             }
-    
+
             for(var j in issuesDataHistory) {
                 for(var inner2 in issuesDataHistory[j]){
                     issuesDataHistory[j][inner2].plainDate = issuesDataHistory[j][inner2].isoDate.split("T")[0];
+                    issuesDataHistory[j][inner2].issues = parseInt(issuesDataHistory[j][inner2].issues);
+
                 }
                 newIssuesData.push(issuesDataHistory[j].slice(-29))
             }
         $(".team-chart-area").append(chartLayout);
     console.log(newPullsData)
     console.log(newIssuesData)
-    setCharts(issuesDataHistory, true)
+    setCharts(newIssuesData, true)
 </script>
 
 
