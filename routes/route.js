@@ -75,7 +75,7 @@ router.get("/", function(req, res){
                 pullsNo: prs,
                 urlstate: urlstate,
                 state: c,
-                header: "Main page",
+                header: "",
                 av: avaNum,
                 username: username === "undefined" ? null : username,
                 dashboardLink: "dashboard",
@@ -100,7 +100,7 @@ router.get("/repo/details/:repoName?", function(req, res) {
 
 //route for single repository data
 router.get("/repo/details/competitor-closure-avg/:competitorName?", function(req, res) {
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/competitor-closure-avg/:" + req.params.competitorName);
     var nameParam = null;
     nameParam = req.params.competitorName;
     var clIssues;
@@ -142,13 +142,30 @@ router.get("/repo/details/change-issue-month/:repo/:range", function(req, res) {
 router.get("/jquery/team/:teamName?", (req, res) => {
 
     var selectedTeam = req.params.teamName;
+    helper.noCache(res);
+    var avatar = reslv.getAvatarImage();
+    if(avatar === "undefined") {
+        res.locals.userStat = false;
+    } else {
+        res.locals.userStat = true;
+        c = helper.getRandomString();
+        var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+    }
+
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
 
     teamsControl.getTeamData(selectedTeam, "repoPullsHistory", req, res, (teamPullsData) => {
         teamsControl.getTeamData(selectedTeam, "repoHistory", req, res, (teamIssueData) => {
             res.render("team-view", {
+                av: avatar,
+                header: selectedTeam,
+                urlstate: urlstate,
+                state: c,
                 issuesData: teamIssueData,
-                pullsData: teamPullsData
+                pullsData: teamPullsData,
+                logoutLink: "../../logout",
+                dashboardLink: "../../dashboard",
+                avatar_url: null
             })
         })
     });

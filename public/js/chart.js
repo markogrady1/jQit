@@ -959,6 +959,7 @@ var setComparisonChart = function(homeData,data , team, isIssue) {
 		        .attr("x", (width / 2))
 		        .attr("y", 0 - (buildStyle.top / 2) - 20)
 		        .attr("text-anchor", "middle")
+				.attr("class", "compare-chart-title")
 		        .text($repo + "  - vs -  " + team);
 		        appendLegend($repo, team);
 		var y = d3.scale.linear()
@@ -1311,7 +1312,7 @@ var setComparisonChart2 = function(homeData, data, team, maximum, isIssue) {
 
     var width = buildStyle.w - buildStyle.left - buildStyle.right;
 	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
-	var svg = d3.select('.compareChart').append('svg')
+	var svg = d3.select('.compareChart2').append('svg')
 				.attr('id', 'compare-line-chart')
 				.attr('height', buildStyle.h + buildStyle.padding)
 				.attr('width', buildStyle.w + buildStyle.padding)
@@ -1788,7 +1789,17 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 
 		 slice.exit()
 			 .remove();
-
+		 var $pieSlice = $(".slice");
+		 $pieSlice.on("mouseover", function() {
+			$(".pie-toggle-link").css({
+				zIndex: 0
+			})
+		})
+		 $pieSlice.on("mouseleave", function() {
+			 $(".pie-toggle-link").css({
+				 zIndex: 1
+			 })
+		 })
 		 /* -------PIE TEXT LABELS -------*/
 
 		 var text = svg.select(".labels").selectAll("text")

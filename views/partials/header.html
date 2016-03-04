@@ -1,9 +1,13 @@
 
 
 <header class="header">
-	<div class="top-left-logo"><span class="header-repo-title"><%= header %></span></div>
+	<div class="top-left-logo"><span class="site-logo"><a href="/" class="logo-link">jQIT</a></span><span class="header-repo-title"><%= header %></span></div>
 	<div class="login-status"></div>
 	<script>
+		var pathname = window.location.pathname;
+//		if(pathname === "/") {
+
+//		}
 		var userState = <%- userStat %>
         var av = <%- JSON.stringify(av) %>
 		dashboardLink = <%- JSON.stringify(dashboardLink) %>

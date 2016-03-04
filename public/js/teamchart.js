@@ -51,7 +51,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
         .orient('left');
 
     var svg = d3.select(chartClass).append('svg')
-        .attr('id', i + 'schart')
+        .classed('team-chart', true)
         .attr('height', buildStyle.h)
         .attr('width', buildStyle.w);
     //svg.call(tip);
@@ -59,9 +59,9 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
         .classed('display', true)
         .attr('transform', 'translate(' + buildStyle.left + ',' + buildStyle.right + ')');
     chart.append("text")
-        .classed(i+'-title', true)
+        .classed('title', true)
         .attr("x", (width / 2))
-        .attr("y", 0 - (buildStyle.top / 2))
+        .attr("y", 0 - (buildStyle.top / 2 - 10))
         .attr("text-anchor", "middle")
         .text(data[0]["team"]);
 

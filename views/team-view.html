@@ -15,6 +15,8 @@
     <link rel='stylesheet' href='/css/jqit.css' />
     <script src="/socket.io/socket.io.js"></script>
 <body>
+<% include partials/header.html %>
+
 <div class="team-chart-area"></div>
 <script>
     var chartLayout = "";
@@ -40,6 +42,8 @@
                 newIssuesData.push(issuesDataHistory[j].slice(-29))
             }
         $(".team-chart-area").append(chartLayout); // append areas for the team charts
+//    $(".team-chart-area").append("<div class='team-chart" + 1 + "'></div>"); // append areas for the team charts
+
     console.log(newPullsData)
     console.log(newIssuesData)
     setCharts(newIssuesData, true); //  create charts for the teams responsibilty

@@ -3,6 +3,7 @@
 <head>
 	<title>Issue Tracker</title>
     <meta charset='utf-8'>
+    <link href='https://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
 	<script src="/js/external/jquery-1.11.3.min.js"></script>
     <script src="/js/external/d3.v3.min.js"></script>
     <script src="/js/external/tinysort.js"></script>
@@ -40,50 +41,51 @@
 <% include partials/header.html %>
 <div class="pie"></div>
 <div class="body-wrap">
+    <br>
+    <a class="team-table-link" href="#team-table">Team table</a>
+    <table class="props xmpl home-main-table" id="xtable">
+      <thead>
+      <tr >
+        <th class="head">Name</th>
+        <th class="head">Issues</th>
+        <th class="head">PR's</th>
+        <th class="head">Forks</th>
+        <th class="head">Watchers</th>
+        <th class="head github-head">GitHub</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% for (var i = 0; i < completeD.length; i++) {
+            var calculatedIssues = completeD[i].issues - completeD[i].pulls;
+            calculatedIssues = calculatedIssues < 0 ? 0 : calculatedIssues;
+            var targetedRepo = flagData === null ? "" : flagData.target;
 
-    <br><br><br>
-<table class="props xmpl" id="xtable">
-  <thead>
-  <tr >
-    <th class="head">Name</th>
-    <th class="head">Issues</th>
-    <th class="head">PR's</th>
-    <th class="head">Forks</th>
-    <th class="head">Watchers</th>
-    <th class="head github-head">GitHub</th>
-  </tr>
-  </thead>
-  <tbody>
-    <% for (var i = 0; i < completeD.length; i++) {
-        var calculatedIssues = completeD[i].issues - completeD[i].pulls;
-        calculatedIssues = calculatedIssues < 0 ? 0 : calculatedIssues;
-        var targetedRepo = flagData === null ? "" : flagData.target;
+           if(completeD[i].name === targetedRepo){ %>
+                <tr class="flagged" id="flagged">
+           <% } else { %>
+                <tr>
+           <% }  %>
+            <td class="name"><a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a><span class="attention<%- i %>"></span></td>
 
-       if(completeD[i].name === targetedRepo){ %>
-            <tr id="flagged">
-       <% } else { %>
-            <tr>
-       <% }  %>
-        <td ><a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a><span class="attention<%- i %>"></span></td>
+            <td ><%= calculatedIssues %></td>
+            <td ><%- completeD[i].pulls%></td>
+            <td><%- completeD[i].forks%></td>
+            <td><%- completeD[i].watchers%></td>
+        <td class="github-detail"><a class="index-github-link" target="_blank" href=<%- completeD[i].github_url%>> <%- completeD[i].github_url%></a></td>
+      </tr>
+        <script>
+            if (attention.target === <%- JSON.stringify(completeD[i].name) %>) {
+                $(".attention<%- i %>").append("<img class='attention-tag <%- completeD[i].name%>' title='click to remove pin' src='img/attention_pin.png'/>")
+            }
+        </script>
+    <% } %>
 
-        <td ><%= calculatedIssues %></td>
-        <td ><%- completeD[i].pulls%></td>
-        <td><%- completeD[i].forks%></td>
-        <td><%- completeD[i].watchers%></td>
-    <td class="github-detail"><a class="index-github-link" target="_blank" href=<%- completeD[i].github_url%>> <%- completeD[i].github_url%></a></td>
-  </tr>
-    <script>
-        if (attention.target === <%- JSON.stringify(completeD[i].name) %>) {
-            $(".attention<%- i %>").append("<img class='attention-tag <%- completeD[i].name%>' title='click to remove pin' src='img/attention_pin.png'/>")
-        }
-    </script>
-<% } %>
-
-  </tbody>
-</table>
+      </tbody>
+    </table>
 
 
 <p class="team-table-title">jQuery Team Table</p>
+    <a name="team-table"></a>
     <table class="props xmpl team-table" id="xtable">
     <thead>
     <tr >

@@ -42,7 +42,7 @@ var scroller = {
 
 		$(".scroll-top-button").on("mouseover", function(){
 			$(this).css({
-		 		backgroundColor: "#ff3b30"
+		 		backgroundColor: "#4E87B2"
 			});
 		});
 		$(".scroll-top-button").on("mouseout", function(){

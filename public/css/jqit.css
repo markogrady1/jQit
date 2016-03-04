@@ -1,12 +1,36 @@
+@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
+
 body {
 	margin:0;
 	padding:0;
     background-color: #f5f5f5;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 13px;
+    /*font-family: 'Helvetica', Helvetica, Arial, sans-serif;*/
+	font-family: 'Signika', sans-serif;
+
+	font-size: 13px;
 }
 
+.d3-tip {
+	z-index: 2;
+}
+.logo-link {
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-stroke-color: #C0D7EC;
+	position: absolute;
+	top: 10px;
+	left: 30px;
+	font-family: 'Libre Baskerville', serif;
+	font-size: 2.7em;
+}
+
+.site-logo a.logo-link:hover {
+	color: #C0D7EC;
+	text-decoration:none;
+}
 .header-logo {
+	position: absolute;
+	top: 10px;
+	left: 11.5%;
 	border-radius: 25px;
 	background-color: #fff;
 	padding: 2px;
@@ -23,7 +47,7 @@ div.top-left-logo {
 .header-repo-title {
 	position: absolute;
 	top: 20px;
-	left: 80px;
+	left: 15.8%;
 	font-size:1.8em;
 }
 
@@ -42,10 +66,24 @@ div.top-left-logo {
 	text-decoration: underline;
 }
 
+.home-main-table {
+	margin-top: 20px;
+}
+
+.team-table-link {
+	text-decoration: none;
+	font-size: 1.2em;
+	color: #428BCA;
+	padding-left: 30px;
+}
+
+.team-table-link:hover {
+	text-decoration: underline;
+}
 
 .login-status {
 	position: relative;
-	top: -48px;
+	top: -51px;
 	height: 50px;
 	width: 150px;
 	float:right;
@@ -100,6 +138,10 @@ ul.top-bar-element-list {
 
 	margin: 0 20px 20px 0;
 }
+.compare-chart-title {
+	font-family: 'Signika', sans-serif;
+	font-size: 1.4em;
+}
 
 .compare-issues-info {
 	margin: 0 20px -20px 0;
@@ -133,6 +175,13 @@ ul.top-bar-element-list {
 	padding: 10px;
 }
 
+#chart, #pulls-chart {
+	border: 1px solid #aaa;
+	padding: 20px 30px 30px 30px;
+	box-shadow: 2px 2px 2px #ddd;
+
+}
+
 .svg-chart .background {
 	shape-rendering: crispEdges;
 	stroke: #ccc;
@@ -157,10 +206,12 @@ ul.top-bar-element-list {
 	margin-top: -29px;
 	padding: 0px;
 	display: none;
+	z-index: 2;
+
 }
 
 .compare-overlay {
-	/*border: 10px solid #4E87B2;*/
+	font-family: 'Open Sans', sans-serif;
 	border-radius: 8px;
 	padding: 30px 0 20px 60px;
 	position: absolute;
@@ -172,7 +223,7 @@ ul.top-bar-element-list {
 	opacity: 1;
 	display: none;
 	box-shadow: -8px 13.856px 47.44px #000;
-	/*z-index: 2;*/
+	z-index: 2;
 	}
 
 
@@ -642,8 +693,18 @@ td, th {
 	height: 15px;
 	float: right;
 }
-#flagged {
-	background-color: #8BDCFA;
+#flagged td a.index-name-link, #flagged td a.index-github-link {
+	background-color: #4E87B2;
+	color: #fff;
+}
+
+#flagged td a.index-name-link:hover, #flagged td a.index-github-link:hover {
+	text-decoration: underline;
+}
+
+#flagged  {
+	background-color: #4E87B2;
+	color: #fff;
 }
 
 .dashboard-ajax-btn {
@@ -665,8 +726,37 @@ td, th {
 	cursor: pointer;
 }
 
-
 /*///////////PIE CHARTS/////////////////*/
+.pie-chart-wrap {
+	position: relative;
+	margin: 0 auto;
+	width: 70%;
+	height: 300px;
+	background-color: #fff;
+
+
+}
+
+.pie-chart-section {
+	box-shadow: 2px 2px 2px #ddd;
+
+}
+
+.pie-toggle-link {
+	font-family: 'Signika', sans-serif;
+	font-size: 1.2em;
+	position: absolute;
+	width: 200px;
+	float: left;
+	z-index: 1;
+	margin: 10px 24%;
+}
+
+#pulls-pie-chart, #issues-pie-chart {
+	position: absolute;
+	top: 20px;
+}
+
 #pulls-pie-chart {
 	display: none;
 }
@@ -694,17 +784,17 @@ td, th {
 }
 
 .pie-chart-tooltip {
-
-	/*font-weight: bold;*/
 	padding: 12px;
 	background: #3a3a3a;
 	color: #cacaca;
 	border-radius: 4px;
 	border: 2px solid #a3a3a3;
 }
+
 .pie-label {
 	font-weight: bold;
 }
+
 #issues-pie-chart {
 	float:left;
 	width: 610px;
@@ -713,12 +803,12 @@ td, th {
 
 .slice{
 	stroke-width: 1px;
-	stroke: #555;
+	stroke: #fff;
 }
 
-polyline{
+polyline {
 	opacity: 1;
-	stroke: black;
+	stroke: #555;
 	stroke-width: 1px;
 	fill: none;
 }
@@ -726,8 +816,78 @@ polyline{
 	clear: both;
 }
 
+svg.team-chart {
+	margin: 20px 0 30px 60px;
+}
+
+.pie-visual-details-wrap {
+	position: relative;
+	width: 44%;
+	height: 300px;
+	background-color: #F5F5F5;
+	float: right;
+	/*z-index: -1;*/
+}
+
+.total-avg-issues, .total-avg-pulls {
+	font-family: 'Signika', sans-serif;
+	height: 100%;
+	width: 45%;
+	float: left;
+	margin: 0 2% 0 2%;
+	/*padding: 0 2% 0 2%;*/
 
 
+}
 
+.pulls-val, .issues-val {
+	height: 20%;
+	font-size: 4em;
+	padding-bottom: 20px;
+	padding-top: 20px;
+	text-align: center;
+	background-color: #fff;
+	color: #4A84B0;
+}
+.total-avg-issues {
+	box-shadow: 2px 2px 2px #ddd;
+	margin-left: 4%;
+}
 
+.total-avg-pulls {
+	box-shadow: 2px 2px 2px #ddd;
+}
 
+.avg-issue-text, .avg-pulls-text {
+	text-align: center;
+	height: 23%;
+	padding-top: 30px;
+	font-size: 2em;
+	background-color: #393939;
+	color: #fff;
+}
+
+.avg-issue-value, .avg-pulls-value {
+	padding-top: 10px;
+	text-align: center;
+	font-size: 4em;
+	font-weight: bold;
+	height: 91px;
+	background-color: #C0D7EC;
+	color: #4A84B0;
+	/*height: 70%;*/
+}
+
+.i-val-wrap, .p-val-wrap {
+	position: relative;
+}
+.avg-issues-explanation, .avg-pulls-explanation {
+	position: absolute;
+	top: 69%;
+	left: 15%;
+	color: #4A84B0;
+}
+
+.a-i-e {
+	left: 28%
+}

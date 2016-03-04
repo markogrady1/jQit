@@ -3,8 +3,11 @@
     <title>Repository Details</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Signika' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <script src="/js/external/jquery-1.11.3.min.js"></script>
     <script src="/js/external/lodash.min.js"></script>
+    <script src="/js/external/scrilla.js"></script>
     <script src="/js/chart.js"></script>
     <script src="/js/ajax-calls.js"></script>
     <script src="/js/events.js"></script>
@@ -101,7 +104,7 @@
       <script src="/js/detectResize.js"></script>
       <script src="/js/external/d3.v3.min.js"></script>
       <script src="/js/external/d3.tip.v0.6.3.js"></script>
-      <script src="/js/external/scrilla.js"></script>
+
       <style>
       </style>
    </head>
@@ -121,7 +124,7 @@
    </div>
    <div class="complete-compare-overlay"></div>
    <div class="compare-overlay"><img src="/img/clear_dot.gif" class="close-img" alt="">
-
+       <div class=compareChart></div>
        <div class=comparison-legend></div>
        <div class="away-comp"></div>
        <div class="home-comp"></div>
@@ -141,7 +144,7 @@
 
    <div class=multi-compareChart></div>
    <div class=multi-comparison></div>
-   <div class=compareChart></div>
+   <div class=compareChart2></div>
       <div class='point point2'></div>
    <input class="range" value=2>
       <script>
@@ -153,9 +156,31 @@
         setCharts(issueflagsIndexs, pullsflagsIndexs, false);
       </script>
    <p class="attention-marker"></p>
-   <p><span class="pie-link i">Issues</span> | <span class="pie-link p">Pull Requests</span></p>
-   <div id="issues-pie-chart"></div>
-   <div id="pulls-pie-chart"></div>
+   <div class="pie-chart-wrap">
+
+       <p class="pie-toggle-link"><span class="pie-link i">Issues</span> | <span class="pie-link p">Pull Requests</span></p>
+       <div id="issues-pie-chart"></div>
+       <div id="pulls-pie-chart"></div>
+       <div class="pie-visual-details-wrap">
+               <div class="total-avg-issues">
+               <div class="avg-issue-text">Issues</div>
+                   <div class="issues-val">some</div>
+                   <div class="i-val-wrap">
+                        <div class="avg-issue-value"></div>
+                        <span class="avg-issues-explanation a-i-e">Of all jQuery issues</span>
+                   </div>
+           </div>
+           <div class="total-avg-pulls">
+               <div class="avg-pulls-text">Pull Requests</div>
+               <div class="pulls-val">some</div>
+               <div class="p-val-wrap">
+                    <div class="avg-pulls-value"></div>
+                   <span class="avg-pulls-explanation">Of all jQuery Pull Requests</span>
+
+               </div>
+           </div>
+       </div>
+   </div>
 <div class="line-break"></div>
    <div class="body-wrap">
          <div class="average"></div>
@@ -172,13 +197,12 @@
          <p><b> Pull Requests: </b> <%= pullRequestNo %></p>
          <p><b> Closed Pull Requests: </b> <%= closedPulls %></p>
          <p><b> Stars: </b> <%= data.watchers_count %></p>
-         <p><b> Created at: </b> <%= data.created_at %></p>
+         <p><b> Created: </b> <%= created %></p>
          <p><b> Description: </b> <%= data.description %></p>
          <p><b> Number of forks: </b> <%= data.forks_count %></p>
-         <p><b> Average time to close issues: </b> <%= avgIssues %></p>
          <p><b> Percentage of all jQuery Open Issues: </b><span class="issuesPercent"><span></p>
          <p><b> Percentage of all jQuery Open Pull Requests: </b><span class="pullsPercent"><span></p>
-         <p><b> Average time to close issues: </b> <%= avgIssues %></p>
+
          <p class='old'>
             <b> Age of oldest issue: </b> <%= issueRange %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <script>
@@ -200,6 +224,9 @@
             </script>
          </p>
          <p><b> Average time to close pull request: </b> <%= avgPulls %></p>
+       <p><b> Average age of open issues: </b> <%= averageAgeOfOpenIssues %></p>
+       <p><b> Average time to close issues: </b> <%= avgIssues %></p>
+       <p><b> Average age of open Pull requests: </b> <%= averageAgeOfOpenPRs %></p>
          <p><b> Age of oldest pull request: </b> <%= pullRange %></p>
          <p><b>Closures: </b><br>
             <%for (var key in events){ %>
@@ -219,7 +246,8 @@
           jqueryPieVal = jqueryPieVal.toFixed(2);
           var issuesPieVal = totals.issues.toFixed(2);
           var rep = homeRepository;
-
+          $(".avg-issue-value").html(issuesPieVal + "%");
+          $(".pulls-val").html(<%= pullRequestNo %>);
           // pie chart data for issues
           var pieData = [{
              "label":rep,
@@ -235,7 +263,8 @@
           jqueryPieVal = 100 - totals.pulls;
           jqueryPieVal = jqueryPieVal.toFixed(2);
           var pullsPieVal = totals.pulls.toFixed(2);
-
+          $(".avg-pulls-value").html(pullsPieVal + "%");
+          $(".issues-val").html(v[v.length-1].issues);
           // pie chart data for PRs
           pieData = [{
                 "label":rep,
