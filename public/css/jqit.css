@@ -301,7 +301,7 @@ ul.top-bar-element-list {
 	left: 199px;
  }
 
-.home-comp {
+.away-comp {
 	position: absolute;
 	bottom: 108px;
 	left: 199px;
@@ -339,7 +339,7 @@ ul.top-bar-element-list {
 	left: 799px;
 }
 
-.away-comp {
+.home-comp {
 	position: absolute;
 	bottom: 108px;
 	left: 799px;
@@ -366,7 +366,7 @@ ul.top-bar-element-list {
 
 #chartArea {
 	width: 1200px;
-	margin: 0 auto;
+	margin: 0 auto 40px auto;
 }
 
 #chartArea2 {
@@ -729,12 +729,10 @@ td, th {
 /*///////////PIE CHARTS/////////////////*/
 .pie-chart-wrap {
 	position: relative;
-	margin: 0 auto;
+	margin: 40px auto 40px auto;
 	width: 70%;
 	height: 300px;
 	background-color: #fff;
-
-
 }
 
 .pie-chart-section {
@@ -753,6 +751,7 @@ td, th {
 }
 
 #pulls-pie-chart, #issues-pie-chart {
+    width: 200px;
 	position: absolute;
 	top: 20px;
 }
@@ -797,8 +796,9 @@ td, th {
 
 #issues-pie-chart {
 	float:left;
-	width: 610px;
-	height: 250px;
+	width: 564px;
+	height: 260px;
+    box-shadow: 2px 2px 2px #ddd;
 }
 
 .slice{
@@ -828,6 +828,7 @@ svg.team-chart {
 	float: right;
 	/*z-index: -1;*/
 }
+
 
 .total-avg-issues, .total-avg-pulls {
 	font-family: 'Signika', sans-serif;
@@ -890,4 +891,103 @@ svg.team-chart {
 
 .a-i-e {
 	left: 28%
+}
+
+/*//////////// closed data section //////////////////////*/
+.clsd-visual-details-wrap {
+	position: relative;
+	width: 40%;
+	height: 300px;
+	background-color: #F5F5F5;
+	float: left;
+    margin-left: 14%;
+    margin-top: 20px;
+	/*z-index: -1;*/
+}
+
+.clsd-visual-details-left-wrap {
+	position: relative;
+	width: 44%;
+	height: 150px;
+	background-color: #F5F5F5;
+	float: right;
+
+	/*z-index: -1;*/
+}
+
+.total-clsd-issues, .total-clsd-pulls {
+	font-family: 'Signika', sans-serif;
+	height: 100%;
+	width: 45%;
+	float: left;
+	margin: 0 2% 0 2%;
+	/*padding: 0 2% 0 2%;*/
+}
+
+.line-break-with-brder {
+    border-top: 1px solid #a9a9a9;
+    width: 80%;
+    height: 1px;
+    margin: 0 auto 20px auto;
+}
+
+.clsd-pulls-val, .clsd-issues-val {
+	height: 20%;
+	font-size: 4em;
+	padding-bottom: 20px;
+	padding-top: 20px;
+	text-align: center;
+	background-color: #fff;
+	color: #4A84B0;
+}
+.total-clsd-issues {
+	box-shadow: 2px 2px 2px #ddd;
+	margin-left: 4%;
+}
+
+.total-clsd-pulls {
+	box-shadow: 2px 2px 2px #ddd;
+}
+
+.clsd-issue-text, .clsd-pulls-text {
+	text-align: center;
+	height: 23%;
+	padding-top: 30px;
+	font-size: 2em;
+	background-color: #393939;
+	color: #fff;
+}
+
+.open-avg-issue-text, .open-avg-pulls-text {
+    margin-top: 20px;
+	text-align: center;
+    width: 63%;
+	height: 53%;
+	padding-top: 30px;
+	font-size: 1.5em;
+	background-color: #393939;
+	color: #fff;
+}
+
+.clsd-issue-value, .clsd-pulls-value {
+	padding-top: 10px;
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+	height: 91px;
+	background-color: #C0D7EC;
+	color: #4A84B0;
+	/*height: 70%;*/
+}
+
+.clsd-issues-explanation, .clsd-pulls-explanation {
+	position: absolute;
+	top: 34%;
+	left: 10%;
+	color: #4A84B0;
+    font-size: 2em;
+}
+
+.average-open-text {
+    color: #C0D7EC;
 }

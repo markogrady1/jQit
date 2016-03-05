@@ -135,36 +135,23 @@
        <div class="away-avg"></div>
        <div class="home-avg"></div>
    </div>
-
       <div id=chartArea></div>
       <div id=chartArea2></div>
-
-
-   <div class=multi-comparison-legend></div>
-
-   <div class=multi-compareChart></div>
-   <div class=multi-comparison></div>
-   <div class=compareChart2></div>
-      <div class='point point2'></div>
-   <input class="range" value=2>
       <script>
           $chartRange = $(".range");
           $prevChartVal = $(".prev-issue-chart");
-          $nextChartVal = $(".next-issue-chart");
-
-        var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
-        setCharts(issueflagsIndexs, pullsflagsIndexs, false);
+          $nextChartVal = $(".next-issue-chart");     
       </script>
-   <p class="attention-marker"></p>
+<div class="line-break-with-brder"></div>
    <div class="pie-chart-wrap">
 
        <p class="pie-toggle-link"><span class="pie-link i">Issues</span> | <span class="pie-link p">Pull Requests</span></p>
        <div id="issues-pie-chart"></div>
        <div id="pulls-pie-chart"></div>
        <div class="pie-visual-details-wrap">
-               <div class="total-avg-issues">
+          <div class="total-avg-issues">
                <div class="avg-issue-text">Issues</div>
-                   <div class="issues-val">some</div>
+                   <div class="issues-val"></div>
                    <div class="i-val-wrap">
                         <div class="avg-issue-value"></div>
                         <span class="avg-issues-explanation a-i-e">Of all jQuery issues</span>
@@ -172,16 +159,59 @@
            </div>
            <div class="total-avg-pulls">
                <div class="avg-pulls-text">Pull Requests</div>
-               <div class="pulls-val">some</div>
+               <div class="pulls-val"></div>
                <div class="p-val-wrap">
                     <div class="avg-pulls-value"></div>
                    <span class="avg-pulls-explanation">Of all jQuery Pull Requests</span>
-
                </div>
            </div>
        </div>
    </div>
 <div class="line-break"></div>
+  <div class="line-break-with-brder"></div>
+<div class="closed-data-wrap">
+    <div class="closed-data">
+        <div class="complete-clsd-wrap">
+         <div class="clsd-visual-details-wrap">
+          <div class="total-clsd-issues">
+               <div class="clsd-issue-text">Closed Issues</div>
+               <div class="clsd-issues-val"><%= closedissues %></div>
+               <div class="i-val-wrap">
+                  <div class="clsd-issue-value">Average time to close issues:</div>
+                  <span class="clsd-issues-explanation a-i-e"><%= avgIssues %></span>
+               </div>
+           </div>
+           <div class="total-clsd-pulls">
+               <div class="clsd-pulls-text">Closed Pull Requests</div>
+               <div class="clsd-pulls-val"><%= closedPulls %></div>
+               <div class="p-val-wrap">
+                    <div class="clsd-pulls-value">Average time to close pull request:</div>
+                   <span class="clsd-pulls-explanation"><%= avgPulls %></span>
+               </div>
+           </div>
+       </div>
+           <div class="clsd-visual-details-left-wrap">
+               <div class="open-avg-issue-text"><span class="average-open-text">Average age of open issues:</span><br> <%= averageAgeOfOpenIssues %></div>
+               <div class="open-avg-pulls-text"><span class="average-open-text">Average age of open Pull Requests:</span><br> <%= averageAgeOfOpenPRs %></div>
+           </div>      
+       </div>
+    </div>
+    <div class="avg-close-time"></div>
+</div>
+<div class="line-break"></div>
+<br><br><br><br><br><br><br><br><br>
+   <div class=multi-comparison-legend></div>
+
+   <div class=multi-compareChart></div>
+   <div class=multi-comparison></div>
+   <div class=compareChart2></div>
+<script>
+var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
+        setCharts(issueflagsIndexs, pullsflagsIndexs, false);
+        </script>
+<div class='point point2'></div>
+   <input class="range" value=2>
+   <p class="attention-marker"></p>
    <div class="body-wrap">
          <div class="average"></div>
          <div><b class="istatus"></b></div>

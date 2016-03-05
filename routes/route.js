@@ -140,7 +140,7 @@ router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
 });
 
 router.get("/jquery/team/:teamName?", (req, res) => {
-
+    var c;
     var selectedTeam = req.params.teamName;
     helper.noCache(res);
     var avatar = reslv.getAvatarImage();
