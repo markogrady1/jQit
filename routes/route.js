@@ -24,7 +24,7 @@ var acc = [], dtt = [];
 console.log(color["cyan"],"Router Initialised.");
 
 //route for the home page
-router.get("/", function(req, res){
+router.get("/", (req, res) => {
 	var avaNum = reslv.getAvatarImage();
     var username = reslv.getStorageItem(0);
 
@@ -45,7 +45,7 @@ router.get("/", function(req, res){
     }
 
     //inner function to retreive pull requests and insert them into complete repository data
-    reslv.getPRs("pulls", function(pullsdata){
+    reslv.getPRs("pulls", (pullsdata) => {
 		c = helper.getRandomString();
 		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
 		prs = pullsdata;
@@ -91,7 +91,7 @@ router.get("/", function(req, res){
 });
 
 //route for single repository data
-router.get("/repo/details/:repoName?", function(req, res) {
+router.get("/repo/details/:repoName?", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
   	var nameParam = null;
   	nameParam = req.params.repoName;
@@ -126,7 +126,7 @@ router.get("/repo/details/competitor-closure-avg/:competitorName?", function(req
 
     });
 
-router.get("/repo/details/change-issue-month/:repo/:range", function(req, res) {
+router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-issue-month/:" + req.params.repo+"/"+req.params.range);
     var range = req.params.range;
     var repo = req.params.repo;
@@ -172,7 +172,7 @@ router.get("/jquery/team/:teamName?", (req, res) => {
 });
 
 //route for single repository details
-router.get("/repo/issue/details/:team?", function(req, res) {
+router.get("/repo/issue/details/:team?", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:" + req.params.repoName);
   	var nameParam = null;
   	nameParam = req.params.team;
@@ -181,7 +181,7 @@ router.get("/repo/issue/details/:team?", function(req, res) {
 
 
 //route for login page ==> GET
-router.get("/logins", function(req, res) {
+router.get("/logins", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /logins");
     query = require("url").parse(req.url, true).query;
     var state = query.state;
@@ -220,11 +220,11 @@ router.get("/logins", function(req, res) {
 });
 
 //route for login page ==> GET
-router.post("/login", function(req, res){
+router.post("/login", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /login");
     username = req.body.username;
     	password = req.body.password;
-	reslv.validateLogin(req, res, function(result, data){
+	reslv.validateLogin(req, res, (result, data) => {
 		if(!result) {
     			res.redirect("/login");
 		} else {
@@ -258,19 +258,19 @@ router.post("/remove-pin", (req, res) => {
 });
 
 //route for the register page requests
-router.get("/register", function(req, res) {
+router.get("/register", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /register");
 	reslv.initiateRegistration(req, res);
 });
 
 //route for posting the users email data
-router.post("/register", function(req, res) {
+router.post("/register", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /logins");
     reslv.validateRegistration(req, res);
 });
 
 //route for logging out
-router.get("/logout", function(req, res) {
+router.get("/logout", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /logout");
     reslv.removeLoggedInStatusofUser();
     res.locals.userStat = false;
@@ -361,7 +361,7 @@ router.post("/dashboard/edit", (req, res) => {
 });
 
 //route for 404 requests
-router.get("*", function(req, res) {
+router.get("*", (req, res) => {
 	res.end("<h1>you\"ve been 404\"d</h1>");
 });
 
