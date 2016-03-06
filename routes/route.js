@@ -156,16 +156,19 @@ router.get("/jquery/team/:teamName?", (req, res) => {
 
     teamsControl.getTeamData(selectedTeam, "repoPullsHistory", req, res, (teamPullsData) => {
         teamsControl.getTeamData(selectedTeam, "repoHistory", req, res, (teamIssueData) => {
-            res.render("team-view", {
-                av: avatar,
-                header: selectedTeam,
-                urlstate: urlstate,
-                state: c,
-                issuesData: teamIssueData,
-                pullsData: teamPullsData,
-                logoutLink: "../../logout",
-                dashboardLink: "../../dashboard",
-                avatar_url: null
+            teamsControl.getRecord(selectedTeam, "repositories", (doc) => {
+                res.render("team-view", {
+                    teamsData: doc,
+                    av: avatar,
+                    header: selectedTeam,
+                    urlstate: urlstate,
+                    state: c,
+                    issuesData: teamIssueData,
+                    pullsData: teamPullsData,
+                    logoutLink: "../../logout",
+                    dashboardLink: "../../dashboard",
+                    avatar_url: null
+                })
             })
         })
     });

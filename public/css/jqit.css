@@ -1,5 +1,12 @@
 @import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
 
+td.t-d {
+	width: 450px;
+}
+
+table.multi-table {
+	width: 400px;
+}
 body {
 	margin:0;
 	padding:0;
@@ -13,6 +20,7 @@ body {
 .d3-tip {
 	z-index: 2;
 }
+
 .logo-link {
 	-webkit-text-stroke-width: 1px;
 	-webkit-text-stroke-color: #C0D7EC;
@@ -587,30 +595,28 @@ SVG#line-chart {
   left: 0;
 }
 
-/* Table style for index page */
+/* Table style*/
 
 
 
 
-
-
-table { 
-  width: 100%; 
-  border-collapse: collapse; 
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 /* Zebra striping */
-tr:nth-of-type(odd) { 
-  background: #eee; 
+tr:nth-of-type(odd) {
+  background: #eee;
 }
-th { 
-  background: #333; 
-  color: white; 
-  font-weight: bold; 
+th {
+  background: #333;
+  color: white;
+  font-weight: bold;
 }
-td, th { 
-  padding: 6px; 
-  border: 1px solid #ccc; 
-  text-align: left; 
+td, th {
+  padding: 6px;
+  border: 1px solid #ccc;
+  text-align: left;
 }
 
 
@@ -990,4 +996,20 @@ svg.team-chart {
 
 .average-open-text {
     color: #C0D7EC;
+}
+
+/*/////////// team page style ////////////////////*/
+.team-details {
+	width: 400px;
+	height: 200px;
+	background-color: red;
+}
+
+.ch-link {
+	color: #2b81af;
+}
+
+.ch-link:hover {
+	text-decoration: underline;
+	cursor: pointer;
 }
