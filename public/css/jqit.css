@@ -1,4 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
+@import url(https://fonts.googleapis.com/css?family=Signika);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
 td.t-d {
 	width: 450px;
@@ -999,10 +1001,32 @@ svg.team-chart {
 }
 
 /*/////////// team page style ////////////////////*/
+.single-chart-wrap {
+	position: relative;
+}
 .team-details {
+	border-radius: 4px;
+	font-family: 'Signika', sans-serif;
+	position: absolute;
+	top: 40px;
+	left: -450px;
 	width: 400px;
 	height: 200px;
-	background-color: red;
+	background-color: #eee;
+	box-shadow: 2px 2px 2px #ddd;
+}
+
+.team-details-inner-wrap {
+	padding: 20px;
+}
+.section-header {
+	border-radius: 4px 4px 0px 0px ;
+	padding: 7px 0 0 20px;
+	font-size: 1.5em;
+	width: 95%;
+	height: 33px;
+	background: #393939;
+	color: #fff;
 }
 
 .ch-link {
@@ -1012,4 +1036,9 @@ svg.team-chart {
 .ch-link:hover {
 	text-decoration: underline;
 	cursor: pointer;
+}
+
+
+.team-chart-area {
+	float: right;
 }

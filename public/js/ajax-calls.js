@@ -26,7 +26,7 @@ var AjaxCalls = {
                 p = data.obj.events;
                 old = data.obj.oldIssueUrl;
                 newestIssue = data.obj.newIssueUrl;
-                startDate = data.obj.fullDate[0].split("T")[0];
+                //startDate = data.obj.fullDate[0].split("T")[0];
                 setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
             },
             error  : function()     { console.log(null); }
@@ -54,7 +54,7 @@ var AjaxCalls = {
                 p = data.obj.events;
                 old = data.obj.oldIssueUrl;
                 newestIssue = data.obj.newIssueUrl;
-                startDate = data.obj.fullDate[0].split("T")[0];
+                //startDate = data.obj.fullDate[0].split("T")[0];
                 setCharts(issueflagsIndexs, pullsflagsIndexs, true, startDate);
             },
             error  : function()     { console.log(null); }

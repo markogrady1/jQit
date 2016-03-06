@@ -48,22 +48,28 @@
 
     for(var k in teamsData) {
 
-        teamsData[k].teamName = newIssuesData[k][newIssuesData.length-1].team;
-        teamsData[k].currentIssues = newIssuesData[k][newIssuesData.length-1].issues;
-        teamsData[k].currentPulls = newPullsData[k][newPullsData.length-1].pulls;
-        var issuesStatus = getMonthlyProgressStatusOfTeams(newIssuesData[k], true);
-        teamsData[k].thirtyDayIssueProgress = issuesStatus;
-        var pullStatus = getMonthlyProgressStatusOfTeams(newPullsData[k], false);
-        teamsData[k].thirtyDayPullsProgress = pullStatus;
-        chartLayout += "<div class='team-chart"+k+"'></div>" +
+        teamsData[k].teamName = newIssuesData[k][newIssuesData[k].length-1].team;
+        teamsData[k].currentIssues = newIssuesData[k][newIssuesData[k].length-1].issues;
+        console.log(newIssuesData[k].length-1)
+        teamsData[k].currentPulls = newPullsData[k][newPullsData[k].length-1].pulls;
+//        var issuesStatus = getMonthlyProgressStatusOfTeams(newIssuesData[k], true);
+        teamsData[k].thirtyDayIssueProgress = getMonthlyProgressStatusOfTeams(newIssuesData[k], true);
+//        var pullStatus = getMonthlyProgressStatusOfTeams(newPullsData[k], false);
+        teamsData[k].thirtyDayPullsProgress = getMonthlyProgressStatusOfTeams(newPullsData[k], false);
+        chartLayout += "<div class='single-chart-wrap'><div class='team-chart"+k+"'></div>" +
+
                 "<div class='team-details'>" +
-                "<div class='change-chart-link'><span class='ch-link ch-link"+k+" _"+k+"'>View Pull requests</span></div>" +
+                "<div class='section-header'>"+teamsData[k].teamName+"</div>" +
+                "<div class='team-details-inner-wrap'>" +
+                "<div class='change-chart-link'><span class='ch-link ch-link"+k+" _"+k+"'>View Pull request history</span></div>" +
                 "<div class='issue-amount'>Repository Name: "+teamsData[k].teamName+"</div>" +
-                "<div class='issue-amount'>Current Issues: "+teamsData[k].currentIssues+"</div>" +
-                "<div class='pulls-amount'>Current Pull Requests: "+teamsData[k].currentPulls+"</div>" +
+//                "<div class='issue-amount'>Current Issues: "+teamsData[k].currentIssues+"</div>" +
+                "<div class='data-amount"+k+"'>Current Issues: "+teamsData[k].currentIssues+"</div>" +
+//                "<div class='pulls-amount'>Current Pull Requests: "+teamsData[k].currentPulls+"</div>" +
                 "<div class='pulls-30day-status'>PRs 30 day progress: "+teamsData[k].thirtyDayPullsProgress+"</div>" +
                 "<div class='issues-30day-status'>Issues 30 day progress: "+teamsData[k].thirtyDayIssueProgress+"</div>" +
-                "</div>"
+                "</div></div></div>" +
+                "<div class='line-break-with-brder'></div>"
     }
         $(".team-chart-area").append(chartLayout); // append areas for the team charts
 
@@ -91,12 +97,14 @@
 $(".ch-link").on("click", function() {
     var isIssue = true;
     var elementSection = this.className.split(" ")[2].replace("_", "");
-    if($(".ch-link" + elementSection).html() === "View Pull requests") {
+    if($(".ch-link" + elementSection).html() === "View Pull request history") {
         isIssue = false;
-        $(".ch-link" + elementSection).html("View Pull issues")
+        $(".data-amount"+elementSection).html("Current Pull Requests: "+teamsData[elementSection].currentPulls)
+        $(".ch-link" + elementSection).html("View issues history")
     } else {
         isIssue = true;
-        $(".ch-link" + elementSection).html("View Pull requests")
+        $(".data-amount"+elementSection).html("Current Issues: "+teamsData[elementSection].currentIssues)
+        $(".ch-link" + elementSection).html("View Pull request history")
     }
 
     setSingleChart(newIssuesData, newPullsData, elementSection, isIssue);

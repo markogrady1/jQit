@@ -160,7 +160,7 @@ router.get("/jquery/team/:teamName?", (req, res) => {
                 res.render("team-view", {
                     teamsData: doc,
                     av: avatar,
-                    header: selectedTeam,
+                    header: selectedTeam + " Team",
                     urlstate: urlstate,
                     state: c,
                     issuesData: teamIssueData,
