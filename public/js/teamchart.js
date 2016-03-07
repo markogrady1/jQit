@@ -1,16 +1,20 @@
 //'use strict';
+function getBuildStyle(w, h, top, bottom, left, right, padding, isIssue) {
+    return {
+        w: w,
+        h: h,
+        top: top,
+        bottom: bottom,
+        left: left,
+        right: right,
+        padding: padding,
+        dataType: isIssue ? "issues" : "pulls"
+    };
+};
+
 
 var setCharts = function(data, isIssue) {
-    var buildStyle = {
-        w: 900,
-        h: 300,
-        top: 48,
-        bottom: 72,
-        left: 60,
-        right: 40,
-        padding: 20,
-        dataType: isIssue ? "Issues" : "Pulls"
-    };
+    var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
 
     for(var t in data) {
         setTeamBarChart(data[t], isIssue, buildStyle, t)
@@ -156,17 +160,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
 
 var setSingleChart = function(issueData, pullsData, index, isIssue) {
     var data = isIssue ? issueData[index] : pullsData[index];
-
-    var buildStyle = {
-        w: 900,
-        h: 300,
-        top: 48,
-        bottom: 72,
-        left: 60,
-        right: 40,
-        padding: 20,
-        dataType: isIssue ? "issues" : "pulls"
-    };
+    var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
 
     $('.team-chart-section' + index).remove();
     var width = buildStyle.w - buildStyle.left - buildStyle.right;
@@ -303,4 +297,5 @@ var setSingleChart = function(issueData, pullsData, index, isIssue) {
 
     }
 
-}
+};
+

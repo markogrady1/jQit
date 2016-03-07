@@ -1,5 +1,29 @@
 
 
+describe("Return target datatype", function() {
+    it("should return 'issues' as target datatype", function() {
+       var bstyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, true)
+        expect(bstyle.dataType).toEqual("issues");
+    })
+});
+
+
+describe("Return an typeof Object", function() {
+    it("should return specific values within object", function() {
+        var bstyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, true);
+        expect(bstyle).toEqual({
+            w: 900,
+            h: 300,
+            top: 48,
+            bottom: 72,
+            left: 60,
+            right: 40,
+            padding: 20,
+            dataType: 'issues'
+        });
+    })
+});
+
 describe("Return an typeof Number", function() {
     it("getRepoPercentage(arr, issues) should return typeof Number", function() {
         var tempArr = [];
