@@ -9,7 +9,14 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
  * ==================================
  */
 
+function getmainChartHeight(build) {
+	return build.h - build.top - build.bottom;
+}
 
+
+function getmainChartWidth(build) {
+	return build.w - build.right - build.left;
+}
 
 
 /**

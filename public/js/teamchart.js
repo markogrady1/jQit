@@ -12,7 +12,13 @@ function getBuildStyle(w, h, top, bottom, left, right, padding, isIssue) {
     };
 };
 
+function getChartHeight(buildObject) {
+    return buildObject.h - buildObject.left - buildObject.bottom;
+}
 
+function getChartWidth(buildObject) {
+    return buildObject.w - buildObject.top - buildObject.right;
+}
 var setCharts = function(data, isIssue) {
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
 
@@ -22,8 +28,8 @@ var setCharts = function(data, isIssue) {
 };
 
 var setTeamBarChart = function(data, isIssue, buildStyle, i) {
-    var width = buildStyle.w - buildStyle.left - buildStyle.right;
-    var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
+    var width = getChartWidth(buildStyle);
+    var height = getChartHeight(buildStyle);
     var chartClass = ".team-chart"+i;
     var x = d3.scale.ordinal()
         .domain(data.map(function(entry){
@@ -163,8 +169,8 @@ var setSingleChart = function(issueData, pullsData, index, isIssue) {
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
 
     $('.team-chart-section' + index).remove();
-    var width = buildStyle.w - buildStyle.left - buildStyle.right;
-    var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
+    var width = getChartWidth(buildStyle);
+    var height = getChartHeight(buildStyle);
     var chartClass = ".team-chart"+index;
     var x = d3.scale.ordinal()
         .domain(data.map(function(entry){

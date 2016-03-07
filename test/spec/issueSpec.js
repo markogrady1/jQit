@@ -1,8 +1,67 @@
+/**
+ * This set of tests are configured to challenge and test the values returned from
+ * the chart.js and teamchart.js scripts
+ */
 
+describe("Return height of issue bar chart", function() {
+    it("getChartHeight(bstyle) should return the value of 168", function() {
+       var bstyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, true)
+        expect(getChartHeight(bstyle)).toEqual(168);
+    })
+});
+
+describe("Return width of issue bar chart", function() {
+    it("getChartWidth(bstyle) should return the value of 812", function() {
+        var bstyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, true)
+        expect(getChartWidth(bstyle)).toEqual(812);
+    })
+});
+
+describe("Return height of main issue bar chart", function() {
+    it("getmainChartHeight(bstyle) should return the value of 180", function() {
+        var bstyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, true)
+        expect(getmainChartHeight(bstyle)).toEqual(180);
+    })
+});
+
+describe("Return width of main issue bar chart", function() {
+    it("getmainChartWidth(bstyle) should return the value of 800", function() {
+        var bstyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, true)
+        expect(getmainChartWidth(bstyle)).toEqual(800);
+    })
+});
+
+describe("Return incorrect height of issue bar chart", function() {
+    it("getChartHeight(bstyle) should return the incorrect value", function() {
+        var bstyle = getBuildStyle(900, 301, 48, 72, 60, 40, 20, true)
+        expect(getChartHeight(bstyle)).not.toEqual(168);
+    })
+});
+
+describe("Return incorrect width of issue bar chart", function() {
+    it("getChartWidth(bstyle) should return the incorrect value", function() {
+        var bstyle = getBuildStyle(900, 301, 42, 72, 60, 40, 20, true)
+        expect(getChartWidth(bstyle)).not.toEqual(812);
+    })
+});
+
+describe("Return incorrect height of main issue bar chart", function() {
+    it("getmainChartHeight(bstyle) should return the incorrect value", function() {
+        var bstyle = getBuildStyle(900, 301, 44, 72, 60, 40, 20, true)
+        expect(getmainChartHeight(bstyle)).not.toEqual(180);
+    })
+});
+
+describe("Return incorrect width of main issue bar chart", function() {
+    it("getmainChartWidth(bstyle) should return the incorrect value", function() {
+        var bstyle = getBuildStyle(900, 301, 42, 71, 62, 40, 20, true)
+        expect(getmainChartWidth(bstyle)).not.toEqual(800);
+    })
+});
 
 describe("Return target datatype", function() {
     it("should return 'issues' as target datatype", function() {
-       var bstyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, true)
+        var bstyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, true)
         expect(bstyle.dataType).toEqual("issues");
     })
 });
