@@ -61,7 +61,7 @@ router.get("/", (req, res) => {
      }
 
      reslv.cacheRepoData(compDoc);
-        var teamData = require("../teams.json")
+        var teamData = require("../repoData/teams.json")
         // obtain any flags that may have been set and render the home page
         getFlagData((flag, att) => {
             if(typeof att === "undefined") {

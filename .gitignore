@@ -1,7 +1,8 @@
 /scratch/*
 /config/
 /node_modules/
-/repoData/
+/repoData/*
+!/repoData/teams.json
 .DS_STORE
 TODO.md
 .*.swp
