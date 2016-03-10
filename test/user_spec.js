@@ -1,7 +1,7 @@
 require('should')
 var assert = require('assert');
 // var User = require('../schema/schema');
-var history = require('../schema/history');
+//var history = require('../schema/history');
 
 var testUser;
 describe('creating new user', function(){	
