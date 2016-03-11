@@ -6,6 +6,8 @@ var mainController = require('../../lib/mainController');
 
 
 var data;
+
+
 describe('obtaining data from teams.json file', function(){
 	it("should return a specific jquery repository name from teams.json", function() {
 		var teams = require("../../repoData/teams.json");
@@ -14,7 +16,7 @@ describe('obtaining data from teams.json file', function(){
 
 	it("should return the number of teams used in application", function() {
 		var teams = require("../../repoData/teams.json");
-		assert.lengthOf(teams, 15, 'teams.json should have 15 teams');
+		assert.lengthOf(teams, 14, 'teams.json should have 14 teams');
 	})
 });
 
@@ -31,7 +33,7 @@ describe('Number of jQuery repositories returned by web bot in rep.json.', funct
 	})
 });
 
-describe('Get PRs data', function(){
+describe('Get PRs data with getSplitValue()', function(){
 	
 	var prString = '2015-08-26T02:00:03Z = 1440576003,\n2012-dev-summit  0,' +
 		'\napi.globalizejs.com  0,\napi.jquery.com  4,\napi.jquerymobile.com  3,' +
@@ -142,7 +144,8 @@ describe('Change endian format of date with dateEndian() function', function(){
 	});
 });
 
-describe('Return the difference of dates in milliseconds', function(){
+describe('Return the difference of dates in milliseconds with timeFormat()', function(){
+
 	it('should return difference of two given dates in milliseconds', function(){
 		var time = date.timeFormat(true);
 		time("2015-08-26T02:00:03Z", "2016-08-26T02:00:03Z", (timeFormat) => {
@@ -158,6 +161,14 @@ describe('Return the difference of dates in milliseconds', function(){
 	});
 });
 
+
+describe('Return the the default login state of the application with loginState.loggedin()', function(){
+	var loginState = require("../../lib/loginState");
+	it('should return the default login state of the application', function(){
+		var state = loginState.state;
+		assert.equal(state, false);
+	});
+});
 
 
 

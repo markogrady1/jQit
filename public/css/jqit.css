@@ -419,12 +419,32 @@ ul.top-bar-element-list {
 .increase {
 	color: #EA594E;
 }
-.decrease {
+.decrease{
 	color: #52DD48;
+}
+
+.bad-number {
+	color: #ff0000;
+}
+
+.good-number  {
+	color: #429365;
+}
+
+.ok-number {
+	color: #EEB233;
 }
 
 .same {
 	color: #66D9EF;
+}
+
+.table-pulls, .table-issues {
+	width: 100px;
+}
+
+.table-end {
+	width: 400px;
 }
 
 .btn {

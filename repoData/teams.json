@@ -52,7 +52,8 @@
     "team": "foundation (ED)",
     "responsibility": [
       "brand.jquery.org",
-      "jquery.github.io"
+      "jquery.github.io",
+      "jquery.org"
     ]},
   {
     "team": "infra",
@@ -71,11 +72,6 @@
     "responsibility": [
       "contribute.jquery.org",
       "irc.jquery.org"
-    ]},
-  {
-    "team": "foundation",
-    "responsibility": [
-      "jquery.org"
     ]},
   {
     "team": "chassis",

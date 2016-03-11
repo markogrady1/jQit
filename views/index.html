@@ -20,6 +20,7 @@
         var attention = <%- JSON.stringify(attention) %>
         var username = <%- JSON.stringify(username) %>
         var teams = <%- JSON.stringify(teams) %>
+        console.log(teams)
         attention = attention === null ? "" : attention;
         console.log("Flag Data: " ,flagData);
 /**
@@ -34,6 +35,7 @@
  * watchers: 6
  *
  * **/
+
       pd.pop(pd.length-1)
     </script>
 </head>
@@ -56,8 +58,8 @@
       </thead>
       <tbody>
         <% for (var i = 0; i < completeD.length; i++) {
-            var calculatedIssues = completeD[i].issues - completeD[i].pulls;
-            calculatedIssues = calculatedIssues < 0 ? 0 : calculatedIssues;
+        completeD[i].calculatedIssues = completeD[i].issues - completeD[i].pulls;
+        completeD[i].calculatedIssues = completeD[i].calculatedIssues < 0 ? 0 : completeD[i].calculatedIssues;
             var targetedRepo = flagData === null ? "" : flagData.target;
 
            if(completeD[i].name === targetedRepo){ %>
@@ -67,7 +69,7 @@
            <% }  %>
             <td class="name"><a class="index-name-link" href=repo/details/<%= names[i] %>> <%- completeD[i].name%></a><span class="attention<%- i %>"></span></td>
 
-            <td ><%= calculatedIssues %></td>
+            <td ><%= completeD[i].calculatedIssues %></td>
             <td ><%- completeD[i].pulls%></td>
             <td><%- completeD[i].forks%></td>
             <td><%- completeD[i].watchers%></td>
@@ -91,6 +93,9 @@
     <tr >
     <th class="head">Team</th>
     <th class="head">Responsibility</th>
+        <th class="head">Issue Status</th>
+        <th class="head">Pull Request Status</th>
+        <th class="head">Pull Request Status</th>
     </tr>
     </thead>
     <tbody>
@@ -103,10 +108,52 @@
             <a class="index-name-link"  href="repo/details/<%- teams[k].responsibility[j]%>"><%- teams[k].responsibility[j] %></a><br>
         <% } %>
         </td>
+
+        <td class="table-issues">
+            <%  for (var j in teams[k].responsibility) { %>
+
+                <% for (var s in completeD) {
+                    if (completeD[s].name === teams[k].responsibility[j]) {
+                         if(completeD[s].calculatedIssues >= 50) { %>
+                            <span class="bad-number">◉ </span><%- completeD[s].calculatedIssues %>
+
+                      <% } else if (completeD[s].calculatedIssues >= 20) { %>
+                             <span class="ok-number">◉ </span><%- completeD[s].calculatedIssues %>
+                      <% } else { %>
+                             <span class="good-number">◉ </span><%- completeD[s].calculatedIssues %>
+                      <% }
+                     }
+                  } %>
+
+            <a class="index-name-link"  href="repo/details/<%- teams[k].responsibility[j]%>"><span class="issue-team-output"></span><% teams[k].responsibility[j].issues %></a><br>
+            <% } %>
+        </td>
+
+        <td class="table-pulls">
+            <%  for (var j in teams[k].responsibility) { %>
+
+            <% for (var s in completeD) {
+            if (completeD[s].name === teams[k].responsibility[j]) {
+            if(completeD[s].pulls >= 10) { %>
+            <span class="bad-number">◉ </span><%- completeD[s].pulls %>
+
+            <% } else if (completeD[s].pulls >= 5) { %>
+            <span class="ok-number">◉ </span><%- completeD[s].pulls %>
+            <% } else { %>
+            <span class="good-number">◉ </span><%- completeD[s].pulls %>
+            <% }
+            }
+            } %>
+
+            <a class="index-name-link"  href="repo/details/<%- teams[k].responsibility[j]%>"><span class="issue-team-output"></span><% teams[k].responsibility[j].issues %></a><br>
+            <% } %>
+        </td>
+        <td class="table-end"></td>
     </tr>
     <% } %>
     </tbody>
     </table>
+    <!--▶-->
 <script>
     sortTable();
     if($(".attention-tag").length != 0) {
