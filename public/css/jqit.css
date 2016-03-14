@@ -664,6 +664,9 @@ td, th {
 .index-github-link:hover {
 	color: #2368EA;
 }
+.team-table {
+	width: 50%;
+}
 /* media query to hide extra table elements when page size is decreased */
 @media (max-width: 649px) {
 	.github-head, .github-detail {
