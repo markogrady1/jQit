@@ -1,6 +1,6 @@
 require('should')
 var assert = require('assert');
- var User = require('../../schema/schema');
+ var User = require('../../schema/repository');
 //var history = require('../schema/history');
 
 var testUser;
