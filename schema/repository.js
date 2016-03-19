@@ -522,10 +522,15 @@ User.prototype.register = function(res, io) {
                 console.log('Duplicate Email: Alert User');
 			} else {
 				var data = localStorage.getItem('data');
-				var avatar = helper.getSplitValue(data, '=>', 1);
-				var avatNum = helper.getSplitValue(avatar, '/', -1)
-				res.redirect('/');
-				this.io.emit("userStatus",{ av: avatNum })
+				if(data === " ") {
+					res.redirect('/');
+				} else {
+					var avatar = helper.getSplitValue(data, '=>', 1);
+					var avatNum = helper.getSplitValue(avatar, '/', -1)
+					res.redirect('/');
+					this.io.emit("userStatus",{ av: avatNum })
+				}
+
 			}			
 		});
 		if(db !== null)
