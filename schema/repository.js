@@ -395,7 +395,7 @@ schema.storeWatchData = function(obj) {
         username: obj.user,
         email: obj.email,
         avatar: obj.avatar,
-        target: obj.target,
+        repository_target: obj.repoTarget,
         receive_email: obj.receiveEmailUpadate,
         highlight_issues_chart: obj.highlightissueschart,
 		highlight_pulls_chart: obj.highlightpullschart,
@@ -404,21 +404,58 @@ schema.storeWatchData = function(obj) {
 		show_every_increase: obj.showEveryIncrease
     }
     connection("user", (db) => {
-        db.collection('flags').findOne({ username: obj.user }, function(err, doc) {
+        db.collection('repoFlag').findOne({ username: obj.user }, function(err, doc) {
             if (err) throw err;
             if(doc === null) {
-                db.collection("flags").insert( flagObj, (err, data) => {
+                db.collection("repoFlag").insert( flagObj, (err, data) => {
                     if(err) throw err;
                     db.close();
                 });
             } else {
-                db.collection("flags").update({ username:obj.user }, flagObj, (err, data) => {
+                db.collection("repoFlag").update({ username:obj.user }, flagObj, (err, data) => {
                     if(err) throw err;
                     db.close();
                 });
             }
         });
     });
+};
+
+
+/**
+ * Function responsible for storing the settings to watch over a given repository
+ * @param {Object} obj
+ */
+schema.storeTeamWatchData = function(obj) {
+
+	var flagObj = {
+		username: obj.user,
+		email: obj.email,
+		avatar: obj.avatar,
+		team_target: obj.teamTarget,
+		receive_email: obj.receiveEmailUpadate,
+		highlight_team_issues_chart: obj.highlightissueschart,
+		highlight_team_pulls_chart: obj.highlightpullschart,
+		issues_team_boundary: obj.issuesboundary,
+		pulls_team_boundary: obj.pullsboundary,
+		show_team_every_increase: obj.showEveryIncrease
+	};
+	connection("user", (db) => {
+		db.collection('teamFlag').findOne({ username: obj.user }, function(err, doc) {
+			if (err) throw err;
+			if(doc === null) {
+				db.collection("teamFlag").insert( flagObj, (err, data) => {
+					if(err) throw err;
+					db.close();
+				});
+			} else {
+				db.collection("teamFlag").update({ username:obj.user }, flagObj, (err, data) => {
+					if(err) throw err;
+					db.close();
+				});
+			}
+		});
+	});
 };
 
 /**
@@ -429,12 +466,28 @@ schema.storeWatchData = function(obj) {
  */
 schema.checkForFlags = function(username, email, callback) {
     connection("user", (db) => {
-        db.collection("flags").findOne({ username: username, email: email}, function (err, doc) {
+        db.collection("repoFlag").findOne({ username: username, email: email}, function (err, doc) {
             if (err) throw err;
 			callback(doc);
             db.close();
         });
     });
+};
+
+/**
+ * Function responsible for searching for a flag set by the current user
+ * @param {String} username
+ * @param {String} email
+ * @param {Function} callback
+ */
+schema.checkForTeamFlags = function(username, email, callback) {
+	connection("user", (db) => {
+		db.collection("teamFlag").findOne({ username: username, email: email}, function (err, doc) {
+			if (err) throw err;
+			callback(doc);
+			db.close();
+		});
+	});
 };
 
 schema.removePin = function(username, repoName, callback) {
@@ -460,7 +513,7 @@ schema.checkForAttention = function(username, email, callback) {
 
 schema.checkForFlaggedRepo = function(username, email, target, callback) {
     connection("user", (db) => {
-        db.collection("flags").findOne({$or: [ { highlight_issues_chart: "true" }, { highlight_pulls_chart: "true" } ], username:username, email: email, target: target}, (err, doc) => {
+        db.collection("repoFlag").findOne({$or: [ { highlight_issues_chart: "true" }, { highlight_pulls_chart: "true" } ], username:username, email: email, target: target}, (err, doc) => {
             if(err) throw err;
             callback(doc);
             db.close();

@@ -12,15 +12,24 @@
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
 flagData = <%- JSON.stringify(flag) %>
+attention = <%- JSON.stringify(attention) %>
+teamFlag = <%- JSON.stringify(teamFlag) %>
+
+
+var teamsJSONValues = <%- JSON.stringify(teamsJSONValues) %>
+console.log(flagData, attention, teamFlag)
 var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrease;
     if(flagData === null) {
+        repositoryTarget = null;
         issuesboundary = 1;
         pullsboundary = 1;
         receiveEmail = false;
         highlightissueschart = false;
         highlightpullschart = false;
         showeveryincrease = false;
+
     } else {
+        repositoryTarget = flagData.repository_target;
         issuesboundary = flagData.issues_boundary;
         console.log(issuesboundary)
         pullsboundary = flagData.pulls_boundary;
@@ -30,14 +39,41 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrea
         highlightpullschart = flagData.highlight_pulls_chart;
         showeveryincrease = flagData.show_every_increase;
     }
+
+if(teamFlag === null) {
+    teamTarget = null;
+    teamissuesboundary = 1;
+    teampullsboundary = 1;
+    teamreceiveEmail = false;
+    teamhighlightissueschart = false;
+    teamhighlightpullschart = false;
+    teamshoweveryincrease = false;
+} else {
+    teamTarget = teamFlag.team_target;
+    teamissuesboundary = teamFlag.issues_team_boundary;
+    console.log(teamissuesboundary)
+    teampullsboundary = teamFlag.pulls_team_boundary;
+    console.log(teampullsboundary)
+    teamreceiveEmail = teamFlag.receive_email;
+    teamhighlightissueschart = teamFlag.highlight_team_issues_chart;
+    teamhighlightpullschart = teamFlag.highlight_team_pulls_chart;
+    teamshoweveryincrease = teamFlag.show_team_every_increase;
+}
+
+
 </script>
+<body>
+
 <% include partials/header.html %>
+<div class="content-wrap">
 <a href="/">Back</a>
 <br><br><br>
+    <div class="repo-dashboard-wrap">
+        <h3 class="repo-dashboard-title">Repository Dashboard</h3>
 <select name="dashboard-watch1" id="dashboard-watch1">
     <option value="title">Watch</option>
     <% for (var i = 0; i < compDoc.length; i++) {
-    var targetedRepo = flag === null ? "" : flag.target;
+    var targetedRepo = flag === null ? "" : flag.repository_target;
     if(compDoc[i].name === targetedRepo) { %>
                 <option value="<%= compDoc[i].name %>" selected><%= compDoc[i].name %></option>
           <%  } else { %>
@@ -68,7 +104,82 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrea
 </div>
 <div class="dashboard-ajax-btn">Save</div>
 <div class="feedback"></div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="team-dashboard-wrap">
+        <h3 class="team-dashboard-title">Team Dashboard</h3>
+
+        <select name="dashboard-watch2" id="dashboard-watch2">
+            <option value="title">Watch</option>
+            <% for (var i = 0; i < teamsJSONValues.length; i++) {
+            var targetedRepo = teamFlag === null ? "" : teamFlag.team_target;
+            if(teamsJSONValues[i].team === targetedRepo) { %>
+            <option value="<%= compDoc[i].name %>" selected><%= teamsJSONValues[i].team %></option>
+            <%  } else { %>
+            <option value="<%= compDoc[i].name %>"><%= teamsJSONValues[i].team %></option>
+            <% } %>
+            <% } %>
+        </select>
+
+        <div>Issues increase limit: <span id="issue-slider-amount2"></span></div>
+        <div id="issue-slider2"></div>
+        <div>Pull Requests increase limit: <span id="pulls-slider-amount2"></span></div>
+        <div id="pulls-slider2"></div>
+        <input type="checkbox" id="receive-email2" class="receive-email-chck2">
+        <label for="receive-email2">Receive Email</label>
+        <br>
+        <input type="checkbox" id="flag-issues-chart2" class="flag-pulls-chart-chck2">
+        <label for="flag-issues-chart2">Flag issues increase in chart</label>
+        <br>
+        <input type="checkbox" id="flag-pulls-chart2" class="flag-issues-chart-chck2">
+        <label for="flag-pulls-chart2">Flag pull requests increase in chart</label>
+        <br>
+        <script>
+
+        </script>
+        <div class="radio-highlight-choice2">
+            <input class="highlight-choice2" id="highlight-every-choice2" type="checkbox" name="highlight-option2" value="every-increase">
+            <label  class="radio-label2" for="highlight-every-choice2">Highlight every increase</label>
+        </div>
+        <div class="dashboard-ajax-btn2">Save</div>
+        <div class="feedback2"></div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
 <script>
+    //incoming values for setting checkboxes
     if(receiveEmail === "true"){
         $("#receive-email").attr("checked", true);
     }
@@ -81,13 +192,28 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrea
     if(showeveryincrease === "true") {
         $("#highlight-every-choice").attr("checked", true);
     }
+
+
+    if(teamreceiveEmail === "true"){
+        $("#receive-email2").attr("checked", true);
+    }
+    if(teamhighlightissueschart === "true"){
+        $("#flag-issues-chart2").attr("checked", true);
+    }
+    if(teamhighlightpullschart === "true"){
+        $("#flag-pulls-chart2").attr("checked", true);
+    }
+    if(teamshoweveryincrease === "true") {
+        $("#highlight-every-choice2").attr("checked", true);
+    }
 </script>
 <script>
     //function to handle the slider setup
     $(function() {
         sliderInit("#issue-slider", "#issue-slider-amount", issuesboundary);
         sliderInit("#pulls-slider", "#pulls-slider-amount", pullsboundary);
-
+        sliderInit("#issue-slider2", "#issue-slider-amount2", teamissuesboundary);
+        sliderInit("#pulls-slider2", "#pulls-slider-amount2", teampullsboundary);
     });
     $(window).on('load', function() {
         prepRadioBtns();
@@ -100,11 +226,19 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrea
     $('#flag-pulls-chart').change(function(){
         prepRadioBtns();
     });
+
+    $('#flag-issues-chart2').change(function(){
+        prepRadioBtns();
+    });
+
+    $('#flag-pulls-chart2').change(function(){
+        prepRadioBtns();
+    });
     //ajax call for save settings
     $(".dashboard-ajax-btn").click(function() {
         $.ajax({
             method: "POST",
-            url: "dashboard/edit",
+            url: "dashboard/edit/repo",
             data: {
                 watchTarget: function() {
                     return $('#dashboard-watch1 :selected').text();
@@ -128,6 +262,38 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrea
             $(".dashboard-ajax-btn").html("Saved");
             setTimeout(function(){
                 $(".dashboard-ajax-btn").html("Save");
+            }, 1000);
+        });
+    });
+
+
+    $(".dashboard-ajax-btn2").click(function() {
+        $.ajax({
+            method: "POST",
+            url: "dashboard/edit/team",
+            data: {
+                watchTarget: function() {
+                    return $('#dashboard-watch2 :selected').text();
+                },
+                receiveEmail: function() {
+                    return $("#receive-email2").is(":checked") ? true : false;
+                },
+                flagIssuesChart: function() {
+                    return $("#flag-issues-chart2").is(":checked") ? true : false;
+                },
+                flagPullsChart: function() {
+                    return $("#flag-pulls-chart2").is(":checked") ? true : false;
+                },
+                issueSlider: $("#issue-slider-amount2").html(),
+                pullsSlider: $("#pulls-slider-amount2").html(),
+                showEveryIncrease: function() {
+                    return $('#highlight-every-choice2').is(":checked")? true : false;
+                }
+            }
+        }).done(function(msg) {
+            $(".dashboard-ajax-btn2").html("Saved");
+            setTimeout(function(){
+                $(".dashboard-ajax-btn2").html("Save");
             }, 1000);
         });
     });
@@ -159,9 +325,21 @@ var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrea
                 color:"#a9a9a9"
             });
         }
+        if($('#flag-pulls-chart2').is(":checked") || $('#flag-issues-chart2').is(":checked")){
+            $(".highlight-choice2").removeAttr('disabled');
+            $(".radio-label2").css({
+                color:"#000"
+            });
+        }else{
+            $(".highlight-choice2").attr('disabled', 'disabled');
+            $(".highlight-choice2").attr("checked", false);
+            $(".radio-label2").css({
+                color:"#a9a9a9"
+            });
+        }
     }
 </script>
-
+</div>
 
 </body>
 </html>

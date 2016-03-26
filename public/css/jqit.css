@@ -737,6 +737,19 @@ td, th {
 	background-color: #4E87B2;
 	color: #fff;
 }
+/*////////// DASHBOARD-LINK /////////////*/
+.repo-dashboard-wrap {
+	margin: 50px;
+	width: 500px;
+	float: left;
+}
+
+.team-dashboard-wrap {
+	margin: 50px;
+	width: 500px;
+	float: left;
+}
+
 
 .dashboard-ajax-btn {
 	width: 200px;
