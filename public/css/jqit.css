@@ -439,6 +439,10 @@ ul.top-bar-element-list {
 	color: #66D9EF;
 }
 
+.flg {
+	color: #87C540;
+}
+
 .table-pulls, .table-issues {
 	width: 100px;
 }
@@ -737,6 +741,20 @@ td, th {
 	background-color: #4E87B2;
 	color: #fff;
 }
+
+#flagged-team td a.index-name-link, #flagged-team td a.index-github-link {
+	background-color: #4E87B2;
+	color: #fff;
+}
+
+#flagged-team td a.index-name-link:hover, #flagged-team td a.index-github-link:hover {
+	text-decoration: underline;
+}
+
+#flagged-team  {
+	background-color: #4E87B2;
+	color: #fff;
+}
 /*////////// DASHBOARD-LINK /////////////*/
 .repo-dashboard-wrap {
 	margin: 50px;
@@ -770,6 +788,24 @@ td, th {
 	cursor: pointer;
 }
 
+.dashboard-ajax-btn2 {
+	width: 200px;
+	margin: 30px 30px 0 30px;
+	padding: 7px 10px;
+	border-radius: 5px;
+	background-color: #3B99FC;
+	color: #fff;
+	font-size: 1.4em;
+	text-align: center;
+}
+
+.dashboard-ajax-btn2:hover {
+	background-color: #4A84B0;
+	color: #fff;
+	font-size: 1.4em;
+	text-align: center;
+	cursor: pointer;
+}
 /*///////////PIE CHARTS/////////////////*/
 .pie-chart-wrap {
 	position: relative;
@@ -1078,3 +1114,4 @@ svg.team-chart {
 .team-chart-area {
 	float: right;
 }
+

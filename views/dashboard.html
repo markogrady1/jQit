@@ -6,6 +6,7 @@
 <script src="/js/external/d3.v3.min.js"></script>
 <script src="/js/external/tinysort.js"></script>
 <script src="/js/external/scrilla.js"></script>
+<script src="/js/config.js"></script>
 <script src="/js/sortTable.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -18,48 +19,7 @@ teamFlag = <%- JSON.stringify(teamFlag) %>
 
 var teamsJSONValues = <%- JSON.stringify(teamsJSONValues) %>
 console.log(flagData, attention, teamFlag)
-var issuesboundary, pullsboundary, receiveEmail, highlightchart, showeveryincrease;
-    if(flagData === null) {
-        repositoryTarget = null;
-        issuesboundary = 1;
-        pullsboundary = 1;
-        receiveEmail = false;
-        highlightissueschart = false;
-        highlightpullschart = false;
-        showeveryincrease = false;
-
-    } else {
-        repositoryTarget = flagData.repository_target;
-        issuesboundary = flagData.issues_boundary;
-        console.log(issuesboundary)
-        pullsboundary = flagData.pulls_boundary;
-        console.log(pullsboundary)
-        receiveEmail = flagData.receive_email;
-        highlightissueschart = flagData.highlight_issues_chart;
-        highlightpullschart = flagData.highlight_pulls_chart;
-        showeveryincrease = flagData.show_every_increase;
-    }
-
-if(teamFlag === null) {
-    teamTarget = null;
-    teamissuesboundary = 1;
-    teampullsboundary = 1;
-    teamreceiveEmail = false;
-    teamhighlightissueschart = false;
-    teamhighlightpullschart = false;
-    teamshoweveryincrease = false;
-} else {
-    teamTarget = teamFlag.team_target;
-    teamissuesboundary = teamFlag.issues_team_boundary;
-    console.log(teamissuesboundary)
-    teampullsboundary = teamFlag.pulls_team_boundary;
-    console.log(teampullsboundary)
-    teamreceiveEmail = teamFlag.receive_email;
-    teamhighlightissueschart = teamFlag.highlight_team_issues_chart;
-    teamhighlightpullschart = teamFlag.highlight_team_pulls_chart;
-    teamshoweveryincrease = teamFlag.show_team_every_increase;
-}
-
+checkDashboardValues(flagData, teamFlag);
 
 </script>
 <body>

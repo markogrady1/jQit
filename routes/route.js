@@ -35,8 +35,8 @@ router.get("/", (req, res) => {
         if (avaNum !== "undefined") {
             res.locals.userStat = true;
             var data = reslv.getStorage();
-            reslv.getFlagData(data, (flagObj, att) => {
-                callback(flagObj, att);
+            reslv.getFlagData(data, (flagObj, att, teamObj) => {
+                callback(flagObj, att, teamObj);
             });
         } else {
             res.locals.userStat = false;
@@ -65,9 +65,12 @@ router.get("/", (req, res) => {
         var teamData = require("../repoData/teams.json");
 
         // obtain any flags that may have been set and render the home page
-        getFlagData((flag, att) => {
+        getFlagData((flag, att, teamFlag) => {
             if(typeof att === "undefined") {
                 att = null;
+            }
+            if(typeof teamFlag === "undefined") {
+                teamFlag = null;
             }
 
             res.render("index", {
@@ -83,6 +86,7 @@ router.get("/", (req, res) => {
                 dashboardLink: "dashboard",
                 logoutLink: "logout",
                 flagData:flag,
+                teamData: teamFlag,
                 attention: att,
                 teams: teamData,
                 avatar_url: null
@@ -146,16 +150,19 @@ router.get("/jquery/team/:teamName?", (req, res) => {
     var selectedTeam = req.params.teamName;
     helper.noCache(res);
     var avatar = reslv.getAvatarImage();
+    var urlstate;
     if(avatar === "undefined") {
         res.locals.userStat = false;
+        c = helper.getRandomString();
+        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+        localStorage.setItem("state", c);
+
     } else {
         res.locals.userStat = true;
         c = helper.getRandomString();
-        var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
     }
-
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
-
     teamsControl.getTeamData(selectedTeam, "repoPullsHistory", req, res, (teamPullsData) => {
         teamsControl.getTeamData(selectedTeam, "repoHistory", req, res, (teamIssueData) => {
             teamsControl.getRecord(selectedTeam, "repositories", (doc) => {
@@ -191,6 +198,7 @@ router.get("/logins", (req, res) => {
     query = require("url").parse(req.url, true).query;
     var state = query.state;
     var code = query.code;
+    console.log(state, code)
     var localState = localStorage.getItem("state");
     var request = require("request");
 

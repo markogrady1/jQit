@@ -13,29 +13,15 @@
     <link rel='stylesheet' href='/css/jqit.css' />
     <script>
         var socket = io();
-
         var cd = <%- JSON.stringify(pullsNo) %>
         var pd = <%- JSON.stringify(completeD) %>
         var flagData = <%- JSON.stringify(flagData) %>
         var attention = <%- JSON.stringify(attention) %>
+        var teamData = <%- JSON.stringify(teamData) %>
         var username = <%- JSON.stringify(username) %>
         var teams = <%- JSON.stringify(teams) %>
-        console.log(teams)
         attention = attention === null ? "" : attention;
         console.log("Flag Data: " ,flagData);
-/**
- * The pd variable contains all the data needed for each of the repositories
- * The values are set   out as the example below displays.
- *
- * forks: 16
- * github_url: "https://github.com/jquery/jquery.github.io"
- * issues: 0
- * name: "jquery.github.io"
- * pulls: "0"
- * watchers: 6
- *
- * **/
-
       pd.pop(pd.length-1)
     </script>
 </head>
@@ -60,7 +46,7 @@
         <% for (var i = 0; i < completeD.length; i++) {
         completeD[i].calculatedIssues = completeD[i].issues - completeD[i].pulls;
         completeD[i].calculatedIssues = completeD[i].calculatedIssues < 0 ? 0 : completeD[i].calculatedIssues;
-            var targetedRepo = flagData === null ? "" : flagData.target;
+            var targetedRepo = flagData === null ? "" : flagData.repository_target;
 
            if(completeD[i].name === targetedRepo){ %>
                 <tr class="flagged" id="flagged">
@@ -99,9 +85,15 @@
     </tr>
     </thead>
     <tbody>
+    <% var targetedTeam = teamData === null ? "" : teamData.team_target; %>
 
-    <% for (var k = 0; k < teams.length; k++) { %>
+    <% for (var k = 0; k < teams.length; k++) {
+
+    if(teams[k].team === targetedTeam){ %>
+    <tr class="flagged" id="flagged-team">
+        <% } else { %>
     <tr>
+        <% }  %>
         <td class="team-name"><a class="index-name-link"  href="jquery/team/<%- teams[k].team %>"><%- teams[k].team %></a></td>
         <td>
         <%  for (var j in teams[k].responsibility) { %>
@@ -119,8 +111,13 @@
 
                       <% } else if (completeD[s].calculatedIssues >= 20) { %>
                              <span class="ok-number">◉ </span><%- completeD[s].calculatedIssues %>
-                      <% } else { %>
-                             <span class="good-number">◉ </span><%- completeD[s].calculatedIssues %>
+                      <% } else {
+            if(teams[k].team === targetedTeam){%>
+            <span class="good-number flg">◉ </span><%- completeD[s].calculatedIssues %>
+            <% } else { %>
+            <span class="good-number">◉ </span><%- completeD[s].calculatedIssues %>
+            <% }  %>
+
                       <% }
                      }
                   } %>
@@ -130,17 +127,21 @@
         </td>
 
         <td class="table-pulls">
-            <%  for (var j in teams[k].responsibility) { %>
+            <%  for (var l in teams[k].responsibility) { %>
 
-            <% for (var s in completeD) {
-            if (completeD[s].name === teams[k].responsibility[j]) {
-            if(completeD[s].pulls >= 10) { %>
-            <span class="bad-number">◉ </span><%- completeD[s].pulls %>
+            <% for (var p in completeD) {
+            if (completeD[p].name === teams[k].responsibility[l]) {
+            if(completeD[p].pulls >= 10) { %>
+            <span class="bad-number">◉ </span><%- completeD[p].pulls %>
 
-            <% } else if (completeD[s].pulls >= 5) { %>
-            <span class="ok-number">◉ </span><%- completeD[s].pulls %>
+            <% } else if (completeD[p].pulls >= 5) { %>
+            <span class="ok-number">◉ </span><%- completeD[p].pulls %>
+            <% } else  if (completeD[p].pulls < 5){
+            if(teams[k].team === targetedTeam){ %>
+            <span class="good-number flg">◉ </span><%- completeD[p].pulls %>
             <% } else { %>
-            <span class="good-number">◉ </span><%- completeD[s].pulls %>
+            <span class="good-number">◉ </span><%- completeD[p].pulls %>
+            <% }  %>
             <% }
             }
             } %>
