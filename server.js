@@ -1,11 +1,11 @@
-var hst = require("./schema/history")
-    , migrate = require("./schema/repoMigrate")
+var hst = require("./models/history")
+    , migrate = require("./models/repoMigrate")
     , express = require("express")
     , app = express()
     , routes = require("./routes/route")
     , resolve = require("./lib/mainController")
     , path = require("path")
-    , schema = require("./schema/repository")
+    , schema = require("./models/repository")
     , bodyParser = require("body-parser")
     , cookieParser = require("cookie-parser")
     , session = require("express-session")
@@ -16,7 +16,7 @@ app.engine(".html", require("ejs").__express);
 app.set("views", __dirname + "/views/");
 app.set("view engine", "html");
 
-    app.locals.repoComparison = require("./schema/repository");
+    app.locals.repoComparison = require("./models/repository");
 
 // app.locals.visualHelper = require("./lib/dataProvider");
 //app.locals.getEvents = require("./lib/resolve")

@@ -1,5 +1,5 @@
-var migrate = require("../schema/repoMigrate")
-	, schema = require("../schema/repository")
+var migrate = require("../models/repoMigrate")
+	, schema = require("../models/repository")
 	, df = require("../lib/date")
 	, helper = require("../lib/helper")
 	, reslv = require("../lib/mainController")
@@ -148,6 +148,7 @@ router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
 router.get("/jquery/team/:teamName?", (req, res) => {
     var c;
     var selectedTeam = req.params.teamName;
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
     helper.noCache(res);
     var avatar = reslv.getAvatarImage();
     var urlstate;
@@ -162,7 +163,6 @@ router.get("/jquery/team/:teamName?", (req, res) => {
         c = helper.getRandomString();
         urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
     }
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
     teamsControl.getTeamData(selectedTeam, "repoPullsHistory", req, res, (teamPullsData) => {
         teamsControl.getTeamData(selectedTeam, "repoHistory", req, res, (teamIssueData) => {
             teamsControl.getRecord(selectedTeam, "repositories", (doc) => {

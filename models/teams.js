@@ -1,35 +1,17 @@
 var async = require("async")
-    , mongoClient = require("mongodb").MongoClient
-    , teamModel = require('../models/teams');
-
-var team = {};
+    , mongoClient = require("mongodb").MongoClient;
 
 
-team.getTeamData = function(teamname, dbase, req, res, callback) {
-    'use strict';
+var teamModel = {};
+
+teamModel.getTeamData = function(teamRepos, dbase, callback) {
     var totalData = [];
-    var count = 0;
-    var teamRepos = [];
-    var teams = require("../repoData/teams.json");
-    for (let i in teams) {
-        if (teamname  === teams[i].team) {
-            for (let j in teams[i].responsibility) {
-                count++;
-                var repo = teams[i].responsibility[j];
-                teamRepos.push(repo);
-            }
-        }
-    }
-
-    //teamModel.getTeamData(teamRepos, dbase, (totalData) => {
-    //    callback(totalData);
-    //});
-    var projection = getProjection(dbase);//not used currently
+    var projection = this.getProjection(dbase);//not used currently
     connection(dbase, function(db){
         async.each(teamRepos, function(item, callback){
             db.collection(item).find({},{}).toArray(function(err, doc) {
                 if (err) throw err;
-                    totalData.push(doc);
+                totalData.push(doc);
             });
             callback();
         }, function(err) {
@@ -42,26 +24,9 @@ team.getTeamData = function(teamname, dbase, req, res, callback) {
     });
 };
 
-team.getRecord = function(teamname, dbase, callback) {
-    'use strict';
-
-    var count = 0;
-    var teamRepos = [];
-    var teams = require("../repoData/teams.json");
-    for (let i in teams) {
-        if (teamname  === teams[i].team) {
-            for (let j in teams[i].responsibility) {
-                count++;
-                var repo = teams[i].responsibility[j];
-                teamRepos.push(repo);
-            }
-        }
-    }
-
-    //teamModel.getRecord(teamRepos, dbase, (totalData) => {
-    //    callback(totalData);
-    //});
-    var projection = getProjection(dbase);//not used currently
+teamModel.getRecord = function(teamRepos, dbase, callback) {
+    var totalData = [];
+    var projection = this.getProjection(dbase);//not used currently
     connection(dbase, function(db){
         async.each(teamRepos, function(item, callback){
             var query = { "name": item };
@@ -80,7 +45,21 @@ team.getRecord = function(teamname, dbase, callback) {
     });
 };
 
-var getProjection = function(db) {
+/**
+ * connect to a given database via mongodb
+ *
+ * @param {String} dbase
+ * @param {Function} callback
+ */
+var connection = function(dbase, callback) {
+    mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db) {
+        if (err) throw err;
+        callback(db)
+    });
+};
+
+
+teamModel.getProjection = function(db) {
     var projection;
     if (db === 'issues') {
         projection = { 'created_at': 1, 'title': 1, 'html_url': 1, '_id': 0 };
@@ -96,26 +75,6 @@ var getProjection = function(db) {
     return projection;
 };
 
-//team.getTeamData = function(db, typeOfRequest, team, callback) {
-//    this.executeQuery(db, team, (data) => {
-//        callback(data)
-//    });
-//
-//};
-
-/**
- * connect to a given database via mongodb
- *
- * @param {String} dbase
- * @param {Function} callback
- */
-var connection = function(dbase, callback) {
-    mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db) {
-        if (err) throw err;
-        callback(db)
-    });
-};
-
 /**
  * Execute query to abtain a given collection data
  *
@@ -123,7 +82,7 @@ var connection = function(dbase, callback) {
  * @param {String} param
  * @param {Function} callback
  */
-team.executeQuery = function(database, param, callback) {
+teamModel.executeQuery = function(database, param, callback) {
     var query = { "repo": param };
     collection = query.repo;
     //var queryStr = getQuery(database);
@@ -132,12 +91,28 @@ team.executeQuery = function(database, param, callback) {
         db.collection(collection).find({}, projection).toArray(function(err, doc) {
             if (err) throw err;
             console.log(doc)
-                callback(doc);
+            callback(doc);
 
             db.close();
         });
     });
 };
 
+/**
+ * Function responsible for searching for a flag set by the current user
+ * @param {String} username
+ * @param {String} email
+ * @param {Function} callback
+ */
+teamModel.checkForTeamFlags = function(username, email, callback) {
+    connection("user", (db) => {
+        db.collection("teamFlag").findOne({ username: username, email: email}, function (err, doc) {
+            if (err) throw err;
+            callback(doc);
+            db.close();
+        });
+    });
+};
 
-module.exports = team;
+
+module.exports = teamModel;

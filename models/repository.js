@@ -87,7 +87,7 @@ var connection = function(dbase, callback) {
  */
 schema.getRecord = function(param, callback) {
 	var query = { "name": param };
-	console.log('schema connecting...');
+	console.log('models connecting...');
 	helper.log('CONNECTION','mongoDB connection made', true);
 	connection("repositories", function(db) {
 		db.collection('repos').findOne(query, function(err, doc) {
@@ -512,14 +512,15 @@ schema.checkForAttention = function(username, email, callback) {
 }
 
 schema.checkForFlaggedRepo = function(username, email, target, callback) {
-    connection("user", (db) => {
-        db.collection("repoFlag").findOne({$or: [ { highlight_issues_chart: "true" }, { highlight_pulls_chart: "true" } ], username:username, email: email, target: target}, (err, doc) => {
-            if(err) throw err;
-            callback(doc);
-            db.close();
-        });
-    })
+	connection("user", (db) => {
+		db.collection("repoFlag").findOne({$or: [ { highlight_issues_chart: "true" }, { highlight_pulls_chart: "true" } ], username:username, email: email, repository_target: target}, (err, doc) => {
+			if(err) throw err;
+			callback(doc);
+			db.close();
+		});
+	})
 };
+
 
 schema.getNextMonth = function(repo, range, callback) {
 	var query = { "repo": param };
