@@ -1,7 +1,7 @@
 <html>
 <title>Dashboard</title>
 <meta charset='utf-8'>
-<link rel='stylesheet' href='/css/jqit.css' />
+
 <script src="/js/external/jquery-1.11.3.min.js"></script>
 <script src="/js/external/d3.v3.min.js"></script>
 <script src="/js/external/tinysort.js"></script>
@@ -11,7 +11,9 @@
 <script src="/socket.io/socket.io.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel='stylesheet' href='/css/jqit.css' />
 <script>
+
 flagData = <%- JSON.stringify(flag) %>
 attention = <%- JSON.stringify(attention) %>
 teamFlag = <%- JSON.stringify(teamFlag) %>
@@ -94,6 +96,7 @@ checkDashboardValues(flagData, teamFlag);
 
         <div>Issues increase limit: <span id="issue-slider-amount2"></span></div>
         <div id="issue-slider2"></div>
+        <div class="ui-slider-tick-mark"></div>
         <div>Pull Requests increase limit: <span id="pulls-slider-amount2"></span></div>
         <div id="pulls-slider2"></div>
         <input type="checkbox" id="receive-email2" class="receive-email-chck2">
@@ -267,7 +270,10 @@ checkDashboardValues(flagData, teamFlag);
             step: 1,
             slide: function( event, ui ) {
                 $( amountDisplay ).html(ui.value );
-            }
+            },create: function( event, ui ) {
+                console.log(event.target)
+                setSliderTicks(event.target);
+            },
         });
         $( amountDisplay).html($( sliderElem).slider( "value" ) );
     }
@@ -298,6 +304,23 @@ checkDashboardValues(flagData, teamFlag);
             });
         }
     }
+
+
+
+
+    function setSliderTicks(el) {
+        var $slider =  $(el);
+        var max =  $slider.slider("option", "max");
+        var min =  $slider.slider("option", "min");
+        var spacing =  100 / (max - min);
+
+        $slider.find('.ui-slider-tick-mark').remove();
+        for (var i = 0; i < max-min ; i++) {
+
+            $('<span class="ui-slider-tick-mark"></span>').css('left', (spacing * i) +  '%').appendTo($slider);
+        }
+    }
+
 </script>
 </div>
 

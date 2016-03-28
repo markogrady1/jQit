@@ -758,13 +758,13 @@ td, th {
 /*////////// DASHBOARD-LINK /////////////*/
 .repo-dashboard-wrap {
 	margin: 50px;
-	width: 500px;
+	width: 35%;
 	float: left;
 }
 
 .team-dashboard-wrap {
 	margin: 50px;
-	width: 500px;
+	width: 35%;
 	float: left;
 }
 
@@ -774,14 +774,14 @@ td, th {
 	margin: 30px 30px 0 30px;
 	padding: 7px 10px;
 	border-radius: 5px;
-	background-color: #3B99FC;
+	background-color: #4E87B2;
 	color: #fff;
 	font-size: 1.4em;
 	text-align: center;
 }
 
 .dashboard-ajax-btn:hover {
-	background-color: #4A84B0;
+	background-color: #7FA9CB;
 	color: #fff;
 	font-size: 1.4em;
 	text-align: center;
@@ -793,19 +793,57 @@ td, th {
 	margin: 30px 30px 0 30px;
 	padding: 7px 10px;
 	border-radius: 5px;
-	background-color: #3B99FC;
+	background-color: #4E87B2;
 	color: #fff;
 	font-size: 1.4em;
 	text-align: center;
 }
 
 .dashboard-ajax-btn2:hover {
-	background-color: #4A84B0;
+	background-color: #7FA9CB;
 	color: #fff;
 	font-size: 1.4em;
 	text-align: center;
 	cursor: pointer;
 }
+#pulls-slider > span.ui-slider-handle,
+#issue-slider > span.ui-slider-handle,
+#pulls-slider2 > span.ui-slider-handle,
+#issue-slider2 > span.ui-slider-handle{
+	background: #2b81af;
+	border: 1px solid #fff;
+	outline: none;
+
+
+}
+
+#pulls-slider > div,
+#issue-slider > div{
+	background: #7FA9CB;
+	border: 1px solid #7FA9CB;;
+}
+#pulls-slider2 > div,
+#issue-slider2 > div {
+	background: #4E87B2;
+	border: 1px solid #4E87B2;;
+}
+.ui-widget-content {
+	border: 1px solid #7FA9CB;
+}
+
+
+.ui-slider-tick-mark{
+	display:inline-block;
+	width:1px;
+	background: #a9a9a9;
+	height:13px;
+	position:absolute;
+	top:-1px;
+}
+#dashboard-watch1, #dashboard-watch2{
+	outline: none;
+}
+
 /*///////////PIE CHARTS/////////////////*/
 .pie-chart-wrap {
 	position: relative;
@@ -1114,4 +1152,44 @@ svg.team-chart {
 .team-chart-area {
 	float: right;
 }
+
+
+input[type="checkbox" i] {
+	-webkit-appearance: checkbox;
+	box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+	background-color: red;
+	margin: 3px 0.5ex;
+	padding: initial;
+	border: initial;
+}
+
+
+.mid-range-wrap {
+	border-radius: 3px;
+	/*padding: 30px 0 ;*/
+	margin: 0 30px;
+	border: 1px solid #aaa;
+	padding: 0;
+	box-shadow: 2px 2px 2px #ddd;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+}
+
+.mid-range-header {
+
+
+	height:50px;
+	color: #333333;
+	background-color: #E7E4E5;
+	border-color: #dddddd;
+	padding: 10px 15px;
+	border-bottom: 1px solid transparent;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+	border-bottom: 1px solid #AAAAAA;
+}
+
 
