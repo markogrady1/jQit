@@ -146,12 +146,22 @@ router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
 });
 
 router.get("/jquery/team/:teamName?", (req, res) => {
-    var c;
+    var c, flagInfo;
     var selectedTeam = req.params.teamName;
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
     helper.noCache(res);
     var avatar = reslv.getAvatarImage();
     var urlstate;
+    var userData = reslv.getStorage();
+    if (userData !== "undefined") {
+        res.locals.userStat = true;
+        var name = userData.split("=>")[0];
+        var email = userData.split("=>")[2];
+        teamsControl.checkForTeamFlags(name, email, selectedTeam, (flagData) => {
+            flagInfo = flagData === null ? null : flagData;
+
+        });
+    }
     if(avatar === "undefined") {
         res.locals.userStat = false;
         c = helper.getRandomString();
@@ -165,8 +175,9 @@ router.get("/jquery/team/:teamName?", (req, res) => {
     }
     teamsControl.getTeamData(selectedTeam, "repoPullsHistory", req, res, (teamPullsData) => {
         teamsControl.getTeamData(selectedTeam, "repoHistory", req, res, (teamIssueData) => {
-            teamsControl.getRecord(selectedTeam, "repositories", (doc) => {
+            teamsControl.getTeamRecord(selectedTeam, "repositories", (doc) => {
                 res.render("team-view", {
+                    flagData: flagInfo,
                     teamsData: doc,
                     av: avatar,
                     header: selectedTeam + " Team",
@@ -311,7 +322,6 @@ router.get("/dashboard", (req, res) => {
                 var data = reslv.getStorage();
                 reslv.getFlagData(data, (flagObj, attData, teamObj) => {
                     callback(flagObj, attData, teamObj);
-                    console.log(flagObj, attData, teamObj)
                 });
             } else {
                 res.locals.userStat = false;

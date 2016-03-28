@@ -21,10 +21,12 @@
 <script>
     var chartLayout = "";
     var teamsData = <%- JSON.stringify(teamsData) %>
+    var flagData = <%- JSON.stringify(flagData) %>
+            console.log(flagData)
     var pullsDataHistory = <%- JSON.stringify(pullsData) %>
     var issuesDataHistory = <%- JSON.stringify(issuesData) %>
             var newPullsData = [], newIssuesData = [];
-   ;
+
             for(var i in pullsDataHistory) {
 
                 for(var inner in pullsDataHistory[i]){

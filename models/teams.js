@@ -24,7 +24,7 @@ teamModel.getTeamData = function(teamRepos, dbase, callback) {
     });
 };
 
-teamModel.getRecord = function(teamRepos, dbase, callback) {
+teamModel.getTeamRecord = function(teamRepos, dbase, callback) {
     var totalData = [];
     var projection = this.getProjection(dbase);//not used currently
     connection(dbase, function(db){
@@ -44,6 +44,17 @@ teamModel.getRecord = function(teamRepos, dbase, callback) {
         });
     });
 };
+
+teamModel.checkForFlaggedTeam = function(username, email, target, callback) {
+    connection("user", (db) => {
+        db.collection("teamFlag").findOne({$or: [ { highlight_team_issues_chart: "true" }, { highlight_team_pulls_chart: "true" } ], username: username, email: email, team_target: target }, (err, doc) => {
+            if(err) throw err;
+            callback(doc);
+            db.close();
+        });
+    })
+};
+
 
 /**
  * connect to a given database via mongodb
