@@ -23,21 +23,16 @@ function getChartWidth(buildObject) {
 var setCharts = function(data, flagData, isIssue) {
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, flagData,  isIssue);
 console.log(data)
-    var issueflagsIndexs;
+    var issueflagsIndexs = null;
     for(var t in data) {
-        if(flagData !== null) {
-
+        if(flagData !== undefined) {
 
             if(flagData.highlight_team_issues_chart === "true") {
-                var issuesLimit = flagData.issues_team_boundary;
+                var limit = flagData.issues_team_boundary;
                 var everyIncrease = flagData.show_team_every_increase;
-                issueflagsIndexs = checkIncrease(data[t], issuesLimit, everyIncrease, "issues"); //check for issues increases
+                issueflagsIndexs = checkIncrease(data[t], limit, everyIncrease, "issues"); //check for issues increases
                 console.log(issueflagsIndexs)
             }
-
-            //if(flagData.highlight_team_pulls_chart === "true") {
-            //    //pullsflagsIndexs = checkIncrease(pr, pullsLimit, everyIncrease, "pulls"); //check for issues increases
-            //}
         }
         setTeamBarChart(data[t], isIssue, buildStyle, t, issueflagsIndexs)
     }
@@ -127,12 +122,9 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs) {
             .attr('height', function(d, i){
                 return height - y(d["issues"]);
             })
-            //.style('fill', linearColorScale(i))
             .style('cursor', 'pointer')
             .style('fill', function(d, i) {
                 // this section of code is responsible for highlighting any increases if specified
-                //if(buildStyle.dataVal === "issues") {
-
                 if (issueflagsIndexs !== null) {
 
                     if (issueflagsIndexs[0] === 999) {
@@ -149,29 +141,10 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs) {
                     }
                     return linearColorScale(i);
 
+                } else {
+                    return linearColorScale(i);
                 }
-    })
-            //} else if(buildStyle.dataVal === "pulls"){
-
-                //if(buildStyle.flagPulls !== null) {
-                //
-                //    if(buildStyle.flagPulls[0] === 999) {
-                //
-                //        if(i === buildStyle.flagPulls[1]) {
-                //            return 'ff0000'
-                //        }
-                //    } else {
-                //        for (var d = 0; d < buildStyle.flagPulls.length; d++) {
-                //            if(buildStyle.flagPulls[d] === i) {
-                //                return 'ff0000'
-                //            }
-                //        }
-                //    }
-                //    return linearColorScale(i);
-                //}
-                //return linearColorScale(i);
-            //}
-
+    });
 
             this.selectAll('.bar-label')
             .data(params.data)
@@ -223,10 +196,23 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs) {
 
 }
 
-var setSingleChart = function(issueData, pullsData, index, isIssue) {
+var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
+    var flagsIndexs = null;
     var data = isIssue ? issueData[index] : pullsData[index];
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
+    if(flagData !== undefined) {
+        var flagTarget = isIssue ? "highlight_team_issues_chart" : "highlight_team_pulls_chart";
+        var boundaryTarget = isIssue ? "issues_team_boundary" : "pulls_team_boundary";
+        var target = isIssue ? "issues" : "pulls";
 
+        if(flagData[flagTarget] === "true") {
+
+            var limit = flagData[boundaryTarget];
+            var everyIncrease = flagData.show_team_every_increase;
+            flagsIndexs = checkIncrease(data, limit, everyIncrease, target); //check for issues increases
+            console.log(flagsIndexs)
+        }
+    }
     $('.team-chart-section' + index).remove();
     var width = getChartWidth(buildStyle);
     var height = getChartHeight(buildStyle);
@@ -311,8 +297,29 @@ var setSingleChart = function(issueData, pullsData, index, isIssue) {
             .attr('height', function(d, i){
                 return height - y(d[buildStyle.dataType]);
             })
-            .style('fill', linearColorScale(i))
-            .style('cursor', 'pointer');
+            .style('cursor', 'pointer')
+            .style('fill', function(d, i) {
+                // this section of code is responsible for highlighting any increases if specified
+                if (flagsIndexs !== null) {
+
+                    if (flagsIndexs[0] === 999) {
+
+                        if (i === buildStyle.flagIssues[1]) {
+                            return 'ff0000'
+                        }
+                    } else {
+                        for (var d = 0; d < flagsIndexs.length; d++) {
+                            if (flagsIndexs[d] === i) {
+                                return 'ff0000'
+                            }
+                        }
+                    }
+                    return linearColorScale(i);
+
+                } else {
+                    return linearColorScale(i);
+                }
+            });
 
         this.selectAll('.bar-label')
             .data(params.data)

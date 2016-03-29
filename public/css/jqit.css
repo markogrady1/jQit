@@ -820,17 +820,19 @@ td, th {
 #pulls-slider > div,
 #issue-slider > div{
 	background: #7FA9CB;
-	border: 1px solid #7FA9CB;;
+	border: 1px solid #7FA9CB;
+	border-radius: 3px;
 }
 #pulls-slider2 > div,
 #issue-slider2 > div {
 	background: #4E87B2;
-	border: 1px solid #4E87B2;;
+	border: 1px solid #4E87B2;
+	border-radius: 3px;
 }
+
 .ui-widget-content {
 	border: 1px solid #7FA9CB;
 }
-
 
 .ui-slider-tick-mark{
 	display:inline-block;
@@ -840,6 +842,7 @@ td, th {
 	position:absolute;
 	top:-1px;
 }
+
 #dashboard-watch1, #dashboard-watch2{
 	outline: none;
 }
