@@ -8,7 +8,8 @@ function getBuildStyle(w, h, top, bottom, left, right, padding, isIssue) {
         left: left,
         right: right,
         padding: padding,
-        dataType: isIssue ? "issues" : "pulls"
+        dataType: isIssue ? "issues" : "pulls",
+
     };
 };
 
@@ -19,15 +20,30 @@ function getChartHeight(buildObject) {
 function getChartWidth(buildObject) {
     return buildObject.w - buildObject.top - buildObject.right;
 }
-var setCharts = function(data, isIssue) {
-    var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
-
+var setCharts = function(data, flagData, isIssue) {
+    var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, flagData,  isIssue);
+console.log(data)
+    var issueflagsIndexs;
     for(var t in data) {
-        setTeamBarChart(data[t], isIssue, buildStyle, t)
+        if(flagData !== null) {
+
+
+            if(flagData.highlight_team_issues_chart === "true") {
+                var issuesLimit = flagData.issues_team_boundary;
+                var everyIncrease = flagData.show_team_every_increase;
+                issueflagsIndexs = checkIncrease(data[t], issuesLimit, everyIncrease, "issues"); //check for issues increases
+                console.log(issueflagsIndexs)
+            }
+
+            //if(flagData.highlight_team_pulls_chart === "true") {
+            //    //pullsflagsIndexs = checkIncrease(pr, pullsLimit, everyIncrease, "pulls"); //check for issues increases
+            //}
+        }
+        setTeamBarChart(data[t], isIssue, buildStyle, t, issueflagsIndexs)
     }
 };
 
-var setTeamBarChart = function(data, isIssue, buildStyle, i) {
+var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs) {
     var width = getChartWidth(buildStyle);
     var height = getChartHeight(buildStyle);
     var chartClass = ".team-chart"+i;
@@ -111,10 +127,53 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i) {
             .attr('height', function(d, i){
                 return height - y(d["issues"]);
             })
-            .style('fill', linearColorScale(i))
-            .style('cursor', 'pointer');
+            //.style('fill', linearColorScale(i))
+            .style('cursor', 'pointer')
+            .style('fill', function(d, i) {
+                // this section of code is responsible for highlighting any increases if specified
+                //if(buildStyle.dataVal === "issues") {
 
-        this.selectAll('.bar-label')
+                if (issueflagsIndexs !== null) {
+
+                    if (issueflagsIndexs[0] === 999) {
+
+                        if (i === buildStyle.flagIssues[1]) {
+                            return 'ff0000'
+                        }
+                    } else {
+                        for (var d = 0; d < issueflagsIndexs.length; d++) {
+                            if (issueflagsIndexs[d] === i) {
+                                return 'ff0000'
+                            }
+                        }
+                    }
+                    return linearColorScale(i);
+
+                }
+    })
+            //} else if(buildStyle.dataVal === "pulls"){
+
+                //if(buildStyle.flagPulls !== null) {
+                //
+                //    if(buildStyle.flagPulls[0] === 999) {
+                //
+                //        if(i === buildStyle.flagPulls[1]) {
+                //            return 'ff0000'
+                //        }
+                //    } else {
+                //        for (var d = 0; d < buildStyle.flagPulls.length; d++) {
+                //            if(buildStyle.flagPulls[d] === i) {
+                //                return 'ff0000'
+                //            }
+                //        }
+                //    }
+                //    return linearColorScale(i);
+                //}
+                //return linearColorScale(i);
+            //}
+
+
+            this.selectAll('.bar-label')
             .data(params.data)
             .enter()
             .append('text')
@@ -305,3 +364,29 @@ var setSingleChart = function(issueData, pullsData, index, isIssue) {
 
 };
 
+
+var checkIncrease = function(data, boundary, periodic, targetType ) {
+    var triggerArray = [];
+    if (periodic) {
+        for (var i = 1; i < data.length; i++) {
+            var df = data[i][targetType] - data[i-1][targetType];
+            if (df >= boundary) {
+                triggerArray.push(i);  //index of triggered items
+            }
+        }
+
+    } else {
+        var increase = data[data.length - 1][targetType] - data[data.length - 2][targetType];
+        if (increase >= boundary) {
+            triggerArray.push(999);
+            triggerArray.push(data.length - 1);
+
+        } else {
+            triggerArray.push(-999);
+            triggerArray.push(-999);
+        }
+        return triggerArray;
+    }
+
+    return triggerArray;
+};

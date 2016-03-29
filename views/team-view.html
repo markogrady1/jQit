@@ -22,7 +22,8 @@
     var chartLayout = "";
     var teamsData = <%- JSON.stringify(teamsData) %>
     var flagData = <%- JSON.stringify(flagData) %>
-            console.log(flagData)
+
+    console.log(flagData)
     var pullsDataHistory = <%- JSON.stringify(pullsData) %>
     var issuesDataHistory = <%- JSON.stringify(issuesData) %>
             var newPullsData = [], newIssuesData = [];
@@ -75,7 +76,7 @@
     }
         $(".team-chart-area").append(chartLayout); // append areas for the team charts
 
-    setCharts(newIssuesData, true); //  create charts for the teams responsibilty
+    setCharts(newIssuesData, flagData, true); //  create charts for the teams responsibilty
 
     function getMonthlyProgressStatusOfTeams(teamData, isIssue) {
 
