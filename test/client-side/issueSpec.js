@@ -196,4 +196,175 @@ describe("Return an typeof Object", function() {
     })
 });
 
+describe("Check that checkIncrease() returns an Object", function() {
+    it("Should return an Object", function() {
+        var dataArr = [];
+        var data = {
+            issues: 9
+        };
+        dataArr.push(data);
+
+        var actualValue = checkIncrease(dataArr, '1', true, "issues");
+        expect(actualValue).toEqual(jasmine.any(Object) )
+    })
+});
+
+describe("Check for periodic rise in issues", function() {
+    it("checkIncrease(data, boundary, periodic, targetType ) should return modified array with the values [1, 2, 4] for issues", function() {
+        var dataArr = [];
+        var data = {
+            issues: 9
+        };
+        dataArr.push(data);
+        data = {
+            issues: 23
+        };
+        dataArr.push(data);
+
+        data = {
+            issues: 25
+        };
+        dataArr.push(data);
+        data = {
+            issues: 19
+        };
+        dataArr.push(data);
+        data = {
+            issues: 22
+        };
+        dataArr.push(data);
+        var actualValue = checkIncrease(dataArr, '1', true, "issues");
+        expect(actualValue).toEqual([1,2,4 ]);
+    })
+});
+
+describe("Check for periodic rise in pulls", function() {
+    it("checkIncrease(data, boundary, periodic, targetType ) should return modified array with the values [1, 2, 4] for pulls", function() {
+        var dataArr = [];
+        var data = {
+            pulls: 9
+        };
+        dataArr.push(data);
+        data = {
+            pulls: 23
+        };
+        dataArr.push(data);
+
+        data = {
+            pulls: 25
+        };
+        dataArr.push(data);
+        data = {
+            pulls: 19
+        };
+        dataArr.push(data);
+        data = {
+            pulls: 22
+        };
+        dataArr.push(data);
+        var actualValue = checkIncrease(dataArr, '1', true, "pulls");
+        expect(actualValue).toEqual([1,2,4 ]);
+    })
+});
+
+
+describe("Check for the last rise in pulls", function() {
+    it("checkIncrease(data, boundary, periodic, targetType ) should return modified array with the values [999, 4] for pulls", function() {
+        var dataArr = [];
+        var data = {
+            pulls: 9
+        };
+        dataArr.push(data);
+        data = {
+            pulls: 23
+        };
+        dataArr.push(data);
+
+        data = {
+            pulls: 25
+        };
+        dataArr.push(data);
+        data = {
+            pulls: 10
+        };
+        dataArr.push(data);
+        data = {
+            pulls: 12
+        };
+        dataArr.push(data);
+        var actualValue = checkIncrease(dataArr, '1', false, "pulls");
+        expect(actualValue).toEqual([999, dataArr.length-1 ]);
+    })
+});
+
+describe("Check for no last rise in pulls", function() {
+    it("checkIncrease(data, boundary, periodic, targetType ) should return modified array with the values [-999, -999] for pulls", function() {
+        var dataArr = [];
+        var data = {
+            pulls: 9
+        };
+        dataArr.push(data);
+        data = {
+            pulls: 23
+        };
+        dataArr.push(data);
+        data = {
+            pulls: 1
+        };
+        dataArr.push(data);
+        var actualValue = checkIncrease(dataArr, '1', false, "pulls");
+        expect(actualValue).toEqual([-999, -999]);
+    })
+});
+
+
+describe("Check for the last rise in issues", function() {
+    it("checkIncrease(data, boundary, periodic, targetType ) should return modified array with the values [999, 4] for issues", function() {
+        var dataArr = [];
+        var data = {
+            issues: 9
+        };
+        dataArr.push(data);
+        data = {
+            issues: 23
+        };
+        dataArr.push(data);
+
+        data = {
+            issues: 25
+        };
+        dataArr.push(data);
+        data = {
+            issues: 119
+        };
+        dataArr.push(data);
+        data = {
+            issues: 122
+        };
+        dataArr.push(data);
+        var actualValue = checkIncrease(dataArr, '1', false, "issues");
+        expect(actualValue).toEqual([999, dataArr.length-1 ]);
+    })
+});
+
+describe("Check for no last rise in issues", function() {
+    it("checkIncrease(data, boundary, periodic, targetType ) should return modified array with the values [-999, -999] for issues", function() {
+        var dataArr = [];
+        var data = {
+            issues: 9
+        };
+        dataArr.push(data);
+        data = {
+            issues: 23
+        };
+        dataArr.push(data);
+        data = {
+            issues: 1
+        };
+        dataArr.push(data);
+        var actualValue = checkIncrease(dataArr, '1', false, "issues");
+        expect(actualValue).toEqual([-999, -999]);
+    })
+});
+
 

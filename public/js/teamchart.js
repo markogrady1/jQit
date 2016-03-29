@@ -22,16 +22,16 @@ function getChartWidth(buildObject) {
 }
 var setCharts = function(data, flagData, isIssue) {
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, flagData,  isIssue);
-console.log(data)
     var issueflagsIndexs = null;
     for(var t in data) {
-        if(flagData !== undefined) {
+        if(flagData !== null) {
 
             if(flagData.highlight_team_issues_chart === "true") {
                 var limit = flagData.issues_team_boundary;
-                var everyIncrease = flagData.show_team_every_increase;
+                var everyIncrease = false;
+                everyIncrease = flagData.show_team_every_increase === "true" ? true : false;
                 issueflagsIndexs = checkIncrease(data[t], limit, everyIncrease, "issues"); //check for issues increases
-                console.log(issueflagsIndexs)
+
             }
         }
         setTeamBarChart(data[t], isIssue, buildStyle, t, issueflagsIndexs)
@@ -126,21 +126,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs) {
             .style('fill', function(d, i) {
                 // this section of code is responsible for highlighting any increases if specified
                 if (issueflagsIndexs !== null) {
-
-                    if (issueflagsIndexs[0] === 999) {
-
-                        if (i === buildStyle.flagIssues[1]) {
-                            return 'ff0000'
-                        }
-                    } else {
-                        for (var d = 0; d < issueflagsIndexs.length; d++) {
-                            if (issueflagsIndexs[d] === i) {
-                                return 'ff0000'
-                            }
-                        }
-                    }
-                    return linearColorScale(i);
-
+                    return checkForFlagValues(issueflagsIndexs, linearColorScale, i);
                 } else {
                     return linearColorScale(i);
                 }
@@ -200,7 +186,7 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
     var flagsIndexs = null;
     var data = isIssue ? issueData[index] : pullsData[index];
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
-    if(flagData !== undefined) {
+    if(flagData !== null) {
         var flagTarget = isIssue ? "highlight_team_issues_chart" : "highlight_team_pulls_chart";
         var boundaryTarget = isIssue ? "issues_team_boundary" : "pulls_team_boundary";
         var target = isIssue ? "issues" : "pulls";
@@ -208,7 +194,9 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
         if(flagData[flagTarget] === "true") {
 
             var limit = flagData[boundaryTarget];
-            var everyIncrease = flagData.show_team_every_increase;
+
+            var everyIncrease = false;
+            everyIncrease = flagData.show_team_every_increase === "true" ? true : false;
             flagsIndexs = checkIncrease(data, limit, everyIncrease, target); //check for issues increases
             console.log(flagsIndexs)
         }
@@ -299,23 +287,10 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
             })
             .style('cursor', 'pointer')
             .style('fill', function(d, i) {
+
                 // this section of code is responsible for highlighting any increases if specified
                 if (flagsIndexs !== null) {
-
-                    if (flagsIndexs[0] === 999) {
-
-                        if (i === buildStyle.flagIssues[1]) {
-                            return 'ff0000'
-                        }
-                    } else {
-                        for (var d = 0; d < flagsIndexs.length; d++) {
-                            if (flagsIndexs[d] === i) {
-                                return 'ff0000'
-                            }
-                        }
-                    }
-                    return linearColorScale(i);
-
+                    return checkForFlagValues(flagsIndexs, linearColorScale, i);
                 } else {
                     return linearColorScale(i);
                 }
@@ -373,8 +348,9 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
 
 
 var checkIncrease = function(data, boundary, periodic, targetType ) {
+    console.log(data, boundary)
     var triggerArray = [];
-    if (periodic) {
+    if (periodic) { // if all chart days are to be analysed
         for (var i = 1; i < data.length; i++) {
             var df = data[i][targetType] - data[i-1][targetType];
             if (df >= boundary) {
@@ -384,11 +360,11 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 
     } else {
         var increase = data[data.length - 1][targetType] - data[data.length - 2][targetType];
-        if (increase >= boundary) {
+        if (increase >= boundary) { // if the targeted boundary is the last day and meets requirements
             triggerArray.push(999);
             triggerArray.push(data.length - 1);
 
-        } else {
+        } else { // if the last day does not meet the desired requirements
             triggerArray.push(-999);
             triggerArray.push(-999);
         }
@@ -396,4 +372,24 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
     }
 
     return triggerArray;
+};
+
+var checkForFlagValues = function(flagsIndexs, linearColorScale, i) {
+    if (flagsIndexs !== null) {
+
+        if (flagsIndexs[0] === 999) {
+
+            if (i === flagsIndexs[1]) {
+                return 'ff0000'
+            }
+        } else {
+            for (var d = 0; d < flagsIndexs.length; d++) {
+                if (flagsIndexs[d] === i) {
+                    return 'ff0000'
+                }
+            }
+        }
+        return linearColorScale(i);
+
+    }
 };

@@ -364,6 +364,30 @@ router.post("/dashboard/edit/repo", (req, res) => {
     var pullsBoundary = req.body.pullsSlider;
     var showEveryIncrease = req.body.showEveryIncrease;
 console.log(watchTarget, issueBoundary, pullsBoundary)
+
+
+
+    var teamWatchTarget = req.body.watchTeamTarget;
+    var teamReceiveEmail = req.body.receiveTeamEmail;
+    var teamFlagIssuesChart = req.body.flagTeamIssuesChart;
+    var teamFlagPullsChart = req.body.flagTeamPullsChart;
+
+    var teamIssueBoundary = req.body.issueTeamSlider;
+    var teamPullsBoundary = req.body.pullsTeamSlider;
+    var teamShowEveryIncrease = req.body.showEveryTeamIncrease;
+    console.log(teamWatchTarget)
+
+    console.log(teamReceiveEmail)
+    console.log(teamFlagIssuesChart)
+    console.log(teamFlagPullsChart)
+    console.log(teamIssueBoundary)
+    console.log(teamPullsBoundary)
+    console.log(teamShowEveryIncrease)
+    teamWatchTarget = teamWatchTarget === "Watch" ? null : teamWatchTarget;
+
+
+
+
     watchTarget = watchTarget === "Watch" ? null : watchTarget;
 
     var data = localStorage.getItem("data");
@@ -384,9 +408,24 @@ console.log(watchTarget, issueBoundary, pullsBoundary)
         showEveryIncrease: showEveryIncrease
 
     };
+
+    var teamWatcher = {
+        user: name,
+        email: email,
+        avatar: avatar,
+        teamTarget: teamWatchTarget,
+        receiveEmailUpadate: teamReceiveEmail,
+        highlightissueschart: teamFlagIssuesChart,
+        highlightpullschart: teamFlagPullsChart,
+        issuesboundary: teamIssueBoundary,
+        pullsboundary: teamPullsBoundary,
+        showEveryIncrease: teamShowEveryIncrease
+
+    };
     res.send("Data Received");
 
     reslv.assignWatcher(watcher);
+    reslv.assignTeamWatcher(teamWatcher);
 });
 
 

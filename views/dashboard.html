@@ -219,6 +219,23 @@ checkDashboardValues(flagData, teamFlag);
                 pullsSlider: $("#pulls-slider-amount").html(),
                 showEveryIncrease: function() {
                     return $('#highlight-every-choice').is(":checked")? true : false;
+                },
+                watchTeamTarget: function() {
+                    return $('#dashboard-watch2 :selected').text();
+                },
+                receiveTeamEmail: function() {
+                    return $("#receive-email2").is(":checked") ? true : false;
+                },
+                flagTeamIssuesChart: function() {
+                    return $("#flag-issues-chart2").is(":checked") ? true : false;
+                },
+                flagTeamPullsChart: function() {
+                    return $("#flag-pulls-chart2").is(":checked") ? true : false;
+                },
+                issueTeamSlider: $("#issue-slider-amount2").html(),
+                pullsTeamSlider: $("#pulls-slider-amount2").html(),
+                showEveryTeamIncrease: function() {
+                    return $('#highlight-every-choice2').is(":checked")? true : false;
                 }
             }
         }).done(function(msg) {
