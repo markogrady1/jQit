@@ -53,7 +53,6 @@
 
         teamsData[k].teamName = newIssuesData[k][newIssuesData[k].length-1].team;
         teamsData[k].currentIssues = newIssuesData[k][newIssuesData[k].length-1].issues;
-        console.log(newIssuesData[k].length-1)
         teamsData[k].currentPulls = newPullsData[k][newPullsData[k].length-1].pulls;
 //        var issuesStatus = getMonthlyProgressStatusOfTeams(newIssuesData[k], true);
         teamsData[k].thirtyDayIssueProgress = getMonthlyProgressStatusOfTeams(newIssuesData[k], true);

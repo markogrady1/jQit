@@ -247,36 +247,36 @@ checkDashboardValues(flagData, teamFlag);
     });
 
 
-    $(".dashboard-ajax-btn2").click(function() {
-        $.ajax({
-            method: "POST",
-            url: "dashboard/edit/team",
-            data: {
-                watchTarget: function() {
-                    return $('#dashboard-watch2 :selected').text();
-                },
-                receiveEmail: function() {
-                    return $("#receive-email2").is(":checked") ? true : false;
-                },
-                flagIssuesChart: function() {
-                    return $("#flag-issues-chart2").is(":checked") ? true : false;
-                },
-                flagPullsChart: function() {
-                    return $("#flag-pulls-chart2").is(":checked") ? true : false;
-                },
-                issueSlider: $("#issue-slider-amount2").html(),
-                pullsSlider: $("#pulls-slider-amount2").html(),
-                showEveryIncrease: function() {
-                    return $('#highlight-every-choice2').is(":checked")? true : false;
-                }
-            }
-        }).done(function(msg) {
-            $(".dashboard-ajax-btn2").html("Saved");
-            setTimeout(function(){
-                $(".dashboard-ajax-btn2").html("Save");
-            }, 1000);
-        });
-    });
+//    $(".dashboard-ajax-btn2").click(function() {
+//        $.ajax({
+//            method: "POST",
+//            url: "dashboard/edit/team",
+//            data: {
+//                watchTarget: function() {
+//                    return $('#dashboard-watch2 :selected').text();
+//                },
+//                receiveEmail: function() {
+//                    return $("#receive-email2").is(":checked") ? true : false;
+//                },
+//                flagIssuesChart: function() {
+//                    return $("#flag-issues-chart2").is(":checked") ? true : false;
+//                },
+//                flagPullsChart: function() {
+//                    return $("#flag-pulls-chart2").is(":checked") ? true : false;
+//                },
+//                issueSlider: $("#issue-slider-amount2").html(),
+//                pullsSlider: $("#pulls-slider-amount2").html(),
+//                showEveryIncrease: function() {
+//                    return $('#highlight-every-choice2').is(":checked")? true : false;
+//                }
+//            }
+//        }).done(function(msg) {
+//            $(".dashboard-ajax-btn2").html("Saved");
+//            setTimeout(function(){
+//                $(".dashboard-ajax-btn2").html("Save");
+//            }, 1000);
+//        });
+//    });
 
     function sliderInit(sliderElem, amountDisplay, boundary) {
         $( sliderElem).slider({

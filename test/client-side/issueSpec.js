@@ -367,4 +367,28 @@ describe("Check for no last rise in issues", function() {
     })
 });
 
+describe("return string value containing bar colour", function() {
+    it("should return type String", function() {
+        var dataArr = [1,2,2];
+        var actualValue = checkForFlagValues(dataArr, function() { return "no colors"}, 1);
+        expect(actualValue).toEqual(jasmine.any(String));
+    })
+});
+
+describe("return colors for chart with checkForFlagValues() function", function() {
+    it("should return a colour #ff0000", function() {
+        var dataArr = [1,2,2];
+        var actualValue = checkForFlagValues(dataArr, function() { return "no colors"}, 1);
+        expect(actualValue).toEqual("ff0000");
+    })
+});
+
+describe("return no colors for chart with checkForFlagValues() function", function() {
+    it("should return 'no colours' text value, which represents the d3.linearColorScale function", function() {
+        var dataArr = [];
+        var actualValue = checkForFlagValues(dataArr, function() { return "no colours"}, 1);
+        expect(actualValue).toEqual("no colours");
+    })
+});
+
 

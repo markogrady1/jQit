@@ -24,7 +24,8 @@ var setCharts = function(data, flagData, isIssue) {
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, flagData,  isIssue);
     var issueflagsIndexs = null;
     for(var t in data) {
-        if(flagData !== null) {
+        flagData = typeof flagData === "undefined" ? null : flagData;
+        if(flagData !== null ) {
 
             if(flagData.highlight_team_issues_chart === "true") {
                 var limit = flagData.issues_team_boundary;
@@ -186,6 +187,8 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
     var flagsIndexs = null;
     var data = isIssue ? issueData[index] : pullsData[index];
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
+    flagData = typeof flagData === "undefined" ? null : flagData;
+
     if(flagData !== null) {
         var flagTarget = isIssue ? "highlight_team_issues_chart" : "highlight_team_pulls_chart";
         var boundaryTarget = isIssue ? "issues_team_boundary" : "pulls_team_boundary";
@@ -198,7 +201,6 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
             var everyIncrease = false;
             everyIncrease = flagData.show_team_every_increase === "true" ? true : false;
             flagsIndexs = checkIncrease(data, limit, everyIncrease, target); //check for issues increases
-            console.log(flagsIndexs)
         }
     }
     $('.team-chart-section' + index).remove();
@@ -348,7 +350,6 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
 
 
 var checkIncrease = function(data, boundary, periodic, targetType ) {
-    console.log(data, boundary)
     var triggerArray = [];
     if (periodic) { // if all chart days are to be analysed
         for (var i = 1; i < data.length; i++) {
@@ -375,21 +376,20 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 };
 
 var checkForFlagValues = function(flagsIndexs, linearColorScale, i) {
-    if (flagsIndexs !== null) {
+    if (flagsIndexs !== null) { //check if a flag has been set
 
-        if (flagsIndexs[0] === 999) {
+        if (flagsIndexs[0] === 999) { // check that requirement is not for last value only
 
-            if (i === flagsIndexs[1]) {
+            if (i === flagsIndexs[1]) { // check if actual chart bar is the same index as the given value, if so return red
                 return 'ff0000'
             }
-        } else {
+        } else { // return the colour red with for every increase
             for (var d = 0; d < flagsIndexs.length; d++) {
                 if (flagsIndexs[d] === i) {
                     return 'ff0000'
                 }
             }
-        }
+        } // otherwise return the default colour scheme
         return linearColorScale(i);
-
     }
 };
