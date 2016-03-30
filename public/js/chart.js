@@ -37,8 +37,7 @@ var $viewEle;
  * Responsible for setting the initial values for the plot of the main charts
  *
  */
-function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate) {
-
+function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate, chartColour) {
 	startDate = typeof startDate === "undefined" ? sd : startDate;
 	detectWindowSize();
 		if(isPreviousMonthOfData) {
@@ -138,9 +137,9 @@ function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate) {
            allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData
          };
-         setBarChart(issuesArr, issuesBarData, historyObj, startDate, isPreviousMonthOfData);
+         setBarChart(issuesArr, issuesBarData, historyObj, startDate, isPreviousMonthOfData, chartColour);
          setLineChart(issuesArr, issuesLineData, startDate, isPreviousMonthOfData);
-         setBarChart(pullsArr, pullsBarData, historyObj, startDate, isPreviousMonthOfData);
+         setBarChart(pullsArr, pullsBarData, historyObj, startDate, isPreviousMonthOfData, chartColour);
          setLineChart(pullsArr, pullsLineData, startDate, isPreviousMonthOfData);
 
 
@@ -169,10 +168,11 @@ var hideLineChart = function() {
  * @param {String} startDate
  * @param {Boolean} isPreviousMonthOfData
  */
-function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData) {
+function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData, chartColour) {
 	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var tot = 0;
 	var isIss =false;
+
 	if(buildStyle.dataVal === 'issues')
 		isIss = true;
 	var chartId = buildStyle.isIssue ? "" : "pulls-";
@@ -265,6 +265,7 @@ function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData
 			}
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=line-tip>" + toolTipValue + ": " + d[buildStyle.dataVal] + "</span><br><br>" + progressStr;
 		 });
+
 	var x = d3.scale.ordinal()
 		.domain(data.map(function(entry){
 			return entry[buildStyle.dataKey];
@@ -282,7 +283,7 @@ function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData
 				.orient('left');
 	var linearColorScale = d3.scale.linear()
 				.domain([0, data.length])
-				.range(['#4A84B0', '#c6dbef']);
+				.range([chartColour, '#c6dbef']);
 	var ordinalColorScale = d3.scale.category20();
 	var xAxis = d3.svg.axis()
 			.scale(x)

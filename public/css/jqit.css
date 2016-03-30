@@ -1196,3 +1196,158 @@ input[type="checkbox"] {
 }
 
 
+
+
+
+
+
+
+
+
+
+.color-picker-wrap {
+	clear: both;
+	width: 200px;
+	height: 200px;
+}
+#frm1 {
+	background-color: #4E87B2;
+}
+.color-widget {
+	background-color: #4E87B2;
+	border: 3px solid #1178BC;
+	border-radius: 4px;
+
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flexbox;
+	display: -ms-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	-moz-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	/*position: fixed;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	width: 100%;
+	height: 100%;
+	padding: 4px;
+	-moz-sizing: border-box;
+	box-sizing: border-box;
+}
+.row {
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flexbox;
+	display: -ms-flex;
+	display: flex;
+	-webkit-flex: 1;
+	-moz-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+}
+.shades {
+	position: relative;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flexbox;
+	display: -ms-flex;
+	display: flex;
+	height: 0px;
+	transition: height 0.1s linear;
+}
+.shades.visible {
+	height: 50px;
+}
+.color,
+.back {
+	-webkit-flex: 1;
+	-moz-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+	position: relative;
+	margin: 0.5px;
+	padding: 0;
+	border: 2px solid #eee;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.color:focus,
+.back:focus {
+	outline: none;
+}
+.color:hover:before,
+.back:hover:before {
+	content: '';
+	position: absolute;
+	background-color: inherit;
+	border: 1px solid #333;
+	z-index: 1;
+	top: -4px;
+	left: -4px;
+	right: -4px;
+	bottom: -4px;
+}
+.color:hover .icon,
+.back:hover .icon {
+	z-index: 1;
+}
+.color.active:before,
+.color.active:hover:before {
+	display: none;
+}
+.back {
+	background-color: #fff;
+}
+.color.active {
+	z-index: 1;
+}
+.shades {
+	z-index: 2;
+	margin-right: 0.5px;
+}
+.icon {
+	font-family: arial;
+	font-weight: bold;
+	color: #666;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	font-size: 50px;
+	line-height: 50px;
+	margin-left: -24px;
+	margin-top: -25px;
+}
+.blackout {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0);
+	pointer-events: none;
+	transition: background-color 0.1s ease-in;
+}
+.blackout.visible {
+	background-color: rgba(0, 0, 0, 0.7);
+	pointer-events: auto;
+}
+.default-colour {
+	width: 100px;
+	padding: 20px 0;
+	font-size: 1.2em;
+	color: #428BCA;
+	text-decoration: underline;
+}
+
+.default-colour:hover {
+	cursor: pointer;
+	text-decoration: none	;
+
+}
+
+.icon {
+	padding: 0  0 15px 8px;
+	font-size: 2.9em;
+}

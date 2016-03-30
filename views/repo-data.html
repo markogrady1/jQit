@@ -28,6 +28,7 @@
         var username =  <%- JSON.stringify(username) %>
         var email =  <%- JSON.stringify(email) %>
         var avgIssues =  <%- JSON.stringify(avgIssues) %>
+        var chartColour = <%- JSON.stringify(chartColour) %>
          if(flagdata !== null) {
 
             everyIncrease = false;
@@ -211,7 +212,7 @@
    <div class=compareChart2></div>
 <script>
 var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
-        setCharts(issueflagsIndexs, pullsflagsIndexs, false);
+        setCharts(issueflagsIndexs, pullsflagsIndexs, false, undefined, chartColour);
         </script>
 <div class='point point2'></div>
    <input class="range" value=2>

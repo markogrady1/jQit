@@ -363,7 +363,9 @@ router.post("/dashboard/edit/repo", (req, res) => {
     var issueBoundary = req.body.issueSlider;
     var pullsBoundary = req.body.pullsSlider;
     var showEveryIncrease = req.body.showEveryIncrease;
-console.log(watchTarget, issueBoundary, pullsBoundary)
+    var chartColour = req.body.chartColour;
+
+    console.log(watchTarget, issueBoundary, pullsBoundary)
 
 
 
@@ -426,6 +428,7 @@ console.log(watchTarget, issueBoundary, pullsBoundary)
 
     reslv.assignWatcher(watcher);
     reslv.assignTeamWatcher(teamWatcher);
+    reslv.setChartColour(watcher, chartColour);
 });
 
 

@@ -151,6 +151,7 @@ schema.executeNextMonthQuery = function(database, param, callback, range) {
 	});
 };
 
+
  /**
  * Aquire all jquery repositories issues and PR data within last 30 days
  *
@@ -421,7 +422,50 @@ schema.storeWatchData = function(obj) {
     });
 };
 
+schema.setChartColour = function(data, colour) {
+	var username = data.user;
+	var email = data.email;
+	var obj = {
+		username: username,
+		email: email,
+		chart_colour: colour
+	};
+	connection("user", (db) => {
+		db.collection('chartColor').findOne({ username: username, email: email }, function(err, doc) {
+			if (err) throw err;
+			if(doc === null) {
+				db.collection("chartColor").insert( obj, (err, data) => {
+					if(err) throw err;
+					db.close();
+				});
+			} else {
+				db.collection("chartColor").update({ username:obj.user }, obj, (err, data) => {
+					if(err) throw err;
+					db.close();
+				});
+			}
+		});
+	});
+};
 
+schema.getChartColour = function(username, email, cb) {
+	connection("user", (db) => {
+		db.collection('chartColor').findOne({ username: username, email: email }, function(err, doc) {
+			if (err) throw err;
+			if(doc === null) {
+				cb("#4E87B2");
+			} else {
+				if(doc.chart_colour === "null") {
+					cb("#4E87B2");
+				} else {
+					cb(doc.chart_colour);
+				}
+
+			}
+			db.close();
+		});
+	});
+}
 /**
  * Function responsible for storing the settings to watch over a given repository
  * @param {Object} obj
