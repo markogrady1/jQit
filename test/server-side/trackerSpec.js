@@ -170,5 +170,82 @@ describe('Return the the default login state of the application with loginState.
 	});
 });
 
+describe('get PR number for a given repository with mainController.getPRs()', function(){
+
+	it("should return a chunk", function() {
+		var str = "'2012-dev-summit  0','2015-developer-summit  3','api.globalizejs.com  1','api.jquery.com  6','api.jquerymobile.com  3'"
+
+		mainController.formatPRs(str, (data) => {
+			setTimeout(() => {
+				console.log(data)
+				assert.equal(data, 135, '');
+
+			},500)
+
+		})
+	})
+});
 
 
+var teamControl = require('../../lib/teamsController');
+
+
+describe('Test the return value of getTeamTargetValue() function', function(){
+
+	it("should return a null value", function() {
+		var val = teamControl.getTeamTargetValue("Watch");
+		assert.equal(val, null);
+	})
+
+
+	it("should return a given string value", function() {
+		var val = teamControl.getTeamTargetValue("jquery");
+		assert.equal(val, "jquery");
+	})
+});
+
+describe('Test the unicode values of the terminal output', function(){
+
+	it("should return a '\x1b[0m' unicode value", function() {
+		var val = helper.terminalStyle();
+		assert.equal(val['reset'], '\x1b[0m');
+	});
+	it("should return a '\x1b[1m' unicode value", function() {
+		var val = helper.terminalStyle();
+		assert.equal(val['bright'], '\x1b[1m');
+	});
+	it("should return a '\x1b[31m' unicode value", function() {
+		var val = helper.terminalStyle();
+		assert.equal(val['error'], '\x1b[31m');
+	});
+
+
+	it("should return a '\x1b[31m' unicode value", function() {
+		var val = helper.terminalCol();
+		assert.equal(typeof val, Object);
+	});
+
+});
+
+//describe('creating new user', function(){
+////var assert = require('assert');
+//	var User = require('../../models/repository');
+////var history = require('../models/history');
+//
+//	var testUser;
+//
+//		testUser = new User("mark", 'at@someplace.com', '1234');
+//
+//
+//	it('is valid', function(){
+//		//assert.equal(testUser, "jquery");
+//
+//	});
+//});
+//
+//describe('Creating new user', function(){
+//	it('is valid', function(){
+//		assert.should.not.equal(undefined);
+//	});
+//});
+//

@@ -79,10 +79,18 @@ buildWidget = function() {
 //            }
         $color = $('<button class="color"></button>');
         hex = colors[name][5];
+console.log(hex)
         $color.attr('data-name', name);
         $color.attr('data-hex', hex);
         $color.css('background-color', hex);
         rows[nextRow()].append($color);
+
+
+        if( $color.css('background-color') === "#03a9f4") {
+
+            $color.css('background-color', "#4a84B0");
+            //rows[nextRow()].append($color);
+        }
     }
 //        $blackout = $('<div class="blackout"></div>');
 //        $widget.append($blackout);
@@ -129,7 +137,7 @@ colors = {
     'Deep Purple': ['#ede7f6', '#d1c4e9', '#b39ddb', '#9575cd', '#7e57c2', '#673ab7', '#5e35b1', '#512da8', '#4527a0', '#311b92', '#b388ff', '#7c4dff', '#651fff', '#6200ea'],
     Indigo: ['#e8eaf6', '#c5cae9', '#9fa8da', '#7986cb', '#5c6bc0', '#3f51b5', '#3949ab', '#303f9f', '#283593', '#1a237e', '#8c9eff', '#536dfe', '#3d5afe', '#304ffe'],
     Blue: ['#e7e9fd', '#d0d9ff', '#afbfff', '#91a7ff', '#738ffe', '#5677fc', '#4e6cef', '#455ede', '#3b50ce', '#2a36b1', '#a6baff', '#6889ff', '#4d73ff', '#4d69ff'],
-    'Light Blue': ['#e1f5fe', '#b3e5fc', '#81d4fa', '#4fc3f7', '#29b6f6', '#03a9f4', '#039be5', '#0288d1', '#0277bd', '#01579b', '#80d8ff', '#40c4ff', '#00b0ff', '#0091ea'],
+    'Light Blue': ['#e1f5fe', '#b3e5fc', '#81d4fa', '#4fc3f7', '#29b6f6', '#4A84B0', '#039be5', '#0288d1', '#0277bd', '#01579b', '#80d8ff', '#40c4ff', '#00b0ff', '#0091ea'],
     Cyan: ['#e0f7fa', '#b2ebf2', '#80deea', '#4dd0e1', '#26c6da', '#00bcd4', '#00acc1', '#0097a7', '#00838f', '#006064', '#84ffff', '#18ffff', '#00e5ff', '#00b8d4'],
     Teal: ['#e0f2f1', '#b2dfdb', '#80cbc4', '#4db6ac', '#26a69a', '#009688', '#00897b', '#00796b', '#00695c', '#004d40', '#a7ffeb', '#64ffda', '#1de9b6', '#00bfa5'],
     Green: ['#d0f8ce', '#a3e9a4', '#72d572', '#42bd41', '#2baf2b', '#259b24', '#0a8f08', '#0a7e07', '#056f00', '#0d5302', '#a2f78d', '#5af158', '#14e715', '#12c700'],

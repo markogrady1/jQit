@@ -1,6 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
-@import url(https://fonts.googleapis.com/css?family=Signika);
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
 
 td.t-d {
 	width: 450px;
@@ -1157,10 +1155,10 @@ svg.team-chart {
 }
 
 
-input[type="checkbox" i] {
-	-webkit-appearance: checkbox;
-	box-sizing: border-box;
-}
+/*input[type="checkbox" i] {*/
+	/*-webkit-appearance: checkbox;*/
+	/*box-sizing: border-box;*/
+/*}*/
 
 input[type="checkbox"] {
 	background-color: red;
@@ -1195,16 +1193,6 @@ input[type="checkbox"] {
 	border-bottom: 1px solid #AAAAAA;
 }
 
-
-
-
-
-
-
-
-
-
-
 .color-picker-wrap {
 	clear: both;
 	width: 200px;
@@ -1212,41 +1200,43 @@ input[type="checkbox"] {
 }
 #frm1 {
 	background-color: #4E87B2;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #fff;
 }
-.color-widget {
-	background-color: #4E87B2;
-	border: 3px solid #1178BC;
-	border-radius: 4px;
+/*.color-widget {*/
+	/*background-color: #4E87B2;*/
+	/*border: 3px solid #1178BC;*/
+	/*border-radius: 4px;*/
 
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flexbox;
-	display: -ms-flex;
-	display: flex;
-	-webkit-flex-direction: column;
-	-moz-flex-direction: column;
-	-ms-flex-direction: column;
-	flex-direction: column;
-	/*position: fixed;*/
-	/*top: 0;*/
-	/*left: 0;*/
-	width: 100%;
-	height: 100%;
-	padding: 4px;
-	-moz-sizing: border-box;
-	box-sizing: border-box;
-}
-.row {
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flexbox;
-	display: -ms-flex;
-	display: flex;
-	-webkit-flex: 1;
-	-moz-flex: 1;
-	-ms-flex: 1;
-	flex: 1;
-}
+	/*display: -webkit-flex;*/
+	/*display: -moz-flex;*/
+	/*display: -ms-flexbox;*/
+	/*display: -ms-flex;*/
+	/*display: flex;*/
+	/*-webkit-flex-direction: column;*/
+	/*-moz-flex-direction: column;*/
+	/*-ms-flex-direction: column;*/
+	/*flex-direction: column;*/
+	/*!*position: fixed;*!*/
+	/*!*top: 0;*!*/
+	/*!*left: 0;*!*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*padding: 4px;*/
+	/*-moz-sizing: border-box;*/
+	/*box-sizing: border-box;*/
+/*}*/
+/*.row {*/
+	/*display: -webkit-flex;*/
+	/*display: -moz-flex;*/
+	/*display: -ms-flexbox;*/
+	/*display: -ms-flex;*/
+	/*display: flex;*/
+	/*-webkit-flex: 1;*/
+	/*-moz-flex: 1;*/
+	/*-ms-flex: 1;*/
+	/*flex: 1;*/
+/*}*/
 .shades {
 	position: relative;
 	display: -webkit-flex;
@@ -1277,17 +1267,18 @@ input[type="checkbox"] {
 .back:focus {
 	outline: none;
 }
+
 .color:hover:before,
 .back:hover:before {
 	content: '';
 	position: absolute;
 	background-color: inherit;
-	border: 1px solid #333;
+	border: 2px solid #666;
 	z-index: 1;
-	top: -4px;
-	left: -4px;
-	right: -4px;
-	bottom: -4px;
+	top: -5px;
+	left: -5px;
+	right: -5px;
+	bottom: -5px;
 }
 .color:hover .icon,
 .back:hover .icon {

@@ -433,6 +433,7 @@ router.post("/dashboard/edit/repo", (req, res) => {
 
 
 //route for posting the dashboard settings
+
 router.post("/dashboard/edit/team", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /dashboard/edit/team");
     var teamWatchTarget = req.body.watchTarget;
@@ -443,16 +444,7 @@ router.post("/dashboard/edit/team", (req, res) => {
     var teamIssueBoundary = req.body.issueSlider;
     var teamPullsBoundary = req.body.pullsSlider;
     var teamShowEveryIncrease = req.body.showEveryIncrease;
-console.log(teamWatchTarget)
-
-console.log(teamReceiveEmail)
-console.log(teamFlagIssuesChart)
-console.log(teamFlagPullsChart)
-console.log(teamIssueBoundary)
-    console.log(teamPullsBoundary)
-console.log(teamShowEveryIncrease)
-    teamWatchTarget = teamWatchTarget === "Watch" ? null : teamWatchTarget;
-    //
+    teamWatchTarget = teamsControl.getTeamTargetValue(teamWatchTarget);
     var data = localStorage.getItem("data");
     var name = helper.getSplitValue(data, "=>", 0);
     var email = helper.getSplitValue(data, "=>", 2);
@@ -475,6 +467,8 @@ console.log(teamShowEveryIncrease)
 
     reslv.assignTeamWatcher(teamWatcher);
 });
+
+
 
 //route for 404 requests
 router.get("*", (req, res) => {

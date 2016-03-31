@@ -302,15 +302,15 @@ checkDashboardValues(flagData, teamFlag);
 <div class="color-picker-wrap">
     <div class="color-widget" onclick="colorPick(event)">
         <form id="frm1" >
-            Color: <input id="coloredvalue" value="" disabled style="border-radius: 5px;border:none; line-height:20px;padding-left: 5px"><br>
+            <span style="color:#fff">Color:</span> <input id="coloredvalue" value="" disabled style="border-radius: 5px;border:2px solid #607d8b; line-height:20px;padding-left: 5px;font-weight: bold;"><br>
         </form>
     </div>
     <div class="default-colour">Default Colour</div>
 </div>
 <script>
     $(".default-colour").on("click", function() {
-        localStorage.setItem("chartColor", "#4A84B0")
-        document.getElementById('coloredvalue').value = "#4A84B0";
+        localStorage.setItem("chartColor", "#4a84b0")
+        document.getElementById('coloredvalue').value = "#4a84b0";
 
     })
 </script>
