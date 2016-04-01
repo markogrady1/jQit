@@ -24,6 +24,7 @@
  - [NodeJS] [node-requirements]
  - [MongoDB] [mongodb-requirements] 
  - Package Manager ([NPM][npm-requirements]/[Homebrew][homebrew-requirements]) 
+ - Data Gatherer [jQit Bot][jqit-bot]
 
 
 **Implementation**
@@ -44,5 +45,6 @@ localhost:3000
 [mongodb-requirements]: https://www.mongodb.org/
 [npm-requirements]: https://docs.npmjs.com/getting-started/installing-node
 [homebrew-requirements]: http://brew.sh/
+[jqit-bot]: https://github.com/markogrady1/jQit-Bot
 
 ####Enjoy!!!
