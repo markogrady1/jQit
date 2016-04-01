@@ -103,7 +103,9 @@ console.log(hex)
         return e.stopPropagation();
     });
     return $widget.find('.color').click(function(e) {
-
+        $(".color-picker-wrap").css({
+            height:"0px"
+        });
         var $active;
         e.stopPropagation();
         $active = $(e.currentTarget);
@@ -129,9 +131,6 @@ console.log(hex)
                 left: "-999999"
 
             });
-            $("span.ui-slider-tick-mark").css("zIndex","2");
-            $(".ui-slider-handle").css("zIndex","3");
-            $(".ui-slider-range").css("zIndex","3");
             localStorage.setItem("chartColor",  hexColor);
         } else {
             $(".end-color-box").css({
@@ -143,9 +142,6 @@ console.log(hex)
                 left: "-999999"
 
             });
-            $("span.ui-slider-tick-mark").css("zIndex","2");
-            $(".ui-slider-handle").css("zIndex","3");
-            $(".ui-slider-range").css("zIndex","3");
             localStorage.setItem("endChartColor",  hexColor);
         }
 
@@ -197,15 +193,30 @@ function colorPick(e)
 }
 
 function setDefaultEvent() {
+    $(".inner-repo-dashboard-wrap").css({
+
+        zIndex:0
+
+    });
+    $(".color-picker-wrap").css({
+        height:"0px"
+    });
     $(".default-color").on("click", function () {
+        $(".color-picker-wrap").css({
+            height:"0px"
+        });
         if(!isEndColor) {
             $(".start-color-box").css({
                 backgroundColor: "#4a84b0"
             });
+            localStorage.setItem("chartColor", "#4a84b0")
+            document.getElementById('coloredvalue').value = "#4a84b0";
         } else {
             $(".end-color-box").css({
                 backgroundColor: "#c6dbef"
             });
+            localStorage.setItem("endChartColor", "#C6DBEF")
+            document.getElementById('coloredvalue').value = "#4a84b0";
         }
 
         $("div.color-widget").css({
@@ -214,22 +225,20 @@ function setDefaultEvent() {
             left: "-999999"
 
         });
-        $(".ui-slider-handle").css("zIndex", "3");
-        $(".ui-slider-range").css("zIndex", "3");
-        localStorage.setItem("chartColor", "#4a84b0")
-        document.getElementById('coloredvalue').value = "#4a84b0";
+
 
     });
 
     $(".close-color-picker").on("click", function () {
+        $(".color-picker-wrap").css({
+            height:"0px"
+        });
         $("div.color-widget").css({
             visibility: "hidden",
             zIndex: "3",
             left: "-999999"
 
         });
-        $(".ui-slider-handle").css("zIndex", "3");
-        $(".ui-slider-range").css("zIndex", "3");
     });
 }
 $(function() {
@@ -240,3 +249,62 @@ $(function() {
     return val;
 
 });
+function setUpBoxButtons() {
+    var $startColorBox = $(".start-color-box");
+    $startColorBox.css("backgroundColor", chartCol);
+    $startColorBox.on("click", function () {
+        isEndColor = false;
+        $(".color-picker-wrap").css({
+            height: "200px"
+        });
+        $("div.color-widget").css({
+            visibility: "visible",
+            zIndex: "3"
+        });
+    })
+
+
+    var $endColorBox = $(".end-color-box");
+    $endColorBox.css("backgroundColor", endChartColor);
+    $endColorBox.on("click", function () {
+        isEndColor = true;
+        $("div.color-widget").css({
+            visibility: "visible",
+            zIndex: "3"
+        });
+        $(".color-picker-wrap").css({
+            height: "200px"
+        });
+    });
+    var $startColortxt = $(".start-color-text");
+    $startColortxt.on("click", function () {
+        isEndColor = false;
+        $(".color-picker-wrap").css({
+            height: "200px"
+        });
+        $("div.color-widget").css({
+            visibility: "visible",
+            zIndex: "3"
+        });
+    })
+
+
+    var $endColortxt = $(".end-color-text");
+    $endColortxt.on("click", function () {
+        isEndColor = true;
+        $("div.color-widget").css({
+            visibility: "visible",
+            zIndex: "3"
+        });
+        $(".color-picker-wrap").css({
+            height: "200px"
+        });
+    });
+
+    $(".complete-default").on("click", function() {
+        $startColorBox.css("backgroundColor", "#4a84b0");
+        $endColorBox.css("backgroundColor", "#C6DBEF");
+        localStorage.setItem("endChartColor", "#C6DBEF")
+        localStorage.setItem("chartColor", "#4a84b0")
+    })
+}

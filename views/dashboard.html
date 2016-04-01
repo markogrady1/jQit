@@ -34,6 +34,8 @@ checkDashboardValues(flagData, teamFlag);
 <br><br><br>
     <div class="repo-dashboard-wrap">
         <h3 class="repo-dashboard-title">Repository Dashboard</h3>
+    <div class="inner-repo-dashboard-wrap">
+
 <select name="dashboard-watch1" id="dashboard-watch1">
     <option value="title">Watch</option>
     <% for (var i = 0; i < compDoc.length; i++) {
@@ -69,7 +71,7 @@ checkDashboardValues(flagData, teamFlag);
 
 <div class="feedback"></div>
     </div>
-
+    </div>
 
 
 
@@ -83,6 +85,8 @@ checkDashboardValues(flagData, teamFlag);
 
     <div class="team-dashboard-wrap">
         <h3 class="team-dashboard-title">Team Dashboard</h3>
+    <div class="inner-team-dashboard-wrap">
+
 
         <select name="dashboard-watch2" id="dashboard-watch2">
             <option value="title">Watch</option>
@@ -120,6 +124,7 @@ checkDashboardValues(flagData, teamFlag);
 
         <div class="feedback2"></div>
 
+    </div>
     </div>
 
 
@@ -302,7 +307,26 @@ checkDashboardValues(flagData, teamFlag);
 </script>
 <script src="/js/colorPicker.js"></script>
 <div class="line-break"></div>
+<div class="both-color-box-wrap">
+    <div class="color-box-title">Change Chart Color</div>
+    <div class="start-color-wrap">
+        <ul class="start-color-list">
+            <li class="start-color"><div class="start-color-text">Gradient Start: </div></li>
+            <li><div class="start-color-box"></div></li>
+        </ul>
+    </div>
 
+
+    <div class="end-color-wrap">
+        <ul class="end-color-list">
+            <li class="end-color"><div class="end-color-text"> &nbsp;Gradient End:&nbsp;</div></li>
+            <li><div class="end-color-box"></div></li>
+        </ul>
+    </div>
+    <div class="bottom-default-link-wrap">
+        <div class="complete-default">Default Colour</div>
+    </div>
+</div>
     <div class="color-box-wrap">
         <div class="color-picker-wrap">
             <div class="color-widget" onclick="colorPick(event)">
@@ -311,56 +335,14 @@ checkDashboardValues(flagData, teamFlag);
                 </form>
             </div>
 
-    <div class="start-color-wrap">
-        <ul class="start-color-list">
-            <li class="start-color"><div>Gradient Start: </div></li>
-            <li><div class="start-color-box"></div></li>
-        </ul>
-    </div>
 
-
-    <div class="end-color-wrap">
-        <ul class="end-color-list">
-            <li class="end-color"><div> &nbsp;Gradient End:&nbsp;</div></li>
-            <li><div class="end-color-box"></div></li>
-        </ul>
-    </div>
     </div>
 <div class="line-break"></div>
     <!--<div class="default-colour">Default Colour</div>-->
 </div>
 
 <script>
-    var $startColorBox = $(".start-color-box");
-    $startColorBox.css("backgroundColor", chartCol);
-    $startColorBox.on("click", function() {
-        isEndColor = false;
-        $("div.color-widget").css({
-            visibility: "visible",
-            zIndex: "3"
-        });
-        $(".ui-slider-handle").css("zIndex","0");
-        $(".ui-slider-range").css("zIndex","0");
-        $("span.ui-slider-tick-mark").css("zIndex","-1");
-
-//        buildWidget();
-    })
-
-
-    var $endColorBox = $(".end-color-box");
-    $endColorBox.css("backgroundColor", endChartColor);
-    $endColorBox.on("click", function() {
-    isEndColor = true;
-        $("div.color-widget").css({
-            visibility: "visible",
-            zIndex: "3"
-        });
-        $(".ui-slider-handle").css("zIndex","0");
-        $(".ui-slider-range").css("zIndex","0");
-        $("span.ui-slider-tick-mark").css("zIndex","-1");
-
-    })
-
+    setUpBoxButtons();
 </script>
 <br><br>
 <div class="dashboard-ajax-btn">Save</div>

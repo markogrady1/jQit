@@ -367,11 +367,6 @@ router.post("/dashboard/edit/repo", (req, res) => {
     var showEveryIncrease = req.body.showEveryIncrease;
     var chartColour = req.body.chartColour;
     var endChartColour = req.body.endChartColour;
-
-    console.log(watchTarget, issueBoundary, pullsBoundary)
-
-
-
     var teamWatchTarget = req.body.watchTeamTarget;
     var teamReceiveEmail = req.body.receiveTeamEmail;
     var teamFlagIssuesChart = req.body.flagTeamIssuesChart;
@@ -380,21 +375,8 @@ router.post("/dashboard/edit/repo", (req, res) => {
     var teamIssueBoundary = req.body.issueTeamSlider;
     var teamPullsBoundary = req.body.pullsTeamSlider;
     var teamShowEveryIncrease = req.body.showEveryTeamIncrease;
-    console.log(teamWatchTarget)
-
-    console.log(teamReceiveEmail)
-    console.log(teamFlagIssuesChart)
-    console.log(teamFlagPullsChart)
-    console.log(teamIssueBoundary)
-    console.log(teamPullsBoundary)
-    console.log(teamShowEveryIncrease)
     teamWatchTarget = teamWatchTarget === "Watch" ? null : teamWatchTarget;
-
-
-
-
     watchTarget = watchTarget === "Watch" ? null : watchTarget;
-
     var data = localStorage.getItem("data");
     var name = helper.getSplitValue(data, "=>", 0);
     var email = helper.getSplitValue(data, "=>", 2);
@@ -436,7 +418,6 @@ router.post("/dashboard/edit/repo", (req, res) => {
 
 
 //route for posting the dashboard settings
-
 router.post("/dashboard/edit/team", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /dashboard/edit/team");
     var teamWatchTarget = req.body.watchTarget;
