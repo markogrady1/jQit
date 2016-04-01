@@ -320,8 +320,8 @@ router.get("/dashboard", (req, res) => {
             if (avatar !== "undefined") {
                 res.locals.userStat = true;
                 var data = reslv.getStorage();
-                reslv.getFlagData(data, (flagObj, attData, teamObj) => {
-                    callback(flagObj, attData, teamObj);
+                reslv.getFlagData(data, (flagObj, attData, teamObj, chartColor, endChartColor) => {
+                    callback(flagObj, attData, teamObj, chartColor, endChartColor);
                 });
             } else {
                 res.locals.userStat = false;
@@ -330,7 +330,7 @@ router.get("/dashboard", (req, res) => {
         }
         var teamsJSONValues = require('../repoData/teams.json');
         compDoc = schema.completeDoc;
-        getFlagData((flag, attention, teamFlag) => {
+        getFlagData((flag, attention, teamFlag, chartColor, endChartColor) => {
             res.render("dashboard", {
                 // state: "true",
                 teamsJSONValues: teamsJSONValues,
@@ -345,7 +345,9 @@ router.get("/dashboard", (req, res) => {
                 flag: flag,
                 attention: attention,
                 teamFlag: teamFlag,
-                avatar_url: null
+                avatar_url: null,
+                chartColor: chartColor,
+                endChartColor: endChartColor
             });
         })
 
@@ -364,6 +366,7 @@ router.post("/dashboard/edit/repo", (req, res) => {
     var pullsBoundary = req.body.pullsSlider;
     var showEveryIncrease = req.body.showEveryIncrease;
     var chartColour = req.body.chartColour;
+    var endChartColour = req.body.endChartColour;
 
     console.log(watchTarget, issueBoundary, pullsBoundary)
 
@@ -428,7 +431,7 @@ router.post("/dashboard/edit/repo", (req, res) => {
 
     reslv.assignWatcher(watcher);
     reslv.assignTeamWatcher(teamWatcher);
-    reslv.setChartColour(watcher, chartColour);
+    reslv.setChartColour(watcher, chartColour, endChartColour);
 });
 
 

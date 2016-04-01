@@ -2,6 +2,7 @@ var activateColor, buildWidget, cancelColor, colors;
 
 colors = null;
 
+isEndColor = false;
 
 
 cancelColor = function() {
@@ -92,8 +93,8 @@ console.log(hex)
             //rows[nextRow()].append($color);
         }
     }
-//        $blackout = $('<div class="blackout"></div>');
-//        $widget.append($blackout);
+        $blackout = $('<div class="color-box-operations"><span class="default-color">default-color</span><span class="close-color-picker">Close</span></div>');
+        $widget.append($blackout);
 //        $widget.find('.blackout').click(function(e) {
 //            e.stopPropagation();
 //            return cancelColor();
@@ -102,6 +103,7 @@ console.log(hex)
         return e.stopPropagation();
     });
     return $widget.find('.color').click(function(e) {
+
         var $active;
         e.stopPropagation();
         $active = $(e.currentTarget);
@@ -117,13 +119,44 @@ console.log(hex)
         console.log(hexColor)
         var txtArea =  document.getElementById('coloredvalue');
         txtArea.value =  hexColor;
-        localStorage.setItem("chartColor",  hexColor);
+        if(!isEndColor) {
+            $(".start-color-box").css({
+                backgroundColor: hexColor
+            });
+            $("div.color-widget").css({
+                visibility: "hidden",
+                zIndex: "3",
+                left: "-999999"
+
+            });
+            $("span.ui-slider-tick-mark").css("zIndex","2");
+            $(".ui-slider-handle").css("zIndex","3");
+            $(".ui-slider-range").css("zIndex","3");
+            localStorage.setItem("chartColor",  hexColor);
+        } else {
+            $(".end-color-box").css({
+                backgroundColor: hexColor
+            });
+            $("div.color-widget").css({
+                visibility: "hidden",
+                zIndex: "3",
+                left: "-999999"
+
+            });
+            $("span.ui-slider-tick-mark").css("zIndex","2");
+            $(".ui-slider-handle").css("zIndex","3");
+            $(".ui-slider-range").css("zIndex","3");
+            localStorage.setItem("endChartColor",  hexColor);
+        }
+
         if ($active.hasClass('active')) {
             return cancelColor();
         } else {
             return activateColor($active);
         }
+
     });
+
 };
 function componentToHex(red, blue, green) {
     var rgb = blue | (green << 8) | (red << 16);
@@ -163,6 +196,47 @@ function colorPick(e)
     return cancelColor();
 }
 
+function setDefaultEvent() {
+    $(".default-color").on("click", function () {
+        if(!isEndColor) {
+            $(".start-color-box").css({
+                backgroundColor: "#4a84b0"
+            });
+        } else {
+            $(".end-color-box").css({
+                backgroundColor: "#c6dbef"
+            });
+        }
+
+        $("div.color-widget").css({
+            visibility: "hidden",
+            zIndex: "3",
+            left: "-999999"
+
+        });
+        $(".ui-slider-handle").css("zIndex", "3");
+        $(".ui-slider-range").css("zIndex", "3");
+        localStorage.setItem("chartColor", "#4a84b0")
+        document.getElementById('coloredvalue').value = "#4a84b0";
+
+    });
+
+    $(".close-color-picker").on("click", function () {
+        $("div.color-widget").css({
+            visibility: "hidden",
+            zIndex: "3",
+            left: "-999999"
+
+        });
+        $(".ui-slider-handle").css("zIndex", "3");
+        $(".ui-slider-range").css("zIndex", "3");
+    });
+}
 $(function() {
-    return buildWidget();
+    var val = buildWidget();
+    setDefaultEvent();
+
+
+    return val;
+
 });

@@ -422,13 +422,14 @@ schema.storeWatchData = function(obj) {
     });
 };
 
-schema.setChartColour = function(data, colour) {
+schema.setChartColour = function(data, colour, endColour) {
 	var username = data.user;
 	var email = data.email;
 	var obj = {
 		username: username,
 		email: email,
-		chart_colour: colour
+		chart_colour: colour,
+		end_chart_colour: endColour
 	};
 	connection("user", (db) => {
 		db.collection('chartColor').findOne({ username: username, email: email }, function(err, doc) {
@@ -450,17 +451,25 @@ schema.setChartColour = function(data, colour) {
 
 schema.getChartColour = function(username, email, cb) {
 	connection("user", (db) => {
+		var c, ec;
 		db.collection('chartColor').findOne({ username: username, email: email }, function(err, doc) {
 			if (err) throw err;
 			if(doc === null) {
-				cb("#4E87B2");
+				cb("#4E87B2", "#c6dbef");
 			} else {
 				if(doc.chart_colour === "null") {
-					cb("#4E87B2");
+					c = "#4E87B2";
 				} else {
-					cb(doc.chart_colour);
-				}
 
+					c = doc.chart_colour;
+				}
+				if(doc.end_chart_colour === "null") {
+					ec = "#c6dbef";
+				} else {
+
+					ec = doc.end_chart_colour;
+				}
+				cb(c, ec);
 			}
 			db.close();
 		});

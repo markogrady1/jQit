@@ -37,7 +37,7 @@ var $viewEle;
  * Responsible for setting the initial values for the plot of the main charts
  *
  */
-function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate, chartColour) {
+function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate, chartColour, endChartColour) {
 	startDate = typeof startDate === "undefined" ? sd : startDate;
 	detectWindowSize();
 		if(isPreviousMonthOfData) {
@@ -137,9 +137,9 @@ function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate, char
            allRepoPullsHistory: allPullsHistory,
            allRepoName: repoData
          };
-         setBarChart(issuesArr, issuesBarData, historyObj, startDate, isPreviousMonthOfData, chartColour);
+         setBarChart(issuesArr, issuesBarData, historyObj, startDate, isPreviousMonthOfData, chartColour, endChartColour);
          setLineChart(issuesArr, issuesLineData, startDate, isPreviousMonthOfData);
-         setBarChart(pullsArr, pullsBarData, historyObj, startDate, isPreviousMonthOfData, chartColour);
+         setBarChart(pullsArr, pullsBarData, historyObj, startDate, isPreviousMonthOfData, chartColour, endChartColour);
          setLineChart(pullsArr, pullsLineData, startDate, isPreviousMonthOfData);
 
 
@@ -168,7 +168,7 @@ var hideLineChart = function() {
  * @param {String} startDate
  * @param {Boolean} isPreviousMonthOfData
  */
-function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData, chartColour) {
+function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData, chartColour, endChartColour) {
 	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var tot = 0;
 	var isIss =false;
@@ -283,7 +283,7 @@ function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData
 				.orient('left');
 	var linearColorScale = d3.scale.linear()
 				.domain([0, data.length])
-				.range([chartColour, '#c6dbef']);
+				.range([chartColour, endChartColour]);
 	var ordinalColorScale = d3.scale.category20();
 	var xAxis = d3.svg.axis()
 			.scale(x)

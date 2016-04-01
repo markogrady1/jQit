@@ -15,6 +15,8 @@
 <script>
 
 flagData = <%- JSON.stringify(flag) %>
+chartCol = <%-  JSON.stringify(chartColor) %>
+endChartColor = <%-  JSON.stringify(endChartColor) %>
 attention = <%- JSON.stringify(attention) %>
 teamFlag = <%- JSON.stringify(teamFlag) %>
 
@@ -27,7 +29,7 @@ checkDashboardValues(flagData, teamFlag);
 <body>
 
 <% include partials/header.html %>
-<div class="content-wrap">
+<div class="content-wrap dashboard-wrap">
 <a href="/">Back</a>
 <br><br><br>
     <div class="repo-dashboard-wrap">
@@ -299,20 +301,66 @@ checkDashboardValues(flagData, teamFlag);
 
 </script>
 <script src="/js/colorPicker.js"></script>
-<div class="color-picker-wrap">
-    <div class="color-widget" onclick="colorPick(event)">
-        <form id="frm1" >
-            <span style="color:#fff">Color:</span> <input id="coloredvalue" value="" disabled style="border-radius: 5px;border:2px solid #607d8b; line-height:20px;padding-left: 5px;font-weight: bold;"><br>
-        </form>
+<div class="line-break"></div>
+
+    <div class="color-box-wrap">
+        <div class="color-picker-wrap">
+            <div class="color-widget" onclick="colorPick(event)">
+                <form id="frm1" >
+                    <span style="color:#fff">Color:</span> <input id="coloredvalue" value="" disabled style="border-radius: 5px;border:2px solid #607d8b; line-height:20px;padding-left: 5px;font-weight: bold;"><br>
+                </form>
+            </div>
+
+    <div class="start-color-wrap">
+        <ul class="start-color-list">
+            <li class="start-color"><div>Gradient Start: </div></li>
+            <li><div class="start-color-box"></div></li>
+        </ul>
     </div>
-    <div class="default-colour">Default Colour</div>
+
+
+    <div class="end-color-wrap">
+        <ul class="end-color-list">
+            <li class="end-color"><div> &nbsp;Gradient End:&nbsp;</div></li>
+            <li><div class="end-color-box"></div></li>
+        </ul>
+    </div>
+    </div>
+<div class="line-break"></div>
+    <!--<div class="default-colour">Default Colour</div>-->
 </div>
+
 <script>
-    $(".default-colour").on("click", function() {
-        localStorage.setItem("chartColor", "#4a84b0")
-        document.getElementById('coloredvalue').value = "#4a84b0";
+    var $startColorBox = $(".start-color-box");
+    $startColorBox.css("backgroundColor", chartCol);
+    $startColorBox.on("click", function() {
+        isEndColor = false;
+        $("div.color-widget").css({
+            visibility: "visible",
+            zIndex: "3"
+        });
+        $(".ui-slider-handle").css("zIndex","0");
+        $(".ui-slider-range").css("zIndex","0");
+        $("span.ui-slider-tick-mark").css("zIndex","-1");
+
+//        buildWidget();
+    })
+
+
+    var $endColorBox = $(".end-color-box");
+    $endColorBox.css("backgroundColor", endChartColor);
+    $endColorBox.on("click", function() {
+    isEndColor = true;
+        $("div.color-widget").css({
+            visibility: "visible",
+            zIndex: "3"
+        });
+        $(".ui-slider-handle").css("zIndex","0");
+        $(".ui-slider-range").css("zIndex","0");
+        $("span.ui-slider-tick-mark").css("zIndex","-1");
 
     })
+
 </script>
 <br><br>
 <div class="dashboard-ajax-btn">Save</div>
@@ -366,6 +414,15 @@ checkDashboardValues(flagData, teamFlag);
                     localStorage.setItem("chartColor", "");
                     if(colour === "") {
                         return "#4E87B2";
+                    } else {
+                        return colour;
+                    }
+                },
+                endChartColour: function() {
+                    var colour = localStorage.getItem("endChartColor");
+                    localStorage.setItem("endChartColor", "");
+                    if(colour === "") {
+                        return "#c6dbef";
                     } else {
                         return colour;
                     }
