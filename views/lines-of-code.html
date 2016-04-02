@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>JQIT | Lines of Code</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+        <script src="/js/external/jquery-1.11.3.min.js"></script>
+        <script src="/js/external/lodash.min.js"></script>
+        <script src="/js/external/scrilla.js"></script>
+        <script src="/js/chart.js"></script>
+        <script src="/js/ajax-calls.js"></script>
+        <script src="/js/external/d3.v3.min.js"></script>
+        <script src="/js/external/d3.tip.v0.6.3.js"></script>
+        <script src="/js/external/tinysort.js"></script>
+        <script src="/js/sortTable.js"></script>
+        <script src="/js/loc.js"></script>
+        <link rel='stylesheet' href='/css/jqit.css' />
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+           var teamName = <%- JSON.stringify(teamName) %>
+           var locData = <%- JSON.stringify(locData) %>
+            console.log(locData)
+
+            var myFlower = new Loc(teamName, 600, 600);
+
+        </script>
+</head>
+<body>
+<% include partials/header.html %>
+
+<div class="content">
+    <div class="upper-content">
+
+    </div>
+    <div class="loc-table-wrap">
+        <table class="props xmpl loc-xtable" id="xtable">
+            <thead>
+            <tr >
+                <th class="head">File/Directory</th>
+                <th class="head">Lines of Code</th>
+                <th class="head">File Type</th>
+            </tr>
+            </thead>
+            <tbody class="loc-table"></tbody></table>
+    </div>
+    <script>
+        myFlower.getData(locData);
+    </script>
+</div>
+</body>
+</html>

@@ -1459,7 +1459,6 @@ ul li.start-color-box {
 .start-color-list{
 	list-style: none;
 	font-size: 1.1em;
-	/*display: inline-block;*/
 }
 
 .start-color-list li{
@@ -1573,4 +1572,46 @@ ul li.end-color-box {
 	border-bottom: 1px solid #dddddd;
 	z-index: 3;
 	background-color: #f5f5f5;
+}
+
+
+/*///// lOC PAGE ////*/
+.loc-declaration {
+	font-size: 1.3em;
+	padding: 30px 0 30px 20%;
+}
+
+.loc-xtable {
+	width: 100%;
+}
+
+.loc-table-wrap {
+	width: 60%;
+	margin: 0 auto;
+}
+
+tr.table-dir {
+	color: #fff;
+	font-size: 1.1em;
+	background-color: #0b97c4;
+}
+
+.loc-link {
+	font-size: 1.1em;
+	color: #4E87B2;
+	width: 130px;
+	padding-left: 20px;
+	/*text-align: center;*/
+}
+
+.loc-link a {
+	text-decoration: none;
+	color: #4E87B2;
+	width: 130px;
+}
+
+.loc-link a:hover {
+	text-decoration: underline;
+	color: #4E87B2;
+	width: 130px;
 }

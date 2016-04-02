@@ -305,6 +305,48 @@ router.get("/logout", (req, res) => {
 	res.redirect("/");
 });
 
+
+//route for the register page requests
+router.get("/repo/details/lines-of-code/:repoName?", (req, res) => {
+
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/lines-of-code/:" + req.params.repoName);
+    var nameParam = null;
+    nameParam = req.params.repoName;
+    var c, flagInfo;
+    helper.noCache(res);
+    var avatar = reslv.getAvatarImage();
+    var urlstate;
+    var userData = reslv.getStorage();
+    if (userData !== "undefined") {
+        res.locals.userStat = true;
+        var name = userData.split("=>")[0];
+        var email = userData.split("=>")[2];
+    }
+    if(avatar === "undefined") {
+        res.locals.userStat = false;
+        c = helper.getRandomString();
+        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+        localStorage.setItem("state", c);
+
+    } else {
+        res.locals.userStat = true;
+        c = helper.getRandomString();
+        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+    }
+    reslv.getLinesOfCode(nameParam, (data) => {
+        res.render("lines-of-code", {
+            teamName: nameParam,
+            locData: data,
+            av: avatar,
+            header: nameParam + " Team",
+            urlstate: urlstate,
+            state: c,
+            logoutLink: "../../../logout",
+            dashboardLink: "../../../dashboard",
+            avatar_url: null
+        })
+    })
+});
 //route for requesting the users dashboard
 router.get("/dashboard", (req, res) => {
     helper.noCache(res);

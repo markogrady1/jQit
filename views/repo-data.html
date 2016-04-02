@@ -105,8 +105,11 @@
       <script src="/js/detectResize.js"></script>
       <script src="/js/external/d3.v3.min.js"></script>
       <script src="/js/external/d3.tip.v0.6.3.js"></script>
+    <script>
 
-      <style>
+    </script>
+
+    <style>
       </style>
    </head>
    <body>
@@ -119,7 +122,9 @@
            <!--<li><div class=details></div></li>-->
            <li><div class=compare-issues-info></div></li>
            <li><div class=compare-pulls-info></div></li>
-       <span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span><!-- ⮀-->
+           <li><div class=loc-link><a href="lines-of-code/<%= data.name %>">List of Files</a></div></li>
+
+           <!--<span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span>&lt;!&ndash; ⮀&ndash;&gt;-->
        </ul>
        <a href="/">Back</a>
    </div>
@@ -205,7 +210,10 @@
     <div class="avg-close-time"></div>
 </div>
 <div class="line-break"></div>
-<br><br><br><br><br><br><br><br><br>
+
+<br><br><br><br><br>
+
+<br><br><br><br>
    <div class=multi-comparison-legend></div>
 
    <div class=multi-compareChart></div>
@@ -326,6 +334,9 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
 
 
       </script>
+
+
+       </div>
 
    </body>
 </html>

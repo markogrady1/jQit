@@ -100,7 +100,6 @@ schema.getRecord = function(param, callback) {
     });
 };
 
-
 /**
  * Execute query to abtain a given collection data
  *
@@ -592,6 +591,18 @@ schema.getNextMonth = function(repo, range, callback) {
 		});
 	});
 };
+
+schema.getLinesOfCode = function(param, callback) {
+	helper.log('CONNECTION','mongoDB connection made', true);
+	connection("flowers", function(db) {
+		db.collection(param).findOne({}, function(err, doc) {
+			if (err) throw err;
+			db.close();
+			callback(doc);
+		});
+	});
+};
+
 /**
  * User object constructor
  *
