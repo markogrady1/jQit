@@ -44,6 +44,7 @@ var ScrollMovement = {
 
 $(document).ready(function() {
 
+
     $(".complete-compare-overlay").on("click", function() {
         ScrollMovement.enableScroll();
         $(".complete-compare-overlay").css("display", "none");
@@ -146,3 +147,4 @@ $(document).ready(function() {
         }
     });
 });
+

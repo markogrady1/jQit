@@ -1,0 +1,72 @@
+var mongoClient = require("mongodb").MongoClient;
+
+
+
+var notification = {};
+
+
+
+notification.getAllUsers = function(callback) {
+    connection("user", function(db){
+        db.collection("users").find({}, {}).toArray(function(err, doc) {
+            if (err) throw err;
+            callback(doc)
+            db.close();
+        });
+    });
+};
+
+notification.getEmailNotifs = function(username, email, callback) {
+    console.log(username, email)
+    connection("user", function(db){
+        db.collection("repoFlag").find({
+            username:username,
+            email:email,
+            receive_email: "true",
+            repository_target: {$ne: null },
+            $or: [ { issues_boundary: {$ne: "0" } }, { pulls_boundary: {$ne: "0" } } ]
+
+        }, {}).toArray(function(err, doc) {
+            if (err) throw err;
+            callback(doc)
+            db.close();
+        });
+    });
+};
+
+
+notification.getRepoIssueHistory = function(target, callback) {
+    connection("repoHistory", function(db){
+        db.collection(target).find({}, {}).toArray(function(err, doc) {
+            if (err) throw err;
+            callback(doc)
+            db.close();
+        });
+    });
+}
+
+
+notification.getRepoPullsHistory = function(target, callback) {
+    connection("repoPullsHistory", function(db){
+        db.collection(target).find({}, {}).toArray(function(err, doc) {
+            if (err) throw err;
+            callback(doc)
+            db.close();
+        });
+    });
+}
+/**
+ * connect to a given database via mongodb
+ *
+ * @param {String} dbase
+ * @param {Function} callback
+ */
+var connection = function(dbase, callback) {
+    mongoClient.connect("mongodb://127.0.0.1:27017/" + dbase, function(err, db) {
+        if (err) throw err;
+        callback(db)
+    });
+};
+
+
+module.exports = notification;

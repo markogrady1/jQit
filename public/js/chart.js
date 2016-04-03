@@ -1694,26 +1694,31 @@ function getDifference(data, isIssue) {
 var checkIncrease = function(data, boundary, periodic, targetType ) {
 	var triggerArray = [];
 	if (periodic) {
-		for (var i = 1; i < data.length; i++) {
-			var df = data[i][targetType] - data[i-1][targetType];
-			if (df >= boundary) {
-				triggerArray.push(i);  //index of triggered items
+		if(boundary !== "0") {
+			for (var i = 1; i < data.length; i++) {
+				var df = data[i][targetType] - data[i-1][targetType];
+				if (df >= boundary) {
+					triggerArray.push(i);  //index of triggered items
+				}
 			}
 		}
 
+
 	} else {
-		var increase = data[data.length - 1][targetType] - data[data.length - 2][targetType];
-		if (increase >= boundary) {
-			triggerArray.push(999);
-			triggerArray.push(data.length - 1);
+		if (boundary !== "0") {
 
-		} else {
-			triggerArray.push(-999);
-			triggerArray.push(-999);
+			var increase = data[data.length - 1][targetType] - data[data.length - 2][targetType];
+			if (increase >= boundary) {
+				triggerArray.push(999);
+				triggerArray.push(data.length - 1);
+
+			} else {
+				triggerArray.push(-999);
+				triggerArray.push(-999);
+			}
+			return triggerArray;
 		}
-		return triggerArray;
 	}
-
 	return triggerArray;
 };
 

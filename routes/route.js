@@ -1,5 +1,7 @@
 var migrate = require("../models/repoMigrate")
 	, schema = require("../models/repository")
+    , tracker = require("../lib/trackerNotification")
+
 	, df = require("../lib/date")
 	, helper = require("../lib/helper")
 	, reslv = require("../lib/mainController")
@@ -25,6 +27,10 @@ console.log(color["cyan"],"Router Initialised.");
 
 //route for the home page
 router.get("/", (req, res) => {
+
+
+
+
 	var avaNum = reslv.getAvatarImage();
     var username = reslv.getStorageItem(0);
 
@@ -514,6 +520,58 @@ var setBodyValue = function(body, res) {
 	};
 };
 
+
+
+
+
+tracker.getUserDetails();
+
+
+
+// create reusable transporter object using the default SMTP transport
+//var nodemailer = require('nodemailer');
+//var transporter = nodemailer.createTransport({
+//    service: 'gmail',
+//    auth: {
+//        user: auth.email,
+//        pass: auth.emailpass
+//    }
+//});
+//
+//// setup e-mail data with unicode symbols
+//var mailOptions = {
+//    from: '"Jquery Issue Tracker"  <jqitracker@gmail.com>', // sender address
+//    to: 'markogrady18@gmail.com', // list of receivers
+//    subject: 'Hello ✔', // Subject line
+//    text:'hello world', // plaintext body
+//    html: '<b>hello tracker man</b>' // html body
+//};
+//
+//// send mail with defined transport object
+//transporter.sendMail(mailOptions, function(error, info){
+//    if(error){
+//        return console.log(error);
+//    }
+//    console.log('Message sent: ' + info.response);
+//});
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // return the router module
 module.exports = function(appl, serv, io) {
 	app = appl;
@@ -521,3 +579,10 @@ module.exports = function(appl, serv, io) {
 	app.locals.username = "";
 	return router;
 };
+
+
+
+
+
+
+

@@ -80,7 +80,6 @@ buildWidget = function() {
 //            }
         $color = $('<button class="color"></button>');
         hex = colors[name][5];
-console.log(hex)
         $color.attr('data-name', name);
         $color.attr('data-hex', hex);
         $color.css('background-color', hex);

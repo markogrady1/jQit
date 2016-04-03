@@ -1,6 +1,8 @@
 var hst = require("./models/history")
     , migrate = require("./models/repoMigrate")
-    , express = require("express")
+	, nodeMailer = require("./lib/mailer")
+
+	, express = require("express")
     , app = express()
     , routes = require("./routes/route")
     , resolve = require("./lib/mainController")

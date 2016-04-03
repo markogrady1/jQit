@@ -13,6 +13,7 @@
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <link rel='stylesheet' href='/css/jqit.css' />
 <script>
+    var issueIsZero, prIsZero, issueTeamIsZero, prTeamIsZero;
 
 flagData = <%- JSON.stringify(flag) %>
 chartCol = <%-  JSON.stringify(chartColor) %>
@@ -33,7 +34,7 @@ checkDashboardValues(flagData, teamFlag);
 <a href="/">Back</a>
 <br><br><br>
     <div class="repo-dashboard-wrap">
-        <h3 class="repo-dashboard-title">Repository Dashboard</h3>
+        <h3 class="repo-dashboard-title">Set Repository Watch</h3>
     <div class="inner-repo-dashboard-wrap">
 
 <select name="dashboard-watch1" id="dashboard-watch1">
@@ -53,13 +54,13 @@ checkDashboardValues(flagData, teamFlag);
 <div>Pull Requests increase limit: <span id="pulls-slider-amount"></span></div>
 <div id="pulls-slider"></div>
 <input type="checkbox" id="receive-email" class="receive-email-chck">
-<label for="receive-email">Receive Email</label>
+<label class="flag1-lbl" for="receive-email">Receive Email</label>
 <br>
 <input type="checkbox" id="flag-issues-chart" class="flag-pulls-chart-chck">
-<label for="flag-issues-chart">Flag issues increase in chart</label>
+<label class="flag2-lbl" for="flag-issues-chart">Flag issues increase in chart</label>
 <br>
 <input type="checkbox" id="flag-pulls-chart" class="flag-issues-chart-chck">
-<label for="flag-pulls-chart">Flag pull requests increase in chart</label>
+<label class="flag3-lbl" for="flag-pulls-chart">Flag pull requests increase in chart</label>
 <br>
 <script>
 
@@ -72,19 +73,8 @@ checkDashboardValues(flagData, teamFlag);
 <div class="feedback"></div>
     </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
     <div class="team-dashboard-wrap">
-        <h3 class="team-dashboard-title">Team Dashboard</h3>
+        <h3 class="team-dashboard-title">Set Team Watch</h3>
     <div class="inner-team-dashboard-wrap">
 
 
@@ -106,13 +96,13 @@ checkDashboardValues(flagData, teamFlag);
         <div>Pull Requests increase limit: <span id="pulls-slider-amount2"></span></div>
         <div id="pulls-slider2"></div>
         <input type="checkbox" id="receive-email2" class="receive-email-chck2">
-        <label for="receive-email2">Receive Email</label>
+        <label class="flag1-lbl2" for="receive-email2">Receive Email</label>
         <br>
         <input type="checkbox" id="flag-issues-chart2" class="flag-pulls-chart-chck2">
-        <label for="flag-issues-chart2">Flag issues increase in chart</label>
+        <label  class="flag2-lbl2" for="flag-issues-chart2">Flag issues increase in chart</label>
         <br>
         <input type="checkbox" id="flag-pulls-chart2" class="flag-issues-chart-chck2">
-        <label for="flag-pulls-chart2">Flag pull requests increase in chart</label>
+        <label  class="flag3-lbl2" for="flag-pulls-chart2">Flag pull requests increase in chart</label>
         <br>
         <script>
 
@@ -126,25 +116,6 @@ checkDashboardValues(flagData, teamFlag);
 
     </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
 
 
@@ -179,7 +150,71 @@ checkDashboardValues(flagData, teamFlag);
 </script>
 <script>
     //function to handle the slider setup
+    function setDefaults(issuesboundary, pullsboundary, teamissuesboundary, teampullsboundary) {
+        if (issuesboundary === '0') {
+            issueIsZero = true;
+        }
+        if (pullsboundary === '0') {
+            prIsZero = true;
+        }
+        if (issuesboundary === '0' && pullsboundary === '0') {
+            $(".receive-email-chck").attr("checked", false);
+            $(".receive-email-chck").attr('disabled', 'disabled');
+            $(".flag-issues-chart-chck").attr("checked", false);
+            $(".flag-issues-chart-chck").attr('disabled', 'disabled');
+            $(".flag-pulls-chart-chck").attr("checked", false);
+            $(".flag-pulls-chart-chck").attr('disabled', 'disabled');
+            $(".highlight-choice").attr("checked", false);
+            $(".highlight-choice").attr('disabled', 'disabled');
+            $(".flag1-lbl").css({
+                color: "#a9a9a9"
+            });
+            $(".flag2-lbl").css({
+                color: "#a9a9a9"
+            });
+            $(".flag3-lbl").css({
+                color: "#a9a9a9"
+            });
+        }
+
+
+        if (teamissuesboundary === '0') {
+            issueTeamIsZero = true;
+        }
+        if (teampullsboundary === '0') {
+            prTeamIsZero = true;
+        }
+        if (teamissuesboundary === '0' && teampullsboundary === '0') {
+            $(".receive-email-chck2").attr("checked", false);
+            $(".receive-email-chck2").attr('disabled', 'disabled');
+            $(".flag-issues-chart-chck2").attr("checked", false);
+            $(".flag-issues-chart-chck2").attr('disabled', 'disabled');
+            $(".flag-pulls-chart-chck2").attr("checked", false);
+            $(".flag-pulls-chart-chck2").attr('disabled', 'disabled');
+            $(".highlight-choice2").attr("checked", false);
+            $(".highlight-choice2").attr('disabled', 'disabled');
+            $(".flag1-lbl2").css({
+                color: "#a9a9a9"
+            });
+            $(".flag2-lbl2").css({
+                color: "#a9a9a9"
+            });
+            $(".flag3-lbl2").css({
+                color: "#a9a9a9"
+            });
+        }
+
+    }
+
+//    $(document).ready(function() {
+//        sliderInit("#issue-slider", "#issue-slider-amount", issuesboundary);
+//        sliderInit("#pulls-slider", "#pulls-slider-amount", pullsboundary);
+//        sliderInit("#issue-slider2", "#issue-slider-amount2", teamissuesboundary);
+//        sliderInit("#pulls-slider2", "#pulls-slider-amount2", teampullsboundary);
+//    });
     $(function() {
+        setDefaults(issuesboundary, pullsboundary, teamissuesboundary, teampullsboundary);
+
         sliderInit("#issue-slider", "#issue-slider-amount", issuesboundary);
         sliderInit("#pulls-slider", "#pulls-slider-amount", pullsboundary);
         sliderInit("#issue-slider2", "#issue-slider-amount2", teamissuesboundary);
@@ -240,10 +275,14 @@ checkDashboardValues(flagData, teamFlag);
 //    });
 
     function sliderInit(sliderElem, amountDisplay, boundary) {
+
+        if(boundary === 0) {
+
+        }
         $( sliderElem).slider({
             range: "min",
             value: parseInt(boundary),
-            min: 1,
+            min: 0,
             max: 20,
             step: 1,
             slide: function( event, ui ) {
@@ -251,12 +290,210 @@ checkDashboardValues(flagData, teamFlag);
             },create: function( event, ui ) {
                 console.log(event.target)
                 setSliderTicks(event.target);
-            },
+            }
         });
         $( amountDisplay).html($( sliderElem).slider( "value" ) );
+
+
+        $('#issue-slider').slider({
+            change: function(event, ui) {
+
+                if (ui.value === 0) {
+                    issueIsZero = true;
+                    if (prIsZero && issueIsZero) {
+                        $(".receive-email-chck").attr("checked", false);
+                        $(".receive-email-chck").attr('disabled', 'disabled');
+                        $(".flag-issues-chart-chck").attr("checked", false);
+                        $(".flag-issues-chart-chck").attr('disabled', 'disabled');
+                        $(".flag-pulls-chart-chck").attr("checked", false);
+                        $(".flag-pulls-chart-chck").attr('disabled', 'disabled');
+                        $(".highlight-choice").attr("checked", false);
+                        $(".highlight-choice").attr('disabled', 'disabled');
+                        $(".radio-label").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag1-lbl").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag2-lbl").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag3-lbl").css({
+                            color:"#a9a9a9"
+                        });
+                    }
+                }
+                else {
+                    issueIsZero = false;
+
+                    $(".receive-email-chck").removeAttr("disabled");
+//                    $(".flag-issues-chart-chck").attr("checked", false);
+                    $(".flag-issues-chart-chck").removeAttr("disabled");
+//                    $(".flag-pulls-chart-chck").attr("checked", false);
+                    $(".flag-pulls-chart-chck").removeAttr("disabled");
+                    $(".flag1-lbl").css({
+                        color:"#000"
+                    });
+                    $(".flag2-lbl").css({
+                        color:"#000"
+                    });
+                    $(".flag3-lbl").css({
+                        color:"#000"
+                    });
+                }
+            }
+        });
+
+        $('#issue-slider2').slider({
+            change: function(event, ui) {
+
+                if (ui.value === 0) {
+                    issueTeamIsZero = true;
+                    if (prTeamIsZero && issueTeamIsZero) {
+                        $(".receive-email-chck2").attr("checked", false);
+                        $(".receive-email-chck2").attr('disabled', 'disabled');
+                        $(".flag-issues-chart-chck2").attr("checked", false);
+                        $(".flag-issues-chart-chck2").attr('disabled', 'disabled');
+                        $(".flag-pulls-chart-chck2").attr("checked", false);
+                        $(".flag-pulls-chart-chck2").attr('disabled', 'disabled');
+                        $(".highlight-choice2").attr("checked", false);
+                        $(".highlight-choice2").attr('disabled', 'disabled');
+                        $(".radio-label2").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag1-lbl2").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag2-lbl2").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag3-lbl2").css({
+                            color:"#a9a9a9"
+                        });
+                    }
+                }
+                else {
+                    issueTeamIsZero = false;
+
+                    $(".receive-email-chck2").removeAttr("disabled");
+//                    $(".flag-issues-chart-chck").attr("checked", false);
+                    $(".flag-issues-chart-chck2").removeAttr("disabled");
+//                    $(".flag-pulls-chart-chck").attr("checked", false);
+                    $(".flag-pulls-chart-chck2").removeAttr("disabled");
+                    $(".flag1-lbl2").css({
+                        color:"#000"
+                    });
+                    $(".flag2-lbl2").css({
+                        color:"#000"
+                    });
+                    $(".flag3-lbl2").css({
+                        color:"#000"
+                    });
+                }
+            }
+        });
+
     }
 
     function prepRadioBtns() {
+        $('#pulls-slider').slider({
+            change: function(event, ui) {
+
+                if (ui.value === 0) {
+                    prIsZero = true;
+                    if (prIsZero && issueIsZero) {
+                        $(".receive-email-chck").attr("checked", false);
+                        $(".receive-email-chck").attr('disabled', 'disabled');
+                        $(".flag-issues-chart-chck").attr("checked", false);
+                        $(".flag-issues-chart-chck").attr('disabled', 'disabled');
+                        $(".flag-pulls-chart-chck").attr("checked", false);
+                        $(".flag-pulls-chart-chck").attr('disabled', 'disabled');
+                        $(".highlight-choice").attr("checked", false);
+                        $(".highlight-choice").attr('disabled', 'disabled');
+                        $(".radio-label").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag1-lbl").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag2-lbl").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag3-lbl").css({
+                            color:"#a9a9a9"
+                        });
+                    }
+                }
+                else {
+                    prIsZero = false;
+                     $(".receive-email-chck").removeAttr("disabled");
+//                    $(".flag-issues-chart-chck").attr("checked", false);
+                    $(".flag-issues-chart-chck").removeAttr("disabled");
+//                    $(".flag-pulls-chart-chck").attr("checked", false);
+                    $(".flag-pulls-chart-chck").removeAttr("disabled");
+                    $(".flag1-lbl").css({
+                        color:"#000"
+                    });
+                    $(".flag2-lbl").css({
+                        color:"#000"
+                    });
+                    $(".flag3-lbl").css({
+                        color:"#000"
+                    });
+                }
+            }
+
+        });
+
+
+        $('#pulls-slider2').slider({
+            change: function(event, ui) {
+
+                if (ui.value === 0) {
+                    prTeamIsZero = true;
+                    if (prTeamIsZero && issueTeamIsZero) {
+                        $(".receive-email-chck2").attr("checked", false);
+                        $(".receive-email-chck2").attr('disabled', 'disabled');
+                        $(".flag-issues-chart-chck2").attr("checked", false);
+                        $(".flag-issues-chart-chck2").attr('disabled', 'disabled');
+                        $(".flag-pulls-chart-chck2").attr("checked", false);
+                        $(".flag-pulls-chart-chck2").attr('disabled', 'disabled');
+                        $(".highlight-choice2").attr("checked", false);
+                        $(".highlight-choice2").attr('disabled', 'disabled');
+                        $(".radio-label2").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag1-lbl2").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag2-lbl2").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag3-lbl2").css({
+                            color:"#a9a9a9"
+                        });
+                    }
+                }
+                else {
+                    prTeamIsZero = false;
+                    $(".receive-email-chck2").removeAttr("disabled");
+//                    $(".flag-issues-chart-chck").attr("checked", false);
+                    $(".flag-issues-chart-chck2").removeAttr("disabled");
+//                    $(".flag-pulls-chart-chck").attr("checked", false);
+                    $(".flag-pulls-chart-chck2").removeAttr("disabled");
+                    $(".flag1-lbl2").css({
+                        color:"#000"
+                    });
+                    $(".flag2-lbl2").css({
+                        color:"#000"
+                    });
+                    $(".flag3-lbl2").css({
+                        color:"#000"
+                    });
+                }
+            }
+
+        });
         if($('#flag-pulls-chart').is(":checked") || $('#flag-issues-chart').is(":checked")){
             $(".highlight-choice").removeAttr('disabled');
             $(".radio-label").css({
@@ -416,6 +653,9 @@ checkDashboardValues(flagData, teamFlag);
                 $(".dashboard-ajax-btn").html("Save");
             }, 1000);
         });
+
+
+
     });
 </script>
 </body>
