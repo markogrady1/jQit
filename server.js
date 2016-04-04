@@ -1,8 +1,6 @@
 var hst = require("./models/history")
-    , migrate = require("./models/repoMigrate")
-	, nodeMailer = require("./lib/mailer")
-
 	, express = require("express")
+	, mailer = require("./lib/mailer")
     , app = express()
     , routes = require("./routes/route")
     , resolve = require("./lib/mainController")
@@ -14,6 +12,7 @@ var hst = require("./models/history")
     , color = require("./lib/helper").terminalCol();
 
 schema.initConnection();
+//mailer.setCron()
 app.engine(".html", require("ejs").__express);
 app.set("views", __dirname + "/views/");
 app.set("view engine", "html");

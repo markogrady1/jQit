@@ -16,8 +16,8 @@ notification.getAllUsers = function(callback) {
     });
 };
 
-notification.getEmailNotifs = function(username, email, callback) {
-    console.log(username, email)
+notification.getEmailNotifs = function(username, email,  callback) {
+
     connection("user", function(db){
         db.collection("repoFlag").find({
             username:username,

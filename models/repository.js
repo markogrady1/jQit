@@ -4,37 +4,11 @@ var mongoClient = require("mongodb").MongoClient
     , bcrypt = require('bcryptjs')
     , _ = require('lodash')
 	, async = require("async")
-    , CronJob = require('cron').CronJob;
+
 var hash;
 writeArr = '';
 
 var schema = {};
-/*  //////////keep this code for switching cronjobs from PHP to nodeJS///////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-new CronJob('* 5 * * *', function() {
-	for(var i = 1; i < 49; i++){
-		var obj = require('../repoData/pulls/open/' + i + "_pulls");
-		if(obj == ""){
-			continue
-		}
-		
-    	var url = _.map(obj, function(data) {return data.url;})
-	    var dataName = helper.getSplitValue(url, '/', 5);
-	    writeArr += '' + dataName + '  '+obj.length + ',\n';
-	}
-
-		var d = new Date();
-		var seconds = d.getTime()/1000;
-		seconds = seconds.toString().split('.');
-		var n = d.toISOString();
-		n = n.substring(19,0)
-		newString = '*' + n + 'Z = ' + seconds[0] +',\n'+writeArr;
-		fs.appendFile('repoData/repo_pulls_2015-12-28-until-2016-02-12.txt', newString, function (err) {
-  				if (err) throw err;
-  				helper.log('CRONJOB','Job written for '+ new Date(), true);
-				});
-}, null, true, "Europe/London");
-*/
 
 /**
  * connect to mongoDB and aquire data for all documents concerning repositories

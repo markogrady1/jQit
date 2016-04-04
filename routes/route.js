@@ -1,9 +1,8 @@
 var migrate = require("../models/repoMigrate")
 	, schema = require("../models/repository")
-    , tracker = require("../lib/trackerNotification")
-
 	, df = require("../lib/date")
 	, helper = require("../lib/helper")
+    //, mailer = require("../lib/mailer")
 	, reslv = require("../lib/mainController")
     , monthly = require("../lib/monthController")
 	, express = require("express")
@@ -519,58 +518,6 @@ var setBodyValue = function(body, res) {
 		"avatar_url": bd.avatar_url
 	};
 };
-
-
-
-
-
-tracker.getUserDetails();
-
-
-
-// create reusable transporter object using the default SMTP transport
-//var nodemailer = require('nodemailer');
-//var transporter = nodemailer.createTransport({
-//    service: 'gmail',
-//    auth: {
-//        user: auth.email,
-//        pass: auth.emailpass
-//    }
-//});
-//
-//// setup e-mail data with unicode symbols
-//var mailOptions = {
-//    from: '"Jquery Issue Tracker"  <jqitracker@gmail.com>', // sender address
-//    to: 'markogrady18@gmail.com', // list of receivers
-//    subject: 'Hello ✔', // Subject line
-//    text:'hello world', // plaintext body
-//    html: '<b>hello tracker man</b>' // html body
-//};
-//
-//// send mail with defined transport object
-//transporter.sendMail(mailOptions, function(error, info){
-//    if(error){
-//        return console.log(error);
-//    }
-//    console.log('Message sent: ' + info.response);
-//});
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // return the router module
 module.exports = function(appl, serv, io) {

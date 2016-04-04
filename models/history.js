@@ -9,6 +9,7 @@ var color = helper.terminalCol();
  * 
  */
 history.init = function (){
+	console.log("called")
 	this.getDataOverTime('repoHistory', 'issue')
 	this.getDataOverTime('repoPullsHistory', 'pulls')
 	this.getClosedDataOverTime('repoClosedPullsHistory', 'PR')
