@@ -420,8 +420,8 @@ router.get("/dashboard", (req, res) => {
             if (avatar !== "undefined") {
                 res.locals.userStat = true;
                 var data = reslv.getStorage();
-                reslv.getFlagData(data, (flagObj, attData, teamObj, chartColor, endChartColor) => {
-                    callback(flagObj, attData, teamObj, chartColor, endChartColor);
+                reslv.getFlagData(data, (flagObj, attData, teamObj, chartColor, endChartColor, contentTeamObj) => {
+                    callback(flagObj, attData, teamObj, chartColor, endChartColor, contentTeamObj);
                 });
             } else {
                 res.locals.userStat = false;
@@ -431,7 +431,7 @@ router.get("/dashboard", (req, res) => {
         var teamsJSONValues = require('../repoData/teams.json');
         var contentTeamJSON = require('../repoData/content_team.json');
         compDoc = schema.completeDoc;
-        getFlagData((flag, attention, teamFlag, chartColor, endChartColor) => {
+        getFlagData((flag, attention, teamFlag, chartColor, endChartColor, contentTeamFlag) => {
             res.render("dashboard", {
                 // state: "true",
                 teamsJSONValues: teamsJSONValues,
@@ -448,10 +448,10 @@ router.get("/dashboard", (req, res) => {
                 teamFlag: teamFlag,
                 avatar_url: null,
                 chartColor: chartColor,
-                endChartColor: endChartColor
+                endChartColor: endChartColor,
+                contentTeamFlag: contentTeamFlag
             });
         })
-
 	}
 });
 

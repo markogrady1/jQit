@@ -551,6 +551,16 @@ schema.checkForTeamFlags = function(username, email, callback) {
 	});
 };
 
+schema.checkForContentTeamFlags = function(username, email, callback) {
+	connection("user", (db) => {
+		db.collection("contentTeamFlag").findOne({ username: username, email: email}, function (err, doc) {
+			if (err) throw err;
+			callback(doc);
+			db.close();
+		});
+	});
+};
+
 schema.removePin = function(username, repoName, callback) {
 	connection("user", (db) => {
 		db.collection("attention").deleteOne({ username: username, target: repoName}, (err, doc) => {

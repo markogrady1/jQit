@@ -13,19 +13,19 @@
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <link rel='stylesheet' href='/css/jqit.css' />
 <script>
-    var issueIsZero, prIsZero, issueTeamIsZero, prTeamIsZero;
+    var issueIsZero, prIsZero, issueTeamIsZero, prTeamIsZero, issueContentTeamIsZero, prContentTeamIsZero;
 
 flagData = <%- JSON.stringify(flag) %>
 chartCol = <%-  JSON.stringify(chartColor) %>
 endChartColor = <%-  JSON.stringify(endChartColor) %>
 attention = <%- JSON.stringify(attention) %>
 teamFlag = <%- JSON.stringify(teamFlag) %>
-
+contentTeamFlag = <%- JSON.stringify(contentTeamFlag) %>
 
 var teamsJSONValues = <%- JSON.stringify(teamsJSONValues) %>
 var contentTeamJSON = <%- JSON.stringify(contentTeamJSON) %>
 console.log(flagData, attention, teamFlag)
-checkDashboardValues(flagData, teamFlag);
+checkDashboardValues(flagData, teamFlag, contentTeamFlag);
 
 </script>
 <body>
@@ -131,7 +131,7 @@ checkDashboardValues(flagData, teamFlag);
         <select name="dashboard-watch3" id="dashboard-watch3">
             <option value="title">Watch</option>
             <% for (var i = 0; i < contentTeamJSON.length; i++) {
-            var targetedRepo = flag === null ? "" : flag.repository_target;
+            var targetedRepo = contentTeamFlag === null ? "" : contentTeamFlag.content_team_target;
             if(contentTeamJSON[i].name === targetedRepo) { %>
             <option value="<%= compDoc[i].name %>" selected><%=  contentTeamJSON[i].team %></option>
             <%  } else { %>
@@ -195,10 +195,23 @@ checkDashboardValues(flagData, teamFlag);
     if(teamshoweveryincrease === "true") {
         $("#highlight-every-choice2").attr("checked", true);
     }
+
+    if(contentteamreceiveEmail === "true"){
+        $("#receive-email3").attr("checked", true);
+    }
+    if(contentteamhighlightissueschart === "true"){
+        $("#flag-issues-chart3").attr("checked", true);
+    }
+    if(contentteamhighlightpullschart === "true"){
+        $("#flag-pulls-chart3").attr("checked", true);
+    }
+    if(contentteamshoweveryincrease === "true") {
+        $("#highlight-every-choice3").attr("checked", true);
+    }
 </script>
 <script>
     //function to handle the slider setup
-    function setDefaults(issuesboundary, pullsboundary, teamissuesboundary, teampullsboundary) {
+    function setDefaults(issuesboundary, pullsboundary, teamissuesboundary, teampullsboundary, contentteamissuesboundary, contentteampullsboundary) {
         if (issuesboundary === '0') {
             issueIsZero = true;
         }
@@ -252,6 +265,31 @@ checkDashboardValues(flagData, teamFlag);
             });
         }
 
+        if (contentteamissuesboundary === '0') {
+            issueContentTeamIsZero = true;
+        }
+        if (contentteampullsboundary === '0') {
+            prContentTeamIsZero = true;
+        }
+        if (contentteamissuesboundary === '0' && contentteampullsboundary === '0') {
+            $(".receive-email-chck3").attr("checked", false);
+            $(".receive-email-chck3").attr('disabled', 'disabled');
+            $(".flag-issues-chart-chck3").attr("checked", false);
+            $(".flag-issues-chart-chck3").attr('disabled', 'disabled');
+            $(".flag-pulls-chart-chck3").attr("checked", false);
+            $(".flag-pulls-chart-chck3").attr('disabled', 'disabled');
+            $(".highlight-choice3").attr("checked", false);
+            $(".highlight-choice3").attr('disabled', 'disabled');
+            $(".flag1-lbl2").css({
+                color: "#a9a9a9"
+            });
+            $(".flag2-lbl2").css({
+                color: "#a9a9a9"
+            });
+            $(".flag3-lbl2").css({
+                color: "#a9a9a9"
+            });
+        }
     }
 
 //    $(document).ready(function() {
@@ -261,14 +299,14 @@ checkDashboardValues(flagData, teamFlag);
 //        sliderInit("#pulls-slider2", "#pulls-slider-amount2", teampullsboundary);
 //    });
     $(function() {
-        setDefaults(issuesboundary, pullsboundary, teamissuesboundary, teampullsboundary);
+        setDefaults(issuesboundary, pullsboundary, teamissuesboundary, teampullsboundary, contentteamissuesboundary, contentteampullsboundary);
 
         sliderInit("#issue-slider", "#issue-slider-amount", issuesboundary);
         sliderInit("#pulls-slider", "#pulls-slider-amount", pullsboundary);
         sliderInit("#issue-slider2", "#issue-slider-amount2", teamissuesboundary);
         sliderInit("#pulls-slider2", "#pulls-slider-amount2", teampullsboundary);
-        sliderInit("#issue-slider3", "#issue-slider-amount3", teamissuesboundary);
-        sliderInit("#pulls-slider3", "#pulls-slider-amount3", teampullsboundary);
+        sliderInit("#issue-slider3", "#issue-slider-amount3", contentteamissuesboundary);
+        sliderInit("#pulls-slider3", "#pulls-slider-amount3", contentteampullsboundary);
     });
     $(window).on('load', function() {
         prepRadioBtns();
@@ -287,6 +325,13 @@ checkDashboardValues(flagData, teamFlag);
     });
 
     $('#flag-pulls-chart2').change(function(){
+        prepRadioBtns();
+    });
+    $('#flag-issues-chart3').change(function(){
+        prepRadioBtns();
+    });
+
+    $('#flag-pulls-chart3').change(function(){
         prepRadioBtns();
     });
     //ajax call for save settings
@@ -443,6 +488,54 @@ checkDashboardValues(flagData, teamFlag);
             }
         });
 
+        $('#issue-slider3').slider({
+            change: function(event, ui) {
+
+                if (ui.value === 0) {
+                    issueContentTeamIsZero = true;
+                    if (prContentTeamIsZero && issueContentTeamIsZero) {
+                        $(".receive-email-chck3").attr("checked", false);
+                        $(".receive-email-chck3").attr('disabled', 'disabled');
+                        $(".flag-issues-chart-chck3").attr("checked", false);
+                        $(".flag-issues-chart-chck3").attr('disabled', 'disabled');
+                        $(".flag-pulls-chart-chck3").attr("checked", false);
+                        $(".flag-pulls-chart-chck3").attr('disabled', 'disabled');
+                        $(".highlight-choice3").attr("checked", false);
+                        $(".highlight-choice3").attr('disabled', 'disabled');
+                        $(".radio-label3").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag1-lbl3").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag2-lbl3").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag3-lbl3").css({
+                            color:"#a9a9a9"
+                        });
+                    }
+                }
+                else {
+                    issueContentTeamIsZero = false;
+
+                    $(".receive-email-chck3").removeAttr("disabled");
+//                    $(".flag-issues-chart-chck").attr("checked", false);
+                    $(".flag-issues-chart-chck3").removeAttr("disabled");
+//                    $(".flag-pulls-chart-chck").attr("checked", false);
+                    $(".flag-pulls-chart-chck3").removeAttr("disabled");
+                    $(".flag1-lbl3").css({
+                        color:"#000"
+                    });
+                    $(".flag2-lbl3").css({
+                        color:"#000"
+                    });
+                    $(".flag3-lbl3").css({
+                        color:"#000"
+                    });
+                }
+            }
+        });
     }
 
     function prepRadioBtns() {
@@ -544,6 +637,57 @@ checkDashboardValues(flagData, teamFlag);
             }
 
         });
+
+
+
+        $('#pulls-slider3').slider({
+            change: function(event, ui) {
+
+                if (ui.value === 0) {
+                    prContentTeamIsZero = true;
+                    if (prContentTeamIsZero && issueContentTeamIsZero) {
+                        $(".receive-email-chck3").attr("checked", false);
+                        $(".receive-email-chck3").attr('disabled', 'disabled');
+                        $(".flag-issues-chart-chck3").attr("checked", false);
+                        $(".flag-issues-chart-chck3").attr('disabled', 'disabled');
+                        $(".flag-pulls-chart-chck3").attr("checked", false);
+                        $(".flag-pulls-chart-chck3").attr('disabled', 'disabled');
+                        $(".highlight-choice3").attr("checked", false);
+                        $(".highlight-choice3").attr('disabled', 'disabled');
+                        $(".radio-label3").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag1-lbl3").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag2-lbl3").css({
+                            color:"#a9a9a9"
+                        });
+                        $(".flag3-lbl3").css({
+                            color:"#a9a9a9"
+                        });
+                    }
+                }
+                else {
+                    prContentTeamIsZero = false;
+                    $(".receive-email-chck3").removeAttr("disabled");
+//                    $(".flag-issues-chart-chck").attr("checked", false);
+                    $(".flag-issues-chart-chck3").removeAttr("disabled");
+//                    $(".flag-pulls-chart-chck").attr("checked", false);
+                    $(".flag-pulls-chart-chck3").removeAttr("disabled");
+                    $(".flag1-lbl3").css({
+                        color:"#000"
+                    });
+                    $(".flag2-lbl3").css({
+                        color:"#000"
+                    });
+                    $(".flag3-lbl3").css({
+                        color:"#000"
+                    });
+                }
+            }
+
+        });
         if($('#flag-pulls-chart').is(":checked") || $('#flag-issues-chart').is(":checked")){
             $(".highlight-choice").removeAttr('disabled');
             $(".radio-label").css({
@@ -565,6 +709,18 @@ checkDashboardValues(flagData, teamFlag);
             $(".highlight-choice2").attr('disabled', 'disabled');
             $(".highlight-choice2").attr("checked", false);
             $(".radio-label2").css({
+                color:"#a9a9a9"
+            });
+        }
+        if($('#flag-pulls-chart3').is(":checked") || $('#flag-issues-chart3').is(":checked")){
+            $(".highlight-choice3").removeAttr('disabled');
+            $(".radio-label3").css({
+                color:"#000"
+            });
+        }else{
+            $(".highlight-choice3").attr('disabled', 'disabled');
+            $(".highlight-choice3").attr("checked", false);
+            $(".radio-label3").css({
                 color:"#a9a9a9"
             });
         }
