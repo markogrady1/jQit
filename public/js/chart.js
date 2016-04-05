@@ -1227,9 +1227,16 @@ var setMultiComparisonCheck = function(histObj) {
 	var data = histObj.allRepoIssueHistory;
 	var i = 1;
 	if($('.multi-compare').length === 0){
+		$('.check-append').append("<b><input type='checkbox' id='checkall'><label class='checkall' for='checkall'>Select all</label><br>")
 		_.map(data, function(val){
 			$('.check-append').append('<input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label class=multi-compare-text for=compare'+(i++)+ '>'+ val[0].team+'</label><br>');
 		});
+
+		if($('.checkall').is(":checked")){
+
+			$(".multi-compare").attr("checked", true);
+
+		}
 	}
 };
 
@@ -1722,7 +1729,7 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 	return triggerArray;
 };
 
- function pieChart(data, targetEl, foundationAvg, currentValue, isIssue) {
+ function pieChart(data, targetEl, foundationAvg, currentValue, isIssue, chartColour, endChartColour) {
 	 var record = isIssue ? "Issues" : "Pull Requests";
  	 var styleClass = foundationAvg < currentValue ? "more-than" : "less-than";
 	 //tooltip needs styling
@@ -1773,7 +1780,7 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 
 	 var color = d3.scale.ordinal()
 		 .domain(["1st", "2nd"])
-		 .range(["#8EB4D3", "#4A84B0"]);
+		 .range([endChartColour, chartColour]);
 
 	 change(data);
 

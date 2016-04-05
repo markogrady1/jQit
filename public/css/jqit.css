@@ -185,7 +185,7 @@ ul.top-bar-element-list {
 	padding: 10px;
 }
 
-#chart, #pulls-chart {
+#chart, #pulls-chart, #line-chart, #pulls-line-chart {
 	border: 1px solid #aaa;
 	padding: 20px 30px 30px 30px;
 	box-shadow: 2px 2px 2px #ddd;
@@ -1282,7 +1282,7 @@ div.color-box-wrap > div.color-picker-wrap > div.color-widget > div:nth-child(6)
 
 /*////////// DASHBOARD /////////////*/
 .repo-dashboard-wrap {
-	margin: 20px;
+	margin: 0px 20px 20px 20px;
 	/*padding: 30px;*/
 	width: 35%;
 	float: left;
@@ -1293,7 +1293,18 @@ div.color-box-wrap > div.color-picker-wrap > div.color-widget > div:nth-child(6)
 }
 
 .team-dashboard-wrap {
-	margin: 20px;
+	margin: 0px 20px 20px 20px;
+	/*padding: 30px;*/
+	width: 35%;
+	float: left;
+	background-color: #fff;
+	border: 1px solid #a9a9a9;
+	border-radius: 5px;
+	color: #444;
+}
+
+.content-dashboard-wrap {
+	margin: 0px 20px 20px 20px;
 	/*padding: 30px;*/
 	width: 35%;
 	float: left;
@@ -1333,6 +1344,23 @@ h3.repo-dashboard-title{
 	z-index: 3;
 	background-color: #f5f5f5;
 }
+
+h3.content-dashboard-title{
+	margin:0;
+}
+.content-dashboard-title {
+	/*padding: 5px 0 0 30px;*/
+	border-radius: 5px 5px 0 0;
+	color: #444;
+	padding: 8px;
+	line-height: 20px;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid #dddddd;
+	z-index: 3;
+	background-color: #f5f5f5;
+}
+
 .inner-repo-dashboard-wrap {
 	display: inherit ;
 	/*margin: 20px;*/
@@ -1356,8 +1384,22 @@ h3.repo-dashboard-title{
 	/*color: #444;*/
 }
 
+.inner-content-dashboard-wrap {
+	/*margin: 20px;*/
+	padding: 30px;
+	/*width: 35%;*/
+	/*float: left;*/
+	/*!*background-color: #fff;*!*/
+	/*!*border: 1px solid #a9a9a9;*!*/
+	/*border-radius: 5px;*/
+	/*color: #444;*/
+}
+
 
 .dashboard-ajax-btn {
+	position: absolute;
+	top: 600px;
+	right: 620px;
 	width: 200px;
 	margin: 30px 30px 0 30px;
 	padding: 7px 10px;
@@ -1397,7 +1439,9 @@ h3.repo-dashboard-title{
 #pulls-slider > span.ui-slider-handle,
 #issue-slider > span.ui-slider-handle,
 #pulls-slider2 > span.ui-slider-handle,
-#issue-slider2 > span.ui-slider-handle{
+#issue-slider2 > span.ui-slider-handle,
+#pulls-slider3 > span.ui-slider-handle,
+#issue-slider3 > span.ui-slider-handle{
 	background: #2b81af;
 	border: 1px solid #fff;
 	outline: none;
@@ -1417,7 +1461,12 @@ h3.repo-dashboard-title{
 	border: 1px solid #4E87B2;
 	border-radius: 3px;
 }
-
+#pulls-slider3 > div,
+#issue-slider3 > div {
+	background: #4E87B2;
+	border: 1px solid #4E87B2;
+	border-radius: 3px;
+}
 .ui-widget-content {
 	border: 1px solid #7FA9CB;
 }
@@ -1431,11 +1480,11 @@ h3.repo-dashboard-title{
 	top:-1px;
 }
 
-#dashboard-watch1, #dashboard-watch2{
+#dashboard-watch1, #dashboard-watch2, #dashboard-watch3 {
 	outline: none;
 }
 
-#dashboard-watch1:hover, #dashboard-watch2:hover{
+#dashboard-watch1:hover, #dashboard-watch2:hover, #dashboard-watch3:hover{
 	cursor: pointer;
 }
 
@@ -1539,8 +1588,8 @@ ul li.end-color-box {
 
 .color-box-wrap {
 	position: absolute;
-	top: 410px;
-	left: 250px;
+	top: 443px;
+	right: 430px;
 }
 
 .color-widget {
@@ -1553,6 +1602,9 @@ ul li.end-color-box {
 
 
 .both-color-box-wrap {
+	position: absolute;
+	top: 443px;
+	right: 650px;
 	background-color: #fff;
 	border: 1px solid #a9a9a9;
 	border-radius: 5px;
@@ -1615,3 +1667,101 @@ tr.table-dir {
 	color: #4E87B2;
 	width: 130px;
 }
+
+
+
+.closure-table {
+	font-size: 1.1em;
+}
+.repo-info-table {
+	font-size: 1.1em;
+}
+
+.index-content-name-link{
+	/*margin: 10px;*/
+	/*padding: 10px;*/
+	/*line-height: 30px;*/
+}
+
+td.detail {
+	padding: 0
+}
+
+.repo-name {
+	line-height: 20px;
+}
+
+.content-link {
+	color: #000;
+	text-decoration: none;
+}
+
+.content-link:hover {
+	color: #2368EA;
+}
+
+
+td.detail-inner.odd {
+	background: #F5F5F5;
+}
+
+.content-title {
+	padding-left: 20px;
+}
+
+.content-title {
+	font-weight: bold;
+	font-size: 1.3em;
+	color: #000;
+	text-decoration: none;
+}
+
+.content-title:hover {
+	color: #2368EA;
+}
+td.detail-inner {
+	width: 50px;
+}
+
+td.hd {
+	width: 50px;
+}
+/*.index-content-name-link:hover {*/
+	/*color: #2368EA;*/
+/*}*/
+
+/*td.content-team {*/
+	/*padding: 0px;*/
+	/*width: 200px*/
+/*}*/
+
+/*td.team-name {*/
+	/*padding: 0px;*/
+	/*width: 100px;*/
+/*}*/
+/*.sp-el {*/
+
+/*}*/
+
+/*.content-issues, .content-team {*/
+	/*padding: 0;*/
+	/*border-left: none;*/
+	/*border-right: none;*/
+/*}*/
+
+/*td a.index-content-name-link {*/
+	/*padding: 0;*/
+	/*!*li*!*/
+/*}*/
+
+/*td.content-detail {*/
+	/*padding: 0;*/
+/*}*/
+
+/*td.content-team.content-detail {*/
+	/*padding-top: 0px;*/
+/*}*/
+
+/*.content-detail.content-issue-detail, .content-detail.content-respons {*/
+	/*padding: 3px;*/
+/*}*/

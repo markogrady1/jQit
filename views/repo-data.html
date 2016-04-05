@@ -25,6 +25,8 @@
         var homeRepository = window.location.pathname.split("/")[3];
         var flagdata = {};
         flagdata = <%- JSON.stringify(flagData) %>
+        wholeData = <%- JSON.stringify(data) %>
+
         var username =  <%- JSON.stringify(username) %>
         var email =  <%- JSON.stringify(email) %>
         var avgIssues =  <%- JSON.stringify(avgIssues) %>
@@ -62,7 +64,10 @@
 
          var allIssuesHistory = <%- JSON.stringify(allRepoHistory) %>
          var allPullsHistory = <%- JSON.stringify(allRepoPullsHistory) %>
-         var repoData = <%- JSON.stringify(repoData) %>
+
+
+        var repoData = <%- JSON.stringify(repoData) %>
+
          var dt = <%- JSON.stringify( fullDate) %>
          sd = dt[0].split("T")[0];
          var pdt = <%- JSON.stringify( fullPullDate) %>
@@ -232,6 +237,99 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
          <div><b class="pstatus"></b></div>
          <section class="item"></section>
 
+
+       <div class="complete-data-table">
+           <table class="props xmpl closure-table" id="xtable">
+               <thead>
+               <tr >
+                   <th class="head" colspan="2">Closures</th>
+
+               </tr>
+               <tr >
+                   <th class="head">User</th>
+                   <th class="head">Closed</th>
+               </tr>
+               </thead>
+               <tbody>
+
+
+
+               <%for (var key in events){ %>
+               <tr>
+                   <td><%= key %></td><td><%= events[key] %></td>
+               </tr>
+               <% } %>
+
+
+
+               </tbody>
+           </table>
+
+       </div>
+       <br><br>
+       <% var dateStr =  new Date(data.created_at.split('T')[0]).toString()
+       dateStr = dateStr.split(" ")[0] +  " " +dateStr.split(" ")[1] +  " " +dateStr.split(" ")[2] +  " " +dateStr.split(" ")[3]
+       var updatedDateStr =  new Date(data.updated_at.split('T')[0]).toString()
+       updatedDateStr = updatedDateStr.split(" ")[0] +  " " +updatedDateStr.split(" ")[1] +  " " +updatedDateStr.split(" ")[2] +  " " +updatedDateStr.split(" ")[3]
+       %>
+   </div>
+   <div class="complete-data-table">
+       <table class="props xmpl repo-info-table" id="xtable">
+           <thead>
+           <tr >
+               <th class="head" colspan="2">Useful Information</th>
+
+           </tr>
+           </thead>
+           <tbody>
+           <tr>
+               <td>Repository Name</td>
+               <td><%= data.name%></td>
+           </tr>
+           <tr>
+               <td>Repository URL</td>
+               <td><%= data.html_url %></td>
+           </tr>
+           <tr>
+               <td>Description</td>
+               <td><%= data.description %></td>
+           </tr>
+           <tr>
+               <td>Home Page</td>
+               <td><a  class="index-github-link" target="_blank" href="<%= data.homepage%>"><%= data.homepage%></a></td>
+           </tr>
+           <tr>
+               <td>Created</td>
+               <td><%= dateStr %></td>
+           </tr>
+           <tr>
+               <td>Last Updated</td>
+               <td><%= updatedDateStr %></td>
+           </tr>
+           <tr>
+               <td>Watchers</td>
+               <td><%= data.watchers %></td>
+           </tr>
+           <tr>
+               <td>Forks</td>
+               <td><%= data.forks %></td>
+           </tr>
+           <tr>
+               <td>Stars</td>
+               <td><%= data.stargazers_count %></td>
+           </tr>
+           <tr>
+               <td>Git clone URL</td>
+               <td><%= data.clone_url %></td>
+           </tr>
+
+           <tr>
+               <td>SSH URL</td>
+               <td><%= data.ssh_url %></td>
+           </tr>
+           </tbody>
+       </table>
+   </div>
          <h1 class=current-repo><%= data.name %></h1>
          <p><b>Repository name:</b> <%= data.name %></p>
          <p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
@@ -302,7 +400,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
              "value":jqueryPieVal
           }];
           var currentIssues = v[v.length-1].issues;
-          pieChart(pieData, "#issues-pie-chart", foundationIssuesAvg, currentIssues, true);
+          pieChart(pieData, "#issues-pie-chart", foundationIssuesAvg, currentIssues, true, chartColour, endChartColour);
 
           jqueryPieVal = 100 - totals.pulls;
           jqueryPieVal = jqueryPieVal.toFixed(2);
@@ -319,7 +417,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
                 "value":jqueryPieVal
              }];
 
-          pieChart(pieData, "#pulls-pie-chart", foundationPullsAvg, <%= pullRequestNo %>, false);
+          pieChart(pieData, "#pulls-pie-chart", foundationPullsAvg, <%= pullRequestNo %>, false, chartColour, endChartColour);
 
           var elm, elm2;
           elm = document.getElementsByClassName('issuesPercent');
@@ -333,10 +431,10 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
          scroller.init();
 
 
+
       </script>
 
 
-       </div>
 
    </body>
 </html>

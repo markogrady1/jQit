@@ -12,22 +12,16 @@ var hst = require("./models/history")
     , color = require("./lib/helper").terminalCol();
 
 schema.initConnection();
-//mailer.setCron()
 app.engine(".html", require("ejs").__express);
 app.set("views", __dirname + "/views/");
 app.set("view engine", "html");
-
-    app.locals.repoComparison = require("./models/repository");
-
-// app.locals.visualHelper = require("./lib/dataProvider");
-//app.locals.getEvents = require("./lib/resolve")
+app.locals.repoComparison = require("./models/repository");
 app.use(cookieParser());
 app.use(session({
 	secret:"jkgabglhantiovqatapiteioatbthtipw4uiwtwu4hthtui42htuohRUVH3932HRTEJGWTWVEHGUIHAIHJSoheojahghvghjkher9turhtreig",
 	saveUninitialized: true,
 	resave: true 
 }));
-
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));

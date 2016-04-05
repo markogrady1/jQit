@@ -2,7 +2,6 @@ var migrate = require("../models/repoMigrate")
 	, schema = require("../models/repository")
 	, df = require("../lib/date")
 	, helper = require("../lib/helper")
-    //, mailer = require("../lib/mailer")
 	, reslv = require("../lib/mainController")
     , monthly = require("../lib/monthController")
 	, express = require("express")
@@ -26,13 +25,8 @@ console.log(color["cyan"],"Router Initialised.");
 
 //route for the home page
 router.get("/", (req, res) => {
-
-
-
-
 	var avaNum = reslv.getAvatarImage();
     var username = reslv.getStorageItem(0);
-
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
@@ -68,7 +62,7 @@ router.get("/", (req, res) => {
 
      reslv.cacheRepoData(compDoc);
         var teamData = require("../repoData/teams.json");
-
+        var contentTeamData = require("../repoData/content_team.json");
         // obtain any flags that may have been set and render the home page
         getFlagData((flag, att, teamFlag) => {
             if(typeof att === "undefined") {
@@ -94,6 +88,7 @@ router.get("/", (req, res) => {
                 teamData: teamFlag,
                 attention: att,
                 teams: teamData,
+                contentTeam: contentTeamData,
                 avatar_url: null
             })
 		});
@@ -152,6 +147,64 @@ router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
 
 router.get("/jquery/team/:teamName?", (req, res) => {
     var c, flagInfo;
+    var isContent = false;
+    var selectedTeam = req.params.teamName;
+    if(selectedTeam === "content-tracking-team") {
+        //selectedTeam = "content";
+        isContent = true;
+    } else {
+        isContent = false;
+    }
+
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
+    helper.noCache(res);
+    var avatar = reslv.getAvatarImage();
+    var urlstate;
+    var userData = reslv.getStorage();
+    if (userData !== "undefined") {
+        res.locals.userStat = true;
+        var name = userData.split("=>")[0];
+        var email = userData.split("=>")[2];
+        teamsControl.checkForTeamFlags(name, email, selectedTeam, (flagData) => {
+            flagInfo = flagData === null ? null : flagData;
+
+        });
+    }
+    if(avatar === "undefined") {
+        res.locals.userStat = false;
+        c = helper.getRandomString();
+        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+        localStorage.setItem("state", c);
+
+    } else {
+        res.locals.userStat = true;
+        c = helper.getRandomString();
+        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+    }
+    teamsControl.getTeamData(selectedTeam, "repoPullsHistory", isContent, req, res, (teamPullsData) => {
+        teamsControl.getTeamData(selectedTeam, "repoHistory", isContent, req, res, (teamIssueData) => {
+            teamsControl.getTeamRecord(selectedTeam, isContent, "repositories", (doc) => {
+                res.render("team-view", {
+                    flagData: flagInfo,
+                    teamsData: doc,
+                    av: avatar,
+                    header: selectedTeam + " Team",
+                    urlstate: urlstate,
+                    state: c,
+                    issuesData: teamIssueData,
+                    pullsData: teamPullsData,
+                    logoutLink: "../../logout",
+                    dashboardLink: "../../dashboard",
+                    avatar_url: null
+                })
+            })
+        })
+    });
+});
+
+
+router.get("/jquery/team/content/:teamName?", (req, res) => {
+    var c, flagInfo;
     var selectedTeam = req.params.teamName;
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
     helper.noCache(res);
@@ -178,9 +231,9 @@ router.get("/jquery/team/:teamName?", (req, res) => {
         c = helper.getRandomString();
         urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
     }
-    teamsControl.getTeamData(selectedTeam, "repoPullsHistory", req, res, (teamPullsData) => {
-        teamsControl.getTeamData(selectedTeam, "repoHistory", req, res, (teamIssueData) => {
-            teamsControl.getTeamRecord(selectedTeam, "repositories", (doc) => {
+    teamsControl.getTeamData(selectedTeam, "repoPullsHistory", true,  req, res, (teamPullsData) => {
+        teamsControl.getTeamData(selectedTeam, "repoHistory", true, req, res, (teamIssueData) => {
+            teamsControl.getTeamRecord(selectedTeam, true, "repositories", (doc) => {
                 res.render("team-view", {
                     flagData: flagInfo,
                     teamsData: doc,
@@ -376,12 +429,13 @@ router.get("/dashboard", (req, res) => {
             }
         }
         var teamsJSONValues = require('../repoData/teams.json');
+        var contentTeamJSON = require('../repoData/content_team.json');
         compDoc = schema.completeDoc;
         getFlagData((flag, attention, teamFlag, chartColor, endChartColor) => {
             res.render("dashboard", {
                 // state: "true",
                 teamsJSONValues: teamsJSONValues,
-
+                contentTeamJSON: contentTeamJSON,
                 av: avatar,
                 header: "Dashboard",
                 urlstate: urlstate,
@@ -408,20 +462,29 @@ router.post("/dashboard/edit/repo", (req, res) => {
     var receiveEmail = req.body.receiveEmail;
     var flagIssuesChart = req.body.flagIssuesChart;
     var flagPullsChart = req.body.flagPullsChart;
-
     var issueBoundary = req.body.issueSlider;
     var pullsBoundary = req.body.pullsSlider;
     var showEveryIncrease = req.body.showEveryIncrease;
     var chartColour = req.body.chartColour;
     var endChartColour = req.body.endChartColour;
+
     var teamWatchTarget = req.body.watchTeamTarget;
     var teamReceiveEmail = req.body.receiveTeamEmail;
     var teamFlagIssuesChart = req.body.flagTeamIssuesChart;
     var teamFlagPullsChart = req.body.flagTeamPullsChart;
-
     var teamIssueBoundary = req.body.issueTeamSlider;
     var teamPullsBoundary = req.body.pullsTeamSlider;
     var teamShowEveryIncrease = req.body.showEveryTeamIncrease;
+
+    var contentTeamWatchTarget = req.body.watchContentTeamTarget;
+    var contentTeamReceiveEmail = req.body.receiveContentTeamEmail;
+    var contentTeamFlagIssuesChart = req.body.flagContentTeamIssuesChart;
+    var contentTeamFlagPullsChart = req.body.flagContentTeamPullsChart;
+    var contentTeamIssueBoundary = req.body.issueContentTeamSlider;
+    var contentTeamPullsBoundary = req.body.pullsContentTeamSlider;
+    var contentTeamShowEveryIncrease = req.body.showEveryContentTeamIncrease;
+
+    contentTeamWatchTarget = contentTeamWatchTarget === "Watch" ? null : contentTeamWatchTarget;
     teamWatchTarget = teamWatchTarget === "Watch" ? null : teamWatchTarget;
     watchTarget = watchTarget === "Watch" ? null : watchTarget;
     var data = localStorage.getItem("data");
@@ -456,10 +519,24 @@ router.post("/dashboard/edit/repo", (req, res) => {
         showEveryIncrease: teamShowEveryIncrease
 
     };
-    res.send("Data Received");
 
+    var contentTeamWatcher = {
+        user: name,
+        email: email,
+        avatar: avatar,
+        teamTarget: contentTeamWatchTarget,
+        receiveEmailUpadate: contentTeamReceiveEmail,
+        highlightissueschart: contentTeamFlagIssuesChart,
+        highlightpullschart: contentTeamFlagPullsChart,
+        issuesboundary: contentTeamIssueBoundary,
+        pullsboundary: contentTeamPullsBoundary,
+        showEveryIncrease: contentTeamShowEveryIncrease
+
+    };
+    res.send("Data Received");
     reslv.assignWatcher(watcher);
     reslv.assignTeamWatcher(teamWatcher);
+    reslv.assignContentTeamWatcher(contentTeamWatcher);
     reslv.setChartColour(watcher, chartColour, endChartColour);
 });
 
@@ -471,7 +548,6 @@ router.post("/dashboard/edit/team", (req, res) => {
     var teamReceiveEmail = req.body.receiveEmail;
     var teamFlagIssuesChart = req.body.flagIssuesChart;
     var teamFlagPullsChart = req.body.flagPullsChart;
-
     var teamIssueBoundary = req.body.issueSlider;
     var teamPullsBoundary = req.body.pullsSlider;
     var teamShowEveryIncrease = req.body.showEveryIncrease;
@@ -495,7 +571,6 @@ router.post("/dashboard/edit/team", (req, res) => {
 
     };
     res.send("Data Received");
-
     reslv.assignTeamWatcher(teamWatcher);
 });
 

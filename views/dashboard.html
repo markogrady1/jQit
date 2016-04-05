@@ -23,6 +23,7 @@ teamFlag = <%- JSON.stringify(teamFlag) %>
 
 
 var teamsJSONValues = <%- JSON.stringify(teamsJSONValues) %>
+var contentTeamJSON = <%- JSON.stringify(contentTeamJSON) %>
 console.log(flagData, attention, teamFlag)
 checkDashboardValues(flagData, teamFlag);
 
@@ -30,7 +31,7 @@ checkDashboardValues(flagData, teamFlag);
 <body>
 
 <% include partials/header.html %>
-<div class="content-wrap dashboard-wrap">
+
 <a href="/">Back</a>
 <br><br><br>
     <div class="repo-dashboard-wrap">
@@ -73,6 +74,9 @@ checkDashboardValues(flagData, teamFlag);
 <div class="feedback"></div>
     </div>
     </div>
+
+
+
     <div class="team-dashboard-wrap">
         <h3 class="team-dashboard-title">Set Team Watch</h3>
     <div class="inner-team-dashboard-wrap">
@@ -116,7 +120,51 @@ checkDashboardValues(flagData, teamFlag);
 
     </div>
     </div>
+
+
+
+
+<div class="content-dashboard-wrap">
+    <h3 class="content-dashboard-title">Set Content Tracker Watch</h3>
+    <div class="inner-content-dashboard-wrap">
+
+        <select name="dashboard-watch3" id="dashboard-watch3">
+            <option value="title">Watch</option>
+            <% for (var i = 0; i < contentTeamJSON.length; i++) {
+            var targetedRepo = flag === null ? "" : flag.repository_target;
+            if(contentTeamJSON[i].name === targetedRepo) { %>
+            <option value="<%= compDoc[i].name %>" selected><%=  contentTeamJSON[i].team %></option>
+            <%  } else { %>
+            <option value="<%= compDoc[i].name %>"><%= contentTeamJSON[i].team %></option>
+            <% } %>
+            <% } %>
+        </select>
+
+        <div>Issues increase limit: <span id="issue-slider-amount3"></span></div>
+        <div id="issue-slider3"></div>
+        <div>Pull Requests increase limit: <span id="pulls-slider-amount3"></span></div>
+        <div id="pulls-slider3"></div>
+        <input type="checkbox" id="receive-email3" class="receive-email-chck3">
+        <label class="flag1-lbl3" for="receive-email3">Receive Email</label>
+        <br>
+        <input type="checkbox" id="flag-issues-chart3" class="flag-pulls-chart-chck3">
+        <label class="flag2-lbl3" for="flag-issues-chart3">Flag issues increase in chart</label>
+        <br>
+        <input type="checkbox" id="flag-pulls-chart3" class="flag-issues-chart-chck3">
+        <label class="flag3-lbl3" for="flag-pulls-chart3">Flag pull requests increase in chart</label>
+        <br>
+        <script>
+
+        </script>
+        <div class="radio-highlight-choice3">
+            <input class="highlight-choice3" id="highlight-every-choice3" type="checkbox" name="highlight-option" value="every-increase">
+            <label  class="radio-label3" for="highlight-every-choice3">Highlight every increase</label>
+        </div>
+
+        <div class="feedback"></div>
     </div>
+</div>
+
 
 
 <script>
@@ -219,6 +267,8 @@ checkDashboardValues(flagData, teamFlag);
         sliderInit("#pulls-slider", "#pulls-slider-amount", pullsboundary);
         sliderInit("#issue-slider2", "#issue-slider-amount2", teamissuesboundary);
         sliderInit("#pulls-slider2", "#pulls-slider-amount2", teampullsboundary);
+        sliderInit("#issue-slider3", "#issue-slider-amount3", teamissuesboundary);
+        sliderInit("#pulls-slider3", "#pulls-slider-amount3", teampullsboundary);
     });
     $(window).on('load', function() {
         prepRadioBtns();
@@ -627,6 +677,23 @@ checkDashboardValues(flagData, teamFlag);
                 pullsTeamSlider: $("#pulls-slider-amount2").html(),
                 showEveryTeamIncrease: function() {
                     return $('#highlight-every-choice2').is(":checked")? true : false;
+                },
+                watchContentTeamTarget: function() {
+                    return $('#dashboard-watch3 :selected').text();
+                },
+                receiveContentTeamEmail: function() {
+                    return $("#receive-email3").is(":checked") ? true : false;
+                },
+                flagContentTeamIssuesChart: function() {
+                    return $("#flag-issues-chart3").is(":checked") ? true : false;
+                },
+                flagContentTeamPullsChart: function() {
+                    return $("#flag-pulls-chart3").is(":checked") ? true : false;
+                },
+                issueContentTeamSlider: $("#issue-slider-amount3").html(),
+                pullsContentTeamSlider: $("#pulls-slider-amount3").html(),
+                showEveryContentTeamIncrease: function() {
+                    return $('#highlight-every-choice3').is(":checked")? true : false;
                 },
                 chartColour: function() {
                     var colour = localStorage.getItem("chartColor");

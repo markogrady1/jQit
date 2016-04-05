@@ -483,6 +483,41 @@ schema.storeTeamWatchData = function(obj) {
 		});
 	});
 };
+/**
+ * Function responsible for storing the settings to watch over a given repository
+ * @param {Object} obj
+ */
+schema.storeContentTeamWatchData = function(obj) {
+
+	var flagObj = {
+		username: obj.user,
+		email: obj.email,
+		avatar: obj.avatar,
+		content_team_target: obj.teamTarget,
+		receive_email: obj.receiveEmailUpadate,
+		highlight_content_team_issues_chart: obj.highlightissueschart,
+		highlight_content_team_pulls_chart: obj.highlightpullschart,
+		issues_content_team_boundary: obj.issuesboundary,
+		pulls_content_team_boundary: obj.pullsboundary,
+		show_content_team_every_increase: obj.showEveryIncrease
+	};
+	connection("user", (db) => {
+		db.collection('contentTeamFlag').findOne({ username: obj.user }, function(err, doc) {
+			if (err) throw err;
+			if(doc === null) {
+				db.collection("contentTeamFlag").insert( flagObj, (err, data) => {
+					if(err) throw err;
+					db.close();
+				});
+			} else {
+				db.collection("contentTeamFlag").update({ username:obj.user }, flagObj, (err, data) => {
+					if(err) throw err;
+					db.close();
+				});
+			}
+		});
+	});
+};
 
 /**
  * Function responsible for searching for a flag set by the current user
