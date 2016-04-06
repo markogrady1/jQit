@@ -1,20 +1,80 @@
 <!doctype html>
 <html>
 <head>
+	<title>Issue Tracker</title>
+	<meta charset='utf-8'>
+	<link href='https://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
+	<script src="/js/external/jquery-1.11.3.min.js"></script>
+	<script src="/js/external/d3.v3.min.js"></script>
+	<script src="/js/external/tinysort.js"></script>
+	<script src="/js/external/scrilla.js"></script>
+	<script src="/js/sortTable.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var username = <%- JSON.stringify(username) %>
+	</script>
+
+	<link rel='stylesheet' href='/css/jqit.css' />
 </head>
 <body>
+	<header class="header">
+		<div class="top-left-logo"><span class="site-logo"><a href="/" class="logo-link">jQIT</a></span><span class="header-repo-title">Email Required</span></div>
+		<div class="login-status"></div>
+
+	</header>
 <script>
 	localStorage.setItem('user',true)
 
 </script>
-<h1>Register: <%= register %></h1>
+
+	<div class="register-form-wrap">
+		<p class="feedback"></p>
+
 <p id="status"></p>
 <form method=post action='register'>
-<input name=username value=<%=username%>><br>
-<input name=email><br>
-<input type=submit value=Register><br>
+<input class="username" id="username" hidden name=username value='<%= username %>'><br>
+
+		<input class="register-email" placeholder="Enter Email Address Here...." type="email" name="email" autofocus><br>
+	<div class="reg-btn-wrap">
+		<input class="register-btn" type=submit value=Register><br><div class="cancel-btn">Cancel</div><br>
+	</div>
 </form>
+	</div>
 <br>
-<a href='/'>Home</a>
+	<script>
+
+		if(username === "") {
+			var unames = localStorage.getItem("uname");
+				$("#username").attr("value",unames);
+		}
+
+		$(".feedback").html("<span class='email-provided'><%- register %></span>")
+		if($(".feedback").text() === "Email not Provided") {
+			var uname = localStorage.getItem("uname");
+			$(".username").val(uname);
+
+			$(".feedback").html("<span class='no-email'>Email not Provided</span>")
+		} else {
+			if($(".feedback").text() === "This Email has been used before") {
+				var uname = localStorage.getItem("uname");
+				$(".username").val(uname);
+
+				$(".feedback").html("<span class='no-email'>This Email has been used before</span>")
+			} else {
+				$(".username").val(<% username %>);
+				localStorage.setItem("uname", $(".username").val());
+
+				$(".feedback").html("<span class='email-provided'><%- register %></span>");
+			}
+
+		}
+				$(document).ready(function() {
+					$(".cancel-btn").on("click", function() {
+						window.location.href = "/";
+					});
+				});
+
+	</script>
+
 </body>
 </html>

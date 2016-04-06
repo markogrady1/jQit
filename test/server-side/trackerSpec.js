@@ -218,13 +218,6 @@ describe('Test the unicode values of the terminal output', function(){
 		var val = helper.terminalStyle();
 		assert.equal(val['error'], '\x1b[31m');
 	});
-
-
-	it("should return a '\x1b[31m' unicode value", function() {
-		var val = helper.terminalCol();
-		assert.equal(typeof val, Object);
-	});
-
 });
 
 //describe('creating new user', function(){

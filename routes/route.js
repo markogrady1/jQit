@@ -151,7 +151,6 @@ router.get("/jquery/team/:teamName?", (req, res) => {
     var c, flagInfo, contentFlagInfo;
     var isContent = false;
     var selectedTeam = req.params.teamName;
-    console.log(selectedTeam)
     if(selectedTeam === "content-tracking-team") {
         //selectedTeam = "content";
         isContent = true;
@@ -175,13 +174,10 @@ router.get("/jquery/team/:teamName?", (req, res) => {
         if(!isContent) {
             teamsControl.checkForTeamFlags(name, email, selectedTeam, (flagData) => {
                 flagInfo = flagData === null ? null : flagData;
-                console.log(flagInfo)
-
             });
         } else {
             teamsControl.checkForContentTeamFlags(name, email, "content-tracking-team", (flagData) => {
                 flagInfo = flagData === null ? null : flagData;
-                console.log(flagInfo)
             });
         }
 
@@ -204,56 +200,6 @@ router.get("/jquery/team/:teamName?", (req, res) => {
 
                 res.render("team-view", {
                     isContent: isContent,
-                    flagData: flagInfo,
-                    teamsData: doc,
-                    av: avatar,
-                    header: selectedTeam + " Team",
-                    urlstate: urlstate,
-                    state: c,
-                    issuesData: teamIssueData,
-                    pullsData: teamPullsData,
-                    logoutLink: "../../logout",
-                    dashboardLink: "../../dashboard",
-                    avatar_url: null
-                })
-            })
-        })
-    });
-});
-
-
-router.get("/jquery/team/content/:teamName?", (req, res) => {
-    var c, flagInfo;
-    var selectedTeam = req.params.teamName;
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
-    helper.noCache(res);
-    var avatar = reslv.getAvatarImage();
-    var urlstate;
-    var userData = reslv.getStorage();
-    if (userData !== "undefined") {
-        res.locals.userStat = true;
-        var name = userData.split("=>")[0];
-        var email = userData.split("=>")[2];
-        teamsControl.checkForTeamFlags(name, email, selectedTeam, (flagData) => {
-            flagInfo = flagData === null ? null : flagData;
-
-        });
-    }
-    if(avatar === "undefined") {
-        res.locals.userStat = false;
-        c = helper.getRandomString();
-        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
-        localStorage.setItem("state", c);
-
-    } else {
-        res.locals.userStat = true;
-        c = helper.getRandomString();
-        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
-    }
-    teamsControl.getTeamData(selectedTeam, "repoPullsHistory", true,  req, res, (teamPullsData) => {
-        teamsControl.getTeamData(selectedTeam, "repoHistory", true, req, res, (teamIssueData) => {
-            teamsControl.getTeamRecord(selectedTeam, true, "repositories", (doc) => {
-                res.render("team-view", {
                     flagData: flagInfo,
                     teamsData: doc,
                     av: avatar,

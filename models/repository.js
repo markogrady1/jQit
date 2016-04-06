@@ -655,7 +655,7 @@ User.prototype.register = function(res, io) {
 		db.collection('users').insert(query, function(err, result){
 			console.log('User Created => ' + new Date());
 			if (err && err.code == 11000) {
-				res.render('register', { register: 'Email has been used before' });
+				res.render('register', { register: 'This Email has been used before' });
                 console.log('Duplicate Email: Alert User');
 			} else {
 				var data = localStorage.getItem('data');
@@ -667,11 +667,11 @@ User.prototype.register = function(res, io) {
 					res.redirect('/');
 					this.io.emit("userStatus",{ av: avatNum })
 				}
-
 			}			
 		});
-		if(db !== null)
+		setTimeout(() => {
 			db.close();
+		}, 2000)
 	});	
 };
 

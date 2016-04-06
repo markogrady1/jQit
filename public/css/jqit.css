@@ -1726,6 +1726,90 @@ td.detail-inner {
 td.hd {
 	width: 50px;
 }
+
+
+
+/* // REGISTER /////*/
+div.reg-btn-wrap {
+	height: 40px;
+	position: absolute;
+	left: 29%;
+}
+
+input.register-btn {
+	position: absolute;
+
+	right: -90px;
+	margin: 20px 0 0 20px;
+	width: 80px;
+	height: 30px;
+	border-radius: 5px;
+	background-color: #3999dd;
+	color: #fff;
+	border: 0;
+	font-size: 1.2em;
+	outline: none;
+	/*padding: 10px;*/
+}
+
+div.cancel-btn {
+	position: absolute;
+	top: 0px;
+	left: 120px;
+	margin: 20px 0 0 20px;
+	padding: 5px 0 0 20px;
+	width: 70px;
+	height:25px;
+	border-radius: 5px;
+	background-color: #3999dd;
+	color: #fff;
+	border: 0;
+	font-size: 1.2em;
+	outline: none;
+}
+
+div.cancel-btn:hover, input.register-btn:hover {
+	cursor: pointer;
+	background: #7FA9CB;
+}
+
+.register-email {
+	text-align: center;
+	display: block;
+	height: auto;
+	border: none;
+	outline: none;
+	box-shadow: none;
+	background: none;
+	border-radius: 0px;
+	padding: 10px;
+	width: 100%;
+	background: transparent;
+	color: #666;
+	border-bottom: 1px solid #000;
+	font-size: 1.8em;
+}
+
+.register-form-wrap {
+	position: relative;
+	width: 40%;
+	margin: 150px auto;
+}
+
+.no-email {
+	color: #ff0000;
+}
+
+span.no-email {
+	color: #ff0000;
+}
+
+p.feedback {
+	text-align: center;
+	font-size: 1.7em;
+}
+
+
 /*.index-content-name-link:hover {*/
 	/*color: #2368EA;*/
 /*}*/
