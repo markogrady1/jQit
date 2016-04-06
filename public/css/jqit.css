@@ -818,7 +818,7 @@ td, th {
 	margin: 40px auto 40px auto;
 	width: 70%;
 	height: 300px;
-	background-color: #fff;
+	background-color: #F5F5F5;
 }
 
 .pie-chart-section {
@@ -884,7 +884,7 @@ td, th {
 	float:left;
 	width: 564px;
 	height: 260px;
-    box-shadow: 2px 2px 2px #ddd;
+    /*box-shadow: 2px 2px 2px #ddd;*/
 }
 
 .slice{
