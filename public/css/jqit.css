@@ -76,6 +76,63 @@ div.top-left-logo {
 	text-decoration: underline;
 }
 
+ul.table-links  {
+	list-style: none;
+	padding: 0;
+}
+
+ul.table-links li {
+	display: inline-block;
+}
+.both-team-tables-wrap {
+	width: 50%;
+	margin: 0 auto;
+}
+
+.repo-table-wrap {
+	width: 90%;
+	margin: 0 auto;
+}
+
+.legend-explain {
+	padding-left: 10px;
+}
+
+.legend-table {
+	border:2px solid #0b97c4;
+	margin: 40px 20px 20px 0;
+}
+
+.legend-table td{
+	border:none;
+}
+
+.legend-title {
+	font-weight: bold;
+	font-size: 1.2em;
+	width: 100px;
+}
+tr.legend-row:nth-of-type(odd) {
+	background: #eee;
+}
+tr.legend-row:nth-of-type(even) {
+	background: #eee;
+}
+@media (max-width: 649px) {
+	.both-team-tables-wrap {
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	.repo-table-wrap {
+		width: 100%;
+		margin: 0 auto;
+	}
+	a.content-title {
+		font-size: 1em;
+		padding:0;
+	}
+}
 .home-main-table {
 	margin-top: 20px;
 }
@@ -166,7 +223,7 @@ ul.top-bar-element-list {
 
 }
 .team-table {
-	width: 80%;
+	width: 100%;
 	/*margin: 0 auto*/
 }
 
@@ -668,9 +725,7 @@ td, th {
 .index-github-link:hover {
 	color: #2368EA;
 }
-.team-table {
-	width: 50%;
-}
+
 /* media query to hide extra table elements when page size is decreased */
 @media (max-width: 649px) {
 	.github-head, .github-detail {
@@ -1808,44 +1863,3 @@ p.feedback {
 	text-align: center;
 	font-size: 1.7em;
 }
-
-
-/*.index-content-name-link:hover {*/
-	/*color: #2368EA;*/
-/*}*/
-
-/*td.content-team {*/
-	/*padding: 0px;*/
-	/*width: 200px*/
-/*}*/
-
-/*td.team-name {*/
-	/*padding: 0px;*/
-	/*width: 100px;*/
-/*}*/
-/*.sp-el {*/
-
-/*}*/
-
-/*.content-issues, .content-team {*/
-	/*padding: 0;*/
-	/*border-left: none;*/
-	/*border-right: none;*/
-/*}*/
-
-/*td a.index-content-name-link {*/
-	/*padding: 0;*/
-	/*!*li*!*/
-/*}*/
-
-/*td.content-detail {*/
-	/*padding: 0;*/
-/*}*/
-
-/*td.content-team.content-detail {*/
-	/*padding-top: 0px;*/
-/*}*/
-
-/*.content-detail.content-issue-detail, .content-detail.content-respons {*/
-	/*padding: 3px;*/
-/*}*/
