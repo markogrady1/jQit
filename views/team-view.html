@@ -20,10 +20,9 @@
 <div class="team-chart-area"></div>
 <script>
     var chartLayout = "";
+    var isContent = <%- JSON.stringify(isContent) %>
     var teamsData = <%- JSON.stringify(teamsData) %>
     var flagData = <%- JSON.stringify(flagData) %>
-
-    console.log(flagData)
     var pullsDataHistory = <%- JSON.stringify(pullsData) %>
     var issuesDataHistory = <%- JSON.stringify(issuesData) %>
             var newPullsData = [], newIssuesData = [];
@@ -75,7 +74,7 @@
     }
         $(".team-chart-area").append(chartLayout); // append areas for the team charts
 
-    setCharts(newIssuesData, flagData, true); //  create charts for the teams responsibilty
+    setCharts(newIssuesData, flagData, true, isContent); //  create charts for the teams responsibilty
 
     function getMonthlyProgressStatusOfTeams(teamData, isIssue) {
 
@@ -109,7 +108,7 @@ $(".ch-link").on("click", function() {
         $(".ch-link" + elementSection).html("View Pull request history")
     }
 
-    setSingleChart(newIssuesData, newPullsData, elementSection, isIssue, flagData);
+    setSingleChart(newIssuesData, newPullsData, elementSection, isIssue, flagData, isContent);
 })
 
 

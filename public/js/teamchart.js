@@ -20,26 +20,36 @@ function getChartHeight(buildObject) {
 function getChartWidth(buildObject) {
     return buildObject.w - buildObject.top - buildObject.right;
 }
-var setCharts = function(data, flagData, isIssue) {
+var setCharts = function(data, flagData, isIssue, isContent) {
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, flagData,  isIssue);
     var issueflagsIndexs = null;
     for(var t in data) {
         flagData = typeof flagData === "undefined" ? null : flagData;
+        var limit, everyIncrease;
         if(flagData !== null ) {
+            if(isContent) {
+                if(flagData.highlight_content_team_issues_chart === "true") {
+                    limit = flagData.issues_content_team_boundary;
+                    everyIncrease = false;
+                    everyIncrease = flagData.show_content_team_every_increase === "true" ? true : false;
+                    issueflagsIndexs = checkIncrease(data[t], limit, everyIncrease, "issues"); //check for issues increases
 
-            if(flagData.highlight_team_issues_chart === "true") {
-                var limit = flagData.issues_team_boundary;
-                var everyIncrease = false;
-                everyIncrease = flagData.show_team_every_increase === "true" ? true : false;
-                issueflagsIndexs = checkIncrease(data[t], limit, everyIncrease, "issues"); //check for issues increases
-
+                }
+            } else {
+                if(flagData.highlight_team_issues_chart === "true") {
+                    limit = flagData.issues_team_boundary;
+                    everyIncrease = false;
+                    everyIncrease = flagData.show_team_every_increase === "true" ? true : false;
+                    issueflagsIndexs = checkIncrease(data[t], limit, everyIncrease, "issues"); //check for issues increases
+                }
             }
+
         }
-        setTeamBarChart(data[t], isIssue, buildStyle, t, issueflagsIndexs)
+        setTeamBarChart(data[t], isIssue, buildStyle, t, issueflagsIndexs, isContent)
     }
 };
 
-var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs) {
+var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs, isContent) {
     var width = getChartWidth(buildStyle);
     var height = getChartHeight(buildStyle);
     var chartClass = ".team-chart"+i;
@@ -183,23 +193,39 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs) {
 
 }
 
-var setSingleChart = function(issueData, pullsData, index, isIssue, flagData) {
+var setSingleChart = function(issueData, pullsData, index, isIssue, flagData, isContent) {
     var flagsIndexs = null;
     var data = isIssue ? issueData[index] : pullsData[index];
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
     flagData = typeof flagData === "undefined" ? null : flagData;
 
     if(flagData !== null) {
-        var flagTarget = isIssue ? "highlight_team_issues_chart" : "highlight_team_pulls_chart";
-        var boundaryTarget = isIssue ? "issues_team_boundary" : "pulls_team_boundary";
-        var target = isIssue ? "issues" : "pulls";
+        var flagTarget, boundaryTarget, target
+
+        if(isContent) {
+            flagTarget = isIssue ? "highlight_content_team_issues_chart" : "highlight_content_team_pulls_chart";
+            boundaryTarget = isIssue ? "issues_content_team_boundary" : "pulls_content_team_boundary";
+            target = isIssue ? "issues" : "pulls";
+        } else {
+            flagTarget = isIssue ? "highlight_team_issues_chart" : "highlight_team_pulls_chart";
+            boundaryTarget = isIssue ? "issues_team_boundary" : "pulls_team_boundary";
+            target = isIssue ? "issues" : "pulls";
+        }
+
 
         if(flagData[flagTarget] === "true") {
 
             var limit = flagData[boundaryTarget];
 
             var everyIncrease = false;
-            everyIncrease = flagData.show_team_every_increase === "true" ? true : false;
+            if(isContent) {
+                everyIncrease = flagData.show_content_team_every_increase === "true" ? true : false;
+
+            } else {
+                everyIncrease = flagData.show_team_every_increase === "true" ? true : false;
+
+            }
+
             flagsIndexs = checkIncrease(data, limit, everyIncrease, target); //check for issues increases
         }
     }

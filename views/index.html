@@ -20,8 +20,8 @@
         var teamData = <%- JSON.stringify(teamData) %>
         var username = <%- JSON.stringify(username) %>
         var teams = <%- JSON.stringify(teams) %>
-        var contentTeam = <%- JSON.stringify(contentTeam) %>
-
+        var contentTeamJSON = <%- JSON.stringify(contentTeamJSON) %>
+        var contentTeamFlag = <%- JSON.stringify(contentTeamFlag) %>
         attention = attention === null ? "" : attention;
         console.log("Flag Data: " ,flagData);
       pd.pop(pd.length-1)
@@ -179,7 +179,7 @@
         <tbody>
         <% var targetedTeam = teamData === null ? "" : teamData.team_target; %>
 
-        <% for (var k = 0; k < contentTeam.length; k++) { %>
+        <% for (var k = 0; k < contentTeamJSON.length; k++) { %>
 
 
         <tr>
@@ -187,13 +187,13 @@
             <td class="detail "><a class="content-title"  href="jquery/team/content-tracking-team">Content Team</a></td>
             <td class="detail repo-name">
                 <table class="inner-table">
-                <%  for (var j in contentTeam[k].responsibility) {
+                <%  for (var j in contentTeamJSON[k].responsibility) {
 
                     if(j % 2 == 0){ col = 'ev'} else { col = 'odd' }
                     %>
                     <tr id="content-row"  class="">
                         <td class="detail-inner <%= col %>">
-                <a class="content-link"  href="repo/details/<%- contentTeam[k].responsibility[j]%>"><%- contentTeam[k].responsibility[j] %></a><br>
+                <a class="content-link"  href="repo/details/<%- contentTeamJSON[k].responsibility[j]%>"><%- contentTeamJSON[k].responsibility[j] %></a><br>
                         </td>
                     </tr>
                 <% } %>
@@ -202,20 +202,20 @@
 
             <td class="detail">
                 <table class="inner-table">
-                <%  for (var j in contentTeam[k].responsibility) {
+                <%  for (var j in contentTeamJSON[k].responsibility) {
                     if(j % 2 == 0){ col = 'ev'} else { col = 'odd' }
                     %>
                     <tr id="content-row">
                         <td  class="detail-inner <%= col %>">
                 <% for (var s in completeD) {
-                if (completeD[s].name === contentTeam[k].responsibility[j]) {
+                if (completeD[s].name === contentTeamJSON[k].responsibility[j]) {
                 if(completeD[s].calculatedIssues >= 50) { %>
                 <span class="bad-number">◉ </span><span class=""><%- completeD[s].calculatedIssues %></span>
 
                 <% } else if (completeD[s].calculatedIssues >= 20) { %>
                 <span class="ok-number">◉ </span><span class=""><%- completeD[s].calculatedIssues %></span>
                 <% } else {
-                if(contentTeam[k].team === targetedTeam){%>
+                if(contentTeamJSON[k].team === targetedTeam){%>
                 <span class="good-number flg">◉ </span><span class=""><%- completeD[s].calculatedIssues %></span>
                 <% } else { %>
                 <span class="good-number">◉ </span><span class=""><%- completeD[s].calculatedIssues %></span>
@@ -225,7 +225,7 @@
                 }
                 } %>
 
-                <a class=""  href="repo/details/<%- contentTeam[k].responsibility[j]%>"><span class=""></span><% contentTeam[k].responsibility[j].issues %></a><br>
+                <a class=""  href="repo/details/<%- contentTeamJSON[k].responsibility[j]%>"><span class=""></span><% contentTeamJSON[k].responsibility[j].issues %></a><br>
                         </td>
                     </tr>
 
@@ -235,20 +235,20 @@
 
             <td  class="detail">
                 <table class="inner-table">
-                <%  for (var l in contentTeam[k].responsibility) {
+                <%  for (var l in contentTeamJSON[k].responsibility) {
                     if(l % 2 == 0){ col = 'ev'} else { col = 'odd' }
                     %>
                 <tr id="content-row">
                     <td  class="detail-inner <%= col %>">
                 <% for (var p in completeD) {
-                if (completeD[p].name === contentTeam[k].responsibility[l]) {
+                if (completeD[p].name === contentTeamJSON[k].responsibility[l]) {
                 if(completeD[p].pulls >= 10) { %>
                 <span class="bad-number">◉ </span><%- completeD[p].pulls %>
 
                 <% } else if (completeD[p].pulls >= 5) { %>
                 <span class="ok-number">◉ </span><%- completeD[p].pulls %>
                 <% } else  if (completeD[p].pulls < 5){
-                if(contentTeam[k].team === targetedTeam){ %>
+                if(contentTeamJSON[k].team === targetedTeam){ %>
                 <span class="good-number flg">◉ </span><%- completeD[p].pulls %>
                 <% } else { %>
                 <span class="good-number">◉ </span><%- completeD[p].pulls %>
@@ -257,7 +257,7 @@
                 }
                 } %>
 
-                <a class=""  href="repo/details/<%- contentTeam[k].responsibility[j]%>"><span class=""></span><% contentTeam[k].responsibility[j].issues %></a><br>
+                <a class=""  href="repo/details/<%- contentTeamJSON[k].responsibility[j]%>"><span class=""></span><% contentTeamJSON[k].responsibility[j].issues %></a><br>
                     </td>
                 </tr>
                 <% } %>

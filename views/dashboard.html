@@ -132,7 +132,7 @@ checkDashboardValues(flagData, teamFlag, contentTeamFlag);
             <option value="title">Watch</option>
             <% for (var i = 0; i < contentTeamJSON.length; i++) {
             var targetedRepo = contentTeamFlag === null ? "" : contentTeamFlag.content_team_target;
-            if(contentTeamJSON[i].name === targetedRepo) { %>
+            if(contentTeamJSON[i].team === targetedRepo) { %>
             <option value="<%= compDoc[i].name %>" selected><%=  contentTeamJSON[i].team %></option>
             <%  } else { %>
             <option value="<%= compDoc[i].name %>"><%= contentTeamJSON[i].team %></option>

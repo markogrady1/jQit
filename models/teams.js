@@ -54,6 +54,15 @@ teamModel.checkForFlaggedTeam = function(username, email, target, callback) {
         });
     })
 };
+teamModel.checkForFlaggedContentTeam = function(username, email, target, callback) {
+    connection("user", (db) => {
+        db.collection("contentTeamFlag").findOne({$or: [ { highlight_content_team_issues_chart: "true" }, { highlight_content_team_pulls_chart: "true" } ], username: username, email: email, content_team_target: target }, (err, doc) => {
+            if(err) throw err;
+            callback(doc);
+            db.close();
+        });
+    })
+};
 
 
 /**

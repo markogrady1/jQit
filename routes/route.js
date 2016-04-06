@@ -34,8 +34,8 @@ router.get("/", (req, res) => {
         if (avaNum !== "undefined") {
             res.locals.userStat = true;
             var data = reslv.getStorage();
-            reslv.getFlagData(data, (flagObj, att, teamObj) => {
-                callback(flagObj, att, teamObj);
+            reslv.getFlagData(data, (flagObj, att, teamObj, col, endChartCol, contentTeamData ) => {
+                callback(flagObj, att, teamObj, col, endChartCol, contentTeamData );
             });
         } else {
             res.locals.userStat = false;
@@ -64,7 +64,8 @@ router.get("/", (req, res) => {
         var teamData = require("../repoData/teams.json");
         var contentTeamData = require("../repoData/content_team.json");
         // obtain any flags that may have been set and render the home page
-        getFlagData((flag, att, teamFlag) => {
+        getFlagData((flag, att, teamFlag, col, endChartCol, contentTeamFlag ) => {
+
             if(typeof att === "undefined") {
                 att = null;
             }
@@ -88,7 +89,8 @@ router.get("/", (req, res) => {
                 teamData: teamFlag,
                 attention: att,
                 teams: teamData,
-                contentTeam: contentTeamData,
+                contentTeamFlag: contentTeamFlag,
+                contentTeamJSON: contentTeamData,
                 avatar_url: null
             })
 		});
@@ -146,9 +148,10 @@ router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
 });
 
 router.get("/jquery/team/:teamName?", (req, res) => {
-    var c, flagInfo;
+    var c, flagInfo, contentFlagInfo;
     var isContent = false;
     var selectedTeam = req.params.teamName;
+    console.log(selectedTeam)
     if(selectedTeam === "content-tracking-team") {
         //selectedTeam = "content";
         isContent = true;
@@ -165,10 +168,24 @@ router.get("/jquery/team/:teamName?", (req, res) => {
         res.locals.userStat = true;
         var name = userData.split("=>")[0];
         var email = userData.split("=>")[2];
-        teamsControl.checkForTeamFlags(name, email, selectedTeam, (flagData) => {
-            flagInfo = flagData === null ? null : flagData;
 
-        });
+            //var target = isContent ? "contentTeamFlag" : "teamFlag";
+            //selectedTeam = isContent ? "content-tracking-team" : selectedTeam;
+
+        if(!isContent) {
+            teamsControl.checkForTeamFlags(name, email, selectedTeam, (flagData) => {
+                flagInfo = flagData === null ? null : flagData;
+                console.log(flagInfo)
+
+            });
+        } else {
+            teamsControl.checkForContentTeamFlags(name, email, "content-tracking-team", (flagData) => {
+                flagInfo = flagData === null ? null : flagData;
+                console.log(flagInfo)
+            });
+        }
+
+
     }
     if(avatar === "undefined") {
         res.locals.userStat = false;
@@ -184,7 +201,9 @@ router.get("/jquery/team/:teamName?", (req, res) => {
     teamsControl.getTeamData(selectedTeam, "repoPullsHistory", isContent, req, res, (teamPullsData) => {
         teamsControl.getTeamData(selectedTeam, "repoHistory", isContent, req, res, (teamIssueData) => {
             teamsControl.getTeamRecord(selectedTeam, isContent, "repositories", (doc) => {
+
                 res.render("team-view", {
+                    isContent: isContent,
                     flagData: flagInfo,
                     teamsData: doc,
                     av: avatar,
@@ -432,6 +451,7 @@ router.get("/dashboard", (req, res) => {
         var contentTeamJSON = require('../repoData/content_team.json');
         compDoc = schema.completeDoc;
         getFlagData((flag, attention, teamFlag, chartColor, endChartColor, contentTeamFlag) => {
+
             res.render("dashboard", {
                 // state: "true",
                 teamsJSONValues: teamsJSONValues,
