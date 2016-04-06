@@ -20,7 +20,7 @@ function getChartHeight(buildObject) {
 function getChartWidth(buildObject) {
     return buildObject.w - buildObject.top - buildObject.right;
 }
-var setCharts = function(data, flagData, isIssue, isContent) {
+var setCharts = function(data, flagData, isIssue, isContent, chartColour, endChartColour) {
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, flagData,  isIssue);
     var issueflagsIndexs = null;
     for(var t in data) {
@@ -45,11 +45,11 @@ var setCharts = function(data, flagData, isIssue, isContent) {
             }
 
         }
-        setTeamBarChart(data[t], isIssue, buildStyle, t, issueflagsIndexs, isContent)
+        setTeamBarChart(data[t], isIssue, buildStyle, t, issueflagsIndexs, isContent, chartColour, endChartColour)
     }
 };
 
-var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs, isContent) {
+var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs, isContent, chartColour, endChartColour) {
     var width = getChartWidth(buildStyle);
     var height = getChartHeight(buildStyle);
     var chartClass = ".team-chart"+i;
@@ -70,7 +70,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs, i
         .orient('left');
     var linearColorScale = d3.scale.linear()
         .domain([0, 29])
-        .range(['#4A84B0', '#c6dbef']);
+        .range([chartColour, endChartColour]);
     var ordinalColorScale = d3.scale.category20();
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -193,7 +193,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs, i
 
 }
 
-var setSingleChart = function(issueData, pullsData, index, isIssue, flagData, isContent) {
+var setSingleChart = function(issueData, pullsData, index, isIssue, flagData, isContent, chartColour, endChartColour) {
     var flagsIndexs = null;
     var data = isIssue ? issueData[index] : pullsData[index];
     var buildStyle = getBuildStyle(900, 300, 48, 72, 60, 40, 20, isIssue);
@@ -250,7 +250,7 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData, is
         .orient('left');
     var linearColorScale = d3.scale.linear()
         .domain([0, 29])
-        .range(['#4A84B0', '#c6dbef']);
+        .range([chartColour, endChartColour]);
     var ordinalColorScale = d3.scale.category20();
     var xAxis = d3.svg.axis()
         .scale(x)

@@ -148,7 +148,7 @@ router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
 });
 
 router.get("/jquery/team/:teamName?", (req, res) => {
-    var c, flagInfo, contentFlagInfo;
+    var c, flagInfo, contentFlagInfo, chartColour, endChartColour;
     var isContent = false;
     var selectedTeam = req.params.teamName;
     if(selectedTeam === "content-tracking-team") {
@@ -180,7 +180,12 @@ router.get("/jquery/team/:teamName?", (req, res) => {
                 flagInfo = flagData === null ? null : flagData;
             });
         }
-
+        teamsControl.getChartColour(name, email, (col, endCol) => {
+            chartColour = col;
+            endChartColour = endCol;
+            //flagInfo = flagData === null ? "" : flagData;
+            //callback(flagData, chartColour);
+        });
 
     }
     if(avatar === "undefined") {
@@ -210,7 +215,9 @@ router.get("/jquery/team/:teamName?", (req, res) => {
                     pullsData: teamPullsData,
                     logoutLink: "../../logout",
                     dashboardLink: "../../dashboard",
-                    avatar_url: null
+                    avatar_url: null,
+                    endChartColour: endChartColour,
+                    chartColour: chartColour
                 })
             })
         })
