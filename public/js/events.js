@@ -93,7 +93,7 @@ $(document).ready(function() {
         var teamname = window.location.pathname.split("/")[3];
         $.ajax({
             method: "POST",
-            url: "attention",
+            url: "do/attention",
             data: {
                 username: username,
                 email: email,

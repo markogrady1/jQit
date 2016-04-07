@@ -448,6 +448,22 @@ schema.getChartColour = function(username, email, cb) {
 		});
 	});
 }
+
+
+schema.getPinInformation = function(username, email, nameParam, cb) {
+	connection("user", (db) => {
+		var c, ec;
+		db.collection('attention').findOne({ username: username, email: email, target: nameParam }, function(err, doc) {
+			if (err) throw err;
+			if(doc !== null) {
+				cb(true);
+			} else {
+				cb(false)
+			}
+			db.close();
+		});
+	});
+}
 /**
  * Function responsible for storing the settings to watch over a given repository
  * @param {Object} obj

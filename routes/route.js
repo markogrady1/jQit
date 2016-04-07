@@ -291,7 +291,7 @@ router.post("/login", (req, res) => {
 });
 
 //route for adding the attention pin to the repo list item
-router.post("/repo/details/attention", (req, res) => {
+router.post("/repo/details/need-attention", (req, res) => {
     var userAvatar = req.body.userAvatar;
     var username = req.body.username;
     var attentionTarget = req.body.attentionTarget;
@@ -300,6 +300,17 @@ router.post("/repo/details/attention", (req, res) => {
         console.log(response)
     });
     res.end();
+});
+
+//route for adding the attention pin to the repo list item
+router.post("/repo/details/no-attention", (req, res) => {
+    var userAvatar = req.body.userAvatar;
+    var username = req.body.username;
+    var attentionTarget = req.body.attentionTarget;
+    var email = req.body.email;
+    schema.removePin(username, attentionTarget, (data) => {
+        return data;
+    });
 });
 
 //route for removing the attention pin

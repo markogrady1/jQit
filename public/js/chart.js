@@ -144,6 +144,10 @@ function setCharts(flagIssues, flagPulls, isPreviousMonthOfData, startDate, char
 
 
          if(issuesArr.length == 0){
+			var info =  $("div.explanation");
+			 info.css({
+				 top: "0px"
+			 })
            var el = document.getElementById('chartArea');
              el.innerHTML = 'There have been no issues in the last 30 days';
              el.setAttribute('class', 'status');
@@ -912,10 +916,12 @@ var compareRepositories = function(repoName, allHistory, isIssue) {
 			}
 		}
 	}
+
 	setComparisonChart(usedArray, comparedArray, team, isIssue);
 };
 
 var setComparisonChart = function(homeData,data , team, isIssue) {
+
 	getCompetitorAverageClosureTime(team, isIssue);
 	displayInfoInOverLay(data, team, isIssue);
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
@@ -925,6 +931,7 @@ var setComparisonChart = function(homeData,data , team, isIssue) {
 	var toolTipValue = isIssue ? 'Open Issues' : 'Pull Requests';
 	var $comparison = $('#compare-line-chart');
 	$comparison.remove();
+
 	var buildStyle = {
 			w: chartWidth,
 			h: lineChartHeight,
@@ -1208,12 +1215,19 @@ var getComparisonFinalString = function(currentStatus) {
 };
 
 var setUpMultipleCompareBtn = function(histObj) {
+	$('.lower-range-wrap').append("<a name='checkboxes-ready'></a>");
 	$('.trigger-multi-compare').remove()
-	$('.multi-comparison').append('<div class=trigger-multi-compare>Compare Multiple Repos</div><div class=check-append></div>');
+	$('.trigger-btn').append('<div class=trigger-multi-compare>Compare Multiple Repos</div>');
+	$('.multi-comparison').append('<div class=check-append></div>');
+	$('.trigger-btn').on("click", function() {
+		window.location.href = "#checkboxes-ready";
+	})
 	var $btn = $('.trigger-multi-compare');
 	$btn.on('click', function() {
 		$btn.remove();
-		$('.multi-comparison').prepend('<button class=go-compare>GO</button>');
+		$('.multi-comparison').append('<button class=go-compare>GO</button>');
+		$('.trigger-btn').append('<div class=trigger-multi-compare>Compare Multiple Repos</div>');
+
 		setMultiComparisonCheck(histObj);
 		var $go = $('.go-compare');
 		$go.on('click', function() {
@@ -1227,16 +1241,57 @@ var setMultiComparisonCheck = function(histObj) {
 	var data = histObj.allRepoIssueHistory;
 	var i = 1;
 	if($('.multi-compare').length === 0){
-		$('.check-append').append("<b><input type='checkbox' id='checkall'><label class='checkall' for='checkall'>Select all</label><br>")
-		_.map(data, function(val){
-			$('.check-append').append('<input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label class=multi-compare-text for=compare'+(i++)+ '>'+ val[0].team+'</label><br>');
-		});
+		$('.check-append').append("<b><input type='checkbox' name='checkall' id='checkall'><label class='checkall' for='checkall'>Select all</label><br>")
+		//_.map(data, function(val){
+		//	console.log(i, data)
+		//	$('.check-append').append('<input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label class=multi-compare-text for=compare'+(i++)+ '>'+ val[0].team+'</label><br>');
+		//});
+		//var s = 0;
+		//$('.check-append').append('<table>')
+		//_.map(data, function(val){
+		//	$('.check-append').append('<tr><td><input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label class=multi-compare-text for=compare'+(i)+ '>'+ data[s++][0].team+'</label></td>' +
+		//		'<td><input type=checkbox id=compare'+(s)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(i)+ '>'+  data[s++][0].team+'</label></td>' +
+		//		'<td><input type=checkbox id=compare'+(s)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(i)+ '>'+  data[s++][0].team+'</label></td></tr>' );
+		//});
+		var c = 1;
 
-		if($('.checkall').is(":checked")){
+		for(var s = 0; s < data.length-1;s++ ){
 
-			$(".multi-compare").attr("checked", true);
+			$('.check-append').append('<tr><td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+ data[s++][0].team+'</label></td>' +
+				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>' +
+				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
+				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
+				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
+				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
+
+				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s][0].team+'</label></td></tr>' );
 
 		}
+		//if($('.checkall').is(":checked")){
+		//	console.log("checked")
+		//	$(".multi-compare").attr("checked", true);
+        //
+		//}
+		$("#checkall").change(function () {
+			$("input:checkbox").prop('checked', $(this).prop("checked"));
+		});
+
+		//$('input[name=checkall]').change(function(){
+        //
+		//	if($(this).is(':checked'))
+		//	{
+		//		console.log("checked")
+		//		$('input[name=issue-multi-compare]').attr("checked", true);
+        //
+		//		// Checkbox is checked.
+		//	}
+		//	else
+		//	{
+		//		console.log("not checked")
+		//		$('input[name=issue-multi-compare]').attr("checked", false);
+		//	}
+        //
+		//});
 	}
 };
 
@@ -1266,7 +1321,6 @@ var getCheckValues = function(histObj) {
 			}
 		}
 	});
-
 	var comparedArray = [];
 	var team, multicomparedArray = [];
 	for(var i = 0; i < checkedRepoData.length; i++) {
@@ -1290,6 +1344,7 @@ var getCheckValues = function(histObj) {
 };
 
 var setComparisonChart2 = function(homeData, data, team, maximum, isIssue) {
+	window.location.href = "#multichart-anchor";
 	var dataVal1 = isIssue ? 'issues' : 'pulls';
 	var dataVal2 = isIssue ? 'issues2' : 'pulls2';
 	var team = 'unknown';
@@ -1298,6 +1353,8 @@ var setComparisonChart2 = function(homeData, data, team, maximum, isIssue) {
 	var toolTipValue = isIssue ? 'Open Issues' : 'Pull Requests';
 	var $comparison = $('#compare-line-chart');
 	$comparison.remove();
+	var $comparisonWrap = $('.compareChart2');
+
 	var buildStyle = {
 			w: chartWidth,
 			h: 500,
@@ -1324,6 +1381,14 @@ var setComparisonChart2 = function(homeData, data, team, maximum, isIssue) {
 					var str = (d[dataVal2] <= d[dataVal1]) ? "<span class=team1compare style=\'color:"+d['designatedColor']+"\'>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span><br><br> <span class=line-tip><span class=team2compare>▶</span> " +  $repo + ": " + d[dataVal2] + "</span>":"<span class=team2compare>▶</span> " +  $repo + ": " + d[dataVal2] + "</span><br><br> <span class=line-tip><span class=team1compare style=\'color:"+d['designatedColor']+"\'>▶</span> " + d['team'] + ": " + d[dataVal1] + "</span>";
 				    return "<span class=line-tip>Date: " + date + " " + monthStr + " " + dateBits[0] + "</span><br><br> <span class=chart-title>"+ toolTipValue+"</span><span class=line-tip><br><br>" + str;
 				  });
+	d3.select('.compare-chart2-wrap')
+		.style({
+			border: "1px solid #aaa",
+			padding: "20px 30px 30px 30px",
+			boxShadow: "2px 2px 2px #ddd",
+			width: "80%",
+			margin: "0 auto"
+		});
 
     var width = buildStyle.w - buildStyle.left - buildStyle.right;
 	var height = buildStyle.h - buildStyle.top - buildStyle.bottom;
@@ -1346,7 +1411,7 @@ var setComparisonChart2 = function(homeData, data, team, maximum, isIssue) {
 		        .attr("y", 0 - (buildStyle.top / 2) - 20)
 		        .attr("text-anchor", "middle")
 		        .text($repo + "  Open Issues Comparison");
-		        appendMultipleLegend($repo, team, data);
+		        //appendMultipleLegend($repo, team, data);
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data[m], function(d) {
 					return maximum;
@@ -1681,7 +1746,7 @@ var getDiff = function(data, isIssue) {
 	var currentStatus = getDifference(data, isIssue);
 	var strStart = "";
 	var s = currentStatus === 1 ? ""  : "s";
-	var strEnd = isIssue ? " Issue" + s + " since last month" : " Pull Request" + s + " since last month"
+	var strEnd = isIssue ? " Issue" + s + " since last month" : " PR" + s + " since last month"
 	if(currentStatus <= 0) {
 		currentStatus = currentStatus.toString().replace('-','');
 		strStart = "Down ";

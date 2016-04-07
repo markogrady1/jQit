@@ -32,6 +32,7 @@
         var avgIssues =  <%- JSON.stringify(avgIssues) %>
         var chartColour = <%- JSON.stringify(chartColour) %>
         var endChartColour = <%- JSON.stringify(endChartColour) %>
+        var isPinned = <%- JSON.stringify(isPinned) %>
          if(flagdata !== null) {
 
             everyIncrease = false;
@@ -55,6 +56,7 @@
                isPullsHighlighted = false;
             }
          }
+
 
 
          console.log("Issues:",isIssuesHighlighted);
@@ -106,6 +108,9 @@
          var foundationIssuesAvg = totals.foundationIssuesAverage.toFixed(2);
          var issuesMonthlyAvg = getMonthAvg(v, 'issues');
          var pullsMonthlyAvg = getMonthAvg(pr, 'pulls');
+
+
+
       </script>
       <script src="/js/detectResize.js"></script>
       <script src="/js/external/d3.v3.min.js"></script>
@@ -117,7 +122,7 @@
     <style>
       </style>
    </head>
-   <body>
+
    <% include partials/header.html %>
    <div id="top-bar">
        <ul class="top-bar-element-list">
@@ -127,12 +132,15 @@
            <!--<li><div class=details></div></li>-->
            <li><div class=compare-issues-info></div></li>
            <li><div class=compare-pulls-info></div></li>
+           <li><div class=trigger-btn></div></li>
+
            <li><div class=loc-link><a href="lines-of-code/<%= data.name %>">List of Files</a></div></li>
 
            <!--<span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span>&lt;!&ndash; ⮀&ndash;&gt;-->
        </ul>
-       <a href="/">Back</a>
+       <span class="home-btn-wrap"><a class='home-btn' href="/">Home</a><span class="bar">|</span></span>
    </div>
+
    <div class="complete-compare-overlay"></div>
    <div class="compare-overlay"><img src="/img/clear_dot.gif" class="close-img" alt="">
        <div class=compareChart></div>
@@ -155,7 +163,7 @@
       </script>
 <div class="line-break-with-brder"></div>
    <div class="mid-range-wrap">
-       <div class="mid-range-header">       </div>
+       <div class="mid-range-header">   Issues and Pull Requests    </div>
 
        <div class="pie-chart-wrap">
 
@@ -184,6 +192,8 @@
    </div>
 <div class="line-break"></div>
   <div class="line-break-with-brder"></div>
+   <div class="lower-range-wrap">
+       <div class="lower-range-header">   Issues and Pull Requests Information  </div>
 <div class="closed-data-wrap">
 
     <div class="closed-data">
@@ -207,34 +217,37 @@
            </div>
        </div>
            <div class="clsd-visual-details-left-wrap">
-               <div class="open-avg-issue-text"><span class="average-open-text">Average age of open issues:</span><br> <%= averageAgeOfOpenIssues %></div>
+               <div class="open-avg-issue-text avg-first-el"><span class="average-open-text">Average age of open issues:</span><br> <%= averageAgeOfOpenIssues %></div>
                <div class="open-avg-pulls-text"><span class="average-open-text">Average age of open Pull Requests:</span><br> <%= averageAgeOfOpenPRs %></div>
-           </div>      
+               <div class="oldest-issue-text"><span class="average-open-text">Age of oldest issues:</span><br> <%= issueRange %>
+                   <p class="goto-oldest-issue old"></p></div>
+               <div class="oldest-pulls-text"><span class="average-open-text">Average age of open Pull Requests:</span><br> <%= averageAgeOfOpenPRs %><p class="goto-oldest-pr old"></p></div>
+           </div>
        </div>
     </div>
     <div class="avg-close-time"></div>
 </div>
+
 <div class="line-break"></div>
-
-<br><br><br><br><br>
-
-<br><br><br><br>
+   </div>
+<br><br>
    <div class=multi-comparison-legend></div>
 
    <div class=multi-compareChart></div>
-   <div class=multi-comparison></div>
-   <div class=compareChart2></div>
+   <div class=multi-comparison></div>   <a class="anchor" name="multichart-anchor"></a>
+
+       <div class="compare-chart2-wrap">
+            <div class=compareChart2></div>
+       </div>
 <script>
 var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
         setCharts(issueflagsIndexs, pullsflagsIndexs, false, undefined, chartColour, endChartColour);
         </script>
 <div class='point point2'></div>
-   <input class="range" value=2>
-   <p class="attention-marker"></p>
-   <div class="body-wrap">
-         <div class="average"></div>
-         <div><b class="istatus"></b></div>
-         <div><b class="pstatus"></b></div>
+   <input class="range" value=2 hidden>
+   <!--<p class="attention-marker"></p>-->
+   <div class="repo-detail-body-wrap">
+         <!--<div class="average"></div>-->
          <section class="item"></section>
 
 
@@ -272,7 +285,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
        var updatedDateStr =  new Date(data.updated_at.split('T')[0]).toString()
        updatedDateStr = updatedDateStr.split(" ")[0] +  " " +updatedDateStr.split(" ")[1] +  " " +updatedDateStr.split(" ")[2] +  " " +updatedDateStr.split(" ")[3]
        %>
-   </div>
+
    <div class="complete-data-table">
        <table class="props xmpl repo-info-table" id="xtable">
            <thead>
@@ -288,7 +301,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
            </tr>
            <tr>
                <td>Repository URL</td>
-               <td><%= data.html_url %></td>
+               <td><a  class="index-github-link" target="_blank" href="<%= data.html_url%>"><%= data.html_url%></a></td>
            </tr>
            <tr>
                <td>Description</td>
@@ -330,6 +343,14 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
            </tbody>
        </table>
    </div>
+   </div>
+       <div class="explanation">
+           <div class="explanation-head">Information</div>
+           <div class="explanation-body">
+               <p>This section of the report displays <%= data.name%>'s total issue and pull request count,<br>
+                   it also produces their total contribution to the jQuery foundation in these areas.</p>
+           </div>
+       </div>
          <h1 class=current-repo><%= data.name %></h1>
          <p><b>Repository name:</b> <%= data.name %></p>
          <p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
@@ -353,7 +374,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
                 }
 
                 if(old !== null){
-                    $('.old').append('<a href='+ old +' target=_blank>Go To Oldest Issue</a>');
+                    $('.old').append("<a class='oldest-link' href=" + old + " target=_blank>Go to oldest issue</a>");
                 }
             </script>
          </p>
@@ -377,7 +398,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
          </p>
          <p></p>
          <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
-
+<img title="Mark for attention" class="repo-page-pin" src="/img/attention_pin.png" alt="">
       <script>
 
           $(document).ready(function(){
@@ -389,7 +410,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
           var issuesPieVal = totals.issues.toFixed(2);
           var rep = homeRepository;
           $(".avg-issue-value").html(issuesPieVal + "%");
-          $(".pulls-val").html(<%= pullRequestNo %>);
+          $(".pulls-val").html(<%= pullRequestNo %> + "<div class='pstatus'></div>");
           // pie chart data for issues
           var pieData = [{
              "label":rep,
@@ -406,7 +427,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
           jqueryPieVal = jqueryPieVal.toFixed(2);
           var pullsPieVal = totals.pulls.toFixed(2);
           $(".avg-pulls-value").html(pullsPieVal + "%");
-          $(".issues-val").html(v[v.length-1].issues);
+          $(".issues-val").html(v[v.length-1].issues + "<div class='istatus'></div>");
           // pie chart data for PRs
           pieData = [{
                 "label":rep,
@@ -430,8 +451,63 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
           elm4[0].innerHTML = pDiff;
          scroller.init();
 
+        var countss = 0;
+
+          for(var k in v) {
+              var tempArr = [];
+              tempArr.push({'date': v[k].date, 'issues': v[k].issues});//this array is used for the actual tables
+              countss +=    parseInt(v[k].issues);
+          }
+          if(countss === 0) {
 
 
+              $("div.explanation").css({
+
+                  top:"300px",
+                  left: "30px"
+              })
+          }
+
+          if(isPinned) {
+              $(".repo-page-pin").attr("src","/img/attention_pin_enabled.png")
+          }
+          $(".repo-page-pin").on("click", function() {
+              var teamname = window.location.pathname.split("/")[3];
+              if($(".repo-page-pin").attr("src") === "/img/attention_pin_enabled.png") {
+                  $(this).attr("src", "/img/attention_pin.png")
+
+                  $.ajax({
+                      method: "POST",
+                      url: "no-attention",
+                      data: {
+                          username: username,
+                          email: email,
+                          userAvatar: av,
+                          attentionTarget: teamname
+                      }
+                  }).done(function(msg) {
+                      console.log(msg)
+                  });
+
+              } else {
+                  $(".repo-page-pin").attr("src", "/img/attention_pin_enabled.png")
+
+                  $.ajax({
+                      method: "POST",
+                      url: "need-attention",
+                      data: {
+                          username: username,
+                          email: email,
+                          userAvatar: av,
+                          attentionTarget: teamname
+                      }
+                  }).done(function(msg) {
+                      console.log(msg)
+                  });
+
+              }
+
+          })
       </script>
 
 
