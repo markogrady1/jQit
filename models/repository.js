@@ -341,7 +341,6 @@ schema.assignAttentionMarker = function(attentionTarget, username, email, userav
 		userAvatar: useravatar,
 		target: attentionTarget
 	};
-	console.log(typeof username);
 	connection("user", (db) => {
 		db.collection('attention').findOne({ username: username }, function(err, doc) {
 			if (err) throw err;

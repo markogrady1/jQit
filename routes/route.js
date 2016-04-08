@@ -297,7 +297,7 @@ router.post("/repo/details/need-attention", (req, res) => {
     var attentionTarget = req.body.attentionTarget;
     var email = req.body.email;
     schema.assignAttentionMarker(attentionTarget, username, email, userAvatar, (response) => {
-        console.log(response)
+        return response;
     });
     res.end();
 });
@@ -311,6 +311,8 @@ router.post("/repo/details/no-attention", (req, res) => {
     schema.removePin(username, attentionTarget, (data) => {
         return data;
     });
+    res.end();
+
 });
 
 //route for removing the attention pin
@@ -320,6 +322,7 @@ router.post("/remove-pin", (req, res) => {
     schema.removePin(username, team, (data) => {
        return data;
     });
+    res.end();
 });
 
 //route for the register page requests

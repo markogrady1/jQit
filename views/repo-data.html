@@ -122,7 +122,7 @@
     <style>
       </style>
    </head>
-
+<body>
    <% include partials/header.html %>
    <div id="top-bar">
        <ul class="top-bar-element-list">
@@ -486,7 +486,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
                           attentionTarget: teamname
                       }
                   }).done(function(msg) {
-                      console.log(msg)
+//                      console.log(msg)
                   });
 
               } else {
@@ -502,7 +502,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
                           attentionTarget: teamname
                       }
                   }).done(function(msg) {
-                      console.log(msg)
+//                      console.log(msg)
                   });
 
               }
@@ -511,6 +511,18 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
       </script>
 
 
+   <footer class="footer-wrap">
 
+   </footer>
+   <div class="footer-lower-bar">
+       <ul class="footer-menu">
+           <li><a href="/">Home</a> &nbsp;&nbsp;| &nbsp;&nbsp; </li>
+           <li><a href="https://github.com/markogrady1/jQit" target="_blank">GitHub</a> &nbsp;&nbsp; |  &nbsp;&nbsp;</li>
+           <li><a href="">Twitter</a> &nbsp;&nbsp; | &nbsp;&nbsp; </li>
+       </ul>
+       <div class="copyright-notice">
+           &copy All rights reservered. jQit Issue Tracker
+       </div>
+   </div>
    </body>
 </html>

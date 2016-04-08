@@ -2083,3 +2083,49 @@ p.feedback {
 	cursor:pointer;
 }
 
+/*////////////////////// FOOTER /////////////////////*/
+
+.footer-wrap {
+	margin-top: 100px;
+	height: 195px;
+	width: 100%;
+	background: #232323;
+}
+.footer-wrap:after {
+	content: "";
+	display: block;
+}
+.footer-lower-bar {
+	height: 50px;
+	padding: 0;
+	background-color: #191919;
+}
+
+.footer-menu {
+	padding: 20px  0 0 40px;
+	margin: 0;
+	list-style:none;
+	color: #777;
+	width: 200px;
+	float: left;
+}
+
+.footer-menu li a {
+	text-decoration: none;
+	color: #777;
+}
+
+.footer-menu li a:hover {
+	text-decoration: underline;
+}
+
+
+.footer-menu li{
+	display: inline-block;
+}
+
+.copyright-notice {
+	color: #777;
+	padding:  20px 40px 0 0;
+	float: right
+}
