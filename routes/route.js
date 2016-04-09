@@ -290,6 +290,16 @@ router.post("/login", (req, res) => {
 	});
 });
 
+
+//route for search of repositories ==> GET
+router.get("/search/:param", (req, res) => {
+
+    var parameter = req.params.param;
+    reslv.getSearchResults(parameter, (result) => {
+        res.send(result)
+    });
+});
+
 //route for adding the attention pin to the repo list item
 router.post("/repo/details/need-attention", (req, res) => {
     var userAvatar = req.body.userAvatar;

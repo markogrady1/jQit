@@ -2129,3 +2129,18 @@ p.feedback {
 	padding:  20px 40px 0 0;
 	float: right
 }
+
+.search-results-table {
+	width: 100%;
+}
+
+.search-tables-txt {
+	width: 400px;
+	font-size: 1.3em;
+	padding: 3px 5px;
+	height: 30px;
+	border-radius: 4px;
+	border: 2px solid #777;
+	outline: none;
+	color: #444;
+}

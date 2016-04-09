@@ -37,6 +37,8 @@
             <li class="tab-link"> <a class="team-table-link" href="#team-table">Team Table</a></li>
             <li class="tab-link"> <a class="team-table-link" href="#content-team-table">Content Team Table</a></li>
         </ul>
+        <input type="text" class="search-tables-txt" placeholder="Search for Repository...">
+        <div class="search-results"></div>
     <table class="props xmpl home-main-table" id="xtable">
       <thead>
       <tr >
@@ -365,5 +367,61 @@ $("index-name-link").on("click", function(socket) {
         &copy All rights reservered. jQit Issue Tracker
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $(".search-tables-txt").on("keyup", function() {
+            var searchVal = $(this.valueOf()).val();
+            if(searchVal.length > 1) {
+                $.ajax({
+
+                    url: "search/" + searchVal,
+
+                }).done(function(msg) {
+                      console.log("client",msg)
+
+                    $(".search-results").html("");
+
+                    var $table = $(".search-results-inner");
+
+                    $table.remove();
+                    $table = $(".search-results");
+
+                    if(msg !== null) {
+                        var tableStr = '';
+                        for(var i in msg) {
+                            for(var k = pd.length-1; k > 0; k--) {
+
+                                if(pd[k].name === msg[i].name) {
+                                    console.log("found", pd[k].name, msg[i].name)
+                                    var newIssues = pd[k].issues - pd[k].pulls;
+                                    newIssues = newIssues < 0 ? 0 : newIssues;
+                                    tableStr += "<tr><td><a class='index-name-link' href='/repo/details/" + msg[i].name + "'>" + msg[i].name + "</a></td>" +
+                                            "<td>" + newIssues +"</td>" +
+                                            "<td>" + pd[k].pulls +"</td>" +
+                                            "<td>" + msg[i].forks_count + "</td>" +
+                                            "<td>" + msg[i].watchers + "</td>" +
+                                            "<td><a href='" + msg[i].html_url + "' target='_blank' class='index-name-link'>" + msg[i].html_url + "</a></td></tr>"
+                                }
+                            }
+                        }
+                        $table.html("<div class='search-results-inner'><table class='search-results-table' id=''>");
+                        $table.html( "<table class='props xmpl home-main-table' id='xtable'><thead class='tab'>" +
+                                "<tr class='tab' >" +
+                                "<th class='head tab'>Name</th>" +
+                                "<th class='head tab'>Issues</th>" +
+                                "<th class='head tab'>PR's</th>" +
+                                "<th class='head tab'>Forks</th>" +
+                                "<th class='head tab'>Watchers</th>" +
+                                "<th class='head github-head tab'>GitHub</th>" +
+                                "</tr>" +
+                                "</thead>" + tableStr);
+                    }
+                });
+            } else {
+                $(".search-results").html("");
+            }
+        })
+    })
+</script>
 </body>
 </html>

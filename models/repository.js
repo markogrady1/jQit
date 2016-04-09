@@ -99,6 +99,19 @@ schema.executeQuery = function(database, param, callback) {
 	});
 };
 
+schema.getSearchResults = function(param, callback) {
+	var param = param.toString();
+	collection = "repos";
+	connection("repositories", function(db){
+		db.collection(collection).find({ name: { $regex: param, $options: "i" } }).toArray(function(err, doc) {
+			if (err) throw err;
+				callback(doc);
+
+			db.close();
+		});
+	});
+};
+
 /**
  * Execute query to abtain a given collection data
  *
