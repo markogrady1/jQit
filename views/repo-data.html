@@ -26,6 +26,9 @@
         var flagdata = {};
         flagdata = <%- JSON.stringify(flagData) %>
         wholeData = <%- JSON.stringify(data) %>
+        ipred = <%- JSON.stringify(ipred) %>
+        prpred = <%- JSON.stringify(prpred) %>
+
 
         var username =  <%- JSON.stringify(username) %>
         var email =  <%- JSON.stringify(email) %>
@@ -347,8 +350,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
        <div class="explanation">
            <div class="explanation-head">Information</div>
            <div class="explanation-body">
-               <p>This section of the report displays <%= data.name%>'s total issue and pull request count,<br>
-                   it also produces their total contribution to the jQuery foundation in these areas.</p>
+               <p><p class="name"><%= data.name %></p><p class="name"><%= ipred %></p><p class="name"><%= prpred %></p></p>
            </div>
        </div>
          <h1 class=current-repo><%= data.name %></h1>

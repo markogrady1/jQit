@@ -2144,3 +2144,8 @@ p.feedback {
 	outline: none;
 	color: #444;
 }
+
+.name {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 6px;
+}

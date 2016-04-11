@@ -99,6 +99,20 @@ schema.executeQuery = function(database, param, callback) {
 	});
 };
 
+schema.prediction = function(database, param, callback) {
+	var query = { "repo": param };
+	collection = query.repo;
+	var queryStr = getQuery(database);
+	var projection = getProjection(database);
+	connection(database, function(db){
+		db.collection(collection).find({}, projection).toArray(function(err, doc) {
+			if (err) throw err;
+			callback(doc)
+			db.close();
+		});
+	});
+};
+
 schema.getSearchResults = function(param, callback) {
 	var param = param.toString();
 	collection = "repos";
