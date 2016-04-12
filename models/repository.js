@@ -704,8 +704,10 @@ User.prototype.register = function(res, io) {
 				if(data === " ") {
 					res.redirect('/');
 				} else {
+					var username = helper.getSplitValue(data,'=>', 0)
 					var avatar = helper.getSplitValue(data, '=>', 1);
-					var avatNum = helper.getSplitValue(avatar, '/', -1)
+					var avatNum = helper.getSplitValue(avatar, '/', -1);
+					localStorage.setItem("data",username + "=>" + avatar + "=>" + query.email);
 					res.redirect('/');
 					this.io.emit("userStatus",{ av: avatNum })
 				}

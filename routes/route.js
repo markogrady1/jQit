@@ -138,7 +138,6 @@ router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-issue-month/:" + req.params.repo+"/"+req.params.range);
     var range = req.params.range;
     var repo = req.params.repo;
-    console.log(range, repo)
     monthly.getNewMonth(repo, range,req, res, io, (obj) => {
         res.writeHead(200, {'content-type': 'text/json' });
         res.write( JSON.stringify({ obj } ) );
@@ -239,7 +238,6 @@ router.get("/logins", (req, res) => {
     query = require("url").parse(req.url, true).query;
     var state = query.state;
     var code = query.code;
-    console.log(state, code)
     var localState = localStorage.getItem("state");
     var request = require("request");
 
@@ -457,6 +455,7 @@ router.post("/dashboard/edit/repo", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /dashboard/edit/repo");
     var watchTarget = req.body.watchTarget;
     var receiveEmail = req.body.receiveEmail;
+
     var flagIssuesChart = req.body.flagIssuesChart;
     var flagPullsChart = req.body.flagPullsChart;
     var issueBoundary = req.body.issueSlider;

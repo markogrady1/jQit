@@ -1257,12 +1257,12 @@ var setMultiComparisonCheck = function(histObj) {
 
 		for(var s = 0; s < data.length-1;s++ ){
 
-			$('.check-append').append('<tr><td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+ data[s++][0].team+'</label></td>' +
-				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>' +
-				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
-				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
-				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
-				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
+			$('.check-append').append('<tr><td class=tab-detail><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+ data[s++][0].team+'</label></td>' +
+				'<td class=tab-detail><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>' +
+				'<td class=tab-detail><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
+				'<td class=tab-detail><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
+				'<td class=tab-detail><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
+				'<td class=tab-detail><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s++][0].team+'</label></td>'+
 
 				'<td><input type=checkbox id=compare'+(c)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(c++)+ '>'+  data[s][0].team+'</label></td></tr>' );
 
@@ -1300,13 +1300,13 @@ var getCheckValues = function(histObj) {
 	var color;
 	var obj = histObj.allRepoIssueHistory;
 	var maximum = 0;
-	_.map(obj, function(data) {
-		_.map(data, function(value) {
-			if(parseInt(value.issues) > maximum) {
-				maximum = value.issues;
-			}
-		});
-	});
+	//_.map(obj, function(data) {
+	//	_.map(data, function(value) {
+	//		if(parseInt(value.issues) > maximum) {
+	//			maximum = value.issues;
+	//		}
+	//	});
+	//});
 
 	var currentRepo = $('.current-repo').text();
 	var comparisonTeams = [];
@@ -1316,7 +1316,13 @@ var getCheckValues = function(histObj) {
 	}).get();
 	_.map(checkedVals, function(name) {
 		for(var i = 0; i < obj.length; i++) {
+
 			if(name === obj[i][0].team) {
+				_.map(obj[i], function(value) {
+					if(parseInt(value.issues) > maximum) {
+						maximum = value.issues;
+					}
+				});
 				checkedRepoData.push(obj[i]);
 			}
 		}
@@ -1414,7 +1420,7 @@ var setComparisonChart2 = function(homeData, data, team, maximum, isIssue) {
 		        //appendMultipleLegend($repo, team, data);
 		var y = d3.scale.linear()
 				.domain([0,d3.max(data[m], function(d) {
-					return maximum;
+					return parseInt(maximum) + 25;
 				})])
 				.range([height, 0]);
 		var x = d3.scale.ordinal()

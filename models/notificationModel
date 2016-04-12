@@ -16,7 +16,7 @@ notification.getAllUsers = function(callback) {
     });
 };
 
-notification.getEmailNotifs = function(username, email,  callback) {
+notification.getRepositoryEmailNotifs = function(username, email,  callback) {
 
     connection("user", function(db){
         db.collection("repoFlag").find({
@@ -33,6 +33,41 @@ notification.getEmailNotifs = function(username, email,  callback) {
         });
     });
 };
+
+notification.getTeamEmailNotifs = function(username, email,  callback) {
+    connection("user", function(db){
+        db.collection("teamFlag").find({
+            username:username,
+            email:email,
+            receive_email: "true",
+            team_target: {$ne: null },
+            $or: [ { issues_team_boundary: {$ne: "0" } }, { pulls_team_boundary: {$ne: "0" } } ]
+
+        }, {}).toArray(function(err, doc) {
+            if (err) throw err;
+            callback(doc)
+            db.close();
+        });
+    });
+};
+
+notification.getContentEmailNotifs = function(username, email,  callback) {
+    connection("user", function(db){
+        db.collection("contentTeamFlag").find({
+            username:username,
+            email:email,
+            receive_email: "true",
+            content_team_target: {$ne: null },
+            $or: [ { issues_content_team_boundary: {$ne: "0" } }, { pulls_content_team_boundary: {$ne: "0" } } ]
+
+        }, {}).toArray(function(err, doc) {
+            if (err) throw err;
+            callback(doc)
+            db.close();
+        });
+    });
+};
+
 
 
 notification.getRepoIssueHistory = function(target, callback) {

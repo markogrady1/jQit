@@ -371,7 +371,7 @@ $("index-name-link").on("click", function(socket) {
     $(document).ready(function() {
         $(".search-tables-txt").on("keyup", function() {
             var searchVal = $(this.valueOf()).val();
-            if(searchVal.length > 1) {
+            if(searchVal.length > 0) {
                 $.ajax({
 
                     url: "search/" + searchVal,
