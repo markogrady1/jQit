@@ -3,9 +3,9 @@ var hst = require("./models/history")
 	, mailer = require("./lib/mailer")
     , app = express()
     , routes = require("./routes/route")
-    , resolve = require("./lib/mainController")
+    , resolve = require("./lib/repoController")
     , path = require("path")
-    , schema = require("./models/repository")
+    , schema = require("./models/repositoryModel")
     , bodyParser = require("body-parser")
     , cookieParser = require("cookie-parser")
     , session = require("express-session")
@@ -15,7 +15,7 @@ schema.initConnection();
 app.engine(".html", require("ejs").__express);
 app.set("views", __dirname + "/views/");
 app.set("view engine", "html");
-app.locals.repoComparison = require("./models/repository");
+app.locals.repoComparison = require("./models/repositoryModel");
 app.use(cookieParser());
 app.use(session({
 	secret:"jkgabglhantiovqatapiteioatbthtipw4uiwtwu4hthtui42htuohRUVH3932HRTEJGWTWVEHGUIHAIHJSoheojahghvghjkher9turhtreig",

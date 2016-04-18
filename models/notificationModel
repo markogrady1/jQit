@@ -16,8 +16,8 @@ notification.getAllUsers = function(callback) {
     });
 };
 
-notification.getRepositoryEmailNotifs = function(username, email,  callback) {
-
+notification.getEmailAlerts = function(username, email, callback) {
+    var arr = [];
     connection("user", function(db){
         db.collection("repoFlag").find({
             username:username,
@@ -28,13 +28,33 @@ notification.getRepositoryEmailNotifs = function(username, email,  callback) {
 
         }, {}).toArray(function(err, doc) {
             if (err) throw err;
-            callback(doc)
+            if(doc.length !== 0) {
+                callback(doc)
+            } else {
+                var data = {
+                    "username": "none",
+                    "email": "none",
+                    "avatar": "none",
+                    "repository_target": "none",
+                    "receive_email": "false",
+                    "highlight_issues_chart": "false",
+                    "highlight_pulls_chart": "false",
+                    "issues_boundary": "0",
+                    "pulls_boundary": "0",
+                    "show_every_increase": "false"
+                }
+
+                arr.push(data)
+                callback(arr)
+            }
+
             db.close();
         });
     });
 };
 
-notification.getTeamEmailNotifs = function(username, email,  callback) {
+notification.getTeamEmailAlerts = function(username, email, callback) {
+    var arr = [];
     connection("user", function(db){
         db.collection("teamFlag").find({
             username:username,
@@ -45,13 +65,31 @@ notification.getTeamEmailNotifs = function(username, email,  callback) {
 
         }, {}).toArray(function(err, doc) {
             if (err) throw err;
-            callback(doc)
+            if(doc.length !== 0) {
+                callback(doc)
+            } else {
+                var data = {
+                    "username": "none",
+                    "email": "none",
+                    "avatar": "none",
+                    "team_target": "none",
+                    "receive_email": "false",
+                    "highlight_team_issues_chart": "false",
+                    "highlight_team_pulls_chart": "false",
+                    "issues_team_boundary": "0",
+                    "pulls_team_boundary": "0",
+                    "show_team_every_increase": "false"
+                }
+                arr.push(data)
+                callback(arr)
+            }
             db.close();
         });
     });
 };
 
-notification.getContentEmailNotifs = function(username, email,  callback) {
+notification.getContentEmailAlerts = function(username, email, callback) {
+    var arr = [];
     connection("user", function(db){
         db.collection("contentTeamFlag").find({
             username:username,
@@ -62,7 +100,25 @@ notification.getContentEmailNotifs = function(username, email,  callback) {
 
         }, {}).toArray(function(err, doc) {
             if (err) throw err;
-            callback(doc)
+            if(doc.length !== 0) {
+                callback(doc)
+            } else {
+                var data = {
+                    "username": "none",
+                    "email": "none",
+                    "avatar": "none",
+                    "content_team_target": "none",
+                    "receive_email": "false",
+                    "highlight_content_team_issues_chart": "false",
+                    "highlight_content_team_pulls_chart": "false",
+                    "issues_content_team_boundary": "0",
+                    "pulls_content_team_boundary": "0",
+                    "show_content_team_every_increase": "false"
+                }
+                arr.push(data)
+                callback(arr)
+
+            }
             db.close();
         });
     });

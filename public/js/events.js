@@ -146,5 +146,18 @@ $(document).ready(function() {
             $("#pulls-pie-chart").css("display", "block");
         }
     });
+
+    $(".trigger-multi-compare").on("click", function() {
+        console.log("click")
+        ScrollMovement.enableScroll();
+        $(".complete-compare-overlay").css("display", "none");
+        $(".compare-overlay").css("display", "none");
+    })
+    $(".trigger-btn").on("click", function() {
+        console.log("click")
+        ScrollMovement.enableScroll();
+        $(".complete-compare-overlay").css("display", "none");
+        $(".compare-overlay").css("display", "none");
+    })
 });
 

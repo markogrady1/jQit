@@ -2,7 +2,7 @@ require('should')
 var assert = require('chai').assert;
 var helper = require('../../lib/helper');
 var date = require('../../lib/date');
-var mainController = require('../../lib/mainController');
+var mainController = require('../../lib/repoController');
 
 
 var data;

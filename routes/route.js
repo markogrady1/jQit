@@ -1,8 +1,8 @@
 var migrate = require("../models/repoMigrate")
-	, schema = require("../models/repository")
+	, schema = require("../models/repositoryModel")
 	, df = require("../lib/date")
 	, helper = require("../lib/helper")
-	, reslv = require("../lib/mainController")
+	, repository = require("../lib/repoController")
     , monthly = require("../lib/monthController")
 	, express = require("express")
 	, auth = require("../config/auth")
@@ -25,16 +25,16 @@ console.log(color["cyan"],"Router Initialised.");
 
 //route for the home page
 router.get("/", (req, res) => {
-	var avaNum = reslv.getAvatarImage();
-    var username = reslv.getStorageItem(0);
+	var avaNum = repository.getAvatarImage();
+    var username = repository.getStorageItem(0);
 	migrate.repositoryMigrate();
 	var prs, c;
 	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
     function getFlagData(callback) {
         if (avaNum !== "undefined") {
             res.locals.userStat = true;
-            var data = reslv.getStorage();
-            reslv.getFlagData(data, (flagObj, att, teamObj, col, endChartCol, contentTeamData ) => {
+            var data = repository.getStorage();
+            repository.getFlagData(data, (flagObj, att, teamObj, col, endChartCol, contentTeamData ) => {
                 callback(flagObj, att, teamObj, col, endChartCol, contentTeamData );
             });
         } else {
@@ -44,7 +44,7 @@ router.get("/", (req, res) => {
     }
 
     //inner function to retreive pull requests and insert them into complete repository data
-    reslv.getPRs("pulls", (pullsdata) => {
+    repository.getPRs("pulls", (pullsdata) => {
 		c = helper.getRandomString();
 		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
 		prs = pullsdata;
@@ -60,7 +60,7 @@ router.get("/", (req, res) => {
      }
 
 
-     reslv.cacheRepoData(compDoc);
+     repository.cacheRepoData(compDoc);
         var teamData = require("../repoData/teams.json");
         var contentTeamData = require("../repoData/content_team.json");
         // obtain any flags that may have been set and render the home page
@@ -103,7 +103,7 @@ router.get("/repo/details/:repoName?", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
   	var nameParam = null;
   	nameParam = req.params.repoName;
-  	reslv.resolveIssueData(nameParam, req, res, io);
+  	repository.getIssueData(nameParam, req, res, io);
 });
 
 //route for single repository data
@@ -112,18 +112,18 @@ router.get("/repo/details/competitor-closure-avg/:competitorName?", function(req
     var nameParam = null;
     nameParam = req.params.competitorName;
     var clIssues;
-    reslv.getClosedIssueNo(nameParam, (closedNumber) => {
+    repository.getClosedIssueNo(nameParam, (closedNumber) => {
         clIssues = closedNumber[closedNumber.length-1].issues;
     });
 
-    reslv.getClosedNo(nameParam, (pullClosedNumber, pullDat, issueClosedNumber, issueDat) => {
+    repository.getClosedNo(nameParam, (pullClosedNumber, pullDat, issueClosedNumber, issueDat) => {
         var pullTimeString = "";
         var issueTimeString = "";
-        reslv.getTimeString(pullDat, (time) => {
+        repository.getTimeString(pullDat, (time) => {
             pullTimeString = time;
         });
 
-        reslv.getTimeString(issueDat, (time) => {
+        repository.getTimeString(issueDat, (time) => {
             issueTimeString = time;
         });
 
@@ -159,9 +159,9 @@ router.get("/jquery/team/:teamName?", (req, res) => {
 
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /jquery/team/:" + selectedTeam);
     helper.noCache(res);
-    var avatar = reslv.getAvatarImage();
+    var avatar = repository.getAvatarImage();
     var urlstate;
-    var userData = reslv.getStorage();
+    var userData = repository.getStorage();
     if (userData !== "undefined") {
         res.locals.userStat = true;
         var name = userData.split("=>")[0];
@@ -228,7 +228,7 @@ router.get("/repo/issue/details/:team?", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:" + req.params.repoName);
   	var nameParam = null;
   	nameParam = req.params.team;
-  	reslv.resolveIssueDates(nameParam, req, res);
+  	repository.resolveIssueDates(nameParam, req, res);
 });
 
 
@@ -261,9 +261,9 @@ router.get("/logins", (req, res) => {
                      requestify.get("https://api.github.com/user?access_token=" + access_t)
                          .then(function(response) {
                              acc = response.getBody();
-                             reslv.resetStorage();
+                             repository.resetStorage();
                              acc = setBodyValue(acc, res)
-                             reslv.initiateRegistration(req, res, state, acc, this.io);
+                             repository.initiateRegistration(req, res, state, acc, this.io);
                          });
                  }
              }
@@ -276,7 +276,7 @@ router.post("/login", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /login");
     username = req.body.username;
     	password = req.body.password;
-	reslv.validateLogin(req, res, (result, data) => {
+	repository.validateLogin(req, res, (result, data) => {
 		if(!result) {
     			res.redirect("/login");
 		} else {
@@ -293,7 +293,7 @@ router.post("/login", (req, res) => {
 router.get("/search/:param", (req, res) => {
 
     var parameter = req.params.param;
-    reslv.getSearchResults(parameter, (result) => {
+    repository.getSearchResults(parameter, (result) => {
         res.send(result)
     });
 });
@@ -336,19 +336,19 @@ router.post("/remove-pin", (req, res) => {
 //route for the register page requests
 router.get("/register", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /register");
-	reslv.initiateRegistration(req, res);
+	repository.initiateRegistration(req, res);
 });
 
 //route for posting the users email data
 router.post("/register", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," POST /logins");
-    reslv.validateRegistration(req, res);
+    repository.validateRegistration(req, res);
 });
 
 //route for logging out
 router.get("/logout", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /logout");
-    reslv.removeLoggedInStatusofUser();
+    repository.removeLoggedInStatusofUser();
     res.locals.userStat = false;
 	req.session.destroy();
 	var localState = localStorage.setItem("state", "");
@@ -366,9 +366,9 @@ router.get("/repo/details/lines-of-code/:repoName?", (req, res) => {
     nameParam = req.params.repoName;
     var c, flagInfo;
     helper.noCache(res);
-    var avatar = reslv.getAvatarImage();
+    var avatar = repository.getAvatarImage();
     var urlstate;
-    var userData = reslv.getStorage();
+    var userData = repository.getStorage();
     if (userData !== "undefined") {
         res.locals.userStat = true;
         var name = userData.split("=>")[0];
@@ -385,7 +385,7 @@ router.get("/repo/details/lines-of-code/:repoName?", (req, res) => {
         c = helper.getRandomString();
         urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
     }
-    reslv.getLinesOfCode(nameParam, (data) => {
+    repository.getLinesOfCode(nameParam, (data) => {
         res.render("lines-of-code", {
             teamName: nameParam,
             locData: data,
@@ -403,7 +403,7 @@ router.get("/repo/details/lines-of-code/:repoName?", (req, res) => {
 router.get("/dashboard", (req, res) => {
     helper.noCache(res);
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /dashboard");
-    var avatar = reslv.getAvatarImage();
+    var avatar = repository.getAvatarImage();
 	if(avatar === "undefined") {
         res.locals.userStat = false;
 		res.redirect("/")
@@ -413,8 +413,8 @@ router.get("/dashboard", (req, res) => {
         function getFlagData(callback) {
             if (avatar !== "undefined") {
                 res.locals.userStat = true;
-                var data = reslv.getStorage();
-                reslv.getFlagData(data, (flagObj, attData, teamObj, chartColor, endChartColor, contentTeamObj) => {
+                var data = repository.getStorage();
+                repository.getFlagData(data, (flagObj, attData, teamObj, chartColor, endChartColor, contentTeamObj) => {
                     callback(flagObj, attData, teamObj, chartColor, endChartColor, contentTeamObj);
                 });
             } else {
@@ -530,10 +530,10 @@ router.post("/dashboard/edit/repo", (req, res) => {
 
     };
     res.send("Data Received");
-    reslv.assignWatcher(watcher);
-    reslv.assignTeamWatcher(teamWatcher);
-    reslv.assignContentTeamWatcher(contentTeamWatcher);
-    reslv.setChartColour(watcher, chartColour, endChartColour);
+    repository.assignWatcher(watcher);
+    repository.assignTeamWatcher(teamWatcher);
+    repository.assignContentTeamWatcher(contentTeamWatcher);
+    repository.setChartColour(watcher, chartColour, endChartColour);
 });
 
 
@@ -567,7 +567,7 @@ router.post("/dashboard/edit/team", (req, res) => {
 
     };
     res.send("Data Received");
-    reslv.assignTeamWatcher(teamWatcher);
+    repository.assignTeamWatcher(teamWatcher);
 });
 
 

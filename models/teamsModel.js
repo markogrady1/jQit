@@ -4,7 +4,7 @@ var async = require("async")
 
 var teamModel = {};
 
-teamModel.getTeamData = function(teamRepos, dbase, callback) {
+teamModel.getTeamRepoData = function(teamRepos, dbase, callback) {
     var totalData = [];
     var projection = this.getProjection(dbase);//not used currently
     connection(dbase, function(db){
@@ -24,7 +24,7 @@ teamModel.getTeamData = function(teamRepos, dbase, callback) {
     });
 };
 
-teamModel.getTeamRecord = function(teamRepos, dbase, callback) {
+teamModel.getTeamRepoRecord = function(teamRepos, dbase, callback) {
     var totalData = [];
     var projection = this.getProjection(dbase);//not used currently
     connection(dbase, function(db){

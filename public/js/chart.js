@@ -1225,6 +1225,7 @@ var setUpMultipleCompareBtn = function(histObj) {
 	var $btn = $('.trigger-multi-compare');
 	$btn.on('click', function() {
 		$btn.remove();
+
 		$('.multi-comparison').append('<button class=go-compare>GO</button>');
 		$('.trigger-btn').append('<div class=trigger-multi-compare>Compare Multiple Repos</div>');
 
