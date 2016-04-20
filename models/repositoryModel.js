@@ -697,6 +697,7 @@ User.prototype.register = function(res, io) {
 		db.collection('users').insert(query, function(err, result){
 			console.log('User Created => ' + new Date());
 			if (err && err.code == 11000) {
+				res.end()
 				res.render('register', { register: 'This Email has been used before' });
                 console.log('Duplicate Email: Alert User');
 			} else {
@@ -708,6 +709,7 @@ User.prototype.register = function(res, io) {
 					var avatar = helper.getSplitValue(data, '=>', 1);
 					var avatNum = helper.getSplitValue(avatar, '/', -1);
 					localStorage.setItem("data",username + "=>" + avatar + "=>" + query.email);
+					res.end();
 					res.redirect('/');
 					this.io.emit("userStatus",{ av: avatNum })
 				}

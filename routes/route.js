@@ -182,10 +182,12 @@ router.get("/jquery/team/:teamName?", (req, res) => {
         teamsControl.getChartColour(name, email, (col, endCol) => {
             chartColour = col;
             endChartColour = endCol;
-            //flagInfo = flagData === null ? "" : flagData;
-            //callback(flagData, chartColour);
         });
 
+    } else {
+        chartColour =  "#4E87B2";
+        endChartColour =  "#C2D8ED";
+        flagInfo = null;
     }
     if(avatar === "undefined") {
         res.locals.userStat = false;
