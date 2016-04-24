@@ -4,16 +4,23 @@
 	<link rel='stylesheet' href='/css/jqit.css' />
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="/js/external/scrilla.js"></script>
-    <style>
-
-    </style>
+    <script>
+		var data = <%- JSON.stringify(data) %>
+						console.log(data)
+    </script>
 </head>
 <body>
-	<div class="body-wrap">
-	<h1><%= name %></h1>
-<div class="button-wrap">
-<% for (var i = 0; i < date.length; i++) { %>
-   <a href=repo/details/<%= date[i] %>><div class='open-issue-repo-dates'><%= date[i].created_at %><span class='inner-title'><%=date[i].title%></span></div></a>   
+<% include partials/header.html %>
+<span class="home-btn-wrap"><a class='home-btn' href="/">Home</a><span class="bar">|</span></span>
+	<div class="issue-list-wrap">
+	<h1 class="repo-issues-title"><%= name %></h1>
+<div class="">
+<% for (var i = 0; i < data.length; i++) {
+			var date = data[i].created_at.split("T")[0]
+			var newDateFormat = date.split("-");
+
+	%>
+   <a href=<%= data[i].html_url %> target='_blank'><div class='open-issue-repo-dates'><%- newDateFormat[2] + "-" + newDateFormat[1]  + "-	" + newDateFormat[0] %><span class='inner-title'><%=data[i].title%></span></div></a>
 
 <% i} %> 
 </div>

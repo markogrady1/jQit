@@ -195,7 +195,7 @@ schema.executeNextMonthQuery = function(database, param, callback, range) {
 var getProjection = function(db) {
 	var projection;
 	if (db === 'issues') {
-		projection = { 'created_at': 1, 'title': 1, 'html_url': 1, '_id': 0 };
+		projection = { 'created_at': 1, 'title': 1, 'html_url': 1, 'url': 1, '_id': 0 };
 	} else if (db === 'repoHistory') {
 		projection = { 'isoDate': 1, 'rawDate': 1, 'issues': 1, '_id': 0 }
 	} else if (db === 'repoPullsHistory') {
@@ -250,7 +250,7 @@ var getNextMonthQuery = function(db, range) {
  * @param {String} username 
  * @param {Function} fn 
  */
-schema.checkForEmail = function(username, fn) {
+schema.checkUserDetails = function(username, fn) {
 	var projection = { 'username': 1, 'email': 1 };
 	var query = { 'username': username };
 	connection('user', function(db){
@@ -276,9 +276,10 @@ schema.checkForEmail = function(username, fn) {
  * @param {String} email 
  * @param {Object} res 
  */
-schema.regUser = function(username, email, res, io) {
+schema.regUser = function(username, email, res, io, cb) {
 	var user = RegisteredUser(username, email);
-	user.register(res, io);
+	helper.noCache(res);
+	user.register(res, io, cb);
 }
 
 /**
@@ -685,11 +686,12 @@ function User(username, email) {
 var RegisteredUser = function(x, y) { return new User(x, y); };
 
 /**
- * Register the new User
- *
- * @param {Object} res 
+ * 
+ * @param res
+ * @param io
+ * @param cb
  */
-User.prototype.register = function(res, io) {
+User.prototype.register = function(res, io, cb) {
 	this.io = io;
 	// hash = bcrypt.hashSync(this.pass, bcrypt.genSaltSync(10));  //not used currently because no passwords stored
 	var query = { 'username': this.username, 'email': this.email};
@@ -704,13 +706,15 @@ User.prototype.register = function(res, io) {
 				var data = localStorage.getItem('data');
 				if(data === " ") {
 					res.redirect('/');
+					res.end()
 				} else {
 					var username = helper.getSplitValue(data,'=>', 0)
 					var avatar = helper.getSplitValue(data, '=>', 1);
 					var avatNum = helper.getSplitValue(avatar, '/', -1);
 					localStorage.setItem("data",username + "=>" + avatar + "=>" + query.email);
 					res.end();
-					res.redirect('/');
+					//res.redirect('../');
+					cb();
 					this.io.emit("userStatus",{ av: avatNum })
 				}
 			}			

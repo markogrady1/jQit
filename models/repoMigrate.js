@@ -55,6 +55,9 @@ migrate.openIssuesMigrate = function() {
 	});
 }
 
+
+
+
 /**
  * Migrate all open Pull requests data to mongodb
  * 
@@ -157,11 +160,14 @@ var connect = function(target, fn) {
 		if(err) throw err;
 		fn(db);
 	});
-}	
+}
 
 migrate.repositoryMigrate();
-migrate.openIssuesMigrate();
 migrate.pullsMigrate();
 migrate.closedDataMigration('pulls');
 migrate.closedDataMigration('issues');
 // migrate.eventsMigrate();
+
+setTimeout(() => {
+	migrate.openIssuesMigrate();
+}, 7000);

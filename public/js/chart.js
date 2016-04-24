@@ -300,6 +300,8 @@ function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData
 
 	var $e = $(buildStyle.chartArea).find('svg');
 	$e.remove();
+
+
 	var svg = d3.select(buildStyle.chartArea).append('svg')
 			.attr('id', chartId + 'chart')
 			.attr('height', buildStyle.h)
@@ -380,47 +382,7 @@ function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData
 				});
 			  })
 			  .style('fill', function(d, i){
-				// this section of code is responsible for highlighting any increases if specified
-				  if(buildStyle.dataVal === "issues") {
-
-					  if(buildStyle.flagIssues !== null) {
-
-						  if(buildStyle.flagIssues[0] === 999) {
-
-							  if(i === buildStyle.flagIssues[1]) {
-								  return 'ff0000'
-							  }
-						  } else {
-							  for (var d = 0; d < buildStyle.flagIssues.length; d++) {
-								  if(buildStyle.flagIssues[d] === i) {
-									  return 'ff0000'
-								  }
-							  }
-						  }
-					  }
-				  } else if(buildStyle.dataVal === "pulls"){
-
-					  if(buildStyle.flagPulls !== null) {
-
-						  if(buildStyle.flagPulls[0] === 999) {
-
-							  if(i === buildStyle.flagPulls[1]) {
-								  return 'ff0000'
-							  }
-						  } else {
-							  for (var d = 0; d < buildStyle.flagPulls.length; d++) {
-								  if(buildStyle.flagPulls[d] === i) {
-									  return 'ff0000'
-								  }
-							  }
-						  }
-						  return linearColorScale(i);
-					  }
-					  return linearColorScale(i);
-				  }
-
-				return linearColorScale(i);  //uncomment line for linearScale colours
-				  //return ordinalColorScale(i);//uncomment line for ordinalScale colours
+				  return getBarColour(buildStyle, i, linearColorScale);
 			  })
 			  .style('cursor', 'pointer');
 
@@ -1777,12 +1739,10 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 			for (var i = 1; i < data.length; i++) {
 				var df = data[i][targetType] - data[i-1][targetType];
 				if (df >= boundary) {
-					triggerArray.push(i);  //index of triggered items
+					triggerArray.push(i);
 				}
 			}
 		}
-
-
 	} else {
 		if (boundary !== "0") {
 
@@ -1790,7 +1750,6 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 			if (increase >= boundary) {
 				triggerArray.push(999);
 				triggerArray.push(data.length - 1);
-
 			} else {
 				triggerArray.push(-999);
 				triggerArray.push(-999);
@@ -1800,6 +1759,49 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 	}
 	return triggerArray;
 };
+
+
+function getBarColour(buildStyle, i, linearColorScale) {
+	if(buildStyle.dataVal === "issues") {
+
+		if(buildStyle.flagIssues !== null) {
+
+			if(buildStyle.flagIssues[0] === 999) {
+
+				if(i === buildStyle.flagIssues[1]) {
+					return 'ff0000'
+				}
+			} else {
+				for (var d = 0; d < buildStyle.flagIssues.length; d++) {
+					if(buildStyle.flagIssues[d] === i) {
+						return 'ff0000'
+					}
+				}
+			}
+		}
+	} else if(buildStyle.dataVal === "pulls"){
+
+		if(buildStyle.flagPulls !== null) {
+
+			if(buildStyle.flagPulls[0] === 999) {
+
+				if(i === buildStyle.flagPulls[1]) {
+					return 'ff0000'
+				}
+			} else {
+				for (var d = 0; d < buildStyle.flagPulls.length; d++) {
+					if(buildStyle.flagPulls[d] === i) {
+						return 'ff0000'
+					}
+				}
+			}
+			return linearColorScale(i);
+		}
+		return linearColorScale(i);
+	}
+
+	return linearColorScale(i);  //uncomment line for linearScale colours
+}
 
  function pieChart(data, targetEl, foundationAvg, currentValue, isIssue, chartColour, endChartColour) {
 	 var record = isIssue ? "Issues" : "Pull Requests";
@@ -1964,3 +1966,4 @@ var checkIncrease = function(data, boundary, periodic, targetType ) {
 	 }
 
  }
+

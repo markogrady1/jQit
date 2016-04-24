@@ -28,7 +28,7 @@
         wholeData = <%- JSON.stringify(data) %>
         ipred = <%- JSON.stringify(ipred) %>
         prpred = <%- JSON.stringify(prpred) %>
-
+        var oldPRURL = <%- JSON.stringify(oldPRURL) %>
 
         var username =  <%- JSON.stringify(username) %>
         var email =  <%- JSON.stringify(email) %>
@@ -137,7 +137,7 @@
            <li><div class=compare-pulls-info></div></li>
            <li><div class=trigger-btn></div></li>
 
-           <li><div class=loc-link><a href="lines-of-code/<%= data.name %>">List of Files</a></div></li>
+           <li><div class=loc-link><a href="../issue/details/<%= data.name %>">List of Issues</a></div></li>
 
            <!--<span class="prev-issue-chart">⮂</span> <span class="next-issue-chart">⮀</span>&lt;!&ndash; ⮀&ndash;&gt;-->
        </ul>
@@ -224,7 +224,7 @@
                <div class="open-avg-pulls-text"><span class="average-open-text">Average age of open Pull Requests:</span><br> <%= averageAgeOfOpenPRs %></div>
                <div class="oldest-issue-text"><span class="average-open-text">Age of oldest issues:</span><br> <%= issueRange %>
                    <p class="goto-oldest-issue old"></p></div>
-               <div class="oldest-pulls-text"><span class="average-open-text">Average age of open Pull Requests:</span><br> <%= averageAgeOfOpenPRs %><p class="goto-oldest-pr old"></p></div>
+               <div class="oldest-pulls-text"><span class="average-open-text">Age of oldest Pull Request:</span><br class="pr-break"> <%= pullRange %><p class="goto-oldest-pr old-pr"></p></div>
            </div>
        </div>
     </div>
@@ -378,6 +378,10 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
                 if(old !== null){
                     $('.old').append("<a class='oldest-link' href=" + old + " target=_blank>Go to oldest issue</a>");
                 }
+
+                if(oldPRURL !== "null"){
+                    $('.old-pr').append("<a class='oldest-link' href=" + oldPRURL + " target=_blank>Go to oldest Pull Request</a>");
+                }
             </script>
          </p>
          <p class='newest'>
@@ -452,6 +456,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
           elm4  = document.getElementsByClassName('pstatus');
           elm4[0].innerHTML = pDiff;
          scroller.init();
+
 
         var countss = 0;
 

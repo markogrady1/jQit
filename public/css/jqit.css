@@ -303,7 +303,7 @@ button.go-compare {
 	fill: #4682B4; 
 }
 
-.open-issue-repo:hover, .open-issue-repo-dates:hover {
+.open-issue-repo:hover{
 	background-color: #2e4677;
 }
 
@@ -375,22 +375,38 @@ button.go-compare {
 	padding:2px 5px;
 	color:red;
 }
+
+a {
+	text-decoration: none;
+}
 .open-issue-repo-dates{
 	width:1000px;
+	text-decoration: none;
 	padding: 11px 20px 11px 20px;
-	background-color: #18295a;
+	background-color: #4E87B2;
 	color:#fff;
-	border-radius: 8px;
-	margin-bottom: 10px;
+	border-radius: 4px;
+	margin-bottom: 3px;
+}
+
+.open-issue-repo-dates a{
+	text-decoration: none;
+}
+.open-issue-repo-dates:hover{
+
+	background-color: #B8D1E8;
+	color: #000;
+
 }
 
 .inner-title {
-	font-size: .7em;
+	font-size: 1.1em;
+	text-decoration: none;
 	margin-left: 50px;
-	background-color: yellow;
+	background-color: #fff;
 	padding: 5px 10px;
-	border-radius: 8px;
-	color: #000;
+	border-radius: 2px;
+	color: #555;
 }
 
 .bar {
@@ -2152,4 +2168,28 @@ p.feedback {
 
 .tab-detail {
 	padding: 0 0 0 0;
+}
+
+/* //////// ISSUE DETAILS PAGE /////////////*/
+
+.issue-list-wrap {
+	width: 70%;
+	margin: 20px auto;
+}
+
+h1.repo-issues-title {
+	width: 100%;
+	/*margin: 0;*/
+	padding: 10px 0  10px 30px;
+	background-color: #E7E4E5;
+
+
+	/*height: 50px;*/
+	color: #555;
+
+	border-radius: 3px;
+	border: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	font-size: 2em;
+
 }

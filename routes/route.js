@@ -136,12 +136,21 @@ router.get("/repo/details/competitor-closure-avg/:competitorName?", function(req
 
 router.get("/repo/details/change-issue-month/:repo/:range", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-issue-month/:" + req.params.repo+"/"+req.params.range);
-    var range = req.params.range;
     var repo = req.params.repo;
     monthly.getNewMonth(repo, range,req, res, io, (obj) => {
         res.writeHead(200, {'content-type': 'text/json' });
         res.write( JSON.stringify({ obj } ) );
         res.end('\n');
+    }, range);
+
+});
+
+router.get("/repo/details/get-issues/:repo", (req, res) => {
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/change-issue-month/:" + req.params.repo+"/"+req.params.range);
+    var range = req.params.range;
+    var repo = req.params.repo;
+    repository.getIssues(repo,  (obj) => {
+
     }, range);
 
 });
@@ -230,7 +239,41 @@ router.get("/repo/issue/details/:team?", (req, res) => {
     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:" + req.params.repoName);
   	var nameParam = null;
   	nameParam = req.params.team;
-  	repository.resolveIssueDates(nameParam, req, res);
+    var c;
+    helper.noCache(res);
+    var avatar = repository.getAvatarImage();
+    var urlstate;
+    var userData = repository.getStorage();
+    if (userData !== "undefined") {
+        res.locals.userStat = true;
+        var name = userData.split("=>")[0];
+        var email = userData.split("=>")[2];
+    }
+    if(avatar === "undefined") {
+        res.locals.userStat = false;
+        c = helper.getRandomString();
+        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+        localStorage.setItem("state", c);
+
+    } else {
+        res.locals.userStat = true;
+        c = helper.getRandomString();
+        urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+    }
+  	repository.resolveIssueDates(nameParam, req, res, (doc, teamName) => {
+        res.render("issue-data", {
+            name: teamName,
+            data: doc,
+            header: teamName+ " issues",
+            av: avatar,
+            urlstate: urlstate,
+            state: c,
+            logoutLink: "../../../logout",
+            dashboardLink: "../../dashboard",
+            avatar_url: null
+
+        })
+    });
 });
 
 
@@ -242,6 +285,7 @@ router.get("/logins", (req, res) => {
     var code = query.code;
     var localState = localStorage.getItem("state");
     var request = require("request");
+    helper.noCache(res);
 
     if (state === localState) {
         helper.print(color['cyan'],"Matched: ", localState + " TOKEN");
@@ -265,12 +309,31 @@ router.get("/logins", (req, res) => {
                              acc = response.getBody();
                              repository.resetStorage();
                              acc = setBodyValue(acc, res)
-                             repository.initiateRegistration(req, res, state, acc, this.io);
+                             repository.initiateLogin(req, res, state, acc, this.io, () => {
+                                 res.end();
+                             });
                          });
                  }
              }
          );
     }
+});
+
+//route for the register page requests
+router.get("/register", (req, res) => {
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /register");
+    repository.initiateLogin(req, res);
+});
+
+//route for posting the users email data
+router.post("/register", (req, res) => {
+    console.log(color["cyan"]+color["yellow"],"Router:"," POST /register");
+    query = require("url").parse(req.url, true).query;
+    var state = query.state;
+    var code = query.code;
+    var localState = localStorage.getItem("state");
+    helper.noCache(res);
+    repository.validateRegistration(req, res, state);
 });
 
 //route for login page ==> GET
@@ -335,17 +398,6 @@ router.post("/remove-pin", (req, res) => {
     res.end();
 });
 
-//route for the register page requests
-router.get("/register", (req, res) => {
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /register");
-	repository.initiateRegistration(req, res);
-});
-
-//route for posting the users email data
-router.post("/register", (req, res) => {
-    console.log(color["cyan"]+color["yellow"],"Router:"," POST /logins");
-    repository.validateRegistration(req, res);
-});
 
 //route for logging out
 router.get("/logout", (req, res) => {
