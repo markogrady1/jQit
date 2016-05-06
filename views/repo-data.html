@@ -33,6 +33,7 @@
         var username =  <%- JSON.stringify(username) %>
         var email =  <%- JSON.stringify(email) %>
         var avgIssues =  <%- JSON.stringify(avgIssues) %>
+        var avgPulls =  <%- JSON.stringify(avgPulls) %>
         var chartColour = <%- JSON.stringify(chartColour) %>
         var endChartColour = <%- JSON.stringify(endChartColour) %>
         var isPinned = <%- JSON.stringify(isPinned) %>
@@ -353,6 +354,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
                <p><p class="name"><%= data.name %></p><p class="name"><%= ipred %></p><p class="name"><%= prpred %></p></p>
            </div>
        </div>
+   <div class="hidden-div" >
          <h1 class=current-repo><%= data.name %></h1>
          <p><b>Repository name:</b> <%= data.name %></p>
          <p><b> GitHub Url: </b> &nbsp;<a href=<%= data.html_url %> target=_blank><%= data.html_url %></a></p>
@@ -403,7 +405,7 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
             <% } %>
          </p>
          <p></p>
-         <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p>
+         <p>Commits URL: <a href=<%= url.commits %>><%= url.commits %></a></p></div>
 <img title="Mark for attention" class="repo-page-pin" src="/img/attention_pin.png" alt="">
       <script>
 
@@ -475,6 +477,11 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
               })
           }
 
+
+
+          if (av === "undefined") {
+              $(".repo-page-pin").attr("src", "/img/clear_dot.gif")
+          }
           if(isPinned) {
               $(".repo-page-pin").attr("src","/img/attention_pin_enabled.png")
           }
@@ -515,6 +522,8 @@ var issuesArr = [], issuesArrSpare = [], pullsArr = [], pullsArrSpare = [];
               }
 
           })
+
+
       </script>
 
 

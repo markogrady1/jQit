@@ -686,7 +686,7 @@ function User(username, email) {
 var RegisteredUser = function(x, y) { return new User(x, y); };
 
 /**
- * 
+ *
  * @param res
  * @param io
  * @param cb

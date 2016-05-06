@@ -113,6 +113,7 @@ router.get("/repo/details/competitor-closure-avg/:competitorName?", function(req
     nameParam = req.params.competitorName;
     var clIssues;
     repository.getClosedIssueNo(nameParam, (closedNumber) => {
+        //if(typeof closedNumber[closedNumber.length-1] !== "undefined")
         clIssues = closedNumber[closedNumber.length-1].issues;
     });
 
@@ -236,9 +237,10 @@ router.get("/jquery/team/:teamName?", (req, res) => {
 
 //route for single repository details
 router.get("/repo/issue/details/:team?", (req, res) => {
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:" + req.params.repoName);
+
   	var nameParam = null;
   	nameParam = req.params.team;
+    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/issue/details/:" + nameParam);
     var c;
     helper.noCache(res);
     var avatar = repository.getAvatarImage();
@@ -269,7 +271,7 @@ router.get("/repo/issue/details/:team?", (req, res) => {
             urlstate: urlstate,
             state: c,
             logoutLink: "../../../logout",
-            dashboardLink: "../../dashboard",
+            dashboardLink: "../../../dashboard",
             avatar_url: null
 
         })

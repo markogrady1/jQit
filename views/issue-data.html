@@ -6,21 +6,29 @@
     <script src="/js/external/scrilla.js"></script>
     <script>
 		var data = <%- JSON.stringify(data) %>
-						console.log(data)
     </script>
 </head>
 <body>
 <% include partials/header.html %>
 <span class="home-btn-wrap"><a class='home-btn' href="/">Home</a><span class="bar">|</span></span>
 	<div class="issue-list-wrap">
-	<h1 class="repo-issues-title"><%= name %></h1>
+	<h1 class="repo-issues-title"><%= name %> <span class="legend"><span class="issue-flag-legend"></span>created over a year ago</span><span class="legend2"><span class="issue-flag-legend2"></span>created within the last year </span></h1>
 <div class="">
 <% for (var i = 0; i < data.length; i++) {
-			var date = data[i].created_at.split("T")[0]
-			var newDateFormat = date.split("-");
+	var date = data[i].created_at.split("T")[0]
+	var newDateFormat = date.split("-");
 
+	var d = new Date(date)
+	var oneYr = new Date(new Date().setYear(new Date().getFullYear() - 1))
+	var nowTime = oneYr.getTime()
+	var freshHold = d.getTime()
+	if(nowTime > freshHold) {
+		m = "issue-flag"
+	} else {
+		m = "no-issue-flag"
+	}
 	%>
-   <a href=<%= data[i].html_url %> target='_blank'><div class='open-issue-repo-dates'><%- newDateFormat[2] + "-" + newDateFormat[1]  + "-	" + newDateFormat[0] %><span class='inner-title'><%=data[i].title%></span></div></a>
+   <a class='issue-anchor' href=<%= data[i].html_url %> target='_blank'><span class=<%= m %>>&nbsp;&nbsp;&nbsp;</span><div class='open-issue-repo-dates'><%- newDateFormat[2] + "-" + newDateFormat[1]  + "-	" + newDateFormat[0] %><span class='inner-title'><%=data[i].title%></span></div></a>
 
 <% i} %> 
 </div>

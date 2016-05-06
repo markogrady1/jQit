@@ -133,7 +133,7 @@ var setTeamBarChart = function(data, isIssue, buildStyle, i, issueflagsIndexs, i
             .attr('height', function(d, i){
                 return height - y(d["issues"]);
             })
-            .style('cursor', 'pointer')
+            //.style('cursor', 'pointer')
             .style('fill', function(d, i) {
                 // this section of code is responsible for highlighting any increases if specified
                 if (issueflagsIndexs !== null) {
@@ -313,7 +313,7 @@ var setSingleChart = function(issueData, pullsData, index, isIssue, flagData, is
             .attr('height', function(d, i){
                 return height - y(d[buildStyle.dataType]);
             })
-            .style('cursor', 'pointer')
+            //.style('cursor', 'pointer')
             .style('fill', function(d, i) {
 
                 // this section of code is responsible for highlighting any increases if specified

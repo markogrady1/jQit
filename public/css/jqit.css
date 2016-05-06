@@ -378,25 +378,82 @@ button.go-compare {
 
 a {
 	text-decoration: none;
+
 }
 .open-issue-repo-dates{
 	width:1000px;
 	text-decoration: none;
-	padding: 11px 20px 11px 20px;
-	background-color: #4E87B2;
-	color:#fff;
-	border-radius: 4px;
-	margin-bottom: 3px;
+	padding: 11px 20px 11px 35px;
+	/*background-color: #4E87B2;*/
+	border: 1px solid #161634;
+	border-bottom: 0px;
+	/*color:#fff;*/
+	/*border-radius: 4px;*/
+	/*margin-bottom: 3px;*/
 }
 
-.open-issue-repo-dates a{
+div.open-issue-repo-dates {
 	text-decoration: none;
+
+	color:#2B6AAD;
 }
 .open-issue-repo-dates:hover{
 
 	background-color: #B8D1E8;
 	color: #000;
+}
+.issue-anchor {
+	position: relative;
 
+}
+
+.issue-flag-legend {
+	position: absolute;
+	left: -10%;
+	background-color: red;
+	top: 4px;
+	width: 5px;
+	height: 10px;
+	z-index: auto;
+}
+.legend {
+	position: absolute;
+	left: 83%;
+	top: 5px;
+	font-size: 0.5em;
+}
+
+.issue-flag-legend2 {
+	position: absolute;
+	left: -8%;
+	background-color: #4E8EF7;
+	top: 3px;
+	width: 5px;
+	height: 10px;
+	z-index: auto;
+}
+.legend2 {
+	position: absolute;
+	left: 83%;
+	top: 25px;
+	font-size: 0.5em;
+}
+span.issue-flag {
+	position: absolute;
+	background-color: red;
+	top: 5px;
+	width: 5px;
+	height: 30px;
+	z-index: auto;
+}
+
+span.no-issue-flag {
+	position: absolute;
+	background-color: #4E8EF7;
+	top: 5px;
+	width: 5px;
+	height: 30px;
+	z-index: auto;
 }
 
 .inner-title {
@@ -407,6 +464,10 @@ a {
 	padding: 5px 10px;
 	border-radius: 2px;
 	color: #555;
+}
+
+a:last-child .open-issue-repo-dates  {
+	border-bottom: 1px solid #161634;
 }
 
 .bar {
@@ -1252,6 +1313,8 @@ a.oldest-link:hover {
 	background: #393939;
 	color: #fff;
 }
+
+
 
 .ch-link {
 	color: #2b81af;
@@ -2191,5 +2254,12 @@ h1.repo-issues-title {
 	border: 1px solid #aaa;
 	border-bottom: 1px solid #aaa;
 	font-size: 2em;
+}
 
+.repo-issues-title {
+	position: relative;
+}
+
+.hidden-div {
+	display: none;
 }

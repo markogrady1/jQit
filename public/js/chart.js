@@ -176,7 +176,9 @@ function setBarChart(data, buildStyle, histObj, startDate, isPreviousMonthOfData
 	var toolTipValue = buildStyle.isIssue ? "Open Issues" : "Pull Requests";
 	var tot = 0;
 	var isIss =false;
-
+	console.log(startDate)
+	var startDateArr = startDate.split("-")
+	startDate = startDateArr[2] + "-" + getMonthString(startDateArr[1] ) + "-" + startDateArr[0];
 	if(buildStyle.dataVal === 'issues')
 		isIss = true;
 	var chartId = buildStyle.isIssue ? "" : "pulls-";
@@ -650,7 +652,7 @@ var toggleLineChart = function(elem) {
 		$( '#pulls-chart').toggle( "slow" );
 	}
 		setTimeout(function(){
-			if ($issue_lchart.is(":visible") || $pulls_lchart.is(":visible")) {
+			if ($pulls_lchart.css("display") !== "none" ) {
 					// spare icon '⫫'
 					$('.chart-icon').attr({
 						class: 'chart-icon fa fa-bar-chart',
@@ -658,6 +660,21 @@ var toggleLineChart = function(elem) {
 					});
 				} else {
 					// spare icon '≃'
+				$('.chart-icon').attr({
+					class: 'chart-icon fa fa-line-chart',
+					title: 'Line Chart'
+				});
+
+			}
+
+			if ($issue_lchart.css("display") !== "none" ) {
+				// spare icon '⫫'
+				$('.chart-icon').attr({
+					class: 'chart-icon fa fa-bar-chart',
+					title: 'Bar Chart'
+				});
+			} else {
+				// spare icon '≃'
 				$('.chart-icon').attr({
 					class: 'chart-icon fa fa-line-chart',
 					title: 'Line Chart'
@@ -1148,7 +1165,7 @@ var getCompetitorAverageClosureTime = function(teamName, isIssue) {
 		} else {
 			$awayAvgClosureTitle.html("Average PR Closure:");
 			$homeAvgClosureTitle.html("Average PR Closure:");
-			$homeAvg.html(avgIssues);
+			$homeAvg.html(avgPulls);
 			$awayAvg.html(data.pullString);
 		}
 
@@ -1205,17 +1222,7 @@ var setMultiComparisonCheck = function(histObj) {
 	var i = 1;
 	if($('.multi-compare').length === 0){
 		$('.check-append').append("<b><input type='checkbox' name='checkall' id='checkall'><label class='checkall' for='checkall'>Select all</label><br>")
-		//_.map(data, function(val){
-		//	console.log(i, data)
-		//	$('.check-append').append('<input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label class=multi-compare-text for=compare'+(i++)+ '>'+ val[0].team+'</label><br>');
-		//});
-		//var s = 0;
-		//$('.check-append').append('<table>')
-		//_.map(data, function(val){
-		//	$('.check-append').append('<tr><td><input type=checkbox id=compare'+(i)+ ' class=multi-compare name=issue-multi-compare value='+ val[0].team+'><label class=multi-compare-text for=compare'+(i)+ '>'+ data[s++][0].team+'</label></td>' +
-		//		'<td><input type=checkbox id=compare'+(s)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(i)+ '>'+  data[s++][0].team+'</label></td>' +
-		//		'<td><input type=checkbox id=compare'+(s)+ ' class=multi-compare name=issue-multi-compare value='+ data[s][0].team+'><label class=multi-compare-text for=compare'+(i)+ '>'+  data[s++][0].team+'</label></td></tr>' );
-		//});
+
 		var c = 1;
 
 		for(var s = 0; s < data.length-1;s++ ){
@@ -1239,22 +1246,7 @@ var setMultiComparisonCheck = function(histObj) {
 			$("input:checkbox").prop('checked', $(this).prop("checked"));
 		});
 
-		//$('input[name=checkall]').change(function(){
-        //
-		//	if($(this).is(':checked'))
-		//	{
-		//		console.log("checked")
-		//		$('input[name=issue-multi-compare]').attr("checked", true);
-        //
-		//		// Checkbox is checked.
-		//	}
-		//	else
-		//	{
-		//		console.log("not checked")
-		//		$('input[name=issue-multi-compare]').attr("checked", false);
-		//	}
-        //
-		//});
+
 	}
 };
 

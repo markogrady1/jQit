@@ -20,11 +20,65 @@ describe('obtaining data from teams.json file', function(){
 	})
 });
 
+describe('This test should return a string consisting of average age of issues', function(){
+	it("the value returned should consist of the string: 82 days 11 hours 3 minutes 0 seconds", function() {
+		var obj = [{ "url": 'https://api.github.com/repos/jquery/jquery/issues/3071',
+			"html_url": 'https://github.com/jquery/jquery/issues/3071',
+			"title": 'Event handlers with invalid selectors should be caught at attach time',
+			"created_at": '2016-04-21T17:57:10Z' },
+		{ "url": 'https://api.github.com/repos/jquery/jquery/issues/3065',
+			"html_url": 'https://github.com/jquery/jquery/issues/3065',
+			'title': 'Specific table CSS style breaks `.is(\':visible\')`',
+			'created_at': '2016-04-19T05:52:47Z' },
+		{ 'url': 'https://api.github.com/repos/jquery/jquery/issues/3062',
+			'html_url': 'https://github.com/jquery/jquery/issues/3062',
+			'title': '.then improperly propagates progress from locked-in Deferred',
+			'created_at': '2016-04-15T21:20:33Z' },
+		{ 'url': 'https://api.github.com/repos/jquery/jquery/issues/3056',
+			'html_url': 'https://github.com/jquery/jquery/issues/3056',
+			'title': 'Add `traditional` param to `.serialize()`',
+			'created_at': '2016-04-14T17:22:54Z' }];
+
+	var avg = mainController.getAverageAge(obj);
+		var avgStringSplitted = avg.split(" ");
+		assert.equal("days-hours-minutes-seconds", avgStringSplitted[1]+"-"+avgStringSplitted[3]+"-"+avgStringSplitted[5]+"-"+avgStringSplitted[7])
+	});
+
+	//it("should return the number of teams used in application", function() {
+	//	var teams = require("../../repoData/teams.json");
+	//	assert.lengthOf(teams, 14, 'teams.json should have 14 teams');
+	//})
+});
+
+describe('This test should return a string consisting of age range of issues', function(){
+	it("the value returned should consist of the string: 8 days 4 hours 17 minutes 6 seconds", function() {
+		var obj = [{ "url": 'https://api.github.com/repos/jquery/jquery/issues/3071',
+			"html_url": 'https://github.com/jquery/jquery/issues/3071',
+			"title": 'Event handlers with invalid selectors should be caught at attach time',
+			"created_at": '2016-04-21T17:57:10Z' },
+			{ "url": 'https://api.github.com/repos/jquery/jquery/issues/3065',
+				"html_url": 'https://github.com/jquery/jquery/issues/3065',
+				'title': 'Specific table CSS style breaks `.is(\':visible\')`',
+				'created_at': '2016-04-19T05:52:47Z' },
+			{ 'url': 'https://api.github.com/repos/jquery/jquery/issues/3062',
+				'html_url': 'https://github.com/jquery/jquery/issues/3062',
+				'title': '.then improperly propagates progress from locked-in Deferred',
+				'created_at': '2016-04-15T21:20:33Z' },
+			{ 'url': 'https://api.github.com/repos/jquery/jquery/issues/3056',
+				'html_url': 'https://github.com/jquery/jquery/issues/3056',
+				'title': 'Add `traditional` param to `.serialize()`',
+				'created_at': '2016-04-14T17:22:54Z' }];
+
+		var avg = mainController.getRange(obj, true);
+		var avgStringSplitted = avg.split(" ");
+		assert.equal("days-hours-minutes-seconds",  avgStringSplitted[1]+"-"+avgStringSplitted[3]+"-"+avgStringSplitted[5]+"-"+avgStringSplitted[7])
+	});
+});
 
 describe('Number of jQuery repositories returned by web bot in rep.json.', function(){
 	it("should return a specific number jquery repositories", function() {
 		var repos = require("../../repoData/rep.json");
-		assert.lengthOf(repos, 49, 'rep.json should have 49 repositories');
+		assert.lengthOf(repos, 50, 'rep.json should have 49 repositories');
 	});
 
 	it("should return a specific jquery repository name from rep.json", function() {
@@ -220,25 +274,3 @@ describe('Test the unicode values of the terminal output', function(){
 	});
 });
 
-//describe('creating new user', function(){
-////var assert = require('assert');
-//	var User = require('../../models/repository');
-////var history = require('../models/history');
-//
-//	var testUser;
-//
-//		testUser = new User("mark", 'at@someplace.com', '1234');
-//
-//
-//	it('is valid', function(){
-//		//assert.equal(testUser, "jquery");
-//
-//	});
-//});
-//
-//describe('Creating new user', function(){
-//	it('is valid', function(){
-//		assert.should.not.equal(undefined);
-//	});
-//});
-//
