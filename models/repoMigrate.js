@@ -22,7 +22,7 @@ migrate.repositoryMigrate = function() {
 	    	helper.print(color['cyan'],'DATA MIGRATION', '- jquery repositories loaded');
 			setTimeout(() => {
 				if(db !== null)
-					db.close();	
+					db.close();
 			}, 1000);
 	    });
 	});
@@ -128,7 +128,7 @@ migrate.closedDataMigration = function(targetData){
         	var url = _.map(obj, function(data) { return data.url; })
 		     var dataName = helper.getSplitValue(url, '/', 5);
 		    db.collection(dataName).remove({});
-		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: false}); //enable bulk inserting of data 
+		    var batch = db.collection(dataName).initializeUnorderedBulkOp({useLegacyOps: false}); //enable bulk inserting of data
 		    for(var j = 0; j < obj.length; j++){	
 		    	batch.insert({  
 		    		url: obj[j].url,

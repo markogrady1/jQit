@@ -4,13 +4,13 @@ module.exports = function(grunt) {
        jshint: {
               all: {
               	src: [
-					 'Gruntfile.js', 'public/js/*.js'
-				],
+	                'Gruntfile.js', 'public/js/*.js'
+                ],
 				options: {
 					jshintrc: true
 				}
-			}
-		}
+              }
+       }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');

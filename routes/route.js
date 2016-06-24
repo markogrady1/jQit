@@ -23,88 +23,87 @@ var app;
 var acc = [], dtt = [];
 console.log(color["cyan"],"Router Initialised.");
 
-//route for the home page
-router.get("/", (req, res) => {
-	var avaNum = repository.getAvatarImage();
-    var username = repository.getStorageItem(0);
-	migrate.repositoryMigrate();
-	var prs, c;
-	console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
-    function getFlagData(callback) {
-        if (avaNum !== "undefined") {
-            res.locals.userStat = true;
-            var data = repository.getStorage();
-            repository.getFlagData(data, (flagObj, att, teamObj, col, endChartCol, contentTeamData ) => {
-                callback(flagObj, att, teamObj, col, endChartCol, contentTeamData );
-            });
-        } else {
-            res.locals.userStat = false;
-            callback(null)
-        }
-    }
-
-    //inner function to retreive pull requests and insert them into complete repository data
-    repository.getPRs("pulls", (pullsdata) => {
-		c = helper.getRandomString();
-		var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
-		prs = pullsdata;
-		compDoc = schema.completeDoc;
-		localStorage.setItem("state", c);
-
-	for(var i = 0; i < compDoc.length; i++){
-      for(var k = prs.length-1; k >=0; k--){
-        var name = prs[k].split("  ");
-        if(compDoc[i].name == name[0])
-          	compDoc[i].pulls = name[1];
-      }
+ router.get("/", (req, res) => {
+     var avaNum = repository.getAvatarImage();
+     var username = repository.getStorageItem(0);
+     migrate.repositoryMigrate();
+     var prs, c;
+     console.log(color["cyan"]+color["yellow"],"Router:"," GET /index");
+     function getFlagData(callback) {
+         if (avaNum !== "undefined") {
+             res.locals.userStat = true;
+             var data = repository.getStorage();
+             repository.getFlagData(data, (flagObj, att, teamObj, col, endChartCol, contentTeamData ) => {
+                 callback(flagObj, att, teamObj, col, endChartCol, contentTeamData );
+             });
+         } else {
+             res.locals.userStat = false;
+             callback(null)
+         }
      }
 
+    //inner function to retreive pull requests and insert them into complete repository data
+     repository.getPRs("pulls", (pullsdata) => {
+	 	c = helper.getRandomString();
+	 	var urlstate = "client_id=" + auth.github_client_id.toString() + "&state=" + c + "";
+	 	prs = pullsdata;
+	 	compDoc = schema.completeDoc;
+	 	localStorage.setItem("state", c);
 
-     repository.cacheRepoData(compDoc);
-        var teamData = require("../repoData/teams.json");
-        var contentTeamData = require("../repoData/content_team.json");
-        // obtain any flags that may have been set and render the home page
-        getFlagData((flag, att, teamFlag, col, endChartCol, contentTeamFlag ) => {
+	 for(var i = 0; i < compDoc.length; i++){
+       for(var k = prs.length-1; k >=0; k--){
+         var name = prs[k].split("  ");
+         if(compDoc[i].name == name[0])
+           	compDoc[i].pulls = name[1];
+       }
+      }
 
-            if(typeof att === "undefined") {
-                att = null;
-            }
-            if(typeof teamFlag === "undefined") {
-                teamFlag = null;
-            }
 
-            res.render("index", {
-                names: schema.names,
-                issuesNo: schema.issues,
-                completeDoc: compDoc,
-                pullsNo: prs,
-                urlstate: urlstate,
-                state: c,
-                header: "",
-                av: avaNum,
-                username: username === "undefined" ? null : username,
-                dashboardLink: "dashboard",
-                logoutLink: "logout",
-                flagData:flag,
-                teamData: teamFlag,
-                attention: att,
-                teams: teamData,
-                contentTeamFlag: contentTeamFlag,
-                contentTeamJSON: contentTeamData,
-                avatar_url: null
-            })
-		});
-		io.emit("userStatus", { av: avaNum })
-	});
-});
+      repository.cacheRepoData(compDoc);
+         var teamData = require("../repoData/teams.json");
+         var contentTeamData = require("../repoData/content_team.json");
+         // obtain any flags that may have been set and render the home page
+         getFlagData((flag, att, teamFlag, col, endChartCol, contentTeamFlag ) => {
+
+             if(typeof att === "undefined") {
+                 att = null;
+             }
+             if(typeof teamFlag === "undefined") {
+                 teamFlag = null;
+             }
+
+             res.render("index", {
+                 names: schema.names,
+                 issuesNo: schema.issues,
+                 completeDoc: compDoc,
+                 pullsNo: prs,
+                 urlstate: urlstate,
+                 state: c,
+                 header: "",
+                 av: avaNum,
+                 username: username === "undefined" ? null : username,
+                 dashboardLink: "dashboard",
+                 logoutLink: "logout",
+                 flagData:flag,
+                 teamData: teamFlag,
+                 attention: att,
+                 teams: teamData,
+                 contentTeamFlag: contentTeamFlag,
+                 contentTeamJSON: contentTeamData,
+                 avatar_url: null
+             })
+ 		});
+ 		io.emit("userStatus", { av: avaNum })
+ 	});
+ });
 
 //route for single repository data
-router.get("/repo/details/:repoName?", (req, res) => {
-    console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
-  	var nameParam = null;
-  	nameParam = req.params.repoName;
-  	repository.getIssueData(nameParam, req, res, io);
-});
+ router.get("/repo/details/:repoName?", (req, res) => {
+     console.log(color["cyan"]+color["yellow"],"Router:"," GET /repo/details/:" + req.params.repoName);
+     var nameParam = null;
+     nameParam = req.params.repoName;
+     repository.getIssueData(nameParam, req, res, io);
+ });
 
 //route for single repository data
 router.get("/repo/details/competitor-closure-avg/:competitorName?", function(req, res) {
@@ -636,8 +635,8 @@ router.get("*", (req, res) => {
 // function responsible for setting and returning the users GitHub details
 var setBodyValue = function(body, res) {
 	var bd = body;
-	 localStorage.setItem("data","");
-	 localStorage.setItem("data", bd.login + "=>" + bd.avatar_url + "=>" + bd.email + "")
+    localStorage.setItem("data","");
+    localStorage.setItem("data", bd.login + "=>" + bd.avatar_url + "=>" + bd.email + "")
 
 	return  {
 		"login": bd.login,
